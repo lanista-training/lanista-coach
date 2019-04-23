@@ -88,7 +88,7 @@ module.exports =
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -119,7 +119,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! styled-components */ "styled-components");
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(styled_components__WEBPACK_IMPORTED_MODULE_8__);
 
-var _jsxFileName = "/Users/rafaeldiaz/Documents/development/lanista-coach/components/header.js";
+var _jsxFileName = "/Users/rafaeldiaz/Documents/Development/lanista-coach/components/header.js";
 
 
 
@@ -279,7 +279,7 @@ var Header = function Header(props) {
     }, "Logout")))), react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(styled_jsx_style__WEBPACK_IMPORTED_MODULE_1___default.a, {
       id: "1562005891",
       __self: this
-    }, "ul.jsx-1562005891{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;list-style:none;margin-left:0;padding-left:0;}li.jsx-1562005891{margin-right:1rem;}li.jsx-1562005891:first-child{margin-left:auto;}a.jsx-1562005891{color:#fff;-webkit-text-decoration:none;text-decoration:none;}header.jsx-1562005891{padding:0.2rem;color:#fff;background-color:#333;}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9yYWZhZWxkaWF6L0RvY3VtZW50cy9kZXZlbG9wbWVudC9sYW5pc3RhLWNvYWNoL2NvbXBvbmVudHMvaGVhZGVyLmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQWdFa0IsQUFHd0IsQUFNSyxBQUdELEFBR04sQUFJSSxXQUhNLElBSVYsRUFQYixDQUhBLFFBV3dCLHNCQUN4QixhQUxBLGFBYmtCLGdCQUNGLGNBQ0MsZUFDakIiLCJmaWxlIjoiL1VzZXJzL3JhZmFlbGRpYXovRG9jdW1lbnRzL2RldmVsb3BtZW50L2xhbmlzdGEtY29hY2gvY29tcG9uZW50cy9oZWFkZXIuanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgTGluayBmcm9tICduZXh0L2xpbmsnXG5pbXBvcnQgeyBsb2dvdXQgfSBmcm9tICcuLi9saWIvYXV0aCdcbmltcG9ydCBjb29raWUgZnJvbSAnanMtY29va2llJ1xuaW1wb3J0IGdxbCBmcm9tIFwiZ3JhcGhxbC10YWdcIlxuaW1wb3J0IHsgUXVlcnkgfSBmcm9tIFwicmVhY3QtYXBvbGxvXCJcbmltcG9ydCBzdHlsZWQgZnJvbSAnc3R5bGVkLWNvbXBvbmVudHMnXG5cbmNvbnN0IE1FX1FVRVJZID0gZ3FsYFxuICB7XG4gICAgbWUge1xuICAgICAgaWRcbiAgICB9XG4gIH1cbmBcblxuY29uc3QgTG9nbyA9IHN0eWxlZC5kaXZgXG4gIG1hcmdpbi1sZWZ0OiAyZW07XG4gIG1hcmdpbi10b3A6IC0xMXB4O1xuICBwb3NpdGlvbjogYWJzb2x1dGU7XG5gO1xuXG5jb25zdCBIZWFkZXIgPSBwcm9wcyA9PiAoXG4gIDxRdWVyeVxuICAgIHF1ZXJ5PXtNRV9RVUVSWX1cbiAgICBmZXRjaFBvbGljeT1cImNhY2hlLWZpcnN0XCJcbiAgPlxuICAgIHsoeyBjbGllbnQsIGxvYWRpbmcgfSkgPT4ge1xuICAgICAgcmV0dXJuICg8aGVhZGVyPlxuICAgICAgICA8bmF2PlxuICAgICAgICAgIDxMb2dvPlxuICAgICAgICAgICAgPGltZyBzcmM9XCIvc3RhdGljL2ltZy9sYW5pc3RhLWxvZ28tcmVkLnBuZ1wiIGFsdD1cIkxhbmlzdGFcIiB3aWR0aD17NDB9IGhlaWdodD17NDB9IC8+XG4gICAgICAgICAgPC9Mb2dvPlxuICAgICAgICAgIDx1bD5cbiAgICAgICAgICAgIHtjb29raWUuZ2V0KCd0b2tlbicpICYmIChcbiAgICAgICAgICAgICAgPGxpPlxuICAgICAgICAgICAgICAgIDxMaW5rIGhyZWY9Jy8nPlxuICAgICAgICAgICAgICAgICAgPGE+V29ya291dHM8L2E+XG4gICAgICAgICAgICAgICAgPC9MaW5rPlxuICAgICAgICAgICAgICA8L2xpPlxuICAgICAgICAgICAgKX1cbiAgICAgICAgICAgIHshY29va2llLmdldCgndG9rZW4nKSAmJiAoXG4gICAgICAgICAgICAgIDxsaT5cbiAgICAgICAgICAgICAgICA8TGluayBocmVmPScvbG9naW4nPlxuICAgICAgICAgICAgICAgICAgPGE+TG9naW48L2E+XG4gICAgICAgICAgICAgICAgPC9MaW5rPlxuICAgICAgICAgICAgICA8L2xpPlxuICAgICAgICAgICAgKX1cbiAgICAgICAgICAgIHtjb29raWUuZ2V0KCd0b2tlbicpICYmIChcbiAgICAgICAgICAgICAgPGxpPlxuICAgICAgICAgICAgICAgIDxMaW5rIGhyZWY9Jy9wcm9maWxlJz5cbiAgICAgICAgICAgICAgICAgIDxhPlByb2ZpbGU8L2E+XG4gICAgICAgICAgICAgICAgPC9MaW5rPlxuICAgICAgICAgICAgICA8L2xpPlxuICAgICAgICAgICAgKX1cbiAgICAgICAgICAgIHtjb29raWUuZ2V0KCd0b2tlbicpICYmIChcbiAgICAgICAgICAgICAgPGxpPlxuICAgICAgICAgICAgICAgIDxidXR0b24gb25DbGljaz17KCkgPT4ge1xuICAgICAgICAgICAgICAgICAgY2xpZW50LnJlc2V0U3RvcmUoKTtcbiAgICAgICAgICAgICAgICAgIGxvZ291dCgpO1xuICAgICAgICAgICAgICAgIH19PkxvZ291dDwvYnV0dG9uPlxuICAgICAgICAgICAgICA8L2xpPlxuICAgICAgICAgICAgKX1cbiAgICAgICAgICA8L3VsPlxuICAgICAgICA8L25hdj5cbiAgICAgIDxzdHlsZSBqc3g+e2BcbiAgICAgICAgdWwge1xuICAgICAgICAgIGRpc3BsYXk6IGZsZXg7XG4gICAgICAgICAgbGlzdC1zdHlsZTogbm9uZTtcbiAgICAgICAgICBtYXJnaW4tbGVmdDogMDtcbiAgICAgICAgICBwYWRkaW5nLWxlZnQ6IDA7XG4gICAgICAgIH1cbiAgICAgICAgbGkge1xuICAgICAgICAgIG1hcmdpbi1yaWdodDogMXJlbTtcbiAgICAgICAgfVxuICAgICAgICBsaTpmaXJzdC1jaGlsZCB7XG4gICAgICAgICAgbWFyZ2luLWxlZnQ6IGF1dG87XG4gICAgICAgIH1cbiAgICAgICAgYSB7XG4gICAgICAgICAgY29sb3I6ICNmZmY7XG4gICAgICAgICAgdGV4dC1kZWNvcmF0aW9uOiBub25lO1xuICAgICAgICB9XG4gICAgICAgIGhlYWRlciB7XG4gICAgICAgICAgcGFkZGluZzogMC4ycmVtO1xuICAgICAgICAgIGNvbG9yOiAjZmZmO1xuICAgICAgICAgIGJhY2tncm91bmQtY29sb3I6ICMzMzM7XG4gICAgICAgIH1cbiAgICAgIGB9PC9zdHlsZT5cbiAgICA8L2hlYWRlcj4pXG4gICAgfX1cbiAgPC9RdWVyeT5cbilcblxuZXhwb3J0IGRlZmF1bHQgSGVhZGVyXG4iXX0= */\n/*@ sourceURL=/Users/rafaeldiaz/Documents/development/lanista-coach/components/header.js */"));
+    }, "ul.jsx-1562005891{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;list-style:none;margin-left:0;padding-left:0;}li.jsx-1562005891{margin-right:1rem;}li.jsx-1562005891:first-child{margin-left:auto;}a.jsx-1562005891{color:#fff;-webkit-text-decoration:none;text-decoration:none;}header.jsx-1562005891{padding:0.2rem;color:#fff;background-color:#333;}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9yYWZhZWxkaWF6L0RvY3VtZW50cy9EZXZlbG9wbWVudC9sYW5pc3RhLWNvYWNoL2NvbXBvbmVudHMvaGVhZGVyLmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQWdFa0IsQUFHd0IsQUFNSyxBQUdELEFBR04sQUFJSSxXQUhNLElBSVYsRUFQYixDQUhBLFFBV3dCLHNCQUN4QixhQUxBLGFBYmtCLGdCQUNGLGNBQ0MsZUFDakIiLCJmaWxlIjoiL1VzZXJzL3JhZmFlbGRpYXovRG9jdW1lbnRzL0RldmVsb3BtZW50L2xhbmlzdGEtY29hY2gvY29tcG9uZW50cy9oZWFkZXIuanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgTGluayBmcm9tICduZXh0L2xpbmsnXG5pbXBvcnQgeyBsb2dvdXQgfSBmcm9tICcuLi9saWIvYXV0aCdcbmltcG9ydCBjb29raWUgZnJvbSAnanMtY29va2llJ1xuaW1wb3J0IGdxbCBmcm9tIFwiZ3JhcGhxbC10YWdcIlxuaW1wb3J0IHsgUXVlcnkgfSBmcm9tIFwicmVhY3QtYXBvbGxvXCJcbmltcG9ydCBzdHlsZWQgZnJvbSAnc3R5bGVkLWNvbXBvbmVudHMnXG5cbmNvbnN0IE1FX1FVRVJZID0gZ3FsYFxuICB7XG4gICAgbWUge1xuICAgICAgaWRcbiAgICB9XG4gIH1cbmBcblxuY29uc3QgTG9nbyA9IHN0eWxlZC5kaXZgXG4gIG1hcmdpbi1sZWZ0OiAyZW07XG4gIG1hcmdpbi10b3A6IC0xMXB4O1xuICBwb3NpdGlvbjogYWJzb2x1dGU7XG5gO1xuXG5jb25zdCBIZWFkZXIgPSBwcm9wcyA9PiAoXG4gIDxRdWVyeVxuICAgIHF1ZXJ5PXtNRV9RVUVSWX1cbiAgICBmZXRjaFBvbGljeT1cImNhY2hlLWZpcnN0XCJcbiAgPlxuICAgIHsoeyBjbGllbnQsIGxvYWRpbmcgfSkgPT4ge1xuICAgICAgcmV0dXJuICg8aGVhZGVyPlxuICAgICAgICA8bmF2PlxuICAgICAgICAgIDxMb2dvPlxuICAgICAgICAgICAgPGltZyBzcmM9XCIvc3RhdGljL2ltZy9sYW5pc3RhLWxvZ28tcmVkLnBuZ1wiIGFsdD1cIkxhbmlzdGFcIiB3aWR0aD17NDB9IGhlaWdodD17NDB9IC8+XG4gICAgICAgICAgPC9Mb2dvPlxuICAgICAgICAgIDx1bD5cbiAgICAgICAgICAgIHtjb29raWUuZ2V0KCd0b2tlbicpICYmIChcbiAgICAgICAgICAgICAgPGxpPlxuICAgICAgICAgICAgICAgIDxMaW5rIGhyZWY9Jy8nPlxuICAgICAgICAgICAgICAgICAgPGE+V29ya291dHM8L2E+XG4gICAgICAgICAgICAgICAgPC9MaW5rPlxuICAgICAgICAgICAgICA8L2xpPlxuICAgICAgICAgICAgKX1cbiAgICAgICAgICAgIHshY29va2llLmdldCgndG9rZW4nKSAmJiAoXG4gICAgICAgICAgICAgIDxsaT5cbiAgICAgICAgICAgICAgICA8TGluayBocmVmPScvbG9naW4nPlxuICAgICAgICAgICAgICAgICAgPGE+TG9naW48L2E+XG4gICAgICAgICAgICAgICAgPC9MaW5rPlxuICAgICAgICAgICAgICA8L2xpPlxuICAgICAgICAgICAgKX1cbiAgICAgICAgICAgIHtjb29raWUuZ2V0KCd0b2tlbicpICYmIChcbiAgICAgICAgICAgICAgPGxpPlxuICAgICAgICAgICAgICAgIDxMaW5rIGhyZWY9Jy9wcm9maWxlJz5cbiAgICAgICAgICAgICAgICAgIDxhPlByb2ZpbGU8L2E+XG4gICAgICAgICAgICAgICAgPC9MaW5rPlxuICAgICAgICAgICAgICA8L2xpPlxuICAgICAgICAgICAgKX1cbiAgICAgICAgICAgIHtjb29raWUuZ2V0KCd0b2tlbicpICYmIChcbiAgICAgICAgICAgICAgPGxpPlxuICAgICAgICAgICAgICAgIDxidXR0b24gb25DbGljaz17KCkgPT4ge1xuICAgICAgICAgICAgICAgICAgY2xpZW50LnJlc2V0U3RvcmUoKTtcbiAgICAgICAgICAgICAgICAgIGxvZ291dCgpO1xuICAgICAgICAgICAgICAgIH19PkxvZ291dDwvYnV0dG9uPlxuICAgICAgICAgICAgICA8L2xpPlxuICAgICAgICAgICAgKX1cbiAgICAgICAgICA8L3VsPlxuICAgICAgICA8L25hdj5cbiAgICAgIDxzdHlsZSBqc3g+e2BcbiAgICAgICAgdWwge1xuICAgICAgICAgIGRpc3BsYXk6IGZsZXg7XG4gICAgICAgICAgbGlzdC1zdHlsZTogbm9uZTtcbiAgICAgICAgICBtYXJnaW4tbGVmdDogMDtcbiAgICAgICAgICBwYWRkaW5nLWxlZnQ6IDA7XG4gICAgICAgIH1cbiAgICAgICAgbGkge1xuICAgICAgICAgIG1hcmdpbi1yaWdodDogMXJlbTtcbiAgICAgICAgfVxuICAgICAgICBsaTpmaXJzdC1jaGlsZCB7XG4gICAgICAgICAgbWFyZ2luLWxlZnQ6IGF1dG87XG4gICAgICAgIH1cbiAgICAgICAgYSB7XG4gICAgICAgICAgY29sb3I6ICNmZmY7XG4gICAgICAgICAgdGV4dC1kZWNvcmF0aW9uOiBub25lO1xuICAgICAgICB9XG4gICAgICAgIGhlYWRlciB7XG4gICAgICAgICAgcGFkZGluZzogMC4ycmVtO1xuICAgICAgICAgIGNvbG9yOiAjZmZmO1xuICAgICAgICAgIGJhY2tncm91bmQtY29sb3I6ICMzMzM7XG4gICAgICAgIH1cbiAgICAgIGB9PC9zdHlsZT5cbiAgICA8L2hlYWRlcj4pXG4gICAgfX1cbiAgPC9RdWVyeT5cbilcblxuZXhwb3J0IGRlZmF1bHQgSGVhZGVyXG4iXX0= */\n/*@ sourceURL=/Users/rafaeldiaz/Documents/Development/lanista-coach/components/header.js */"));
   });
 };
 
@@ -303,7 +303,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! next/head */ "next/head");
 /* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(next_head__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _header__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./header */ "./components/header.js");
-var _jsxFileName = "/Users/rafaeldiaz/Documents/development/lanista-coach/components/layout.js";
+var _jsxFileName = "/Users/rafaeldiaz/Documents/Development/lanista-coach/components/layout.js";
 
 
 
@@ -332,7 +332,7 @@ var Layout = function Layout(props) {
   }, "Authentication with Next.js using JWT and Hasura GraphQL Engine")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(styled_jsx_style__WEBPACK_IMPORTED_MODULE_0___default.a, {
     id: "2939023367",
     __self: this
-  }, "*,*::before,*::after{box-sizing:border-box;}body{margin:0;color:#333;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto, 'Helvetica Neue',Arial,Noto Sans,sans-serif,'Apple Color Emoji', 'Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji';}.container{max-width:65rem;margin:1.5rem auto;padding-left:1rem;padding-right:1rem;}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9yYWZhZWxkaWF6L0RvY3VtZW50cy9kZXZlbG9wbWVudC9sYW5pc3RhLWNvYWNoL2NvbXBvbmVudHMvbGF5b3V0LmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQVN1QixBQUsrQixBQUdiLEFBT08sU0FOTCxPQU9RLElBSnNDLEVBTjNELGFBV29CLGtCQUNDLG1CQUNyQixtSUFOQSIsImZpbGUiOiIvVXNlcnMvcmFmYWVsZGlhei9Eb2N1bWVudHMvZGV2ZWxvcG1lbnQvbGFuaXN0YS1jb2FjaC9jb21wb25lbnRzL2xheW91dC5qcyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBSZWFjdCBmcm9tICdyZWFjdCdcbmltcG9ydCBIZWFkIGZyb20gJ25leHQvaGVhZCdcbmltcG9ydCBIZWFkZXIgZnJvbSAnLi9oZWFkZXInXG5cbmNvbnN0IExheW91dCA9IHByb3BzID0+IChcbiAgPFJlYWN0LkZyYWdtZW50PlxuICAgIDxIZWFkPlxuICAgICAgPHRpdGxlPkF1dGhlbnRpY2F0aW9uIHdpdGggTmV4dC5qcyB1c2luZyBKV1QgYW5kIEhhc3VyYSBHcmFwaFFMIEVuZ2luZTwvdGl0bGU+XG4gICAgPC9IZWFkPlxuICAgIDxzdHlsZSBqc3ggZ2xvYmFsPntgXG4gICAgICAqLFxuICAgICAgKjo6YmVmb3JlLFxuICAgICAgKjo6YWZ0ZXIge1xuICAgICAgICBib3gtc2l6aW5nOiBib3JkZXItYm94O1xuICAgICAgfVxuICAgICAgYm9keSB7XG4gICAgICAgIG1hcmdpbjogMDtcbiAgICAgICAgY29sb3I6ICMzMzM7XG4gICAgICAgIGZvbnQtZmFtaWx5OiAtYXBwbGUtc3lzdGVtLCBCbGlua01hY1N5c3RlbUZvbnQsICdTZWdvZSBVSScsIFJvYm90byxcbiAgICAgICAgICAnSGVsdmV0aWNhIE5ldWUnLCBBcmlhbCwgTm90byBTYW5zLCBzYW5zLXNlcmlmLCAnQXBwbGUgQ29sb3IgRW1vamknLFxuICAgICAgICAgICdTZWdvZSBVSSBFbW9qaScsICdTZWdvZSBVSSBTeW1ib2wnLCAnTm90byBDb2xvciBFbW9qaSc7XG4gICAgICB9XG4gICAgICAuY29udGFpbmVyIHtcbiAgICAgICAgbWF4LXdpZHRoOiA2NXJlbTtcbiAgICAgICAgbWFyZ2luOiAxLjVyZW0gYXV0bztcbiAgICAgICAgcGFkZGluZy1sZWZ0OiAxcmVtO1xuICAgICAgICBwYWRkaW5nLXJpZ2h0OiAxcmVtO1xuICAgICAgfVxuICAgIGB9PC9zdHlsZT5cbiAgICA8SGVhZGVyIC8+XG5cbiAgICA8bWFpbj5cbiAgICAgIDxkaXYgY2xhc3NOYW1lPSdjb250YWluZXInPntwcm9wcy5jaGlsZHJlbn08L2Rpdj5cbiAgICA8L21haW4+XG4gIDwvUmVhY3QuRnJhZ21lbnQ+XG4pXG5cbmV4cG9ydCBkZWZhdWx0IExheW91dFxuIl19 */\n/*@ sourceURL=/Users/rafaeldiaz/Documents/development/lanista-coach/components/layout.js */"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_header__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  }, "*,*::before,*::after{box-sizing:border-box;}body{margin:0;color:#333;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto, 'Helvetica Neue',Arial,Noto Sans,sans-serif,'Apple Color Emoji', 'Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji';}.container{max-width:65rem;margin:1.5rem auto;padding-left:1rem;padding-right:1rem;}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi9Vc2Vycy9yYWZhZWxkaWF6L0RvY3VtZW50cy9EZXZlbG9wbWVudC9sYW5pc3RhLWNvYWNoL2NvbXBvbmVudHMvbGF5b3V0LmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQVN1QixBQUsrQixBQUdiLEFBT08sU0FOTCxPQU9RLElBSnNDLEVBTjNELGFBV29CLGtCQUNDLG1CQUNyQixtSUFOQSIsImZpbGUiOiIvVXNlcnMvcmFmYWVsZGlhei9Eb2N1bWVudHMvRGV2ZWxvcG1lbnQvbGFuaXN0YS1jb2FjaC9jb21wb25lbnRzL2xheW91dC5qcyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBSZWFjdCBmcm9tICdyZWFjdCdcbmltcG9ydCBIZWFkIGZyb20gJ25leHQvaGVhZCdcbmltcG9ydCBIZWFkZXIgZnJvbSAnLi9oZWFkZXInXG5cbmNvbnN0IExheW91dCA9IHByb3BzID0+IChcbiAgPFJlYWN0LkZyYWdtZW50PlxuICAgIDxIZWFkPlxuICAgICAgPHRpdGxlPkF1dGhlbnRpY2F0aW9uIHdpdGggTmV4dC5qcyB1c2luZyBKV1QgYW5kIEhhc3VyYSBHcmFwaFFMIEVuZ2luZTwvdGl0bGU+XG4gICAgPC9IZWFkPlxuICAgIDxzdHlsZSBqc3ggZ2xvYmFsPntgXG4gICAgICAqLFxuICAgICAgKjo6YmVmb3JlLFxuICAgICAgKjo6YWZ0ZXIge1xuICAgICAgICBib3gtc2l6aW5nOiBib3JkZXItYm94O1xuICAgICAgfVxuICAgICAgYm9keSB7XG4gICAgICAgIG1hcmdpbjogMDtcbiAgICAgICAgY29sb3I6ICMzMzM7XG4gICAgICAgIGZvbnQtZmFtaWx5OiAtYXBwbGUtc3lzdGVtLCBCbGlua01hY1N5c3RlbUZvbnQsICdTZWdvZSBVSScsIFJvYm90byxcbiAgICAgICAgICAnSGVsdmV0aWNhIE5ldWUnLCBBcmlhbCwgTm90byBTYW5zLCBzYW5zLXNlcmlmLCAnQXBwbGUgQ29sb3IgRW1vamknLFxuICAgICAgICAgICdTZWdvZSBVSSBFbW9qaScsICdTZWdvZSBVSSBTeW1ib2wnLCAnTm90byBDb2xvciBFbW9qaSc7XG4gICAgICB9XG4gICAgICAuY29udGFpbmVyIHtcbiAgICAgICAgbWF4LXdpZHRoOiA2NXJlbTtcbiAgICAgICAgbWFyZ2luOiAxLjVyZW0gYXV0bztcbiAgICAgICAgcGFkZGluZy1sZWZ0OiAxcmVtO1xuICAgICAgICBwYWRkaW5nLXJpZ2h0OiAxcmVtO1xuICAgICAgfVxuICAgIGB9PC9zdHlsZT5cbiAgICA8SGVhZGVyIC8+XG5cbiAgICA8bWFpbj5cbiAgICAgIDxkaXYgY2xhc3NOYW1lPSdjb250YWluZXInPntwcm9wcy5jaGlsZHJlbn08L2Rpdj5cbiAgICA8L21haW4+XG4gIDwvUmVhY3QuRnJhZ21lbnQ+XG4pXG5cbmV4cG9ydCBkZWZhdWx0IExheW91dFxuIl19 */\n/*@ sourceURL=/Users/rafaeldiaz/Documents/Development/lanista-coach/components/layout.js */"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_header__WEBPACK_IMPORTED_MODULE_3__["default"], {
     __source: {
       fileName: _jsxFileName,
       lineNumber: 30
@@ -407,7 +407,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _jsxFileName = "/Users/rafaeldiaz/Documents/development/lanista-coach/lib/auth.js";
+var _jsxFileName = "/Users/rafaeldiaz/Documents/Development/lanista-coach/lib/auth.js";
 
 
 
@@ -2428,22 +2428,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/createClass */ "./node_modules/@babel/runtime-corejs2/helpers/esm/createClass.js");
 /* harmony import */ var _babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/possibleConstructorReturn */ "./node_modules/@babel/runtime-corejs2/helpers/esm/possibleConstructorReturn.js");
 /* harmony import */ var _babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/getPrototypeOf */ "./node_modules/@babel/runtime-corejs2/helpers/esm/getPrototypeOf.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/inherits */ "./node_modules/@babel/runtime-corejs2/helpers/esm/inherits.js");
-/* harmony import */ var _babel_runtime_corejs2_helpers_esm_taggedTemplateLiteral__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/taggedTemplateLiteral */ "./node_modules/@babel/runtime-corejs2/helpers/esm/taggedTemplateLiteral.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! isomorphic-unfetch */ "isomorphic-unfetch");
-/* harmony import */ var isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var _components_layout__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../components/layout */ "./components/layout.js");
-/* harmony import */ var _lib_auth__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../lib/auth */ "./lib/auth.js");
-/* harmony import */ var graphql_tag__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! graphql-tag */ "graphql-tag");
-/* harmony import */ var graphql_tag__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(graphql_tag__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react-apollo */ "react-apollo");
-/* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(react_apollo__WEBPACK_IMPORTED_MODULE_13__);
-/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! styled-components */ "styled-components");
-/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(styled_components__WEBPACK_IMPORTED_MODULE_14__);
-/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../style.css */ "./style.css");
-/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(_style_css__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/assertThisInitialized */ "./node_modules/@babel/runtime-corejs2/helpers/esm/assertThisInitialized.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/inherits */ "./node_modules/@babel/runtime-corejs2/helpers/esm/inherits.js");
+/* harmony import */ var _babel_runtime_corejs2_helpers_esm_taggedTemplateLiteral__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @babel/runtime-corejs2/helpers/esm/taggedTemplateLiteral */ "./node_modules/@babel/runtime-corejs2/helpers/esm/taggedTemplateLiteral.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! isomorphic-unfetch */ "isomorphic-unfetch");
+/* harmony import */ var isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(isomorphic_unfetch__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var _components_layout__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../components/layout */ "./components/layout.js");
+/* harmony import */ var _lib_auth__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../lib/auth */ "./lib/auth.js");
+/* harmony import */ var graphql_tag__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! graphql-tag */ "graphql-tag");
+/* harmony import */ var graphql_tag__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(graphql_tag__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! react-apollo */ "react-apollo");
+/* harmony import */ var react_apollo__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(react_apollo__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! styled-components */ "styled-components");
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(styled_components__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../style.css */ "./style.css");
+/* harmony import */ var _style_css__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(_style_css__WEBPACK_IMPORTED_MODULE_16__);
 
 
 
@@ -2452,11 +2453,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-var _jsxFileName = "/Users/rafaeldiaz/Documents/development/lanista-coach/pages/login.js";
+
+var _jsxFileName = "/Users/rafaeldiaz/Documents/Development/lanista-coach/pages/login.js";
 
 
 function _templateObject2() {
-  var data = Object(_babel_runtime_corejs2_helpers_esm_taggedTemplateLiteral__WEBPACK_IMPORTED_MODULE_7__["default"])(["\n  query CurrentUserForLayout {\n    me {\n      id\n      first_name\n      last_name\n      email\n      plans {\n        name\n      }\n    }\n  }\n"]);
+  var data = Object(_babel_runtime_corejs2_helpers_esm_taggedTemplateLiteral__WEBPACK_IMPORTED_MODULE_8__["default"])(["\n  query CurrentUserForLayout {\n    me {\n      id\n      first_name\n      last_name\n      email\n      plans {\n        name\n      }\n    }\n  }\n"]);
 
   _templateObject2 = function _templateObject2() {
     return data;
@@ -2466,7 +2468,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  var data = Object(_babel_runtime_corejs2_helpers_esm_taggedTemplateLiteral__WEBPACK_IMPORTED_MODULE_7__["default"])(["\n  mutation Login( $email: String!,  $password: String!) {\n     login(email: $email, password: $password) {\n         token\n         user {\n          id\n          email\n          first_name\n          last_name\n          plans {\n            name\n          }\n        }\n     }\n  }\n"]);
+  var data = Object(_babel_runtime_corejs2_helpers_esm_taggedTemplateLiteral__WEBPACK_IMPORTED_MODULE_8__["default"])(["\n  mutation Login( $email: String!,  $password: String!) {\n     login(email: $email, password: $password) {\n         token\n         user {\n          id\n          email\n          first_name\n          last_name\n          plans {\n            name\n          }\n        }\n     }\n  }\n"]);
 
   _templateObject = function _templateObject() {
     return data;
@@ -2483,55 +2485,86 @@ function _templateObject() {
 
 
 
-var LOGIN = graphql_tag__WEBPACK_IMPORTED_MODULE_12___default()(_templateObject());
-var ME_QUERY = graphql_tag__WEBPACK_IMPORTED_MODULE_12___default()(_templateObject2());
-var Stage = styled_components__WEBPACK_IMPORTED_MODULE_14___default.a.div.withConfig({
+var LOGIN = graphql_tag__WEBPACK_IMPORTED_MODULE_13___default()(_templateObject());
+var ME_QUERY = graphql_tag__WEBPACK_IMPORTED_MODULE_13___default()(_templateObject2());
+var Stage = styled_components__WEBPACK_IMPORTED_MODULE_15___default.a.div.withConfig({
   displayName: "login__Stage",
   componentId: "sc-12wzbu1-0"
 })(["background-color:white;display:flex;flex-direction:column;align-items:flex-start;height:100%;"]);
-var History = styled_components__WEBPACK_IMPORTED_MODULE_14___default.a.div.withConfig({
+var History = styled_components__WEBPACK_IMPORTED_MODULE_15___default.a.div.withConfig({
   displayName: "login__History",
   componentId: "sc-12wzbu1-1"
-})(["height:20%;"]);
-var Message = styled_components__WEBPACK_IMPORTED_MODULE_14___default.a.div.withConfig({
+})(["height:100%;width:100%;position:absolute;top:0;"]);
+var Message = styled_components__WEBPACK_IMPORTED_MODULE_15___default.a.div.withConfig({
   displayName: "login__Message",
   componentId: "sc-12wzbu1-2"
-})(["height:60%;margin-left:1em;font-size:1.5em;font-weight:bolder;"]);
-var MessageLogo = styled_components__WEBPACK_IMPORTED_MODULE_14___default.a.div.withConfig({
-  displayName: "login__MessageLogo",
+})(["margin-left:1em;font-size:1.5em;font-weight:bolder;display:flex;height:100%;width:100%;"]);
+var MessageWrapper = styled_components__WEBPACK_IMPORTED_MODULE_15___default.a.div.withConfig({
+  displayName: "login__MessageWrapper",
   componentId: "sc-12wzbu1-3"
-})(["margin-left:2em;margin-top:-11px;"]);
-var MessageContent = styled_components__WEBPACK_IMPORTED_MODULE_14___default.a.div.withConfig({
-  displayName: "login__MessageContent",
+})(["display:inline-block;align-self:flex-end;margin-bottom:10vh;"]);
+var MessageLogo = styled_components__WEBPACK_IMPORTED_MODULE_15___default.a.div.withConfig({
+  displayName: "login__MessageLogo",
   componentId: "sc-12wzbu1-4"
-})(["margin-left:2em;margin-top:-11px;"]);
-var InputSection = styled_components__WEBPACK_IMPORTED_MODULE_14___default.a.div.withConfig({
-  displayName: "login__InputSection",
+})(["margin-left:0;margin-top:0;"]);
+var MessageContent = styled_components__WEBPACK_IMPORTED_MODULE_15___default.a.div.withConfig({
+  displayName: "login__MessageContent",
   componentId: "sc-12wzbu1-5"
-})(["height:20%;"]);
+})(["margin-left:0;margin-top:0;"]);
+var InputSection = styled_components__WEBPACK_IMPORTED_MODULE_15___default.a.div.withConfig({
+  displayName: "login__InputSection",
+  componentId: "sc-12wzbu1-6"
+})(["height:20%;display:flex;align-self:flex-end;"]);
+var LanistaButton = styled_components__WEBPACK_IMPORTED_MODULE_15___default.a.button.withConfig({
+  displayName: "login__LanistaButton",
+  componentId: "sc-12wzbu1-7"
+})(["border-style:solid;border-color:red;background:transparent;font-size:1em;padding:0.5em 1em;display:inline-block;align-self:flex-end;margin-right:2em;margin-bottom:2em;z-index:2;"]);
 
 var Login =
 /*#__PURE__*/
 function (_Component) {
-  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_6__["default"])(Login, _Component);
+  Object(_babel_runtime_corejs2_helpers_esm_inherits__WEBPACK_IMPORTED_MODULE_7__["default"])(Login, _Component);
 
   function Login(props) {
-    var _this;
+    var _this2;
 
     Object(_babel_runtime_corejs2_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_2__["default"])(this, Login);
 
-    _this = Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__["default"])(Login).call(this, props));
-    _this.state = {
+    _this2 = Object(_babel_runtime_corejs2_helpers_esm_possibleConstructorReturn__WEBPACK_IMPORTED_MODULE_4__["default"])(this, Object(_babel_runtime_corejs2_helpers_esm_getPrototypeOf__WEBPACK_IMPORTED_MODULE_5__["default"])(Login).call(this, props));
+    _this2.state = {
       email: '',
       password: '',
       error: '',
       message: 'Willkommen bei Lanista',
-      history: []
+      history: ["Test 1"],
+      input: react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement(LanistaButton, {
+        onClick: function onClick() {
+          _this2.pushInHistory();
+        },
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 110
+        },
+        __self: this
+      }, "Weiter")
     };
-    return _this;
+    _this2.renderInput = _this2.renderInput.bind(Object(_babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6__["default"])(_this2));
+    _this2.pushInHistory = _this2.pushInHistory.bind(Object(_babel_runtime_corejs2_helpers_esm_assertThisInitialized__WEBPACK_IMPORTED_MODULE_6__["default"])(_this2));
+    return _this2;
   }
 
   Object(_babel_runtime_corejs2_helpers_esm_createClass__WEBPACK_IMPORTED_MODULE_3__["default"])(Login, [{
+    key: "pushInHistory",
+    value: function pushInHistory() {
+      console.log("pushInHistory");
+      console.log(this.state);
+      var history = this.state.history;
+      history.push("Test 2");
+      this.setState({
+        history: history
+      });
+    }
+  }, {
     key: "_confirm",
     value: function () {
       var _confirm2 = Object(_babel_runtime_corejs2_helpers_esm_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1__["default"])(
@@ -2543,7 +2576,7 @@ function (_Component) {
             switch (_context.prev = _context.next) {
               case 0:
                 token = data.login.token;
-                Object(_lib_auth__WEBPACK_IMPORTED_MODULE_11__["login"])({
+                Object(_lib_auth__WEBPACK_IMPORTED_MODULE_12__["login"])({
                   token: token
                 });
 
@@ -2562,22 +2595,46 @@ function (_Component) {
       return _confirm;
     }()
   }, {
+    key: "renderInput",
+    value: function renderInput() {
+      var _this = this;
+
+      this.setState({
+        input: react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement(LanistaButton, {
+          onClick: function onClick() {
+            console.log("Marke");
+            console.log(_this);
+
+            _this.setState({
+              history: _this.state.history.push("Test 2")
+            });
+          },
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 138
+          },
+          __self: this
+        }, "Weiter")
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
       var _this$state = this.state,
           email = _this$state.email,
           password = _this$state.password,
-          message = _this$state.message;
-      return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(react_apollo__WEBPACK_IMPORTED_MODULE_13__["Mutation"], {
+          message = _this$state.message,
+          input = _this$state.input;
+      return react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement(react_apollo__WEBPACK_IMPORTED_MODULE_14__["Mutation"], {
         mutation: LOGIN,
         variables: {
           email: this.state.email,
           password: this.state.password
         },
         onCompleted: function onCompleted(data) {
-          return _this2._confirm(data);
+          return _this3._confirm(data);
         },
         update: function update(cache, _ref) {
           var login = _ref.data.login;
@@ -2596,64 +2653,80 @@ function (_Component) {
         },
         __source: {
           fileName: _jsxFileName,
-          lineNumber: 98
+          lineNumber: 155
         },
         __self: this
       }, function (login, _ref2) {
         var data = _ref2.data;
-        return react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(Stage, {
+        return react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement(Stage, {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 117
+            lineNumber: 174
           },
           __self: this
-        }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(History, {
+        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement(History, {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 118
+            lineNumber: 175
           },
           __self: this
-        }, "History"), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(Message, {
+        }, _this3.state.history.map(function (item, i) {
+          console.log('test');
+          return react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("li", {
+            key: i,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 179
+            },
+            __self: this
+          }, item);
+        })), react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement(Message, {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 121
+            lineNumber: 183
           },
           __self: this
-        }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(MessageLogo, {
+        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement(MessageWrapper, {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 122
+            lineNumber: 184
           },
           __self: this
-        }, react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement("img", {
+        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement(MessageLogo, {
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 185
+          },
+          __self: this
+        }, react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement("img", {
           src: "/static/img/lanista-logo-red.png",
           alt: "Lanista",
           width: 40,
           height: 40,
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 123
+            lineNumber: 186
           },
           __self: this
-        })), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(MessageContent, {
+        })), react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement(MessageContent, {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 125
+            lineNumber: 188
           },
           __self: this
-        }, message)), react__WEBPACK_IMPORTED_MODULE_8___default.a.createElement(InputSection, {
+        }, message))), react__WEBPACK_IMPORTED_MODULE_9___default.a.createElement(InputSection, {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 129
+            lineNumber: 193
           },
           __self: this
-        }, "InputSection"));
+        }, input));
       });
     }
   }]);
 
   return Login;
-}(react__WEBPACK_IMPORTED_MODULE_8__["Component"]);
+}(react__WEBPACK_IMPORTED_MODULE_9__["Component"]);
 
 /* harmony default export */ __webpack_exports__["default"] = (Login);
 
@@ -2670,14 +2743,14 @@ function (_Component) {
 
 /***/ }),
 
-/***/ 3:
+/***/ 4:
 /*!******************************!*\
   !*** multi ./pages/login.js ***!
   \******************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/rafaeldiaz/Documents/development/lanista-coach/pages/login.js */"./pages/login.js");
+module.exports = __webpack_require__(/*! /Users/rafaeldiaz/Documents/Development/lanista-coach/pages/login.js */"./pages/login.js");
 
 
 /***/ }),

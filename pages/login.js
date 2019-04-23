@@ -47,32 +47,55 @@ const Stage = styled.div`
 `;
 
 const History = styled.div`
-  height: 20%;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
 `;
 
 const Message = styled.div`
-  height: 60%;
   margin-left: 1em;
   font-size: 1.5em;
   font-weight: bolder;
+  display: flex;
+  height: 100%;
+  width: 100%;
+`;
+
+const MessageWrapper = styled.div`
+  display: inline-block;
+  align-self: flex-end;
+  margin-bottom: 10vh;
 `;
 
 const MessageLogo = styled.div`
-  margin-left: 2em;
-  margin-top: -11px;
+  margin-left: 0;
+  margin-top: 0;
 `;
 
 const MessageContent = styled.div`
-  margin-left: 2em;
-  margin-top: -11px;
+  margin-left: 0;
+  margin-top: 0;
 `;
 
 const InputSection = styled.div`
   height: 20%;
+  display: flex;
+  align-self: flex-end;
 `;
 
-
-
+const LanistaButton = styled.button`
+  border-style: solid;
+  border-color: red;
+  background: transparent;
+  font-size: 1em;
+  padding: 0.5em 1em;
+  display: inline-block;
+  align-self: flex-end;
+  margin-right: 2em;
+  margin-bottom: 2em;
+  z-index: 2;
+`;
 
 class Login extends Component {
 
@@ -83,8 +106,25 @@ class Login extends Component {
       password: '',
       error: '',
       message:  'Willkommen bei Lanista',
-      history: [],
+      history: ["Test 1"],
+      input: (<LanistaButton onClick={() => {this.pushInHistory()}}>
+        Weiter
+      </LanistaButton>)
     }
+    this.renderInput = this.renderInput.bind(this);
+    this.pushInHistory = this.pushInHistory.bind(this);
+  }
+
+  pushInHistory() {
+    console.log("pushInHistory");
+    console.log(this.state);
+    const {history} = this.state;
+    history.push("Test 2");
+    this.setState(
+      {
+        history: history
+      }
+    )
   }
 
   async _confirm( data ) {
@@ -92,8 +132,25 @@ class Login extends Component {
     login({ token })
   }
 
+  renderInput() {
+    const _this = this;
+    this.setState({
+      input: (<LanistaButton onClick={() => {
+        console.log("Marke");
+        console.log( _this )
+        _this.setState(
+          {
+            history: _this.state.history.push("Test 2")
+          }
+        )
+      }}>
+        Weiter
+      </LanistaButton>)
+    })
+  }
+
   render () {
-    const { email, password, message } = this.state
+    const { email, password, message, input } = this.state
     return (
       <Mutation
         mutation={LOGIN}
@@ -116,18 +173,25 @@ class Login extends Component {
           return (
             <Stage>
               <History>
-                History
+                {
+                  this.state.history.map(function(item, i){
+                    console.log('test');
+                    return <li key={i}>{item}</li>
+                  }
+                )}
               </History>
               <Message>
-                <MessageLogo>
-                  <img src="/static/img/lanista-logo-red.png" alt="Lanista" width={40} height={40} />
-                </MessageLogo>
-                <MessageContent>
-                  {message}
-                </MessageContent>
+                <MessageWrapper>
+                  <MessageLogo>
+                    <img src="/static/img/lanista-logo-red.png" alt="Lanista" width={40} height={40} />
+                  </MessageLogo>
+                  <MessageContent>
+                    {message}
+                  </MessageContent>
+                </MessageWrapper>
               </Message>
               <InputSection>
-                InputSection
+                {input}
               </InputSection>
             </Stage>
           )
