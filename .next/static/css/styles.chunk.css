@@ -1,0 +1,14 @@
+body, html {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  overscroll-behavior: none;
+  font-family: 'Abel', sans-serif;
+}
+
+body > :first-child {
+  height: 100%;
+}
+
+
+/*# sourceMappingURL=styles.chunk.css.map*/
