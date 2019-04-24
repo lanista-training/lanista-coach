@@ -1,1 +1,0 @@
-{"version":3,"file":"static/css/styles.chunk.css","sources":["webpack:///./style.css"],"sourcesContent":["body, html {\n  padding: 0;\n  margin: 0;\n  height: 100%;\n  overscroll-behavior: none;\n  font-family: 'Abel', sans-serif;\n}\n\nbody > :first-child {\n  height: 100%;\n}\n"],"mappings":"AAAA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;AACA;;","sourceRoot":""}
