@@ -10,7 +10,6 @@ export default class MyDocument extends Document {
     return (
       <html>
         <Head>
-          <title>Lanista Coach</title>
           <link href="https://fonts.googleapis.com/css?family=Abel" rel="stylesheet"/>
         </Head>
         <body>
