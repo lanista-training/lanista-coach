@@ -1,0 +1,289 @@
+/* Regular @import url statements work as you'd expect them to -- alternatively
+you can import locally, and they wind up in the resulting bundle */
+@import url('https://fonts.googleapis.com/css?family=Gentium+Basic');
+@import url('https://fonts.googleapis.com/css?family=Abel');
+@font-face {
+  font-family: 'lanista';
+  src:  url('../fonts/fonts/icomoon.eot?cm8f97');
+  src:  url('../fonts/fonts/icomoon.eot?cm8f97#iefix') format('embedded-opentype'),
+    url('../fonts/fonts/icomoon.ttf?cm8f97') format('truetype'),
+    url('../fonts/fonts/icomoon.woff?cm8f97') format('woff'),
+    url('../fonts/fonts/icomoon.svg?cm8f97#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@import '~semantic-ui-css/semantic.css';
+@import '~react-mfb/mfb.css';
+@import "~react-day-picker/lib/style.css";
+html {
+  padding: 0;
+  border: 0;
+  font-family: 'Gentium Basic', serif;
+  font-size: 16px;
+
+  /* We can nest rules, thanks to SASS */
+  li {
+    font-size: 2rem;
+  }
+}
+
+body, html {
+  background-color: #fafafa!important;
+}
+
+.de-flag{
+  background-image: url('../images/de.png');
+  background-size: contain!important;
+  height: 40px;
+  width: 40px;
+  background-color: initial;
+  bottom: -25px;
+}
+
+.es-flag{
+  background-image: url('../images/es.png');
+  background-size: contain!important;
+  height: 40px;
+  width: 40px;
+  background-color: initial;
+  bottom: -25px;
+}
+
+.en-flag{
+  background-image: url('../images/en.png');
+  background-size: contain!important;
+  height: 40px;
+  width: 40px;
+  background-color: initial;
+  bottom: -25px;
+}
+
+.fr-flag{
+  background-image: url('../images/fr.png');
+  background-size: contain!important;
+  height: 40px;
+  width: 40px;
+  background-color: initial;
+  bottom: -25px;
+}
+
+.text-input-invalid {
+  border-color: #d20027!important;
+  background-color: #f3e0e3!important;
+}
+
+.fade-enter {
+  opacity: 0.01;
+}
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+.fade-exit {
+  opacity: 1;
+}
+.fade-exit-active {
+  opacity: 0.01;
+  transition: opacity 500ms ease-in;
+}
+
+.scene{
+  transition: all 0.3s ease-in-out;
+  position: absolute;
+}
+
+.none-enter {
+  z-index: 1;
+}
+
+.ui.floating.label {
+  padding: 0.3em;
+  top: -0.3em!important;
+}
+
+.ui.active.button, .ui.active.button:hover {
+    color: rgb(155, 201, 61)!important;
+    font-weight: bold!important;
+}
+
+.green-icon i {
+  color: rgb(155,201,61)!important;
+  font-weight: bold!important;
+  text-shadow: 0px 0px 12px rgba(155, 201, 61, 1);
+}
+
+@keyframes glowing {
+  0% { box-shadow: 0 0 -10px #c4a300; }
+  40% { box-shadow: 0 0 20px #c4a300; }
+  60% { box-shadow: 0 0 20px #c4a300; }
+  100% { box-shadow: 0 0 -10px #c4a300; }
+}
+
+.button-glow {
+  animation: glowing 5000ms infinite;
+}
+
+.icon-time-inactive.icon::before {
+  font-family: Lanista;
+  content: "\e94e";
+}
+
+.icon-birthday-inactive.icon::before {
+  font-family: Lanista;
+  content: "\e939";
+}
+
+.icon-email-inactive.icon::before {
+  font-family: Lanista;
+  content: "\e94a";
+}
+
+.icon-calender-inactive.icon::before {
+  font-family: Lanista;
+  content: "\e91a";
+}
+
+.icon-customer-inactive.icon::before {
+  font-family: Lanista;
+  content: "\e943";
+}
+
+.icon-training-plan-inactive.icon::before {
+  font-family: Lanista;
+  content: "\e92a";
+}
+
+.icon-back.icon::before {
+  font-family: Lanista;
+  content: "\e953";
+}
+
+.icon-logout.icon::before {
+  font-family: Lanista;
+  content: "\e955";
+}
+
+.icon-shop.icon::before {
+  font-family: Lanista;
+  content: "\e956";
+}
+
+.icon-more.icon::before {
+  font-family: Lanista;
+  content: "\e954";
+}
+
+.icon-sync.icon::before {
+  font-family: Lanista;
+  content: "\e957";
+}
+
+.icon-tools-inactive.icon::before {
+  font-family: Lanista;
+  content: "\e951";
+}
+
+.icon-help-inactive.icon::before {
+  font-family: Lanista;
+  content: "\e91f";
+}
+
+.icon-exercise-inactive.icon::before {
+  font-family: Lanista;
+  content: "\e952";
+}
+
+
+
+.icon-user-new.icon::before {
+  font-family: Lanista;
+  content: "\e959";
+}
+
+.icon-user-remove.icon::before {
+  font-family: Lanista;
+  content: "\e95d";
+}
+
+.icon-folder.icon::before {
+  font-family: Lanista;
+  content: "\e95a";
+}
+
+.icon-time-back.icon::before {
+  font-family: Lanista;
+  content: "\e958";
+}
+
+.icon-plus.icon::before {
+  font-family: Lanista;
+  content: "\e95b";
+}
+
+.icon-remove.icon::before {
+  font-family: Lanista;
+  content: "\e95c";
+}
+
+
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none!important;
+}
+
+.DayPicker {
+  font-size: 1.06rem!important;
+}
+.DayPicker-Caption {
+  text-align: center!important;
+}
+
+.DayPicker-NavButton--prev {
+  left: 1.5em!important;
+}
+
+.DayPicker-NavButton {
+  background-size: 80%!important;
+}
+
+.DayPicker-Footer {
+  text-align: center;
+}
+
+*:focus {
+    outline: 0;
+}
+
+.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+  width: 33px!important;
+}
+
+.ui.basic.red.label {
+  color: white!important;
+}
+
+.ui.input{
+  display: block!important;
+}
+
+.logout-button {
+  color: #db2828!important;
+}
+
+.command-red {
+  color: #db2828!important;
+}
+
+.command-green {
+  color: rgb(155, 201, 61)!important;
+}
+
+.logout-button i {
+  font-weight: bold!important;
+}
+
+.ui.card ul {
+  padding: 0!important;
+  margin: 0!important;
+}

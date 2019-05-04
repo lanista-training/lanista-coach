@@ -1,0 +1,10 @@
+{
+  "MSG_feed_text": "hat eine Nachricht gesendet",
+  "BRD_feed_text": "hat Geburtstag",
+  "ARQ_feed_text": "wünscht ein Termin",
+  "APT_feed_text": "hat ein Termin",
+  "WKE_feed_text": "hat keinen gültigen Trainingsplan",
+  "WKA_feed_text": "hat bald keinen gültigen Trainingsplan",
+  "ACT_feed_text": "hat trainiert",
+  "Overview": "Überblick"
+}
