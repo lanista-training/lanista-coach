@@ -1,10 +1,14 @@
 import * as React from "react";
 import Dashboard from './Dashboard';
 import Router from 'next/router';
+import { Query } from "react-apollo";
 import _ from 'lodash';
 
 import Scene from "../../components/Scene";
 import Filter from "../../components/feeds/Filter"
+
+
+import { CUSTOMERS_QUERY } from "../../mutations/dashboard";
 
 class DashboardWithoutMutation extends React.Component {
 
@@ -197,27 +201,42 @@ class DashboardWithoutMutation extends React.Component {
     }];
 
     return (
-      <Scene
-        commandsLeft={commandsLeft}
-        commandsRight={commandsRight}
-        headerChildren={
-          <Filter
-            onFilterByTime={this.jumpToStart}
-            onFilterByType={this.onFilterByType}
-            filter={filter}
-          />
-        }
-        processing={false}
-        t={this.t}
+      <Query
+        query={CUSTOMERS_QUERY}
+        variables={{
+          offset: 0,
+          limit: 10
+        }}
       >
-        <Dashboard
-          t={this.t}
-          goBack={this.goBack}
-          feeds={dataSource}
-          currentScrollPosition={this.state.currentScrollPosition}
-          jumpToDay={this.jumpToDay}
-        />
-      </Scene>
+        {({ loading, error, data }) => {
+          if (loading) return "Loading...";
+          if (error) return `Error! ${error.message}`;
+
+          return (
+            <Scene
+              commandsLeft={commandsLeft}
+              commandsRight={commandsRight}
+              headerChildren={
+                <Filter
+                  onFilterByTime={this.jumpToStart}
+                  onFilterByType={this.onFilterByType}
+                  filter={filter}
+                />
+              }
+              processing={false}
+              t={this.t}
+            >
+              <Dashboard
+                t={this.t}
+                goBack={this.goBack}
+                feeds={dataSource}
+                currentScrollPosition={this.state.currentScrollPosition}
+                jumpToDay={this.jumpToDay}
+              />
+            </Scene>
+          );
+        }}
+      </Query>
     );
   }
 }
