@@ -3,9 +3,9 @@ const FeedsTypes = {
   appointment_request: 'ARQ',
   appointment: 'APT',
   customer_activity: 'ACT',
-  workout_expired: 'WKE',
+  workout_expired: 'EXP_PLANS',
   workout_about_to_expire: 'WKA',
-  birthday: 'BRD',
+  birthday: 'USER_BIRTHDAY',
 }
 
 export default FeedsTypes;

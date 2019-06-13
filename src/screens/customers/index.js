@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import Scene from "../../components/Scene";
 import Router from 'next/router';
-
+import { Query } from "react-apollo";
+import _ from "lodash";
 import Customers from './Customers';
 import dataSource from './test_data';
 import folders from '../folder/test_data';
 import CustomerSearchField from '../../components/CustomerSearchField';
+import { MEMBERS, ME } from "../../queries";
 
 class CustomersWithData extends Component {
 
@@ -20,13 +22,14 @@ class CustomersWithData extends Component {
       folderMenu: [],
       folders: folders,
       translations: [],
+      filter: '',
     }
-    this.filterList = this.filterList.bind(this);
     this.showFolderMenu = this.showFolderMenu.bind(this);
     this.closeFolderMenu = this.closeFolderMenu.bind(this);
     this.showCustomer = this.showCustomer.bind(this);
     this.t = this.t.bind(this);
     this.onChangeLanguage = this.onChangeLanguage.bind(this);
+    this.onFetchMembers = this.onFetchMembers.bind(this);
   }
 
   componentDidMount() {
@@ -37,11 +40,11 @@ class CustomersWithData extends Component {
     Router.back();
   }
 
-  showCustomer(index) {
+  showCustomer(customerId) {
     const {customers} = this.state;
     Router.push({
       pathname: '/customer',
-      query: { customer: customers[index].id }
+      query: { customer: customerId }
     });
     //history.push("/customer", {customer: customers[index]});
   }
@@ -60,7 +63,6 @@ class CustomersWithData extends Component {
         icon: 'icon-plus',
         text: 'Create new customer folder',
         onClick: () => {
-          console.log("Create new folder");
           this.closeFolderMenu();
           history.push("/folder");
         }
@@ -70,7 +72,6 @@ class CustomersWithData extends Component {
         icon: 'icon-folder',
         text: folder.name,
         onClick: () => {
-          console.log("Open folder");
           this.closeFolderMenu();
           history.push("/folder", {folder: folder});
         }
@@ -82,24 +83,6 @@ class CustomersWithData extends Component {
       menuDirection: 'right',
       folderMenu: folderMenus,
     })
-  }
-
-  filterList(value) {
-    const {customers} = this.state;
-
-    this.setState({
-      filtering: true
-    }, () => {
-      this.setState({
-        filteredCustomers: customers.filter( customer =>
-          customer.first_name.toLowerCase().indexOf(value.toLowerCase()) > -1
-          || customer.last_name.toLowerCase().indexOf(value.toLowerCase()) > -1
-          || customer.email.toLowerCase().indexOf(value.toLowerCase()) > -1
-        )
-      }, () => {
-        this.setState({filtering: false});
-      })
-    });
   }
 
   getCommandsRight() {
@@ -196,6 +179,54 @@ class CustomersWithData extends Component {
     });
   }
 
+  onFetchMembers(fetchMore, data) {
+    const {filter, pageSize, initialLoading} = this.state
+    const previousCursor = initialLoading ? "0" : data.members.cursor;
+
+    fetchMore({
+      variables: {
+        after: previousCursor,
+        pageSize: pageSize,
+        filter: filter,
+      },
+      updateQuery: (prev, { fetchMoreResult, ...rest }) => {
+        if( initialLoading ) {
+          this.setState({initialLoading: false})
+        }
+        if (!fetchMoreResult) {
+          console.log( 'No result')
+          this.setState({
+            hasMore: false
+          })
+          return prev;
+        } else {
+          console.log( 'Cursor ' + fetchMoreResult.members.cursor)
+          this.setState({
+            hasMore: fetchMoreResult.members.hasMore
+          })
+          console.log( 'previousCursor ' + previousCursor)
+          if( previousCursor == 0) {
+            return {
+              ...fetchMoreResult,
+              members: {
+                ...fetchMoreResult.members,
+                members: fetchMoreResult.members.members,
+              },
+            };
+          } else {
+            return {
+              ...fetchMoreResult,
+              members: {
+                ...fetchMoreResult.members,
+                members: _.unionBy(prev.members.members, fetchMoreResult.members.members, value => value.id),
+              },
+            };
+          }
+        }
+      },
+    })
+  }
+
   render() {
     const {t} = this.props;
     const {
@@ -207,6 +238,7 @@ class CustomersWithData extends Component {
       closeFolderMenu,
       menuDirection,
       folderMenu,
+      filter,
     } = this.state;
     const languages = [
       { key: 'DE', text: 'Deutsch', value: 'DE' },
@@ -218,28 +250,77 @@ class CustomersWithData extends Component {
     ]
 
     return(
-      <Scene
-        commandsLeft={this.getCommandsLeft()}
-        commandsRight={this.getCommandsRight()}
-        processing={processing}
-        headerChildren={
-          <CustomerSearchField onChange={this.filterList}/>
-        }
-        menuVisible={folderMenuVisible}
-        onHideMenu={this.closeFolderMenu}
-        menuDirection={menuDirection}
-        menu={folderMenu}
-        t={this.t}
-      >
-        <Customers
-          t={this.t}
-          customers={filteredCustomers}
-          filtering={filtering}
-          isFilterOn={filteredCustomers.length != customers.length}
-          closeFolderMenu={closeFolderMenu}
-          showCustomer={this.showCustomer}
-        />
-      </Scene>
+      <Query query={ME}>
+        {({ loading: loadingOne, data: { me } }) => (
+          <Query
+            notifyOnNetworkStatusChange
+            fetchPolicy="cache-and-network"
+            query={MEMBERS}
+            variables={{
+              pageSize: 20,
+              after: "0",
+            }}
+            onCompleted={ (data) => {
+              this.setState({
+                initialLoading: false,
+              })
+            }}
+          >
+            {({ data, loading, error, fetchMore }) => {
+              const hasMore = data && data.members ? data.members.hasMore : true
+              const result = (data && data.members) ? data.members : {members: []}
+              return (
+                <Scene
+                  commandsLeft={this.getCommandsLeft()}
+                  commandsRight={this.getCommandsRight()}
+                  processing={processing}
+                  headerChildren={
+                    <>
+                      <CustomerSearchField onChange={(text) => {
+                        if( text.length > 1 ) {
+                          this.setState({
+                            filter: text.trim(),
+                            initialLoading: true,
+                          }, () => {
+                            this.onFetchMembers(fetchMore, data);
+                          });
+                        } else {
+                          this.setState({
+                            filter: '',
+                            initialLoading: true,
+                          })
+                        }
+                      }}/>
+                  </>
+                  }
+                  menuVisible={folderMenuVisible}
+                  onHideMenu={this.closeFolderMenu}
+                  menuDirection={menuDirection}
+                  menu={folderMenu}
+                  t={this.t}
+                >
+                  {
+                      ( (me && me.bu === 0) || (filter && filter.trim().length > 1) ) &&
+                      <Customers
+                        t={this.t}
+                        customers={result.members}
+                        filtering={filtering}
+                        isFilterOn={data ? (data.length != data.length) : false}
+                        closeFolderMenu={closeFolderMenu}
+                        showCustomer={this.showCustomer}
+                        onRequestPage={(page) => this.onFetchMembers(fetchMore, data, page)}
+                        loading={loading}
+                        error={error}
+                        hasMore={hasMore}
+                        setPageSize={(newPageSize) => this.setState({pageSize: newPageSize})}
+                      />
+                  }
+                </Scene>
+              );
+            }}
+          </Query>
+        )}
+      </Query>
     )
   }
 }

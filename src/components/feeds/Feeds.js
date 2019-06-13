@@ -1,7 +1,7 @@
 import * as React from "react";
 import Feed from "./Feed";
 import styled from 'styled-components';
-import ReactList from 'react-list';
+import InfiniteList from '../../components/InfiniteList';
 import DayPicker from 'react-day-picker';
 import { Sticky, Button, List } from 'semantic-ui-react';
 import Calender from '../Calender';
@@ -38,6 +38,7 @@ const Stage = styled.div`
   flex-grow: 1;
   margin: 0 auto;
   padding-top: 5em!important;
+  height: 100vh;
 `;
 const ListSection = styled.div`
   overflow: auto;
@@ -46,7 +47,7 @@ const ListSection = styled.div`
   margin-right: 28px;
   max-width: 550px;
   width: 100%;
-  margin-bottom: 6em;
+  margin-bottom: 4em;
 `;
 const ToolsSection = styled.div`
   max-width: 275px;
@@ -153,10 +154,10 @@ class Feeds extends React.Component {
 
   constructor(props) {
     super(props);
-    this.handleDayClick = this.handleDayClick.bind(this);
     this.state = {
       selectedDay: new Date(),
     };
+    this.handleDayClick = this.handleDayClick.bind(this);
   }
 
   componentDidMount() {
@@ -182,13 +183,22 @@ class Feeds extends React.Component {
   }
 
   render() {
-    const {feeds, t, jumpToDay} = this.props;
+    const {
+      feeds,
+      t,
+      jumpToDay,
+      onRequestPage,
+      loading,
+      error,
+      hasMore,
+      initialLoading,
+      setPageSize,
+    } = this.props;
     const dataSource = [];
     const modifiers = (day) => {
       return feeds.find(element => {
         return element.title == day.toLocaleString().split(',')[0].split( ".").join("-");
       });
-
     };
     const modifiersStyles = {
       modifiers: {
@@ -204,26 +214,30 @@ class Feeds extends React.Component {
       }
     };
 
+    var items = [];
     feeds.map( (feedList, index) =>
     {
       feedList.data.map( (feed, index) =>
        {
-         dataSource.push(feed);
+         items.push(
+           <Feed t={t} key={feed.type + feed.member.id} feed={feed}/>
+         );
        });
     });
 
     return (
-      <Stage>
-        <ListSection className='hide-scrollbar'>
-          <ReactList
-            ref={c => this.list = c}
-            itemRenderer={(index, key) => {
-              return(<Feed t={t} key={index} feed={dataSource[index]}/>);
-            }}
-            length={dataSource.length}
-            type='uniform'
-            className='hide-scrollbar'
-          />
+      <Stage id="feed-stage">
+        <ListSection className='hide-scrollbar' id="infinte-list-wrapper">
+          <InfiniteList
+            loadMore={onRequestPage}
+            hasMore={hasMore}
+            loader={<div class="loader">Loading...</div>}
+            initialLoading={initialLoading}
+            loading={loading}
+            setPageSize={setPageSize}
+          >
+            {items}
+          </InfiniteList>
         </ListSection>
         <ToolsSection>
         <Card>

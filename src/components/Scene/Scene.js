@@ -40,6 +40,7 @@ const Stage = styled.div`
   overflow-y: auto;
   margin-right: 100px;
   margin-left:  100px;
+  height: 100%;
   ::-webkit-scrollbar {
     width: 0px!important;
     background: transparent!important; /* make scrollbar transparent */
@@ -155,7 +156,6 @@ export default ({
         animation='overlay'
         icon='labeled'
         onHide={onHideMenu}
-        vertical
         visible={menuVisible}
         width='thin'
         direction={menuDirection}

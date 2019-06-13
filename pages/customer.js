@@ -1,11 +1,17 @@
 import React from "react";
 import { withAuthSync } from '../lib/auth'
-//import CustomersScreen from "../src/screens/customers"
+import CustomerScreen from "../src/screens/customer"
 
-function Customer() {
+function Customer({memberId}) {
   return (
-    <div>Customer</div>
+    <CustomerScreen  memberId={memberId}></CustomerScreen>
   );
 }
+
+Customer.getInitialProps = context => {
+  return ({
+    memberId: context.query.customer
+  })
+};
 
 export default withAuthSync(Customer);

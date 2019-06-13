@@ -118,8 +118,6 @@ class LoginWithMutation extends React.Component {
   }
 
   goToRegistration( target ) {
-    console.log( "GO TO REGISTRATION" );
-    console.log( target );
     Router.push('/registration');
   }
 
@@ -157,11 +155,19 @@ class LoginWithMutation extends React.Component {
         onCompleted={data => this._confirm(data)}
         update={(cache, { data: { login } }) => {
           console.log("update")
-          //const query = cache.readQuery({ query: ME_QUERY });
-          //console.log( "query" )
-          //console.log( query )
+          var query = null;
+          try {
+            query = cache.readQuery({ query: ME_QUERY });
+          } catch( e ) {
+            console.log( "Login error")
+            console.log( e )
+          }
+
+          console.log( "query" )
+          console.log( query )
           console.log("login.user")
           console.log(login.user)
+
           cache.writeQuery({
             query: ME_QUERY,
             data: { me: login.user },
@@ -169,8 +175,6 @@ class LoginWithMutation extends React.Component {
         }}
       >
         {(login, { data }) => {
-          console.log("MUTATION DATA");
-          console.log( data );
           return (
             <Login
               //authenticated={data && data.state ?  : false}

@@ -90,7 +90,7 @@ const CommandsBlock = ({feedType}) => {
 };
 
 export default ({feed, key, t}) => (
-  <StyledFeed key={key}>
+  <StyledFeed key={feed.type + feed.member.id}>
     <Header>
       <Photo>
         <a style={{
@@ -98,22 +98,22 @@ export default ({feed, key, t}) => (
           height: '40px',
           backgroundColor: '#fafafa',
           borderRadius: '50%',
-          webkitBoxSizing: 'border-box',
+          WebkitBoxSizing: 'border-box',
           boxSizing: 'border-box',
           display: 'block',
-          webkitBoxFlex: '0',
-          webkitFlex: '0 0 auto',
+          WebkitBoxFlex: '0',
+          WebkitFlex: '0 0 auto',
           msFlex: '0 0 auto',
           flex: '0 0 auto',
           overflow: 'hidden',
           position: 'relative',
         }}>
-          <img src={feed.customer.photoUrl} alt="" style={{height: '100%', width: '100%'}}/>
+          <img src={feed.member.photoUrl} alt="" style={{height: '100%', width: '100%'}}/>
         </a>
       </Photo>
       <HeaderText>
-        <HeaderName>{feed.customer.first_name} {feed.customer.last_name}</HeaderName><HeaderDescription> {t("dashboard:" + feed.type + "_feed_text")}</HeaderDescription>
-        <HeaderDateTime>{moment(feed.customer.target_date).calendar()}</HeaderDateTime>
+        <HeaderName>{feed.member.first_name} {feed.member.last_name}</HeaderName><HeaderDescription> {t("dashboard:" + feed.type + "_feed_text")}</HeaderDescription>
+        <HeaderDateTime>{moment(parseInt(feed.target_date)).calendar()}</HeaderDateTime>
       </HeaderText>
     </Header>
     <CommandsBlock feedType={feed.type}/>

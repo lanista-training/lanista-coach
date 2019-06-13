@@ -1,5 +1,5 @@
 import * as React from "react";
-import styled from "@/lib/styledComponents";
+import styled from 'styled-components';
 import moment from "moment";
 import { Header, Icon, Image } from 'semantic-ui-react'
 

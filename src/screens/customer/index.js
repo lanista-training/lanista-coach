@@ -1,66 +1,83 @@
 import React, { Component } from 'react';
-import { withRouter } from "react-router";
 import _ from 'lodash';
 import moment from "moment";
-
-import { translate } from 'react-i18next';
+import Router from 'next/router';
+import { Query } from "react-apollo";
 import Scene from "../../components/Scene";
 import Customer from './Customer';
 import CustomerHeader from "../../components/CustomerHeader";
+import { MEMBER } from "../../queries";
 
-import protocollsFile from './test_data';
-import exerciesesFile from '../exercises/test_data';
-
-@translate(['common', 'setup'], { wait: true })
 class CustomerWithData extends Component {
 
   constructor(props) {
     super(props);
-    const customer = props.location.state ? props.location.state.customer : {};
-    const exercises = [];
-
-    exerciesesFile.map((exercise) => {
-      exercises[exercise.id] = exercise;
-    });
-    for( i = 0; i < protocollsFile.length; i++) {
-      protocollsFile[i].image_1 = protocollsFile[i].user_exercise_id > 0 ? "http://lanista-training.com/tpmanager/img/s/" +  exercises[protocollsFile[i].user_exercise_id] + '_1.jpg' : protocollsFile[i].exercise_id > 0 ? "http://lanista-training.com/app/resources/images/previews/" +  exercises[parseInt(protocollsFile[i].exercise_id)].ext_id + "_1.jpg" : null;
-      protocollsFile[i].image_2 = protocollsFile[i].user_exercise_id > 0 ? "http://lanista-training.com/tpmanager/img/s/" +  exercises[protocollsFile[i].user_exercise_id] + '_2.jpg' : protocollsFile[i].exercise_id > 0 ? "http://lanista-training.com/app/resources/images/previews/" + exercises[parseInt(protocollsFile[i].exercise_id)].ext_id + "_2.jpg" : null;
-    }
-    const tmp = _.reduce(_.groupBy(protocollsFile, o => o.execution_date.substring(0,10)+ "_" + (o.exercise_id > 0 ? ('0_' + o.exercise_id) :('1_' + o.user_exercise_id) )), (acc, next, index) => {
-      acc.push({
-        title: index,
-        exercise_id: index.split('_')[2],
-        exercise_type: index.split('_')[1],
-        data: next
-      });
-      return acc;
-    }, []);
-    const tmp_1 = _.groupBy(tmp, o => o.title.substring(0,10));
-    const dataSource = [];
-    for (var property in tmp_1) {
-      if (tmp_1.hasOwnProperty(property)) {
-        dataSource.push({
-          day: moment( property.substring(0, 10), "YYYY-MM-DD" ),
-          data: tmp_1[property],
-        })
-      }
-    }
 
     this.state = {
       processing: false,
-      customer: customer,
-      protocolls: dataSource,
+      translations: [],
     };
     this.goBack = this.goBack.bind(this);
+    this.t = this.t.bind(this);
+    this.onChangeLanguage = this.onChangeLanguage.bind(this);
+    this.extractLastMeasures = this.extractLastMeasures.bind(this);
   };
 
+  componentDidMount() {
+    this.onChangeLanguage("de");
+  }
+
   goBack() {
-    this.props.history.goBack();
+    Router.back();
   }
 
   getCommandsRight() {
-    return ([]);
+    const {memberId} = this.props;
+    return ([{
+          icon: 'icon-create-workout',
+          text: 'new user',
+          type: 'type-1',
+          typex: 'Ionicons',
+          name: 'new user',
+          onTap: () => {
+            console.log("Create Workout");
+          }
+      }, {
+          icon: 'icon-create-protocoll',
+          text: 'folder',
+          type: 'type-1',
+          typex: 'Ionicons',
+          name: 'folder',
+          onTap: () => {
+            console.log("Create Protocoll");
+          }
+      }, {
+          icon: 'icon-measure',
+          text: 'last',
+          type: 'type-1',
+          typex: 'Ionicons',
+          name: 'last',
+          onTap: () => {
+            Router.push({
+              pathname: '/measures',
+              query: { customer: memberId }
+            });
+          }
+      }, {
+          icon: 'icon-activity',
+          text: 'refresh',
+          type: 'type-1',
+          typex: 'Ionicons',
+          name: 'refresh',
+          onTap: () => {
+            Router.push({
+              pathname: '/anamnese',
+              query: { customer: memberId }
+            });
+          }
+      }]);
   }
+
 
   getCommandsLeft() {
     return ([{
@@ -96,31 +113,94 @@ class CustomerWithData extends Component {
       }]);
   }
 
+  calculateBodyFat(member, measures) {
+    return measures.trizeps + measures.scapula + measures.auxiliar + measures.chest + measures.sprailium + measures.abs + measures.quads
+  }
+
+  extractLastMeasures(data) {
+     if( data && data.member && data.member.calipers ){
+       const sortedData = _.orderBy(data.member.calipers, ['target_date'], ['desc'])
+
+       const lastHeightEntry = _.find(sortedData, (o) => o.height > 0)
+       const lastWeightEntry = _.find(sortedData, (o) => o.weight > 0)
+
+       const lastHeight = lastHeightEntry ? lastHeightEntry.height : 0
+       const lastWeight = lastWeightEntry ? lastWeightEntry.weight : 0
+
+       const lastFutrex = _.find(sortedData, (o) => (o.futrex > 0 || (o.trizeps>0 && o.scapula>0 &&  o.auxiliar>0 && o.chest>0 && o.sprailium>0 && o.abs>0 && o.quads>0 )))
+       return {
+         height: lastHeight,
+         weight: lastWeight,
+         fat: lastFutrex ? (lastFutrex.futrex > 0 ? lastFutrex.futrex : this.calculateBodyFat(data.member, lastFutrex)) : 0,
+       }
+     } else {
+       return {
+         height: 0,
+         weight: 0,
+         fat: 0,
+       }
+     }
+  }
+
+  t(text) {
+    const {translations} = this.state;
+    const textWithoutNamespace = text.split(":");
+    const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
+    return (translation ? translation : text);
+  }
+
+  onChangeLanguage( language ) {
+    const translations = require('../../../static/locales/' + language + '/dashboard');
+    const commonTranslations = require('../../../static/locales/' + language + '/common');
+    const originalLanguages = ['en', 'de', 'es', 'fr'];
+
+    this.setState({
+      translations: {...translations, ...commonTranslations},
+      currentLanguage: language,
+      availableLanguages: originalLanguages.filter(word => word !== language)
+    });
+  }
+
   render() {
-    const {t, i18n} = this.props;
-    const {processing, customer, protocolls} = this.state;
+    const {processing, protocolls} = this.state;
+    const {memberId} = this.props;
 
     return(
-      <Scene
-        commandsLeft={this.getCommandsLeft()}
-        commandsRight={this.getCommandsRight()}
-        processing={processing}
-        headerChildren={
-          <CustomerHeader
-            userId={customer.id}
-            firstName={customer.first_name}
-            lastName={customer.last_name}
-          />
-        }
+      <Query
+        query={MEMBER}
+        notifyOnNetworkStatusChange
+        fetchPolicy="cache-and-network"
+        variables={{
+          memberId: memberId,
+        }}
       >
-        <Customer
-          customer={customer}
-          protocolls={protocolls}
-          t={t}
-        />
-      </Scene>
+        {({ data, loading, error, fetchMore }) => {
+          return (
+            <Scene
+              commandsLeft={this.getCommandsLeft()}
+              commandsRight={this.getCommandsRight()}
+              processing={processing}
+              headerChildren={
+                <CustomerHeader
+                  userId={data && data.member ? data.member.id : ''}
+                  firstName={data && data.member ? data.member.first_name : ''}
+                  lastName={data && data.member ? data.member.last_name : ''}
+                />
+              }
+              t={this.t}
+            >
+              <Customer
+                customer={data && data.member ? data.member : {}}
+                lastMeasures={this.extractLastMeasures(data) }
+                protocolls={protocolls}
+                t={this.t}
+              />
+            </Scene>
+          )
+        }}
+      </Query>
     )
   }
 }
 
-export default withRouter(CustomerWithData);
+export default CustomerWithData;

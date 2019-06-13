@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import Router from 'next/router';
+import { Query } from "react-apollo";
 
 import Scene from "../../components/Scene";
 import Setup from './Setup';
-
 import { logout } from '../../../lib/auth';
+import { ME_QUERY } from "../../mutations/authenticate";
 
 class SetupWithData extends Component {
 
@@ -174,7 +175,7 @@ class SetupWithData extends Component {
     })
   }
 
-  getCommandsRight() {
+  getCommandsRight(client) {
     const {
       dataChanged,
       showPasswordConfirmationButton,
@@ -230,7 +231,9 @@ class SetupWithData extends Component {
         className: 'logout-button',
         onTap: () => {
           logout();
-          console.log("Logout");
+          client.clearStore();
+          client.resetStore();
+          console.log("Logout and reset store");
         }
     }])
     :
@@ -243,8 +246,10 @@ class SetupWithData extends Component {
         name: 'logout',
         className: 'logout-button',
         onTap: () => {
+          console.log("Logout and reset store...");
           logout();
-          console.log("Logout");
+          client.resetStore();
+          console.log("done !");
         }
     }]);
   }
@@ -534,31 +539,39 @@ class SetupWithData extends Component {
     ]
 
     return(
-      <Scene
-        commandsLeft={this.getCommandsLeft()}
-        commandsRight={this.getCommandsRight()}
-        processing={processing}
-        t={this.t}
+      <Query
+        query={ME_QUERY}
       >
-        <Setup
-          t={this.t}
-          dataChanged={dataChanged}
-          goBack={this.goBack}
-          languages={languages}
-          userData={user_data}
-          email={email}
-          handleChange={this.handleChange}
-          onTipingOldPassword={this.onTipingOldPassword}
-          onTipingNewPassword={this.onTipingNewPassword}
-          onTipingConfimationPassword={this.onTipingConfimationPassword}
-          passwordOld={passwordOld}
-          passwordNew={passwordNew}
-          passwordConfirmation={passwordConfirmation}
-          passwordIncorrect={passwordIncorrect}
-          passwordConfirmed={passwordConfirmed}
-          saveData={this.saveData}
-        />
-      </Scene>
+        {({ client, data, loading, error }) => {
+          return (
+            <Scene
+              commandsLeft={this.getCommandsLeft()}
+              commandsRight={this.getCommandsRight(client)}
+              processing={processing}
+              t={this.t}
+            >
+              <Setup
+                t={this.t}
+                dataChanged={dataChanged}
+                goBack={this.goBack}
+                languages={languages}
+                userData={user_data}
+                email={email}
+                handleChange={this.handleChange}
+                onTipingOldPassword={this.onTipingOldPassword}
+                onTipingNewPassword={this.onTipingNewPassword}
+                onTipingConfimationPassword={this.onTipingConfimationPassword}
+                passwordOld={passwordOld}
+                passwordNew={passwordNew}
+                passwordConfirmation={passwordConfirmation}
+                passwordIncorrect={passwordIncorrect}
+                passwordConfirmed={passwordConfirmed}
+                saveData={this.saveData}
+              />
+            </Scene>
+          );
+        }}
+      </Query>
     )
   }
 }

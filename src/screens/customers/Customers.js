@@ -10,20 +10,41 @@ import {
   Sidebar,
   Menu,
 } from 'semantic-ui-react';
-import ReactList from 'react-list';
+import InfiniteList from '../../components/InfiniteList';
 import { useTransition, animated } from 'react-spring';
 
 const Stage = styled.div`
-  padding-top: 8em!important;
-  padding-bottom: 8em!important;
-  max-width: 775px;
-  display: block!important;
-  margin-right: auto!important;
-  margin-left: auto!important;
-  ::-webkit-scrollbar {
-    width: 0px!important;
-    background: transparent!important; /* make scrollbar transparent */
-  }
+  max-width: 935px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-flow: row nowrap;
+  -ms-flex-flow: row nowrap;
+  -webkit-flex-flow: row nowrap;
+  -ms-flex-flow: row nowrap;
+  flex-flow: row nowrap;
+  max-width: 935px;
+  position: relative;
+  width: 100%;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  margin: 0 auto;
+  padding-top: 5em!important;
+  height: 100vh;
+`;
+const ListSection = styled.div`
+  overflow: auto;
+  padding-top: 1.5em;
+  width: 100%;
+  margin-bottom: 4em;
 `;
 const StyledCard = styled(Card)`
   width: 100%!important;
@@ -34,12 +55,23 @@ const StyledCard = styled(Card)`
 `;
 const ListItem = styled(List.Item)`
   padding: 1.5em!important;
-  border-bottom-color: rgba(0, 0, 0, 0.075);
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
+  float: left;
+  width: 20vw;
+  height: 100%;
+  background-color: white;
+  overflow: hidden;
+  margin: 2em;
+  border: 1px solid rgba(0,0,0,.0975);
+  border-radius: 5px;
+  box-shadow: 0 0 27px 0 #0000001f;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
 `;
 const UserNameAndAvatar = styled.div`
   display: flex;
+  flex-flow: column;
+  align-items: center;
   font-size: 1.3em;
   line-height: 1.4em;
 `;
@@ -55,45 +87,30 @@ const ListLoader = styled(Loader)`
 `;
 const FilterStatus  = styled.div`
   font-size: 1.2em;
-`;
 
-function AnimatedList({customers, showCustomer}) {
-  return (
-    <List divided verticalAlign='middle'>
-      <ReactList
-        //ref={c => this.list = c}
-        itemRenderer={(index, key) => {
-          return(
-            <ListItem>
-              <List.Content floated='right'>
-                <Action>
-                  <Button onClick={() => showCustomer(index)}>Open</Button>
-                </Action>
-              </List.Content>
-              <UserNameAndAvatar>
-                <Avatar>
-                  <Image
-                    avatar
-                    src={'http://lanista-training.com/tpmanager/img/p/' + customers[index].id + '_photo.jpg'}
-                    size='massive'
-                  />
-                </Avatar>
-                <List.Content style={{lineHight: '2em'}}>
-                  {customers[index].first_name} {customers[index].last_name}
-                  <br/>
-                  <span style={{color: "rgb(116, 116, 116)", fontSize: '0.9em'}}>{customers[index].email}</span>
-                </List.Content>
-              </UserNameAndAvatar>
-            </ListItem>
-          );
-        }}
-        length={customers.length}
-        type='uniform'
-        className='hide-scrollbar'
-      />
-    </List>
-  )
-}
+`;
+const FirstName  = styled.div`
+  text-align: center;
+  line-height: 1em;
+  height: 1em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 18vw
+`;
+const LastName  = styled.div`
+  text-align: center;
+  line-height: 1em;
+  height: 1em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 18vw
+`;
 
 class Customers extends React.Component {
 
@@ -101,6 +118,7 @@ class Customers extends React.Component {
     super(props)
     this.state = {
       value: null,
+      initialLoading: true,
     }
   }
 
@@ -111,18 +129,61 @@ class Customers extends React.Component {
       isFilterOn,
       showCustomer,
       t,
+      onRequestPage,
+      hasMore,
+      initialLoading,
+      loading,
+      setPageSize,
     } = this.props;
+
+    var items = [];
+    customers.map((customer, i) => {
+      items.push(
+        <ListItem key={i}>
+          <UserNameAndAvatar>
+            <a style={{
+              width: '8em',
+              height: '8em',
+              backgroundColor: '#fafafa',
+              borderRadius: '5%',
+              webkitBoxSizing: 'border-box',
+              boxSizing: 'border-box',
+              display: 'block',
+              webkitBoxFlex: '0',
+              webkitFlex: '0 0 auto',
+              msFlex: '0 0 auto',
+              flex: '0 0 auto',
+              overflow: 'hidden',
+              position: 'relative',
+            }}>
+              <img src={'http://lanista-training.com/tpmanager/img/p/' + customer.id + '_photo.jpg'} alt="" style={{height: '100%', width: '100%'}}/>
+            </a>
+            <List.Content style={{ padding: "1em 0"}}>
+              <FirstName>{(customer.first_name||customer.last_name) ? customer.last_name : customer.email}</FirstName>
+              <LastName>{customer.first_name}</LastName>
+            </List.Content>
+          </UserNameAndAvatar>
+          <Action>
+            <Button onClick={() => showCustomer(customer.id)}>Open</Button>
+          </Action>
+        </ListItem>
+      );
+    });
+
     return(
       <Stage>
-        <FilterStatus>
-          {isFilterOn ? (customers.length + ' ' + t('customers:customers_found')) : ''}
-        </FilterStatus>
-        <StyledCard>
-          <Dimmer active={filtering} inverted>
-            <ListLoader size='mini'>Loading</ListLoader>
-          </Dimmer>
-          <AnimatedList customers={customers} showCustomer={showCustomer}/>
-        </StyledCard>
+        <ListSection className='hide-scrollbar' id="infinte-list-wrapper">
+          <InfiniteList
+            initialLoading={initialLoading}
+            loading={loading}
+            loader={<div class="">Loading...</div>}
+            loadMore={onRequestPage}
+            hasMore={hasMore}
+            setPageSize={setPageSize}
+          >
+            {items}
+          </InfiniteList>
+        </ListSection>
       </Stage>
     );
   }
