@@ -6,7 +6,7 @@ import { Menu, MainButton, ChildButton } from "react-mfb";
 import {useTransition, animated} from 'react-spring';
 
  const Root = styled.div`
-   background-image: url(/static/img/login-background.jpg);
+   background-image: url(https://lanistacoach.s3.amazonaws.com/static/img/login-background.jpg);
    background-size: cover;
    background-position: center center;
    background-repeat: no-repeat;

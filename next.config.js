@@ -2,7 +2,7 @@ const withCSS = require('@zeit/next-css')
 
 const config = {
   target: "serverless",
-  //assetPrefix: "https://s3.amazonaws.com/lanistacoach"
+  assetPrefix: "https://lanistacoach.s3.amazonaws.com"
 };
 
-module.exports = withCSS()
+module.exports = withCSS(config)
