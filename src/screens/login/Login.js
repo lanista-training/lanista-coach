@@ -161,6 +161,40 @@ class Login extends React.Component {
       }} />)
       : <ChildButton/>);
 
+      const MyFooter = () => {
+        const [show, set] = useState(false)
+        const transitions = useTransition(show, null, {
+          from: { opacity: 0 },
+          enter: { opacity: 1 },
+          leave: { opacity: 0 },
+        })
+        console.log( "MyFooter")
+        return transitions.map(({ item, key, props }) =>
+          {
+            console.log( "item" )
+            console.log( item )
+            return (<animated.div key={key} style={props}><Footer key={key} style={props}>
+              <Nav style={{color: 'black', fontFamily: 'Abel'}}>
+                © Lanista Trainingssoftware 2012
+                <a>
+                  Impresum
+                </a>
+                <a>
+                  Datenschutz
+                </a>
+                <a>
+                  Info
+                </a>
+              </Nav>
+              <Menu effect={effect} method={method} position={pos}>
+                <MainButton className={currentLanguage + "-flag"} iconResting="ion-plus-round" iconActive="ion-close-round" />
+                {languageItems}
+              </Menu>
+            </Footer></animated.div>)
+          }
+        )
+      }
+
     return (
       <Root className={"scene"} style={{display: "table", height: "100vh", width: "100vw"}}>
         <div style={{
@@ -248,24 +282,7 @@ class Login extends React.Component {
               </StyledRegisterButton>
             </Grid.Row>
           </Grid>
-          <Footer style={{}}>
-            <Nav style={{color: 'black', fontFamily: 'Abel'}}>
-              © Lanista Trainingssoftware 2012
-              <a>
-                Impresum
-              </a>
-              <a>
-                Datenschutz
-              </a>
-              <a>
-                Info
-              </a>
-            </Nav>
-            <Menu effect={effect} method={method} position={pos}>
-              <MainButton className={currentLanguage + "-flag"} iconResting="ion-plus-round" iconActive="ion-close-round" />
-              {languageItems}
-            </Menu>
-          </Footer>
+          <MyFooter/>
         </div>
       </Root>
     )

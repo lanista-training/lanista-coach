@@ -375,7 +375,7 @@ class Customer extends React.Component {
             <WorkoutsList className="hide-scrollbar">
               {
                 warnings.map(( item, key ) =>
-                  <WorkoutsListItem key={key} style={{backgroundImage: 'url(/static/img/injury-background.jpg)',  backgroundSize: 'cover'}}>
+                  <WorkoutsListItem key={key} style={{backgroundImage: 'url(https://lanistacoach.s3.amazonaws.com/static/img/injury-background.jpg)',  backgroundSize: 'cover'}}>
                     <div className="workoutname">{item.name}</div>
                     <div className="workoutdescription">{item.description && item.description.length > 0 ? item.description : "No description available"}</div>
                     <div className="workoutextrainfo">{this.translateRating(item.rating)}</div>

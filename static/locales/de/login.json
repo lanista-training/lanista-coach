@@ -14,5 +14,7 @@
   "trainingssoftware": "Lanista Trainingssoftware © 2012",
   "impressum": "Impressum",
   "datenschutz": "Datenschutz",
-  "info": "Info"
+  "info": "Info",
+  "UNEXPECTEDERROR": "Es ist ein Fehler aufgetretten",
+  "USERNOTFOUND": "Email oder Passwort sind nicht korrekt"
 }

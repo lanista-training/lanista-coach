@@ -15,7 +15,6 @@ class LoginWithMutation extends React.Component {
       availableLanguages: ['en', 'de', 'es', 'pt', 'ru', 'fr'],
 
       authenticated: false,
-      authenticating: false,
       error: false,
       errorMessage: null,
 
@@ -81,39 +80,35 @@ class LoginWithMutation extends React.Component {
 
   doAuthenticate(login) {
     const {email, password} = this.state;
-    const {t} = this.props;
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+    console.log("doAuthenticate")
+    console.log(email)
+    console.log(password)
+
     // data validation
-    if( email === undefined || email.length == 0 ) {
+    if( email == "" ) {
       this.setState({
         emailIsValid: false,
-        validationEmailErrorMessage: t("login:email_empty"),
+        validationEmailErrorMessage: this.t("login:email_empty"),
       });
     } else if( !re.test(email) ) {
       this.setState({
         emailIsValid: false,
-        validationEmailErrorMessage: t("login:email_invalid"),
+        validationEmailErrorMessage: this.t("login:email_invalid"),
       });
-    } else if (password === undefined || password.length == 0 ) {
+    } else if (password == "" ) {
       this.setState({
         passwordIsValid: false,
-        validationPasswordErrorMessage: t("login:password_empty"),
+        validationPasswordErrorMessage: this.t("login:password_empty"),
       });
     } else if ( password.length < 6 ) {
       this.setState({
         passwordIsValid: false,
-        validationPasswordErrorMessage: t("login:password_to_short"),
+        validationPasswordErrorMessage: this.t("login:password_to_short"),
       });
     } else {
       login();
-      this.setState({
-        authenticated: false,
-        authenticating: false,
-        authenticationErrorMessage: "Connection error",
-        passwordIsValid: null,
-        emailIsValid:  null,
-      });
     }
   }
 
@@ -163,23 +158,20 @@ class LoginWithMutation extends React.Component {
             console.log( e )
           }
 
-          console.log( "query" )
-          console.log( query )
-          console.log("login.user")
-          console.log(login.user)
-
           cache.writeQuery({
             query: ME_QUERY,
             data: { me: login.user },
           });
         }}
       >
-        {(login, { data }) => {
+        {(login, { loading, data, error }) => {
+          console.log("data")
+          console.log(data)
+          const errorCode = error && (error.message.indexOf(": ") > -1 ? error.message.split(': ')[1] : error.message);
           return (
             <Login
-              //authenticated={data && data.state ?  : false}
               authenticated={this.state.authenticated}
-              authenticating={this.state.authenticating}
+              authenticating={loading || (data && data.login && data.login.token)}
               errorMessage={this.state.errorMessage}
               authenticateUser={() => this.doAuthenticate(login)}
               goToRegistration= {this.goToRegistration}
@@ -199,7 +191,7 @@ class LoginWithMutation extends React.Component {
               validationEmailErrorMessage={this.state.validationEmailErrorMessage}
               validationPasswordErrorMessage={this.state.validationPasswordErrorMessage}
 
-              authenticationErrorMessage={this.state.authenticationErrorMessage}
+              authenticationErrorMessage={errorCode ? this.t(errorCode) : undefined}
             />
           );
         }}

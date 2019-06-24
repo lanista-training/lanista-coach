@@ -151,7 +151,7 @@ class Anamnese extends React.Component {
       { menuItem: { key: 'injuries',  content: t('injuries') }, render: () =>
         <Tab.Pane style={{ height: "calc((100vh - 130px) - 7em)" }}>
           <div style={{alignItems: "center", height: "100%", alignContent: "center", textAlign: "center", background: "white"}}>
-            <img src="static/img/front_side_back_skele.jpg" alt="Smiley face" height="100%" width="auto"/>
+            <img src="https://lanistacoach.s3.amazonaws.com/static/img/front_side_back_skele.jpg" alt="Smiley face" height="100%" width="auto"/>
           </div>
         </Tab.Pane>
       },
