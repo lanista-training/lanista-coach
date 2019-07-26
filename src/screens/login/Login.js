@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import LogoImage from '-!react-svg-loader!../../images/LanistaLogo.svg';
-import { Input, Grid, Button } from 'semantic-ui-react';
-import { Menu, MainButton, ChildButton } from "react-mfb";
-import {useTransition, animated} from 'react-spring';
+import React, { useState } from 'react'
+import styled from 'styled-components'
+import LogoImage from '-!react-svg-loader!../../images/LanistaLogo.svg'
+import { Input, Grid, Button } from 'semantic-ui-react'
+import { Menu, MainButton, ChildButton } from "react-mfb"
+import {useSpring, animated} from 'react-spring'
+import Link from 'next/link'
 
  const Root = styled.div`
    background-image: url(https://lanistacoach.s3.amazonaws.com/static/img/login-background.jpg);
@@ -21,7 +22,7 @@ const LanistaLogo = styled.div`
   }
 `;
 
-const Link = styled.div`
+const StyledLink = styled.div`
   font-size: 16px;
   text-align: center;
   padding-top: 1em;
@@ -101,6 +102,35 @@ const Nav = styled.nav`
   }
 `;
 
+const effect = 'zoomin', pos = 'br', method = 'hover';
+
+const MyFooter = ({currentLanguage, languageItems}) => {
+  //const [visible, toggle] = useState(true)
+  const props = useSpring({opacity: 1, from:{opacity: 0}})
+  return (
+    <animated.div style={props}>
+      <Footer>
+        <Nav style={{color: 'black', fontFamily: 'Abel'}}>
+          © Lanista Trainingssoftware 2012
+          <a>
+            Impresum
+          </a>
+          <a>
+            Datenschutz
+          </a>
+          <a>
+            Info
+          </a>
+        </Nav>
+        <Menu effect={effect} method={method} position={pos}>
+          <MainButton className={currentLanguage + "-flag"} iconResting="ion-plus-round" iconActive="ion-close-round" />
+          {languageItems}
+        </Menu>
+      </Footer>
+    </animated.div>
+  )
+}
+
 // ----------------------------------------------------------------------------
 
 // Say hello from GraphQL, along with a HackerNews feed fetched by GraphQL
@@ -113,9 +143,12 @@ class Login extends React.Component {
   }
 
   componentDidMount() {
-    this.setState({
-      show: true
-    });
+    const _this = this
+    setTimeout(function(){
+      _this.setState({
+        show: true
+      });
+    }, 2000);
   }
 
   componentWillUnmount() {
@@ -125,12 +158,12 @@ class Login extends React.Component {
   }
 
   render() {
-    const effect = 'zoomin', pos = 'br', method = 'hover';
     const {show} = this.state;
     const {
       authenticateUser,
       authenticating,
       goToRegistration,
+      goToForgotpassword,
       error,
       errorMessage,
       t,
@@ -160,40 +193,6 @@ class Login extends React.Component {
         onChangeLanguage(language);
       }} />)
       : <ChildButton/>);
-
-      const MyFooter = () => {
-        const [show, set] = useState(false)
-        const transitions = useTransition(show, null, {
-          from: { opacity: 0 },
-          enter: { opacity: 1 },
-          leave: { opacity: 0 },
-        })
-        console.log( "MyFooter")
-        return transitions.map(({ item, key, props }) =>
-          {
-            console.log( "item" )
-            console.log( item )
-            return (<animated.div key={key} style={props}><Footer key={key} style={props}>
-              <Nav style={{color: 'black', fontFamily: 'Abel'}}>
-                © Lanista Trainingssoftware 2012
-                <a>
-                  Impresum
-                </a>
-                <a>
-                  Datenschutz
-                </a>
-                <a>
-                  Info
-                </a>
-              </Nav>
-              <Menu effect={effect} method={method} position={pos}>
-                <MainButton className={currentLanguage + "-flag"} iconResting="ion-plus-round" iconActive="ion-close-round" />
-                {languageItems}
-              </Menu>
-            </Footer></animated.div>)
-          }
-        )
-      }
 
     return (
       <Root className={"scene"} style={{display: "table", height: "100vh", width: "100vw"}}>
@@ -253,9 +252,9 @@ class Login extends React.Component {
               <PasswordValidationMessage>{authenticationErrorMessage}</PasswordValidationMessage>
             </Grid.Row>
             <Grid.Row centered columns={1} style={{paddingTop: 0}}>
-              <Link>
-                  <a>{t("login:forgot_password")}</a>
-              </Link>
+              <StyledLink onClick={goToForgotpassword}>
+                  <a >{t("login:forgot_password")}</a>
+              </StyledLink>
             </Grid.Row>
             <Grid.Row centered columns={1} style={{paddingTop: 0, paddingBottom: 0, height: 140, display: "grid"}}>
               <StyledLoginButton loading={authenticating} onClick={
@@ -282,7 +281,7 @@ class Login extends React.Component {
               </StyledRegisterButton>
             </Grid.Row>
           </Grid>
-          <MyFooter/>
+          <MyFooter currentLanguage={currentLanguage} languageItems={languageItems}/>
         </div>
       </Root>
     )

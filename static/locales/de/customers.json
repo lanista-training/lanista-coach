@@ -1,3 +1,5 @@
 {
-  "customers_found": "Kunden gefunden"
+  "customers_found": "Kunden gefunden",
+  "emptylist": "Suche nach Vorname, Nachname oder Email",
+  "noresult": "Leider wurde kein Kunde gefunden"
 }

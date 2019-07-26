@@ -21,6 +21,7 @@ class CustomerWithData extends Component {
     this.t = this.t.bind(this);
     this.onChangeLanguage = this.onChangeLanguage.bind(this);
     this.extractLastMeasures = this.extractLastMeasures.bind(this);
+    this.onProtocollClick = this.onProtocollClick.bind(this);
   };
 
   componentDidMount() {
@@ -29,6 +30,18 @@ class CustomerWithData extends Component {
 
   goBack() {
     Router.back();
+  }
+
+  onProtocollClick(exerciseId) {
+    console.log("onProtocollClick")
+    const {memberId} = this.props;
+    Router.push({
+      pathname: '/exercise',
+      query: {
+        exercise: exerciseId,
+        member: memberId,
+      }
+    });
   }
 
   getCommandsRight() {
@@ -194,6 +207,7 @@ class CustomerWithData extends Component {
                 lastMeasures={this.extractLastMeasures(data) }
                 protocolls={protocolls}
                 t={this.t}
+                onProtocollClick={this.onProtocollClick}
               />
             </Scene>
           )

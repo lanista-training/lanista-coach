@@ -9,7 +9,9 @@ export default class InfiniteScroll extends Component {
       initialLoading: false,
       pageSize: 0,
     }
+    this.lastScrollTop = 0;
     this.scrollListener = this.scrollListener.bind(this);
+    this.direction = "DOWN"
   }
 
   componentDidMount() {
@@ -17,7 +19,7 @@ export default class InfiniteScroll extends Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    const {initialLoading, hasMore, loading} = this.props
+    const {initialLoading, hasMore, hasMoreUp, loading} = this.props
 
     if( initialLoading !== prevProps.initialLoading ){
       if ( initialLoading ) {
@@ -36,10 +38,14 @@ export default class InfiniteScroll extends Component {
         console.log('=============== loading started ===============')
       } else {
         console.log('=============== loading finished ===============')
-        if( !hasMore ) {
+        if( !hasMore && !hasMoreUp ) {
           this.detachScrollListener();
         }
       }
+    }
+    if( this.direction == 'UP' ){
+      let scrollEl = document.getElementById("infinte-list-wrapper");
+      scrollEl.scrollTop = scrollEl.scrollHeight - this.beforeScrollHeight + this.beforeScrollTop;
     }
     this.attachScrollListener();
   }
@@ -47,6 +53,7 @@ export default class InfiniteScroll extends Component {
   attachScrollListener() {
     let scrollEl = document.getElementById("infinte-list-wrapper");
     if (!this.props.hasMore || !scrollEl) {
+      console.log("NO ATTACHING")
       return;
     }
     scrollEl.addEventListener(
@@ -72,9 +79,22 @@ export default class InfiniteScroll extends Component {
   }
 
   scrollListener(e) {
-    if( (e.target.scrollHeight - e.target.scrollTop) <= (e.target.offsetHeight * 2) ) {
-      this.loadMore()
+    console.log("scrollListener")
+    console.log(e)
+    const {hasMore} = this.props
+    if( this.lastScrollTop < e.target.scrollTop ) {
+      if( (e.target.scrollHeight - e.target.scrollTop) <= (e.target.offsetHeight * 2) && hasMore) {
+        this.loadMore('DOWN')
+      }
+    } else {
+      if( e.target.scrollTop <= (e.target.offsetHeight * 2) ) {
+        this.beforeScrollHeight = e.target.scrollHeight;
+        this.beforeScrollTop = e.target.scrollTop;
+        this.loadMore('UP')
+      }
+
     }
+    this.lastScrollTop = e.target.scrollTop
   }
 
   isPassiveSupported() {
@@ -103,10 +123,11 @@ export default class InfiniteScroll extends Component {
     this.props.setPageSize(Math.ceil(itemsOnPage))
   }
 
-  loadMore() {
+  loadMore(direction) {
     console.log('=============== loadMore ===============')
     const {loadMore} = this.props
-    loadMore()
+    this.direction = direction
+    loadMore(direction)
   }
 
   render() {
@@ -114,6 +135,7 @@ export default class InfiniteScroll extends Component {
       children,
       props,
       hasMore,
+      hasMoreUp,
       loader,
       initialLoading,
       listClass,
@@ -125,7 +147,7 @@ export default class InfiniteScroll extends Component {
       if (hasMore) {
         childrenArray.push(loader)
       }
-      return React.createElement('div', {class: (listClass ? listClass : '')}, childrenArray);
+      return React.createElement('div', {class: listClass}, childrenArray);
     }
 
   }

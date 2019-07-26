@@ -107,7 +107,6 @@ const AlarmnButton = styled(Button)`
 
 const CommandPanelButton = styled(Button)`
   margin-top: 20px!important;
-  background: none!important;
   font-size: 2.5em!important;
 `;
 const SideBarMenu =  styled(List)`
@@ -148,6 +147,7 @@ export default ({
   menuVisible,
   onHideMenu,
   menuDirection,
+  me,
 }) => {
   return (
     <Sidebar.Pushable as={Scene}>
@@ -207,7 +207,7 @@ export default ({
         <Footer>
           <Trainer>
             <Avatar onClick={goToSetup}>
-              <a style={{
+              <div style={{
                 backgroundColor: '#fafafa',
                 webkitBoxSizing: 'border-box',
                 boxSizing: 'border-box',
@@ -218,9 +218,10 @@ export default ({
                 flex: '0 0 auto',
                 overflow: 'hidden',
                 position: 'relative',
-              }}>
-                <img src={"https://randomuser.me/api/portraits/men/75.jpg"} alt="" style={{height: '100%', width: '100%'}}/>
-              </a>
+                backgroundImage: 'url(http://lanista-training.com/tpmanager/img/p/' + (me && me.id) + '_photo.jpg?_dc=1562657343714)',
+                backgroundSize: 'cover',
+                height: '100%',
+              }}/>
             </Avatar>
             <span style={{
               marginLeft: '0.5em',
@@ -232,7 +233,7 @@ export default ({
               fontWeight: 'bold',
               color: 'rgba(0,0,0,.6)'
             }}>
-              Rafael<br/> Diaz
+              {me && me.first_name}<br/> {me && me.last_name}
             </span>
           </Trainer>
 

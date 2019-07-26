@@ -298,7 +298,7 @@ class Customer extends React.Component {
   }
 
   render() {
-    const {customer, lastMeasures} = this.props;
+    const {customer, lastMeasures, onProtocollClick} = this.props;
     const {birthday, plans, workouts, warnings} = customer;
 
     const dayLists = _.groupBy(workouts, (workout) => workout.formated_date);
@@ -417,7 +417,7 @@ class Customer extends React.Component {
                 {
                   _.map(protocolls, (protocoll, exercise_id) => {
                     return (
-                      <Exercise>
+                      <Exercise onClick={() => onProtocollClick(exercise_id)}>
                         <ExerciseImages style={{backgroundImage: "url(https://lanista-training.com" + protocoll[0].image_url + "_1.jpg), url(https://lanista-training.com" + protocoll[0].image_url + "_2.jpg)"}}></ExerciseImages>
                         <ExerciseProtocolls>
                           {

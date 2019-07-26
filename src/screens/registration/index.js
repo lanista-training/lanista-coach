@@ -1,6 +1,8 @@
 import * as React from "react";
 import Registration from './Registration';
 import Router from 'next/router';
+import { Mutation } from "react-apollo";
+import { REGISTER } from "../../mutations";
 
 class RegistrationWithoutMutation extends React.Component {
 
@@ -8,7 +10,6 @@ class RegistrationWithoutMutation extends React.Component {
     super(props);
     this.state = {
       registered: false,
-      registering: false,
       error: false,
       errorMessage: null,
 
@@ -50,15 +51,15 @@ class RegistrationWithoutMutation extends React.Component {
   }
 
   handleEmailChange(event){
-    this.setState({email: event});
     this.setState({
+      email: typeof event === 'string' ? value : event.target.value,
       emailIsValid: null,
       validationEmailErrorMessage: null,
     });
   }
 
   handlePasswordChange(event){
-    this.setState({password: event});
+    this.setState({password: typeof event === 'string' ? value : event.target.value});
     this.setState({
       passwordIsValid: null,
       validationPasswordErrorMessage: null,
@@ -66,7 +67,7 @@ class RegistrationWithoutMutation extends React.Component {
   }
 
   handlePasswordConfirmationChange(event){
-    this.setState({passwordConfirmation: event});
+    this.setState({passwordConfirmation: typeof event === 'string' ? value : event.target.value});
     this.setState({
       passwordConfirmationIsValid: null,
       validationPasswordConfirmationErrorMessage: null,
@@ -81,8 +82,7 @@ class RegistrationWithoutMutation extends React.Component {
     });
   }
 
-  doRegister() {
-    console.log("doRegister");
+  doRegister(callback) {
     const {email, password, passwordConfirmation, agreedToLA} = this.state;
     const {t} = this.props;
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -102,32 +102,32 @@ class RegistrationWithoutMutation extends React.Component {
     if( email === undefined || email.length == 0 ) {
       this.setState({
         emailIsValid: false,
-        validationEmailErrorMessage: t("login:email_empty"),
+        validationEmailErrorMessage: this.t("login:email_empty"),
       });
     } else if( !re.test(email) ) {
       this.setState({
         emailIsValid: false,
-        validationEmailErrorMessage: t("login:email_invalid"),
+        validationEmailErrorMessage: this.t("login:email_invalid"),
       });
     } else if (password === undefined || password.length == 0 ) {
       this.setState({
         passwordIsValid: false,
-        validationPasswordErrorMessage: t("login:password_empty"),
+        validationPasswordErrorMessage: this.t("login:password_empty"),
       });
     } else if ( password.length < 6 ) {
       this.setState({
         passwordIsValid: false,
-        validationPasswordErrorMessage: t("login:password_to_short"),
+        validationPasswordErrorMessage: this.t("login:password_to_short"),
       });
     } else if ( password != passwordConfirmation ) {
       this.setState({
         passwordIsValid: false,
-        validationPasswordErrorMessage: t("login:password_confirmation_error"),
+        validationPasswordErrorMessage: this.t("login:password_confirmation_error"),
       });
     }  else if ( agreedToLA === undefined || !agreedToLA ) {
       this.setState({
         agreedToLAIsValid: false,
-        validationAgreedToLAErrorMessage: t("login:agreed_to_la_error"),
+        validationAgreedToLAErrorMessage: this.t("login:agreed_to_la_error"),
       });
     } else {
       this.setState({
@@ -138,23 +138,7 @@ class RegistrationWithoutMutation extends React.Component {
         passwordConfirmationIsValid: null,
         validationPasswordConfirmationErrorMessage: null,
       });
-      const simulateError = ( Math.floor((Math.random() * 10) + 1) > 5 );
-      //const simulateError = true;
-      console.log("SIMULATE ERROR " + simulateError);
-      this.setState({
-        registering: true,
-      }, () => {
-        const _this = this;
-        setTimeout(function(){
-          _this.setState({
-            registered: !simulateError,
-            registering: false,
-            registrationErrorMessage: simulateError ? "Email already exists" : null,
-            passwordIsValid: simulateError ? false : null,
-            emailIsValid: simulateError ? false : null,
-          });
-        }, 2000);
-      });
+      callback();
     }
   }
 
@@ -178,40 +162,55 @@ class RegistrationWithoutMutation extends React.Component {
   }
 
   render() {
-    const {currentLanguage, availableLanguages} = this.state;
+    const {currentLanguage, availableLanguages, email, password} = this.state;
 
-    return (<Registration
-      t={this.t}
-      languages={availableLanguages}
-      currentLanguage={currentLanguage}
-      onChangeLanguage={this.onChangeLanguage}
-      goBack={this.goBack}
-      registerUser={this.doRegister}
-      registering={this.registering}
+    return (
+      <Mutation
+        mutation={REGISTER}
+        notifyOnNetworkStatusChange
+        variables={{ email: email, password: password }}
+      >
+        {(register, { loading, data, error, networkStatus }) => {
+          const errorCode = error && (error.message.indexOf(": ") > -1 ? error.message.split(': ')[1] : error.message);
+          console.log( error )
+          console.log('errorCode')
+          console.log( errorCode)
+          return(<Registration
+            t={this.t}
+            languages={availableLanguages}
+            currentLanguage={currentLanguage}
+            onChangeLanguage={this.onChangeLanguage}
+            goBack={this.goBack}
+            registerUser={() => this.doRegister(register)}
+            registering={loading}
 
-      email={this.state.email}
-      emailIsValid={this.state.emailIsValid}
-      handleEmailChange={this.handleEmailChange}
+            email={this.state.email}
+            emailIsValid={this.state.emailIsValid}
+            handleEmailChange={this.handleEmailChange}
 
-      password={this.state.password}
-      passwordIsValid={this.state.passwordIsValid}
-      handlePasswordChange={this.handlePasswordChange}
+            password={this.state.password}
+            passwordIsValid={this.state.passwordIsValid}
+            handlePasswordChange={this.handlePasswordChange}
 
-      passwordConfirmation={this.state.passwordConfirmation}
-      passwordConfirmationIsValid={this.state.passwordConfirmationIsValid}
-      handlePasswordConfirmationChange={this.handlePasswordConfirmationChange}
+            passwordConfirmation={this.state.passwordConfirmation}
+            passwordConfirmationIsValid={this.state.passwordConfirmationIsValid}
+            handlePasswordConfirmationChange={this.handlePasswordConfirmationChange}
 
-      agreedToLA={this.state.agreedToLA}
-      agreedToLAIsValid={this.state.agreedToLAIsValid}
-      handleAgreedToLAChange={this.handleAgreedToLAChange}
+            agreedToLA={this.state.agreedToLA}
+            agreedToLAIsValid={this.state.agreedToLAIsValid}
+            handleAgreedToLAChange={this.handleAgreedToLAChange}
 
-      validationEmailErrorMessage={this.state.validationEmailErrorMessage}
-      validationPasswordErrorMessage={this.state.validationPasswordErrorMessage}
-      validationPasswordConfirmationErrorMessage={this.state.validationPasswordErrorMessage}
-      validationAgreedToLAErrorMessage={this.state.validationAgreedToLAErrorMessage}
+            validationEmailErrorMessage={this.state.validationEmailErrorMessage}
+            validationPasswordErrorMessage={this.state.validationPasswordErrorMessage}
+            validationPasswordConfirmationErrorMessage={this.state.validationPasswordErrorMessage}
+            validationAgreedToLAErrorMessage={this.state.validationAgreedToLAErrorMessage}
 
-      registrationErrorMessage={this.state.authenticationErrorMessage}
-    />);
+            registrationErrorMessage={this.state.authenticationErrorMessage}
+            registrationSuccessfully={data && data.register && data.register.message == 'USERCREATED'}
+          />)
+        }}
+      </Mutation>
+    );
   }
 }
 

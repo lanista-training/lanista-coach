@@ -12,6 +12,7 @@ export default ({
   loading,
   error,
   hasMore,
+  hasMoreUp,
   initialLoading,
   setPageSize,
 }) => {
@@ -25,6 +26,7 @@ export default ({
       loading={loading}
       error={error}
       hasMore={hasMore}
+      hasMoreUp={hasMoreUp}
       initialLoading={initialLoading}
       setPageSize={setPageSize}
     />

@@ -198,6 +198,26 @@ body, html {
   content: "\e908";
 }
 
+.icon-search.icon::before {
+  font-family: Lanista;
+  content: "\e909";
+}
+
+.icon-user-exercise.icon::before {
+  font-family: Lanista;
+  content: "\e90a";
+}
+
+.icon-plugin.icon::before {
+  font-family: Lanista;
+  content: "\e90b";
+}
+
+.icon-view-list.icon::before {
+  font-family: Lanista;
+  content: "\e90e";
+}
+
 .hide-scrollbar::-webkit-scrollbar {
   display: none!important;
 }
@@ -321,4 +341,21 @@ body, html {
 
 .self-protocolled {
   color: #4aacd8!important;
+}
+.search-icon-active{color: white!important;background: rgb(155, 201, 61)!important;padding: 15px!important;margin: 17px!important;}
+
+.ui.circular.button {
+  background-color: transparent;
+}
+
+.ui.button:hover {
+  background-color: transparent;
+}
+
+.ui.button:focus {
+    background-color: transparent;
+}
+
+.exercises-list {
+  text-align: center;
 }

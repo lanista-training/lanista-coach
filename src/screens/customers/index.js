@@ -7,6 +7,7 @@ import Customers from './Customers';
 import dataSource from './test_data';
 import folders from '../folder/test_data';
 import CustomerSearchField from '../../components/CustomerSearchField';
+import EmptyListMessage from '../../components/EmptyListMessage';
 import { MEMBERS, ME } from "../../queries";
 
 class CustomersWithData extends Component {
@@ -14,9 +15,7 @@ class CustomersWithData extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      customers: dataSource,
       processing: false,
-      filteredCustomers: dataSource,
       filtering: false,
       folderMenuVisible: false,
       folderMenu: [],
@@ -41,12 +40,10 @@ class CustomersWithData extends Component {
   }
 
   showCustomer(customerId) {
-    const {customers} = this.state;
     Router.push({
       pathname: '/customer',
       query: { customer: customerId }
     });
-    //history.push("/customer", {customer: customers[index]});
   }
 
   closeFolderMenu() {
@@ -168,7 +165,7 @@ class CustomersWithData extends Component {
   }
 
   onChangeLanguage( language ) {
-    const translations = require('../../../static/locales/' + language + '/dashboard');
+    const translations = require('../../../static/locales/' + language + '/customers');
     const commonTranslations = require('../../../static/locales/' + language + '/common');
     const originalLanguages = ['en', 'de', 'es', 'fr'];
 
@@ -230,10 +227,8 @@ class CustomersWithData extends Component {
   render() {
     const {t} = this.props;
     const {
-      filteredCustomers,
       processing,
       filtering,
-      customers,
       folderMenuVisible,
       closeFolderMenu,
       menuDirection,
@@ -269,6 +264,11 @@ class CustomersWithData extends Component {
             {({ data, loading, error, fetchMore }) => {
               const hasMore = data && data.members ? data.members.hasMore : true
               const result = (data && data.members) ? data.members : {members: []}
+              console.log("filter")
+              console.log(me)
+              console.log(me && me.bu > 0)
+              console.log(filter)
+              console.log(filter.trim().length === 0)
               return (
                 <Scene
                   commandsLeft={this.getCommandsLeft()}
@@ -300,20 +300,24 @@ class CustomersWithData extends Component {
                   t={this.t}
                 >
                   {
-                      ( (me && me.bu === 0) || (filter && filter.trim().length > 1) ) &&
-                      <Customers
-                        t={this.t}
-                        customers={result.members}
-                        filtering={filtering}
-                        isFilterOn={data ? (data.length != data.length) : false}
-                        closeFolderMenu={closeFolderMenu}
-                        showCustomer={this.showCustomer}
-                        onRequestPage={(page) => this.onFetchMembers(fetchMore, data, page)}
-                        loading={loading}
-                        error={error}
-                        hasMore={hasMore}
-                        setPageSize={(newPageSize) => this.setState({pageSize: newPageSize})}
-                      />
+                    ( (me && me.bu === 0) || (filter && filter.trim().length > 1) ) &&
+                    <Customers
+                      t={this.t}
+                      customers={result.members}
+                      filtering={filtering}
+                      isFilterOn={data ? (data.length != data.length) : false}
+                      closeFolderMenu={closeFolderMenu}
+                      showCustomer={this.showCustomer}
+                      onRequestPage={(page) => this.onFetchMembers(fetchMore, data, page)}
+                      loading={loading}
+                      error={error}
+                      hasMore={hasMore}
+                      setPageSize={(newPageSize) => this.setState({pageSize: newPageSize})}
+                    />
+                  }
+                  {
+                    ( me && me.bu > 0 && filter.trim().length === 0 ) &&
+                    <EmptyListMessage text={this.t("emptylist")} icon="\e90d"/>
                   }
                 </Scene>
               );

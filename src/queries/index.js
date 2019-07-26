@@ -16,10 +16,11 @@ export const MEMBERS = gql`
   }
 `
 export const FEEDS = gql`
-  query Feeds($pageSize:Int, $after:String, $filter:String) {
-    feeds(pageSize: $pageSize, after: $after, filter: $filter) {
+  query Feeds($pageSize:Int, $after:String, $filter:String, $direction:String) {
+    feeds(pageSize: $pageSize, after: $after, filter: $filter, direction:$direction) {
       cursor,
       hasMore,
+      direction,
       feeds{
         type
         target_date
@@ -34,6 +35,124 @@ export const FEEDS = gql`
     }
   }
 `
+
+export const EXERCISE = gql`
+  query Exercise($exerciseId:ID!, $memberId:ID) {
+    exercise(exerciseId: $exerciseId, memberId: $memberId) {
+      id
+      name
+      start_image
+      end_image
+      coaching_notes
+      mistakes
+      member {
+        id
+        first_name
+        last_name
+      }
+      workouts {
+        id
+        execution_date
+        formated_date
+        weight
+        round
+        repetitions
+        training_unit
+        self_protocolled
+      }
+    }
+  }
+`
+export const EXERCISES = gql`
+  query Exercises($pageSize:Int, $after:String, $bodyFilters:[String] = [], $typeFilters:[String] = [], $toolFilters:[String] = [], $textFilter:String) {
+    exercises(pageSize: $pageSize, after: $after, bodyFilters: $bodyFilters, typeFilters: $typeFilters, toolFilters: $toolFilters, textFilter: $textFilter) {
+      cursor
+      hasMore
+      total
+      exercises {
+        id
+        name
+        start_image
+        end_image
+      }
+    }
+  }
+`
+
+export const WORKOUTS = gql`
+  query Workouts($filter:String) {
+    workouts(filter: $filter) {
+      id
+      name
+      description
+      duration
+      public
+      plugin
+      studio
+    }
+  }
+`
+export const WORKOUT = gql`
+  query Workout($workoutId:ID!) {
+    workout(workoutId: $workoutId) {
+      id
+      name
+      description
+      duration
+      changed_date
+      creator_full_name
+      creator_image
+      splits {
+        id
+        name
+        exercises {
+          id
+          position
+          weight
+          rounds
+          repetitions
+          training_unit
+          exercise {
+            id
+            name
+            start_image
+            end_image
+          }
+        }
+      }
+    }
+  }
+`
+
+export const PLANEXERCISE = gql`
+  query Planexercise($planexerciseId:ID!) {
+    planexercise(planexerciseId: $planexerciseId) {
+      id
+      position
+      weight
+      rounds
+      repetitions
+      training_unit
+      exercise {
+        id
+        name
+        start_image
+        end_image
+      }
+    }
+  }
+`
+
+export const PLUGINS = gql`
+  query Plugins {
+    plugins {
+      id
+      name
+      description
+    }
+  }
+`
+
 export const ME = gql`
   query CurrentUserForLayout {
     me {

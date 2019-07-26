@@ -30,6 +30,7 @@ class LoginWithMutation extends React.Component {
     this.onChangeLanguage = this.onChangeLanguage.bind(this);
     this.doAuthenticate = this.doAuthenticate.bind(this);
     this.goToRegistration = this.goToRegistration.bind(this);
+    this.goToForgotpassword = this.goToForgotpassword.bind(this);
     this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.t = this.t.bind(this);
@@ -82,10 +83,6 @@ class LoginWithMutation extends React.Component {
     const {email, password} = this.state;
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    console.log("doAuthenticate")
-    console.log(email)
-    console.log(password)
-
     // data validation
     if( email == "" ) {
       this.setState({
@@ -112,8 +109,12 @@ class LoginWithMutation extends React.Component {
     }
   }
 
-  goToRegistration( target ) {
+  goToRegistration() {
     Router.push('/registration');
+  }
+
+  goToForgotpassword() {
+    Router.push('/forgotpassword');
   }
 
   t(text) {
@@ -146,6 +147,7 @@ class LoginWithMutation extends React.Component {
     return (
       <Mutation
         mutation={LOGIN}
+        notifyOnNetworkStatusChange
         variables={{ email: email, password: password }}
         onCompleted={data => this._confirm(data)}
         update={(cache, { data: { login } }) => {
@@ -164,9 +166,7 @@ class LoginWithMutation extends React.Component {
           });
         }}
       >
-        {(login, { loading, data, error }) => {
-          console.log("data")
-          console.log(data)
+        {(login, { loading, data, error, networkStatus }) => {
           const errorCode = error && (error.message.indexOf(": ") > -1 ? error.message.split(': ')[1] : error.message);
           return (
             <Login
@@ -174,7 +174,8 @@ class LoginWithMutation extends React.Component {
               authenticating={loading || (data && data.login && data.login.token)}
               errorMessage={this.state.errorMessage}
               authenticateUser={() => this.doAuthenticate(login)}
-              goToRegistration= {this.goToRegistration}
+              goToRegistration={this.goToRegistration}
+              goToForgotpassword={this.goToForgotpassword}
               t={this.t}
               languages={availableLanguages}
               currentLanguage={currentLanguage}

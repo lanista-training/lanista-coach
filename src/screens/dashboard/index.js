@@ -3,7 +3,7 @@ import Dashboard from './Dashboard';
 import Router from 'next/router';
 import { Query } from "react-apollo";
 import _ from 'lodash';
-
+import moment from "moment"
 import Scene from "../../components/Scene";
 import Filter from "../../components/feeds/Filter"
 
@@ -20,37 +20,65 @@ class DashboardWithoutMutation extends React.Component {
       translations: [],
       initialLoading: true,
     }
-    this.goBack = this.goBack.bind(this);
-    this.onFilterByTime = this.onFilterByTime.bind(this);
-    this.jumpToDay = this.jumpToDay.bind(this);
-    this.jumpToStart = this.jumpToStart.bind(this);
-    this.t = this.t.bind(this);
-    this.onChangeLanguage = this.onChangeLanguage.bind(this);
-    this.processFeeds = this.processFeeds.bind(this);
+    this.goBack = this.goBack.bind(this)
+    this.onFilterByTime = this.onFilterByTime.bind(this)
+    this.jumpToDay = this.jumpToDay.bind(this)
+    this.jumpToStart = this.jumpToStart.bind(this)
+    this.t = this.t.bind(this)
+    this.onChangeLanguage = this.onChangeLanguage.bind(this)
+    this.processFeeds = this.processFeeds.bind(this)
+    this.getNearestDate = this.getNearestDate.bind(this)
+    this.previousCursor = {
+      UP: "0",
+      DOWN: "0",
+    }
+    this.previousDirection = ''
+    this.endUpReached = false
+    this.endDownReached = false
   }
 
   componentDidMount() {
     this.onChangeLanguage("de");
   }
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    //  moment(parseInt(feed.target_date)).format('DD-MM-YYYY')
+    const {initialLoading} = this.state
+    //console.log("componentDidUpdate")
+    //console.log( prevState.initialLoading )
+    //console.log( initialLoading )
+    if( initialLoading != prevState.initialLoading && prevState.initialLoading ){
+      console.log("Jump")
+      const nearestDate = this.getNearestDate(new Date());
+      //const formatedDate = parseInt(nearestDate);
+      document.getElementById( moment(parseInt(nearestDate)).format('DD-MM-YYYY') ).scrollIntoView();
+    }
+  }
+
   processFeeds(rawFeeds) {
+    let targetDates = []
     let dataSource = _.groupBy(rawFeeds, o => o.target_date.toLocaleString().split(',')[0].split( ".").join("-"));
     dataSource = _.reduce(dataSource, (acc, next, index) => {
+      targetDates.push(parseInt(index))
       acc.push({
         title: index,
         data: next
       });
       return acc;
     }, []);
+    this.targetDates = targetDates
     return dataSource;
+  }
+
+  getNearestDate(date) {
+    const nearest = this.targetDates.find(function(targetDate) {
+      return (new Date(targetDate) > date);
+    });
+    return nearest
   }
 
   goBack() {
     Router.back();
-  }
-
-  goToCustomers() {
-    Router.push("/customers");
   }
 
   onFilterByTime() {
@@ -59,10 +87,8 @@ class DashboardWithoutMutation extends React.Component {
 
   jumpToDay(day) {
     // CALCULATE THE CURRENT POSSITION OF THE FIRST ELEMENT FROM TODAY
-    console.log("day selectd", day);
     const {dataSource} = this.state;
     var dateFormatted = new Date(day.getFullYear(),day.getMonth(),day.getDate());
-    console.log("dateFormatted index: ", dateFormatted);
     var counter = 0;
     var found = false;
     console.log("datas: ",dataSource);
@@ -75,8 +101,6 @@ class DashboardWithoutMutation extends React.Component {
         counter = counter + dataSource[i].data.length;
       }
     };
-
-    console.log("counter: ", counter);
     this.setState({
       currentScrollPosition: counter
     })
@@ -117,33 +141,34 @@ class DashboardWithoutMutation extends React.Component {
     });
   }
 
-  onFetchFeeds(fetchMore, data) {
+  onFetchFeeds(fetchMore, data, direction) {
     const {filter, pageSize, initialLoading} = this.state
-    const previousCursor = initialLoading ? "0" : data.feeds.cursor;
-
+    const previousCursor = initialLoading ? "0" : (direction == this.previousDirection ? data.feeds.cursor : this.previousCursor[this.previousDirection == '' ? 'DOWN' : this.previousDirection]);
+    if( direction != this.previousDirection ) {
+      this.previousCursor[this.previousDirection == '' ? 'DOWN' : this.previousDirection] = data.feeds.cursor
+      this.previousDirection = direction
+    }
     fetchMore({
       variables: {
         after: previousCursor,
         pageSize: pageSize,
         filter: filter,
+        direction: direction,
       },
       updateQuery: (prev, { fetchMoreResult, ...rest }) => {
         if( initialLoading ) {
           this.setState({initialLoading: false})
         }
         if (!fetchMoreResult) {
-          console.log( 'No result')
-          this.setState({
-            hasMore: false
-          })
+          //this.setState({
+          //  hasMore: false
+          //})
           return prev;
         } else {
-          console.log( 'Cursor ' + fetchMoreResult.feeds.cursor)
-          this.setState({
-            hasMore: fetchMoreResult.feeds.hasMore
-          })
-          console.log( 'previousCursor ' + previousCursor)
-          if( previousCursor == 0) {
+          //this.setState({
+          //  hasMore: fetchMoreResult.feeds.hasMore
+          //})
+          if( previousCursor == "0" && data.feeds.cursor.indexOf(':') > -1) {
             return {
               ...fetchMoreResult,
               feeds: {
@@ -156,7 +181,7 @@ class DashboardWithoutMutation extends React.Component {
               ...fetchMoreResult,
               feeds: {
                 ...fetchMoreResult.feeds,
-                feeds: _.unionBy(prev.feeds.feeds, fetchMoreResult.feeds.feeds, value => (value.member.id + value.type)),
+                feeds: direction == 'DOWN' ? _.unionBy(prev.feeds.feeds, fetchMoreResult.feeds.feeds, value => (value.member.id + value.type)) : _.unionBy(fetchMoreResult.feeds.feeds, prev.feeds.feeds, value => (value.member.id + value.type)),
               },
             };
           }
@@ -175,7 +200,7 @@ class DashboardWithoutMutation extends React.Component {
         typex: 'Ionicons',
         name: 'people',
         onTap: () => {
-          this.goToCustomers();
+          Router.push("/customers");
         }
     }, {
         icon: 'icon-exercise-inactive',
@@ -185,7 +210,7 @@ class DashboardWithoutMutation extends React.Component {
         typex: 'Ionicons',
         name: 'exercises',
         onTap: () => {
-          console.log("Command Exercises");
+          Router.push("/exercises");
         }
     }, {
         icon: 'icon-training-plan-inactive',
@@ -195,7 +220,8 @@ class DashboardWithoutMutation extends React.Component {
         typex: 'Ionicons',
         name: 'calendar',
         onTap: () => {
-          console.log("Command Workouts");
+          console.log("Command Workouts.");
+          Router.push("/workouts");
         }
     }];
 
@@ -226,19 +252,37 @@ class DashboardWithoutMutation extends React.Component {
         notifyOnNetworkStatusChange={true}
         query={FEEDS}
         variables={{
-          pageSize: 10,
+          pageSize:20,
           after: "0",
+          direction: ""
         }}
         onCompleted={ (data) => {
-          console.log('query completed')
           this.setState({
             initialLoading: false,
           })
-          console.log(data)
+          if( data.feeds.cursor.indexOf(':') > -1 ) {
+            this.previousCursor["UP"] = data.feeds.cursor.split(":")[0]
+            this.previousCursor["DOWN"] = data.feeds.cursor.split(":")[1]
+          } else {
+            this.previousCursor[(data.feeds.direction == '' ? "DOWN" : data.feeds.direction)] = data.feeds.cursor
+          }
         }}
       >
         {({ data, loading, error, fetchMore }) => {
-          const hasMore = data && data.feeds ? data.feeds.hasMore : true
+          let hasMore = true
+          let hasMoreup = true
+
+          if( data && data.feeds && data.feeds.direction == '' ) {
+            if( data.feeds.cursor.indexOf(':') > -1 ) {
+              hasMore = data.feeds.cursor.split(':')[0] > 20
+              hasMoreup = data.feeds.cursor.split(':')[1] > 20
+              if( data.feeds.cursor.split(':')[0] ) this.endUpReached = true
+            } else {
+              hasMore = data.feeds.hasMore
+              hasMoreup = data.feeds.hasMore
+            }
+
+          }
           const result = (data && data.feeds) ? data.feeds : {feeds: []}
           return (
             <Scene
@@ -253,8 +297,9 @@ class DashboardWithoutMutation extends React.Component {
                     this.setState({
                       filter: newFilter,
                       initialLoading: true,
+                      pageSize: 20,
                     }, () => {
-                      this.onFetchFeeds(fetchMore, data);
+                      this.onFetchFeeds(fetchMore, data, "DOWN");
                     });
 
                   }}
@@ -270,11 +315,12 @@ class DashboardWithoutMutation extends React.Component {
                 feeds={this.processFeeds(result.feeds)}
                 currentScrollPosition={this.state.currentScrollPosition}
                 jumpToDay={this.jumpToDay}
-                onRequestPage={(pageSize) => this.onFetchFeeds(fetchMore, data)}
+                onRequestPage={(direction) => this.onFetchFeeds(fetchMore, data, direction)}
                 setPageSize={(newPageSize) => this.setState({pageSize: newPageSize})}
                 loading={loading}
                 error={error}
-                hasMore={hasMore}
+                hasMore={hasMore && !this.endUpReached}
+                hasMoreUp={true}
                 initialLoading={initialLoading}
               />
             </Scene>

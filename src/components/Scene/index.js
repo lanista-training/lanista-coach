@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Scene from './Scene';
 import Router from 'next/router';
+import { Query } from "react-apollo";
+import { ME } from "../../queries";
 
 class SceneWithData extends Component {
 
@@ -18,7 +20,7 @@ class SceneWithData extends Component {
         {
           type: 'TP',
           userId: 1,
-          fullName: 'Jual Guaido',
+          fullName: 'Juan Guaido',
           imageUrl: 'https://randomuser.me/api/portraits/men/12.jpg'
         },{
           type: 'AP',
@@ -57,11 +59,16 @@ class SceneWithData extends Component {
   render() {
     const {alarms} = this.state;
     return(
-      <Scene
-        goToSetup={this.goToSetup}
-        alarms={alarms}
-        {...this.props}
-      />
+      <Query query={ME} notifyOnNetworkStatusChange fetchPolicy="cache-and-network">
+        {({ data, loading, error, fetchMore }) => {
+          return(<Scene
+            goToSetup={this.goToSetup}
+            alarms={alarms}
+            {...this.props}
+            me={data && data.me}
+          />)
+        }}
+      </Query>
     )
   }
 }

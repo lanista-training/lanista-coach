@@ -93,7 +93,7 @@ export default ({feed, key, t}) => (
   <StyledFeed key={feed.type + feed.member.id}>
     <Header>
       <Photo>
-        <a style={{
+        <div style={{
           width: '40px',
           height: '40px',
           backgroundColor: '#fafafa',
@@ -107,13 +107,14 @@ export default ({feed, key, t}) => (
           flex: '0 0 auto',
           overflow: 'hidden',
           position: 'relative',
+          backgroundImage: 'url("' + feed.member.photoUrl + '")',
+          backgroundSize: "contain",
         }}>
-          <img src={feed.member.photoUrl} alt="" style={{height: '100%', width: '100%'}}/>
-        </a>
+        </div>
       </Photo>
       <HeaderText>
         <HeaderName>{feed.member.first_name} {feed.member.last_name}</HeaderName><HeaderDescription> {t("dashboard:" + feed.type + "_feed_text")}</HeaderDescription>
-        <HeaderDateTime>{moment(parseInt(feed.target_date)).calendar()}</HeaderDateTime>
+        <HeaderDateTime>{moment(parseInt(feed.target_date)).format('DD-MM-YYYY')}</HeaderDateTime>
       </HeaderText>
     </Header>
     <CommandsBlock feedType={feed.type}/>

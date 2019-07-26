@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Input, Grid, Button, Checkbox, Icon, Modal, Header, Image } from 'semantic-ui-react';
 import LogoImage from '-!react-svg-loader!../../images/LanistaLogo.svg';
 import {Menu, MainButton, ChildButton} from "react-mfb";
+import {LegalContent} from "./legalContent";
 
 const StyledRegisterButton = styled(Button)`
   width: 345px;
@@ -15,13 +16,14 @@ const StyledRegisterButton = styled(Button)`
 const StyledBackButton = styled(Button)`
   width: 345px;
   height: 50px;
+  margin-top: 4.5em!important;
   background: ${props => props.theme.colors.secondary}!important;
   color: ${props => props.theme.colors.primary}!important;
   line-height: 1.5em!important;
 `;
 
 const Root = styled.div`
-  background-image: url(/static/img/registration-background.png);
+  background-image: url(https://lanistacoach.s3.amazonaws.com/static/img/registration-background.png);
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -40,7 +42,7 @@ const EmailValidationMessage = styled.div`
   position: absolute;
   text-align: center;
   width: 100%;
-  top: -20px;
+  top: -5px;
   color: #d20027;
 `;
 
@@ -86,6 +88,12 @@ const Nav = styled.nav`
   }
 `;
 
+const SuccessfullMessage  = styled.div`
+  color: ${props => props.theme.colors.primary};
+  width: 100%;
+  font-size: 2em;
+  font-weight: 700;
+`;
 class Registration extends React.Component {
 
   constructor(props) {
@@ -161,6 +169,7 @@ class Registration extends React.Component {
       validationPasswordErrorMessage,
       validationAgreedToLAErrorMessage,
       registrationErrorMessage,
+      registrationSuccessfully,
     } = this.props;
 
     const {
@@ -181,13 +190,13 @@ class Registration extends React.Component {
       : <ChildButton/>);
 
     return(
-      <div key="content" style={{display: "table", height: "100vh", width: "100vw"}}>
+      <div key="content" style={{height: "100vh", width: "100vw"}}>
         <div style={{
           display: "table-cell",
           verticalAlign: "middle",
         }}>
-          <Root className={"scene"} style={{display: "table-cell", height: "100vh", width: "100vw", verticalAlign: "middle"}}>
-            <Grid centered columns={1} style={{height:"60vh", marginTop: "-13vh"}}>
+          <Root className={"scene"} style={{height: "100vh", width: "100vw", verticalAlign: "middle"}}>
+            <Grid centered columns={1} style={{height:"60vh", marginTop: "15vh"}}>
               <Grid.Row centered columns={1}>
                 <LanistaLogo  style={{}}>
                   <LogoImage width={60} height={60}/>
@@ -200,9 +209,9 @@ class Registration extends React.Component {
                   </div>
                 </LanistaLogo>
               </Grid.Row>
-              <Grid.Row centered columns={1} style={{
+              {!registrationSuccessfully && (<Grid.Row centered columns={1} style={{
                 paddingBottom: 0,
-                paddingTop: 0,
+                paddingTop: 15,
                 height: 220,
                 display: "grid"
               }}>
@@ -267,9 +276,10 @@ class Registration extends React.Component {
                 value={agreedToLA ? 1 : 0}
                 checked={agreedToLA}
                />
-               <PasswordValidationMessage style={{top: "17em"}}>{validationAgreedToLAErrorMessage}</PasswordValidationMessage>
-              </Grid.Row>
-              <Grid.Row centered columns={1} style={{paddingTop: 0, paddingBottom: 0, height: 30, display: "grid"}}>
+               <PasswordValidationMessage style={{top: "16em"}}>{validationAgreedToLAErrorMessage}</PasswordValidationMessage>
+              </Grid.Row>)}
+
+              {!registrationSuccessfully && (<Grid.Row centered columns={1} style={{paddingTop: 0, paddingBottom: 0, height: 30, display: "grid"}}>
                 <StyledRegisterButton style={{marginTop: "2em"}} loading={registering} onClick={
                   () => {
                     registerUser();
@@ -277,7 +287,12 @@ class Registration extends React.Component {
                 } disabled={registering}>
                   { registering ? ("...") : t("register") }
                 </StyledRegisterButton>
-              </Grid.Row>
+              </Grid.Row>)}
+
+              {registrationSuccessfully && (<SuccessfullMessage>
+                {t('registration successfull')}
+              </SuccessfullMessage>)}
+
               <StyledBackButton key="button"  onClick={() => {
                 this.setState({
                   show: false
@@ -309,21 +324,9 @@ class Registration extends React.Component {
         </div>
 
         <Modal open={showLegalAgreements}>
-          <Modal.Header>Profile Picture</Modal.Header>
+          <Modal.Header>{t("legal title")}</Modal.Header>
           <Modal.Content image>
-            <Image wrapped size='medium' src='https://react.semantic-ui.com/images/wireframe/image.png' />
-            <Modal.Description>
-              <Header>Modal Header</Header>
-              <p>This is an example of expanded content that will cause the modals dimmer to scroll</p>
-              <Image src='https://react.semantic-ui.com/images/wireframe/paragraph.png' />
-              <Image src='https://react.semantic-ui.com/images/wireframe/paragraph.png' />
-              <Image src='https://react.semantic-ui.com/images/wireframe/paragraph.png' />
-              <Image src='https://react.semantic-ui.com/images/wireframe/paragraph.png' />
-              <Image src='https://react.semantic-ui.com/images/wireframe/paragraph.png' />
-              <Image src='https://react.semantic-ui.com/images/wireframe/paragraph.png' />
-              <Image src='https://react.semantic-ui.com/images/wireframe/paragraph.png' />
-              <Image src='https://react.semantic-ui.com/images/wireframe/paragraph.png' />
-            </Modal.Description>
+            <LegalContent/>
           </Modal.Content>
           <Modal.Actions>
             <Button secondary onClick={()=>{

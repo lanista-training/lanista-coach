@@ -1,11 +1,12 @@
-import * as React from "react";
-import Feed from "./Feed";
-import styled from 'styled-components';
-import InfiniteList from '../../components/InfiniteList';
-import DayPicker from 'react-day-picker';
-import { Sticky, Button, List } from 'semantic-ui-react';
-import Calender from '../Calender';
-import { Transition } from 'react-spring';
+import * as React from "react"
+import Feed from "./Feed"
+import styled from 'styled-components'
+import InfiniteList from '../../components/InfiniteList'
+import DayPicker from 'react-day-picker'
+import { Sticky, Button, List } from 'semantic-ui-react'
+import Calender from '../Calender'
+import { Transition } from 'react-spring'
+import moment from "moment"
 
 const StyledDateLabel = styled.div`
   font-family: Abel;
@@ -148,7 +149,10 @@ const StatisticValue = styled.div`
   color: black;
   font-weight: bold;
 `;
-
+const FeedsTitle = styled.div`
+  padding-top: 1em;
+  padding-bottom: 0.5em;
+`;
 
 class Feeds extends React.Component {
 
@@ -168,10 +172,12 @@ class Feeds extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
+    /*
     const {currentScrollPosition} = this.props;
     if (currentScrollPosition != prevProps.currentScrollPosition) {
       this.list.scrollTo(currentScrollPosition);
     }
+    */
   }
 
   handleDayClick(day) {
@@ -191,6 +197,7 @@ class Feeds extends React.Component {
       loading,
       error,
       hasMore,
+      hasMoreUp,
       initialLoading,
       setPageSize,
     } = this.props;
@@ -215,10 +222,18 @@ class Feeds extends React.Component {
     };
 
     var items = [];
+    let previousTargetDate = ''
     feeds.map( (feedList, index) =>
     {
       feedList.data.map( (feed, index) =>
        {
+         const targetDate = moment(parseInt(feed.target_date)).format('DD-MM-YYYY')
+         if( previousTargetDate != targetDate ) {
+           items.push(
+             <FeedsTitle id={targetDate}>{targetDate}</FeedsTitle>
+           )
+         }
+         previousTargetDate = targetDate;
          items.push(
            <Feed t={t} key={feed.type + feed.member.id} feed={feed}/>
          );
@@ -231,6 +246,7 @@ class Feeds extends React.Component {
           <InfiniteList
             loadMore={onRequestPage}
             hasMore={hasMore}
+            hasMoreUp={hasMoreUp}
             loader={<div class="loader">Loading...</div>}
             initialLoading={initialLoading}
             loading={loading}

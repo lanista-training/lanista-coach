@@ -12,6 +12,7 @@ import {
 } from 'semantic-ui-react';
 import InfiniteList from '../../components/InfiniteList';
 import { useTransition, animated } from 'react-spring';
+import EmptyListMessage from '../../components/EmptyListMessage';
 
 const Stage = styled.div`
   max-width: 935px;
@@ -141,7 +142,7 @@ class Customers extends React.Component {
       items.push(
         <ListItem key={i}>
           <UserNameAndAvatar>
-            <a style={{
+            <div style={{
               width: '8em',
               height: '8em',
               backgroundColor: '#fafafa',
@@ -155,9 +156,10 @@ class Customers extends React.Component {
               flex: '0 0 auto',
               overflow: 'hidden',
               position: 'relative',
+              backgroundImage: 'url("http://lanista-training.com/tpmanager/img/p/' + customer.id + '_photo.jpg")',
+              backgroundSize: "contain",
             }}>
-              <img src={'http://lanista-training.com/tpmanager/img/p/' + customer.id + '_photo.jpg'} alt="" style={{height: '100%', width: '100%'}}/>
-            </a>
+            </div>
             <List.Content style={{ padding: "1em 0"}}>
               <FirstName>{(customer.first_name||customer.last_name) ? customer.last_name : customer.email}</FirstName>
               <LastName>{customer.first_name}</LastName>
@@ -169,21 +171,29 @@ class Customers extends React.Component {
         </ListItem>
       );
     });
-
     return(
       <Stage>
-        <ListSection className='hide-scrollbar' id="infinte-list-wrapper">
-          <InfiniteList
-            initialLoading={initialLoading}
-            loading={loading}
-            loader={<div class="">Loading...</div>}
-            loadMore={onRequestPage}
-            hasMore={hasMore}
-            setPageSize={setPageSize}
-          >
-            {items}
-          </InfiniteList>
-        </ListSection>
+      {
+        customers && customers.length > 0 && (
+          <ListSection className='hide-scrollbar' id="infinte-list-wrapper">
+            <InfiniteList
+              initialLoading={initialLoading}
+              loading={loading}
+              loader={<div class="">Loading...</div>}
+              loadMore={onRequestPage}
+              hasMore={hasMore}
+              setPageSize={setPageSize}
+            >
+              {items}
+            </InfiniteList>
+          </ListSection>
+        )
+      }
+      {
+        (customers && customers.length) == 0 && (
+          <EmptyListMessage text={t("noresult")} styles={{position:"absolute"}} icon="\e90c"/>
+        )
+      }
       </Stage>
     );
   }
