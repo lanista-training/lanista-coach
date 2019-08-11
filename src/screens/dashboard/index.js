@@ -7,14 +7,13 @@ import moment from "moment"
 import Scene from "../../components/Scene";
 import Filter from "../../components/feeds/Filter"
 
-import { FEEDS } from "../../queries";
+import { FEEDS, CALENDARENTRIES } from "../../queries";
 
 class DashboardWithoutMutation extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      currentScrollPosition: 0,
       dataSource: [],
       filter: undefined,
       translations: [],
@@ -28,13 +27,8 @@ class DashboardWithoutMutation extends React.Component {
     this.onChangeLanguage = this.onChangeLanguage.bind(this)
     this.processFeeds = this.processFeeds.bind(this)
     this.getNearestDate = this.getNearestDate.bind(this)
-    this.previousCursor = {
-      UP: "0",
-      DOWN: "0",
-    }
-    this.previousDirection = ''
-    this.endUpReached = false
-    this.endDownReached = false
+    this.congratulateMember = this.congratulateMember.bind(this)
+    this.openPlan = this.openPlan.bind(this)
   }
 
   componentDidMount() {
@@ -42,17 +36,15 @@ class DashboardWithoutMutation extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    //  moment(parseInt(feed.target_date)).format('DD-MM-YYYY')
     const {initialLoading} = this.state
-    //console.log("componentDidUpdate")
-    //console.log( prevState.initialLoading )
-    //console.log( initialLoading )
+    /*
     if( initialLoading != prevState.initialLoading && prevState.initialLoading ){
       console.log("Jump")
       const nearestDate = this.getNearestDate(new Date());
       //const formatedDate = parseInt(nearestDate);
       document.getElementById( moment(parseInt(nearestDate)).format('DD-MM-YYYY') ).scrollIntoView();
     }
+    */
   }
 
   processFeeds(rawFeeds) {
@@ -87,39 +79,28 @@ class DashboardWithoutMutation extends React.Component {
 
   jumpToDay(day) {
     // CALCULATE THE CURRENT POSSITION OF THE FIRST ELEMENT FROM TODAY
-    const {dataSource} = this.state;
-    var dateFormatted = new Date(day.getFullYear(),day.getMonth(),day.getDate());
-    var counter = 0;
-    var found = false;
-    console.log("datas: ",dataSource);
-    for( var i = 0; i < dataSource.length && !found; i++) {
-      const tmp = dataSource[i].title.split("-");
-      const myDate = new Date(tmp[2], tmp[1]-1, tmp[0]);
-      if( myDate.getTime() === dateFormatted.getTime()  ) {
-        found = true;
-      } else {
-        counter = counter + dataSource[i].data.length;
-      }
-    };
-    this.setState({
-      currentScrollPosition: counter
-    })
+
   }
 
   jumpToStart() {
-    if( this.state.currentScrollPosition == 0) {
-      this.setState({
-        currentScrollPosition: 100
-      })
-    } else {
-      this.setState({
-        currentScrollPosition: -1
-      }, () => {
-        this.setState({
-          currentScrollPosition: 0
-        })
-      })
-    }
+
+  }
+
+  congratulateMember(memberId){
+    Router.push({
+      pathname: '/customer',
+      query: { customer: memberId }
+    });
+  }
+
+  openPlan(memberId, planId){
+    console.log("openPlan")
+    console.log(memberId)
+    console.log(planId)
+    Router.push({
+      pathname: '/workout',
+      query: { workout: planId }
+    });
   }
 
   t(text) {
@@ -141,34 +122,30 @@ class DashboardWithoutMutation extends React.Component {
     });
   }
 
-  onFetchFeeds(fetchMore, data, direction) {
+  onFetchFeeds(fetchMore, data) {
     const {filter, pageSize, initialLoading} = this.state
-    const previousCursor = initialLoading ? "0" : (direction == this.previousDirection ? data.feeds.cursor : this.previousCursor[this.previousDirection == '' ? 'DOWN' : this.previousDirection]);
-    if( direction != this.previousDirection ) {
-      this.previousCursor[this.previousDirection == '' ? 'DOWN' : this.previousDirection] = data.feeds.cursor
-      this.previousDirection = direction
-    }
+    const cursor = initialLoading ? "0" : data.feeds.cursor;
+
     fetchMore({
       variables: {
-        after: previousCursor,
+        after: cursor,
         pageSize: pageSize,
         filter: filter,
-        direction: direction,
       },
       updateQuery: (prev, { fetchMoreResult, ...rest }) => {
         if( initialLoading ) {
           this.setState({initialLoading: false})
         }
         if (!fetchMoreResult) {
-          //this.setState({
-          //  hasMore: false
-          //})
+          this.setState({
+            hasMore: false
+          })
           return prev;
         } else {
-          //this.setState({
-          //  hasMore: fetchMoreResult.feeds.hasMore
-          //})
-          if( previousCursor == "0" && data.feeds.cursor.indexOf(':') > -1) {
+          this.setState({
+            hasMore: fetchMoreResult.feeds.hasMore
+          })
+          if( cursor == "0" ) {
             return {
               ...fetchMoreResult,
               feeds: {
@@ -181,7 +158,7 @@ class DashboardWithoutMutation extends React.Component {
               ...fetchMoreResult,
               feeds: {
                 ...fetchMoreResult.feeds,
-                feeds: direction == 'DOWN' ? _.unionBy(prev.feeds.feeds, fetchMoreResult.feeds.feeds, value => (value.member.id + value.type)) : _.unionBy(fetchMoreResult.feeds.feeds, prev.feeds.feeds, value => (value.member.id + value.type)),
+                feeds: _.unionBy(prev.feeds.feeds, fetchMoreResult.feeds.feeds, value => (value.member.id + value.type)),
               },
             };
           }
@@ -254,36 +231,17 @@ class DashboardWithoutMutation extends React.Component {
         variables={{
           pageSize:20,
           after: "0",
-          direction: ""
         }}
         onCompleted={ (data) => {
           this.setState({
             initialLoading: false,
           })
-          if( data.feeds.cursor.indexOf(':') > -1 ) {
-            this.previousCursor["UP"] = data.feeds.cursor.split(":")[0]
-            this.previousCursor["DOWN"] = data.feeds.cursor.split(":")[1]
-          } else {
-            this.previousCursor[(data.feeds.direction == '' ? "DOWN" : data.feeds.direction)] = data.feeds.cursor
-          }
         }}
       >
         {({ data, loading, error, fetchMore }) => {
-          let hasMore = true
-          let hasMoreup = true
-
-          if( data && data.feeds && data.feeds.direction == '' ) {
-            if( data.feeds.cursor.indexOf(':') > -1 ) {
-              hasMore = data.feeds.cursor.split(':')[0] > 20
-              hasMoreup = data.feeds.cursor.split(':')[1] > 20
-              if( data.feeds.cursor.split(':')[0] ) this.endUpReached = true
-            } else {
-              hasMore = data.feeds.hasMore
-              hasMoreup = data.feeds.hasMore
-            }
-
-          }
+          const hasMore = (data && data.feeds) ? data.feeds.hasMore : false
           const result = (data && data.feeds) ? data.feeds : {feeds: []}
+
           return (
             <Scene
               commandsLeft={commandsLeft}
@@ -292,6 +250,10 @@ class DashboardWithoutMutation extends React.Component {
                 <Filter
                   onFilterByTime={this.jumpToStart}
                   onFilterByType={(filterValue) => {
+                    console.log("FILTER VALUE")
+                    console.log( filterValue )
+                    if( filterValue === 'APT') filterValue = 'EXP_PLANS'
+                    if( filterValue === 'MSG') filterValue = 'EXP_PLANS'
                     const {filter} = this.state;
                     const newFilter = (filter == filterValue ? undefined : filterValue);
                     this.setState({
@@ -313,15 +275,15 @@ class DashboardWithoutMutation extends React.Component {
                 t={this.t}
                 goBack={this.goBack}
                 feeds={this.processFeeds(result.feeds)}
-                currentScrollPosition={this.state.currentScrollPosition}
                 jumpToDay={this.jumpToDay}
                 onRequestPage={(direction) => this.onFetchFeeds(fetchMore, data, direction)}
                 setPageSize={(newPageSize) => this.setState({pageSize: newPageSize})}
                 loading={loading}
                 error={error}
-                hasMore={hasMore && !this.endUpReached}
-                hasMoreUp={true}
+                hasMore={hasMore}
                 initialLoading={initialLoading}
+                congratulateMember={this.congratulateMember}
+                openPlan={this.openPlan}
               />
             </Scene>
           );

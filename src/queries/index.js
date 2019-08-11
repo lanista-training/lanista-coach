@@ -16,12 +16,31 @@ export const MEMBERS = gql`
   }
 `
 export const FEEDS = gql`
-  query Feeds($pageSize:Int, $after:String, $filter:String, $direction:String) {
-    feeds(pageSize: $pageSize, after: $after, filter: $filter, direction:$direction) {
+  query Feeds($pageSize:Int, $after:String, $filter:String) {
+    feeds(pageSize: $pageSize, after: $after, filter: $filter) {
       cursor,
       hasMore,
-      direction,
       feeds{
+        id
+        type
+        target_date
+        member{
+          id
+          first_name
+          last_name
+          email
+          photoUrl
+        }
+      }
+    }
+  }
+`
+
+export const CALENDARENTRIES = gql`
+  query CalenderEntries($day:String) {
+    calendarEntries(day: $day) {
+      feeds{
+        id
         type
         target_date
         member{

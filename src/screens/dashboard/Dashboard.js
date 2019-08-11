@@ -15,6 +15,8 @@ export default ({
   hasMoreUp,
   initialLoading,
   setPageSize,
+  congratulateMember,
+  openPlan,
 }) => {
   return (
     <Feeds
@@ -29,6 +31,8 @@ export default ({
       hasMoreUp={hasMoreUp}
       initialLoading={initialLoading}
       setPageSize={setPageSize}
+      congratulateMember={congratulateMember}
+      openPlan={openPlan}
     />
   )
 };

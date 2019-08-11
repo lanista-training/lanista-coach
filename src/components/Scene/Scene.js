@@ -104,6 +104,18 @@ const AlarmnButton = styled(Button)`
   top: 0.5em;
   color: rgb(155, 201, 61)!important;
 `;
+const MessagesButton = styled(Button)`
+  background: none!important;
+  font-size: 2em!important;
+  padding: 0em!important;
+  .active {
+    color: green!important;
+  }
+  position: absolute;
+  right: 3em;
+  top: 0.5em;
+  color: rgb(155, 201, 61)!important;
+`;
 
 const CommandPanelButton = styled(Button)`
   margin-top: 20px!important;
@@ -237,6 +249,9 @@ export default ({
             </span>
           </Trainer>
 
+          <MessagesButton circular>
+            <Icon name='mail' />
+          </MessagesButton>
           <Popup
             trigger={
               <AlarmnButton circular>

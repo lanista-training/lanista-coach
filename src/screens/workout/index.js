@@ -12,7 +12,6 @@ class WorkoutWithData extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       processing: false,
       translations: [],

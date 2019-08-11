@@ -9,9 +9,7 @@ export default class InfiniteScroll extends Component {
       initialLoading: false,
       pageSize: 0,
     }
-    this.lastScrollTop = 0;
-    this.scrollListener = this.scrollListener.bind(this);
-    this.direction = "DOWN"
+    this.scrollListener = this.scrollListener.bind(this)
   }
 
   componentDidMount() {
@@ -42,10 +40,6 @@ export default class InfiniteScroll extends Component {
           this.detachScrollListener();
         }
       }
-    }
-    if( this.direction == 'UP' ){
-      let scrollEl = document.getElementById("infinte-list-wrapper");
-      scrollEl.scrollTop = scrollEl.scrollHeight - this.beforeScrollHeight + this.beforeScrollTop;
     }
     this.attachScrollListener();
   }
@@ -79,22 +73,10 @@ export default class InfiniteScroll extends Component {
   }
 
   scrollListener(e) {
-    console.log("scrollListener")
-    console.log(e)
     const {hasMore} = this.props
-    if( this.lastScrollTop < e.target.scrollTop ) {
-      if( (e.target.scrollHeight - e.target.scrollTop) <= (e.target.offsetHeight * 2) && hasMore) {
-        this.loadMore('DOWN')
-      }
-    } else {
-      if( e.target.scrollTop <= (e.target.offsetHeight * 2) ) {
-        this.beforeScrollHeight = e.target.scrollHeight;
-        this.beforeScrollTop = e.target.scrollTop;
-        this.loadMore('UP')
-      }
-
+    if( (e.target.scrollHeight - e.target.scrollTop) <= (e.target.offsetHeight * 2) && hasMore ) {
+      this.loadMore()
     }
-    this.lastScrollTop = e.target.scrollTop
   }
 
   isPassiveSupported() {
@@ -123,11 +105,10 @@ export default class InfiniteScroll extends Component {
     this.props.setPageSize(Math.ceil(itemsOnPage))
   }
 
-  loadMore(direction) {
+  loadMore() {
     console.log('=============== loadMore ===============')
     const {loadMore} = this.props
-    this.direction = direction
-    loadMore(direction)
+    loadMore()
   }
 
   render() {

@@ -3,8 +3,9 @@
   "USER_BIRTHDAY_feed_text": "hat Geburtstag",
   "ARQ_feed_text": "wünscht ein Termin",
   "APT_feed_text": "hat ein Termin",
-  "EXP_PLANS_feed_text": "hat keinen gültigen Trainingsplan",
+  "PLAN_STATUS_feed_text": "hat keinen gültigen Trainingsplan",
   "WKA_feed_text": "hat bald keinen gültigen Trainingsplan",
-  "ACT_feed_text": "hat trainiert",
+  "USER_ACTIVITY_feed_text": "hat trainiert",
+  "EMPTY_DAY_feed_text": "keine Benachrichtigungen für heute",
   "Overview": "Überblick"
 }
