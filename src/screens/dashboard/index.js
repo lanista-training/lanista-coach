@@ -7,7 +7,7 @@ import moment from "moment"
 import Scene from "../../components/Scene";
 import Filter from "../../components/feeds/Filter"
 
-import { FEEDS, CALENDARENTRIES } from "../../queries";
+import { FEEDS } from "../../queries";
 
 class DashboardWithoutMutation extends React.Component {
 
