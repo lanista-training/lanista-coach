@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from "react"
 import {
   Button,
   Label,
@@ -10,11 +10,13 @@ import {
   Loader,
   Sidebar,
   Menu,
-} from 'semantic-ui-react';
-import styled from 'styled-components';
+} from 'semantic-ui-react'
+import styled from 'styled-components'
 
-import Header from "../Header";
-import Footer from "../Footer";
+import Header from "../Header"
+import Footer from "../Footer"
+import MessagesButton from "../MessagesButton"
+import AlarmsButton from "../AlarmsButton"
 
 const Scene = styled.div`
   position: absolute;
@@ -37,10 +39,11 @@ const Scene = styled.div`
 `;
 const Stage = styled.div`
   display: block;
-  overflow-y: auto;
   margin-right: 100px;
   margin-left:  100px;
   height: 100%;
+  overflow: visible!important;
+  overflow-y: auto;
   ::-webkit-scrollbar {
     width: 0px!important;
     background: transparent!important; /* make scrollbar transparent */
@@ -55,6 +58,13 @@ const CommandPanelRight = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  .synchronize-icon {
+    .icon {
+      color: rgb(155,201,61);
+      font-size: 1.3em;
+      font-weight: 700;
+    }
+  }
 }
 `;
 const CommandPanelLeft = styled.div`
@@ -92,30 +102,19 @@ const Avatar = styled.div`
   height: 45px;
   overflow: hidden;
 `;
-const AlarmnButton = styled(Button)`
+const AlarmButton = styled(Button)`
   background: none!important;
-  font-size: 2em!important;
+  font-size: 1.9em!important;
   padding: 0em!important;
   .active {
     color: green!important;
   }
   position: absolute;
-  right: 1em;
-  top: 0.5em;
+  right: 0em;
+  top: 0.7em;
   color: rgb(155, 201, 61)!important;
 `;
-const MessagesButton = styled(Button)`
-  background: none!important;
-  font-size: 2em!important;
-  padding: 0em!important;
-  .active {
-    color: green!important;
-  }
-  position: absolute;
-  right: 3em;
-  top: 0.5em;
-  color: rgb(155, 201, 61)!important;
-`;
+
 
 const CommandPanelButton = styled(Button)`
   margin-top: 20px!important;
@@ -145,6 +144,12 @@ const SideBarMenuItem = styled(List.Item)`
 const SideBarMenuItemIcon = styled(List.Icon)`
   font-size: 2em!important;
   line-height: 1em!important;
+`;
+const AlerstsSection = styled.div`
+  height: 1em;
+  position: absolute;
+  right: 0;
+  }
 `;
 export default ({
   commandsLeft,
@@ -211,6 +216,7 @@ export default ({
                 circular
                 icon={command.icon}
                 className={command.className}
+                style={command.style}
               />
             ))
           }
@@ -249,40 +255,12 @@ export default ({
             </span>
           </Trainer>
 
-          <MessagesButton circular>
-            <Icon name='mail' />
-          </MessagesButton>
-          <Popup
-            trigger={
-              <AlarmnButton circular>
-                <Icon name='bell' />
-                <Label color='red' floating>
-                  {alarms.length}
-                </Label>
-              </AlarmnButton>
-            }
-            content={
-              <List relaxed='very' divided verticalAlign='middle'>
-              {
-                alarms.map((alarm, index) => {
-                  return (
-                    <List.Item key={index} style={{minWidth: '400px'}}>
-                      <Image avatar src={alarm.imageUrl} />
-                      <List.Content>
-                        <List.Header as='a'>{alarm.fullName}</List.Header>
-                        <List.Description>
-                          {t("common:alarm_" + alarm.type)}
-                        </List.Description>
-                      </List.Content>
-                    </List.Item>
-                  )
-                })
-              }
-              </List>
-            }
-            on='click'
-            position='top right'
-          />
+          <AlerstsSection>
+            <MessagesButton/>
+            <AlarmsButton/>
+          </AlerstsSection>
+
+
         </Footer>
       </Sidebar.Pusher>
     </Sidebar.Pushable>

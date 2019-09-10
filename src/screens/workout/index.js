@@ -2,11 +2,25 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import moment from "moment";
 import Router from 'next/router';
-import { Query } from "react-apollo";
+import { withApollo } from '../../../lib/apollo'
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import Scene from "../../components/Scene";
 import Workout from './Workout';
 import WorkoutHeader from "../../components/WorkoutHeader";
 import { WORKOUT } from "../../queries";
+
+const Panel = ({workoutId}) => {
+  const { loading, error, data } = useQuery(WORKOUT, {variables: {
+    workoutId: workoutId,
+  }});
+  return (
+    <WorkoutWithData
+      loading={loading}
+      data={data}
+      error={error}
+    />
+  )
+}
 
 class WorkoutWithData extends Component {
 
@@ -97,51 +111,41 @@ class WorkoutWithData extends Component {
     });
   }
 
-  showExercise(planexerciseId) {
+  showExercise(exerciseId, memberId, planexerciseId) {
     Router.push({
       pathname: '/exercise',
-      query: { planexercise: planexerciseId }
+      query: {
+        exercise: exerciseId,
+        member: memberId,
+        planexercise: planexerciseId
+      }
     });
   }
 
   render() {
     const {processing} = this.state;
-    const {workoutId} = this.props;
-
-    return(
-      <Query
-        query={WORKOUT}
-        notifyOnNetworkStatusChange
-        fetchPolicy="cache-and-network"
-        variables={{
-          workoutId: workoutId,
-        }}
+    const {loading, error, data} = this.props;
+    return (
+      <Scene
+        commandsLeft={this.getCommandsLeft()}
+        commandsRight={this.getCommandsRight()}
+        processing={processing}
+        headerChildren={
+          <WorkoutHeader
+            title={data && data.workout ? data.workout.name : ''}
+            subtitle={data && data.workout ? ('Planduar: ' + data.workout.duration + ' Wochen') : ''}
+          />
+        }
+        t={this.t}
       >
-        {({ data, loading, error, fetchMore }) => {
-          return (
-            <Scene
-              commandsLeft={this.getCommandsLeft()}
-              commandsRight={this.getCommandsRight()}
-              processing={processing}
-              headerChildren={
-                <WorkoutHeader
-                  title={data && data.workout ? data.workout.name : ''}
-                  subtitle={data && data.workout ? ('Planduar: ' + data.workout.duration + ' Wochen') : ''}
-                />
-              }
-              t={this.t}
-            >
-              <Workout
-                workout={data && data.workout ? data.workout : undefined}
-                t={this.t}
-                onShowExercise={this.showExercise}
-              />
-            </Scene>
-          )
-        }}
-      </Query>
+        <Workout
+          workout={data && data.workout ? data.workout : undefined}
+          t={this.t}
+          onShowExercise={this.showExercise}
+        />
+      </Scene>
     )
   }
 }
 
-export default WorkoutWithData;
+export default withApollo(Panel);

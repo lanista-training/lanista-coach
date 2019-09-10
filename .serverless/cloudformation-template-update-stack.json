@@ -52,6 +52,24 @@
         "LogGroupName": "/aws/lambda/lanista-coach-app-dev-customers"
       }
     },
+    "ExerciseLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/lanista-coach-app-dev-exercise"
+      }
+    },
+    "ExercisesLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/lanista-coach-app-dev-exercises"
+      }
+    },
+    "ForgotpasswordLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/lanista-coach-app-dev-forgotpassword"
+      }
+    },
     "IndexLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
@@ -104,6 +122,18 @@
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
         "LogGroupName": "/aws/lambda/lanista-coach-app-dev-test"
+      }
+    },
+    "WorkoutLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/lanista-coach-app-dev-workout"
+      }
+    },
+    "WorkoutsLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/lanista-coach-app-dev-workouts"
       }
     },
     "CategoriesDashunoDashdosLogGroup": {
@@ -195,7 +225,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/lanista-coach-app/dev/1560854957743-2019-06-18T10:49:17.743Z/lanista-coach-app.zip"
+          "S3Key": "serverless/lanista-coach-app/dev/1568129061058-2019-09-10T15:24:21.058Z/lanista-coach-app.zip"
         },
         "FunctionName": "lanista-coach-app-dev-not-found",
         "Handler": "sls-next-build/_error.render",
@@ -206,7 +236,7 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs8.10",
+        "Runtime": "nodejs10.x",
         "Timeout": 6
       },
       "DependsOn": [
@@ -214,14 +244,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "NotDashfoundLambdaVersion1eyEMTIbi3ptTcYwgv6psDGyfVATX1L8gOWKH76g4cs": {
+    "NotDashfoundLambdaVersionMeCxHjBvmUIDXJaxbhlmigCbqEHllFpPKijmNDypaw": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "NotDashfoundLambdaFunction"
         },
-        "CodeSha256": "8Wh1LfBWzvvLhfILqHPGcBIZIYhgUqH2kIgYDYwJ2Hg="
+        "CodeSha256": "kKjFEJKESHSg7DVAhAq2ClXoYpYROd/Or5sn/XIHiCY="
       }
     },
     "AboutLambdaFunction": {
@@ -231,7 +261,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/lanista-coach-app/dev/1560854957743-2019-06-18T10:49:17.743Z/lanista-coach-app.zip"
+          "S3Key": "serverless/lanista-coach-app/dev/1568129061058-2019-09-10T15:24:21.058Z/lanista-coach-app.zip"
         },
         "FunctionName": "lanista-coach-app-dev-about",
         "Handler": "sls-next-build/about.render",
@@ -242,7 +272,7 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs8.10",
+        "Runtime": "nodejs10.x",
         "Timeout": 6
       },
       "DependsOn": [
@@ -250,14 +280,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "AboutLambdaVersionumtsX2lIcGixvqG9a3QkojJkFtpT9tP9ewwRDf1tn8": {
+    "AboutLambdaVersion5N0TkJtCS1UWQ6mcSqbpOPy846XzZDpkRbYwVJe9XI": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "AboutLambdaFunction"
         },
-        "CodeSha256": "8Wh1LfBWzvvLhfILqHPGcBIZIYhgUqH2kIgYDYwJ2Hg="
+        "CodeSha256": "kKjFEJKESHSg7DVAhAq2ClXoYpYROd/Or5sn/XIHiCY="
       }
     },
     "AnamneseLambdaFunction": {
@@ -267,7 +297,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/lanista-coach-app/dev/1560854957743-2019-06-18T10:49:17.743Z/lanista-coach-app.zip"
+          "S3Key": "serverless/lanista-coach-app/dev/1568129061058-2019-09-10T15:24:21.058Z/lanista-coach-app.zip"
         },
         "FunctionName": "lanista-coach-app-dev-anamnese",
         "Handler": "sls-next-build/anamnese.render",
@@ -278,7 +308,7 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs8.10",
+        "Runtime": "nodejs10.x",
         "Timeout": 6
       },
       "DependsOn": [
@@ -286,14 +316,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "AnamneseLambdaVersionkmEEQIzY5xI9ZHruHK5NLx9Wn89finiQeBFa7VM5Os": {
+    "AnamneseLambdaVersiontc1JYipLwYxFWD8UVstAiQ1erLIIdSPhlOMQeuz4k": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "AnamneseLambdaFunction"
         },
-        "CodeSha256": "8Wh1LfBWzvvLhfILqHPGcBIZIYhgUqH2kIgYDYwJ2Hg="
+        "CodeSha256": "kKjFEJKESHSg7DVAhAq2ClXoYpYROd/Or5sn/XIHiCY="
       }
     },
     "ConfigurationLambdaFunction": {
@@ -303,7 +333,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/lanista-coach-app/dev/1560854957743-2019-06-18T10:49:17.743Z/lanista-coach-app.zip"
+          "S3Key": "serverless/lanista-coach-app/dev/1568129061058-2019-09-10T15:24:21.058Z/lanista-coach-app.zip"
         },
         "FunctionName": "lanista-coach-app-dev-configuration",
         "Handler": "sls-next-build/configuration.render",
@@ -314,7 +344,7 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs8.10",
+        "Runtime": "nodejs10.x",
         "Timeout": 6
       },
       "DependsOn": [
@@ -322,14 +352,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "ConfigurationLambdaVersionf3bVZ5nQ8tGlrBZnvfmyxy27hqDDH0w5HWZRqiIb7po": {
+    "ConfigurationLambdaVersionur2i6jM8DF1JDML62VtF7PI2vLHSiFwcoAgOGU5dIFY": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ConfigurationLambdaFunction"
         },
-        "CodeSha256": "8Wh1LfBWzvvLhfILqHPGcBIZIYhgUqH2kIgYDYwJ2Hg="
+        "CodeSha256": "kKjFEJKESHSg7DVAhAq2ClXoYpYROd/Or5sn/XIHiCY="
       }
     },
     "CustomerLambdaFunction": {
@@ -339,7 +369,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/lanista-coach-app/dev/1560854957743-2019-06-18T10:49:17.743Z/lanista-coach-app.zip"
+          "S3Key": "serverless/lanista-coach-app/dev/1568129061058-2019-09-10T15:24:21.058Z/lanista-coach-app.zip"
         },
         "FunctionName": "lanista-coach-app-dev-customer",
         "Handler": "sls-next-build/customer.render",
@@ -350,7 +380,7 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs8.10",
+        "Runtime": "nodejs10.x",
         "Timeout": 6
       },
       "DependsOn": [
@@ -358,14 +388,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "CustomerLambdaVersionGZCeAvYvhoB3xVELSyYTDvd6AQkXmQq64rsXlw7mKfU": {
+    "CustomerLambdaVersiondi3MlvhxjEODiMOxILSejxkuICbyFwzz0KqqgEKyes": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "CustomerLambdaFunction"
         },
-        "CodeSha256": "8Wh1LfBWzvvLhfILqHPGcBIZIYhgUqH2kIgYDYwJ2Hg="
+        "CodeSha256": "kKjFEJKESHSg7DVAhAq2ClXoYpYROd/Or5sn/XIHiCY="
       }
     },
     "CustomersLambdaFunction": {
@@ -375,7 +405,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/lanista-coach-app/dev/1560854957743-2019-06-18T10:49:17.743Z/lanista-coach-app.zip"
+          "S3Key": "serverless/lanista-coach-app/dev/1568129061058-2019-09-10T15:24:21.058Z/lanista-coach-app.zip"
         },
         "FunctionName": "lanista-coach-app-dev-customers",
         "Handler": "sls-next-build/customers.render",
@@ -386,7 +416,7 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs8.10",
+        "Runtime": "nodejs10.x",
         "Timeout": 6
       },
       "DependsOn": [
@@ -394,14 +424,122 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "CustomersLambdaVersion0sXWEjomOHOUYNPp6Zy4XYir6lJ2A258oM2waHnqMQ": {
+    "CustomersLambdaVersionWuHQXnClHEbIFFbHGtgoOpEbdk94stMF7xafNw5qeg": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "CustomersLambdaFunction"
         },
-        "CodeSha256": "8Wh1LfBWzvvLhfILqHPGcBIZIYhgUqH2kIgYDYwJ2Hg="
+        "CodeSha256": "kKjFEJKESHSg7DVAhAq2ClXoYpYROd/Or5sn/XIHiCY="
+      }
+    },
+    "ExerciseLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/lanista-coach-app/dev/1568129061058-2019-09-10T15:24:21.058Z/lanista-coach-app.zip"
+        },
+        "FunctionName": "lanista-coach-app-dev-exercise",
+        "Handler": "sls-next-build/exercise.render",
+        "MemorySize": 512,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs10.x",
+        "Timeout": 6
+      },
+      "DependsOn": [
+        "ExerciseLogGroup",
+        "IamRoleLambdaExecution"
+      ]
+    },
+    "ExerciseLambdaVersionTuxGJFakFWg09lEZqxHktCBPWjKPLJpML86QI7i3Y": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ExerciseLambdaFunction"
+        },
+        "CodeSha256": "kKjFEJKESHSg7DVAhAq2ClXoYpYROd/Or5sn/XIHiCY="
+      }
+    },
+    "ExercisesLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/lanista-coach-app/dev/1568129061058-2019-09-10T15:24:21.058Z/lanista-coach-app.zip"
+        },
+        "FunctionName": "lanista-coach-app-dev-exercises",
+        "Handler": "sls-next-build/exercises.render",
+        "MemorySize": 512,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs10.x",
+        "Timeout": 6
+      },
+      "DependsOn": [
+        "ExercisesLogGroup",
+        "IamRoleLambdaExecution"
+      ]
+    },
+    "ExercisesLambdaVersionMIvLbF46f6fqd2O6YuuIgfdkweoW9xANws6R3YNSGyE": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ExercisesLambdaFunction"
+        },
+        "CodeSha256": "kKjFEJKESHSg7DVAhAq2ClXoYpYROd/Or5sn/XIHiCY="
+      }
+    },
+    "ForgotpasswordLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/lanista-coach-app/dev/1568129061058-2019-09-10T15:24:21.058Z/lanista-coach-app.zip"
+        },
+        "FunctionName": "lanista-coach-app-dev-forgotpassword",
+        "Handler": "sls-next-build/forgotpassword.render",
+        "MemorySize": 512,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs10.x",
+        "Timeout": 6
+      },
+      "DependsOn": [
+        "ForgotpasswordLogGroup",
+        "IamRoleLambdaExecution"
+      ]
+    },
+    "ForgotpasswordLambdaVersionsgxMvWgnhew7IBZM9CUU2B9KjYeRCbsWYG6fONcDY": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "ForgotpasswordLambdaFunction"
+        },
+        "CodeSha256": "kKjFEJKESHSg7DVAhAq2ClXoYpYROd/Or5sn/XIHiCY="
       }
     },
     "IndexLambdaFunction": {
@@ -411,7 +549,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/lanista-coach-app/dev/1560854957743-2019-06-18T10:49:17.743Z/lanista-coach-app.zip"
+          "S3Key": "serverless/lanista-coach-app/dev/1568129061058-2019-09-10T15:24:21.058Z/lanista-coach-app.zip"
         },
         "FunctionName": "lanista-coach-app-dev-index",
         "Handler": "sls-next-build/index.render",
@@ -422,7 +560,7 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs8.10",
+        "Runtime": "nodejs10.x",
         "Timeout": 6
       },
       "DependsOn": [
@@ -430,14 +568,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "IndexLambdaVersionGOIwPaPiD185uZqMubW1l6DEIrBcGIgksb4Lequdkk": {
+    "IndexLambdaVersionO7wpseCN1pKRIE78nVCSjiaj3naJhLwp0ZudjqBQ": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "IndexLambdaFunction"
         },
-        "CodeSha256": "8Wh1LfBWzvvLhfILqHPGcBIZIYhgUqH2kIgYDYwJ2Hg="
+        "CodeSha256": "kKjFEJKESHSg7DVAhAq2ClXoYpYROd/Or5sn/XIHiCY="
       }
     },
     "LoginUnderscorebackupLambdaFunction": {
@@ -447,7 +585,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/lanista-coach-app/dev/1560854957743-2019-06-18T10:49:17.743Z/lanista-coach-app.zip"
+          "S3Key": "serverless/lanista-coach-app/dev/1568129061058-2019-09-10T15:24:21.058Z/lanista-coach-app.zip"
         },
         "FunctionName": "lanista-coach-app-dev-login_backup",
         "Handler": "sls-next-build/login.backup.render",
@@ -458,7 +596,7 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs8.10",
+        "Runtime": "nodejs10.x",
         "Timeout": 6
       },
       "DependsOn": [
@@ -466,14 +604,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "LoginUnderscorebackupLambdaVersionZnMFTkwKNHkOVq2sJWKz7gDKPlduFkTtXVRcQoK6Qg": {
+    "LoginUnderscorebackupLambdaVersionTbp3HyS1qAM9pxaPpPDNiIV2MyAntikWtrsWLyoKKz4": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "LoginUnderscorebackupLambdaFunction"
         },
-        "CodeSha256": "8Wh1LfBWzvvLhfILqHPGcBIZIYhgUqH2kIgYDYwJ2Hg="
+        "CodeSha256": "kKjFEJKESHSg7DVAhAq2ClXoYpYROd/Or5sn/XIHiCY="
       }
     },
     "LoginLambdaFunction": {
@@ -483,7 +621,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/lanista-coach-app/dev/1560854957743-2019-06-18T10:49:17.743Z/lanista-coach-app.zip"
+          "S3Key": "serverless/lanista-coach-app/dev/1568129061058-2019-09-10T15:24:21.058Z/lanista-coach-app.zip"
         },
         "FunctionName": "lanista-coach-app-dev-login",
         "Handler": "sls-next-build/login.render",
@@ -494,7 +632,7 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs8.10",
+        "Runtime": "nodejs10.x",
         "Timeout": 6
       },
       "DependsOn": [
@@ -502,14 +640,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "LoginLambdaVersionBK34gMaEGJ3mILRZW4mujop8e57KuoXzx6A1eMpYVs": {
+    "LoginLambdaVersionDVNjGehYe2bW1ocHQQNZMtuhZtoLe5KH3WOE3IR5A": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "LoginLambdaFunction"
         },
-        "CodeSha256": "8Wh1LfBWzvvLhfILqHPGcBIZIYhgUqH2kIgYDYwJ2Hg="
+        "CodeSha256": "kKjFEJKESHSg7DVAhAq2ClXoYpYROd/Or5sn/XIHiCY="
       }
     },
     "MeasuresLambdaFunction": {
@@ -519,7 +657,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/lanista-coach-app/dev/1560854957743-2019-06-18T10:49:17.743Z/lanista-coach-app.zip"
+          "S3Key": "serverless/lanista-coach-app/dev/1568129061058-2019-09-10T15:24:21.058Z/lanista-coach-app.zip"
         },
         "FunctionName": "lanista-coach-app-dev-measures",
         "Handler": "sls-next-build/measures.render",
@@ -530,7 +668,7 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs8.10",
+        "Runtime": "nodejs10.x",
         "Timeout": 6
       },
       "DependsOn": [
@@ -538,14 +676,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "MeasuresLambdaVersionFyVTUG3KEKs7o8JKkokUVdaxcjif7wuYyn2AStRxvY": {
+    "MeasuresLambdaVersionasclWRvoaeRzGbCcbyQF3qa1Rxm3DzJZJzMslvsayw": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "MeasuresLambdaFunction"
         },
-        "CodeSha256": "8Wh1LfBWzvvLhfILqHPGcBIZIYhgUqH2kIgYDYwJ2Hg="
+        "CodeSha256": "kKjFEJKESHSg7DVAhAq2ClXoYpYROd/Or5sn/XIHiCY="
       }
     },
     "PostLambdaFunction": {
@@ -555,7 +693,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/lanista-coach-app/dev/1560854957743-2019-06-18T10:49:17.743Z/lanista-coach-app.zip"
+          "S3Key": "serverless/lanista-coach-app/dev/1568129061058-2019-09-10T15:24:21.058Z/lanista-coach-app.zip"
         },
         "FunctionName": "lanista-coach-app-dev-post",
         "Handler": "sls-next-build/post.render",
@@ -566,7 +704,7 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs8.10",
+        "Runtime": "nodejs10.x",
         "Timeout": 6
       },
       "DependsOn": [
@@ -574,14 +712,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "PostLambdaVersione7AcyovbJkpRg6yrUGQIfZHglIp6CkCgazzHSEdfU": {
+    "PostLambdaVersionKxf8QEfWnumiIDFAEmA2AMndQKYWjbpkHleFEGA7k0": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "PostLambdaFunction"
         },
-        "CodeSha256": "8Wh1LfBWzvvLhfILqHPGcBIZIYhgUqH2kIgYDYwJ2Hg="
+        "CodeSha256": "kKjFEJKESHSg7DVAhAq2ClXoYpYROd/Or5sn/XIHiCY="
       }
     },
     "ProfileLambdaFunction": {
@@ -591,7 +729,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/lanista-coach-app/dev/1560854957743-2019-06-18T10:49:17.743Z/lanista-coach-app.zip"
+          "S3Key": "serverless/lanista-coach-app/dev/1568129061058-2019-09-10T15:24:21.058Z/lanista-coach-app.zip"
         },
         "FunctionName": "lanista-coach-app-dev-profile",
         "Handler": "sls-next-build/profile.render",
@@ -602,7 +740,7 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs8.10",
+        "Runtime": "nodejs10.x",
         "Timeout": 6
       },
       "DependsOn": [
@@ -610,14 +748,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "ProfileLambdaVersion0sftHTTMratJIxsokaIHmme3OBordB2z9JI6JLVMK0": {
+    "ProfileLambdaVersionI76VqKI6vmismrX8znJvHHKnJaWB2omw4rJp2GUpNQ": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ProfileLambdaFunction"
         },
-        "CodeSha256": "8Wh1LfBWzvvLhfILqHPGcBIZIYhgUqH2kIgYDYwJ2Hg="
+        "CodeSha256": "kKjFEJKESHSg7DVAhAq2ClXoYpYROd/Or5sn/XIHiCY="
       }
     },
     "RegistrationLambdaFunction": {
@@ -627,7 +765,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/lanista-coach-app/dev/1560854957743-2019-06-18T10:49:17.743Z/lanista-coach-app.zip"
+          "S3Key": "serverless/lanista-coach-app/dev/1568129061058-2019-09-10T15:24:21.058Z/lanista-coach-app.zip"
         },
         "FunctionName": "lanista-coach-app-dev-registration",
         "Handler": "sls-next-build/registration.render",
@@ -638,7 +776,7 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs8.10",
+        "Runtime": "nodejs10.x",
         "Timeout": 6
       },
       "DependsOn": [
@@ -646,14 +784,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "RegistrationLambdaVersionLgdXB7NUBlFin2lD6uJIqIyADwpH3T8lSBzqrRW7WA0": {
+    "RegistrationLambdaVersionZO4v2iiLF5Jfc09wyzRdMYDqrwN0D1ivonIcUZk4Ys": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "RegistrationLambdaFunction"
         },
-        "CodeSha256": "8Wh1LfBWzvvLhfILqHPGcBIZIYhgUqH2kIgYDYwJ2Hg="
+        "CodeSha256": "kKjFEJKESHSg7DVAhAq2ClXoYpYROd/Or5sn/XIHiCY="
       }
     },
     "TemplateLambdaFunction": {
@@ -663,7 +801,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/lanista-coach-app/dev/1560854957743-2019-06-18T10:49:17.743Z/lanista-coach-app.zip"
+          "S3Key": "serverless/lanista-coach-app/dev/1568129061058-2019-09-10T15:24:21.058Z/lanista-coach-app.zip"
         },
         "FunctionName": "lanista-coach-app-dev-template",
         "Handler": "sls-next-build/template.render",
@@ -674,7 +812,7 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs8.10",
+        "Runtime": "nodejs10.x",
         "Timeout": 6
       },
       "DependsOn": [
@@ -682,14 +820,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "TemplateLambdaVersionua1J0Hrvo5QRaHhgS2stExzPRp9uioZswrNGCLBsF3A": {
+    "TemplateLambdaVersionezcjawVcoV0XuvqUKpdWXW4tv56uqggNJ2muMko0Eg": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "TemplateLambdaFunction"
         },
-        "CodeSha256": "8Wh1LfBWzvvLhfILqHPGcBIZIYhgUqH2kIgYDYwJ2Hg="
+        "CodeSha256": "kKjFEJKESHSg7DVAhAq2ClXoYpYROd/Or5sn/XIHiCY="
       }
     },
     "TestLambdaFunction": {
@@ -699,7 +837,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/lanista-coach-app/dev/1560854957743-2019-06-18T10:49:17.743Z/lanista-coach-app.zip"
+          "S3Key": "serverless/lanista-coach-app/dev/1568129061058-2019-09-10T15:24:21.058Z/lanista-coach-app.zip"
         },
         "FunctionName": "lanista-coach-app-dev-test",
         "Handler": "sls-next-build/test.render",
@@ -710,7 +848,7 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs8.10",
+        "Runtime": "nodejs10.x",
         "Timeout": 6
       },
       "DependsOn": [
@@ -718,14 +856,86 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "TestLambdaVersionKZpOiR6NBEiLxW7zqOH129mHn9ya5zNOyb9AG1iLI": {
+    "TestLambdaVersionIgmh62BvmkIne5bjksMiCE5pVash9rEj5c2HIv2yQ8A": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "TestLambdaFunction"
         },
-        "CodeSha256": "8Wh1LfBWzvvLhfILqHPGcBIZIYhgUqH2kIgYDYwJ2Hg="
+        "CodeSha256": "kKjFEJKESHSg7DVAhAq2ClXoYpYROd/Or5sn/XIHiCY="
+      }
+    },
+    "WorkoutLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/lanista-coach-app/dev/1568129061058-2019-09-10T15:24:21.058Z/lanista-coach-app.zip"
+        },
+        "FunctionName": "lanista-coach-app-dev-workout",
+        "Handler": "sls-next-build/workout.render",
+        "MemorySize": 512,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs10.x",
+        "Timeout": 6
+      },
+      "DependsOn": [
+        "WorkoutLogGroup",
+        "IamRoleLambdaExecution"
+      ]
+    },
+    "WorkoutLambdaVersionNkJMZSNvRtH0NEIoUOqHAHp6IPeCIDOANz9ataJfsk": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "WorkoutLambdaFunction"
+        },
+        "CodeSha256": "kKjFEJKESHSg7DVAhAq2ClXoYpYROd/Or5sn/XIHiCY="
+      }
+    },
+    "WorkoutsLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/lanista-coach-app/dev/1568129061058-2019-09-10T15:24:21.058Z/lanista-coach-app.zip"
+        },
+        "FunctionName": "lanista-coach-app-dev-workouts",
+        "Handler": "sls-next-build/workouts.render",
+        "MemorySize": 512,
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        },
+        "Runtime": "nodejs10.x",
+        "Timeout": 6
+      },
+      "DependsOn": [
+        "WorkoutsLogGroup",
+        "IamRoleLambdaExecution"
+      ]
+    },
+    "WorkoutsLambdaVersionIHxki1kHLHnuutyMsVaA9va486KcM1npWgrfDiUIQ": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "WorkoutsLambdaFunction"
+        },
+        "CodeSha256": "kKjFEJKESHSg7DVAhAq2ClXoYpYROd/Or5sn/XIHiCY="
       }
     },
     "CategoriesDashunoDashdosLambdaFunction": {
@@ -735,7 +945,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/lanista-coach-app/dev/1560854957743-2019-06-18T10:49:17.743Z/lanista-coach-app.zip"
+          "S3Key": "serverless/lanista-coach-app/dev/1568129061058-2019-09-10T15:24:21.058Z/lanista-coach-app.zip"
         },
         "FunctionName": "lanista-coach-app-dev-categories-uno-dos",
         "Handler": "sls-next-build/categories/uno/dos.render",
@@ -746,7 +956,7 @@
             "Arn"
           ]
         },
-        "Runtime": "nodejs8.10",
+        "Runtime": "nodejs10.x",
         "Timeout": 6
       },
       "DependsOn": [
@@ -754,14 +964,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "CategoriesDashunoDashdosLambdaVersionHiTRHXV54EcFNyx2qtRCwKXBl0CZtkKYrNhrEok": {
+    "CategoriesDashunoDashdosLambdaVersionBh9SLE5MS8APkXRo2UK7Nwt1DqRDI80kO6QZsDFXs": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "CategoriesDashunoDashdosLambdaFunction"
         },
-        "CodeSha256": "8Wh1LfBWzvvLhfILqHPGcBIZIYhgUqH2kIgYDYwJ2Hg="
+        "CodeSha256": "kKjFEJKESHSg7DVAhAq2ClXoYpYROd/Or5sn/XIHiCY="
       }
     },
     "ApiGatewayRestApi": {
@@ -860,6 +1070,51 @@
           ]
         },
         "PathPart": "customers",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceExercise": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "exercise",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceExercises": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "exercises",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceForgotpassword": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "forgotpassword",
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
         }
@@ -992,6 +1247,36 @@
           ]
         },
         "PathPart": "test",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceWorkout": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "workout",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceWorkouts": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "workouts",
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
         }
@@ -1541,6 +1826,264 @@
                 {
                   "Fn::GetAtt": [
                     "CustomersLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodExerciseGet": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceExercise"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ExerciseLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodExerciseHead": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "HEAD",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceExercise"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ExerciseLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodExercisesGet": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceExercises"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ExercisesLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodExercisesHead": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "HEAD",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceExercises"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ExercisesLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodForgotpasswordGet": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceForgotpassword"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ForgotpasswordLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodForgotpasswordHead": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "HEAD",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceForgotpassword"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "ForgotpasswordLambdaFunction",
                     "Arn"
                   ]
                 },
@@ -2336,6 +2879,178 @@
         "MethodResponses": []
       }
     },
+    "ApiGatewayMethodWorkoutGet": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceWorkout"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "WorkoutLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodWorkoutHead": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "HEAD",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceWorkout"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "WorkoutLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodWorkoutsGet": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceWorkouts"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "WorkoutsLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
+    "ApiGatewayMethodWorkoutsHead": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "HEAD",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceWorkouts"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "WorkoutsLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      }
+    },
     "ApiGatewayMethodCategoriesUnoDosGet": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
@@ -2422,7 +3137,7 @@
         "MethodResponses": []
       }
     },
-    "ApiGatewayDeployment1560854862975": {
+    "ApiGatewayDeployment1568128975152": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -2443,6 +3158,12 @@
         "ApiGatewayMethodCustomerHead",
         "ApiGatewayMethodCustomersGet",
         "ApiGatewayMethodCustomersHead",
+        "ApiGatewayMethodExerciseGet",
+        "ApiGatewayMethodExerciseHead",
+        "ApiGatewayMethodExercisesGet",
+        "ApiGatewayMethodExercisesHead",
+        "ApiGatewayMethodForgotpasswordGet",
+        "ApiGatewayMethodForgotpasswordHead",
         "ApiGatewayMethodGet",
         "ApiGatewayMethodHead",
         "ApiGatewayMethodLoginbackupGet",
@@ -2461,6 +3182,10 @@
         "ApiGatewayMethodTemplateHead",
         "ApiGatewayMethodTestGet",
         "ApiGatewayMethodTestHead",
+        "ApiGatewayMethodWorkoutGet",
+        "ApiGatewayMethodWorkoutHead",
+        "ApiGatewayMethodWorkoutsGet",
+        "ApiGatewayMethodWorkoutsHead",
         "ApiGatewayMethodCategoriesUnoDosGet",
         "ApiGatewayMethodCategoriesUnoDosHead"
       ]
@@ -2656,6 +3381,117 @@
         "FunctionName": {
           "Fn::GetAtt": [
             "CustomersLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "ExerciseLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ExerciseLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "ExercisesLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ExercisesLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "ForgotpasswordLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "ForgotpasswordLambdaFunction",
             "Arn"
           ]
         },
@@ -3020,6 +3856,80 @@
         }
       }
     },
+    "WorkoutLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "WorkoutLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "WorkoutsLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "WorkoutsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
     "CategoriesDashunoDashdosLambdaPermissionApiGateway": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
@@ -3088,6 +3998,128 @@
         }
       },
       "DeletionPolicy": "Retain"
+    },
+    "StaticAssetsProxyParentResource": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "static",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "StaticAssetsProxyResource": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "StaticAssetsProxyParentResource"
+        },
+        "PathPart": "{proxy+}",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "StaticAssetsProxyMethod": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "ResourceId": {
+          "Ref": "StaticAssetsProxyResource"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "HttpMethod": "GET",
+        "MethodResponses": [
+          {
+            "StatusCode": 200
+          }
+        ],
+        "RequestParameters": {
+          "method.request.path.proxy": true
+        },
+        "Integration": {
+          "IntegrationHttpMethod": "GET",
+          "Type": "HTTP_PROXY",
+          "Uri": "https://s3-eu-central-1.amazonaws.com/lanistacoach/static/{proxy}",
+          "RequestParameters": {
+            "integration.request.path.proxy": "method.request.path.proxy"
+          },
+          "IntegrationResponses": [
+            {
+              "StatusCode": 200
+            }
+          ]
+        }
+      }
+    },
+    "NextStaticAssetsProxyParentResource": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "_next",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "NextStaticAssetsProxyResource": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "NextStaticAssetsProxyParentResource"
+        },
+        "PathPart": "{proxy+}",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "NextStaticAssetsProxyMethod": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "ResourceId": {
+          "Ref": "NextStaticAssetsProxyResource"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "HttpMethod": "GET",
+        "MethodResponses": [
+          {
+            "StatusCode": 200
+          }
+        ],
+        "RequestParameters": {
+          "method.request.path.proxy": true
+        },
+        "Integration": {
+          "IntegrationHttpMethod": "GET",
+          "Type": "HTTP_PROXY",
+          "Uri": "https://s3-eu-central-1.amazonaws.com/lanistacoach/_next/{proxy}",
+          "RequestParameters": {
+            "integration.request.path.proxy": "method.request.path.proxy"
+          },
+          "IntegrationResponses": [
+            {
+              "StatusCode": 200
+            }
+          ]
+        }
+      }
     }
   },
   "Outputs": {
@@ -3099,97 +4131,127 @@
     "NotDashfoundLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "NotDashfoundLambdaVersion1eyEMTIbi3ptTcYwgv6psDGyfVATX1L8gOWKH76g4cs"
+        "Ref": "NotDashfoundLambdaVersionMeCxHjBvmUIDXJaxbhlmigCbqEHllFpPKijmNDypaw"
       }
     },
     "AboutLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "AboutLambdaVersionumtsX2lIcGixvqG9a3QkojJkFtpT9tP9ewwRDf1tn8"
+        "Ref": "AboutLambdaVersion5N0TkJtCS1UWQ6mcSqbpOPy846XzZDpkRbYwVJe9XI"
       }
     },
     "AnamneseLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "AnamneseLambdaVersionkmEEQIzY5xI9ZHruHK5NLx9Wn89finiQeBFa7VM5Os"
+        "Ref": "AnamneseLambdaVersiontc1JYipLwYxFWD8UVstAiQ1erLIIdSPhlOMQeuz4k"
       }
     },
     "ConfigurationLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ConfigurationLambdaVersionf3bVZ5nQ8tGlrBZnvfmyxy27hqDDH0w5HWZRqiIb7po"
+        "Ref": "ConfigurationLambdaVersionur2i6jM8DF1JDML62VtF7PI2vLHSiFwcoAgOGU5dIFY"
       }
     },
     "CustomerLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "CustomerLambdaVersionGZCeAvYvhoB3xVELSyYTDvd6AQkXmQq64rsXlw7mKfU"
+        "Ref": "CustomerLambdaVersiondi3MlvhxjEODiMOxILSejxkuICbyFwzz0KqqgEKyes"
       }
     },
     "CustomersLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "CustomersLambdaVersion0sXWEjomOHOUYNPp6Zy4XYir6lJ2A258oM2waHnqMQ"
+        "Ref": "CustomersLambdaVersionWuHQXnClHEbIFFbHGtgoOpEbdk94stMF7xafNw5qeg"
+      }
+    },
+    "ExerciseLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "ExerciseLambdaVersionTuxGJFakFWg09lEZqxHktCBPWjKPLJpML86QI7i3Y"
+      }
+    },
+    "ExercisesLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "ExercisesLambdaVersionMIvLbF46f6fqd2O6YuuIgfdkweoW9xANws6R3YNSGyE"
+      }
+    },
+    "ForgotpasswordLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "ForgotpasswordLambdaVersionsgxMvWgnhew7IBZM9CUU2B9KjYeRCbsWYG6fONcDY"
       }
     },
     "IndexLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "IndexLambdaVersionGOIwPaPiD185uZqMubW1l6DEIrBcGIgksb4Lequdkk"
+        "Ref": "IndexLambdaVersionO7wpseCN1pKRIE78nVCSjiaj3naJhLwp0ZudjqBQ"
       }
     },
     "LoginUnderscorebackupLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "LoginUnderscorebackupLambdaVersionZnMFTkwKNHkOVq2sJWKz7gDKPlduFkTtXVRcQoK6Qg"
+        "Ref": "LoginUnderscorebackupLambdaVersionTbp3HyS1qAM9pxaPpPDNiIV2MyAntikWtrsWLyoKKz4"
       }
     },
     "LoginLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "LoginLambdaVersionBK34gMaEGJ3mILRZW4mujop8e57KuoXzx6A1eMpYVs"
+        "Ref": "LoginLambdaVersionDVNjGehYe2bW1ocHQQNZMtuhZtoLe5KH3WOE3IR5A"
       }
     },
     "MeasuresLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "MeasuresLambdaVersionFyVTUG3KEKs7o8JKkokUVdaxcjif7wuYyn2AStRxvY"
+        "Ref": "MeasuresLambdaVersionasclWRvoaeRzGbCcbyQF3qa1Rxm3DzJZJzMslvsayw"
       }
     },
     "PostLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "PostLambdaVersione7AcyovbJkpRg6yrUGQIfZHglIp6CkCgazzHSEdfU"
+        "Ref": "PostLambdaVersionKxf8QEfWnumiIDFAEmA2AMndQKYWjbpkHleFEGA7k0"
       }
     },
     "ProfileLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ProfileLambdaVersion0sftHTTMratJIxsokaIHmme3OBordB2z9JI6JLVMK0"
+        "Ref": "ProfileLambdaVersionI76VqKI6vmismrX8znJvHHKnJaWB2omw4rJp2GUpNQ"
       }
     },
     "RegistrationLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "RegistrationLambdaVersionLgdXB7NUBlFin2lD6uJIqIyADwpH3T8lSBzqrRW7WA0"
+        "Ref": "RegistrationLambdaVersionZO4v2iiLF5Jfc09wyzRdMYDqrwN0D1ivonIcUZk4Ys"
       }
     },
     "TemplateLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "TemplateLambdaVersionua1J0Hrvo5QRaHhgS2stExzPRp9uioZswrNGCLBsF3A"
+        "Ref": "TemplateLambdaVersionezcjawVcoV0XuvqUKpdWXW4tv56uqggNJ2muMko0Eg"
       }
     },
     "TestLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "TestLambdaVersionKZpOiR6NBEiLxW7zqOH129mHn9ya5zNOyb9AG1iLI"
+        "Ref": "TestLambdaVersionIgmh62BvmkIne5bjksMiCE5pVash9rEj5c2HIv2yQ8A"
+      }
+    },
+    "WorkoutLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "WorkoutLambdaVersionNkJMZSNvRtH0NEIoUOqHAHp6IPeCIDOANz9ataJfsk"
+      }
+    },
+    "WorkoutsLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "WorkoutsLambdaVersionIHxki1kHLHnuutyMsVaA9va486KcM1npWgrfDiUIQ"
       }
     },
     "CategoriesDashunoDashdosLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "CategoriesDashunoDashdosLambdaVersionHiTRHXV54EcFNyx2qtRCwKXBl0CZtkKYrNhrEok"
+        "Ref": "CategoriesDashunoDashdosLambdaVersionBh9SLE5MS8APkXRo2UK7Nwt1DqRDI80kO6QZsDFXs"
       }
     },
     "ServiceEndpoint": {

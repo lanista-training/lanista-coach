@@ -90,7 +90,10 @@ const SearchTextPin = ({name, translation, onClick}) => <StyledSearchPin onClick
   <i/>
 </StyledSearchPin>
 
-
+const SearchPluginPin = ({name, onClick}) => <StyledSearchPin onClick={() => onClick('plugin', {name: name})}>
+  {name}
+  <i/>
+</StyledSearchPin>
 
 export default ({total, t, filter, onRemoveFilter}) => (
   <ExercisesHeader>
@@ -115,6 +118,11 @@ export default ({total, t, filter, onRemoveFilter}) => (
       {
         filter.tool.map((item, index) =>
           <SearchExerciseToolPin key={index} name={item} translation={t(item)} onClick={onRemoveFilter}/>
+        )
+      }
+      {
+        filter.plugin.map((item, index) =>
+          <SearchPluginPin key={index} name={item} onClick={onRemoveFilter}/>
         )
       }
       </Filters>

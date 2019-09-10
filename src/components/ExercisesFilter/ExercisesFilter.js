@@ -1,6 +1,7 @@
 import * as React from "react"
 import styled from 'styled-components'
 import BodyFilter from '../BodyFilter'
+import Plugins from '../Plugins'
 import { Tab, Search } from 'semantic-ui-react'
 
 const FilterPanel = styled(Tab)`
@@ -12,6 +13,8 @@ const FilterPanel = styled(Tab)`
     padding: 1.5em 0;
     height: 5em;
     overflow: hidden;
+    position: relative;
+    z-index: 1;
     .item {
       padding: 0!important;
       width: 16vw!important;
@@ -47,6 +50,7 @@ const Filter  = styled.div`
   width: 100%;
   height: 100%;
   padding-top: 5em!important;
+
 `;
 const StyledSearchPin =  styled.div`
   width: auto!important;
@@ -91,44 +95,11 @@ const StyledSearchInput =  styled.div`
     }
   }
 `;
-const StyledNoPluginMessage =  styled.div`
-  font-size: 1.5em;
-  font-weight: 700;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-flex-flow: column-reverse;
-  -ms-flex-flow: column-reverse;
-  flex-flow: column-reverse;
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  line-height: 3.5em;
-  opacity: .5;
-  i {
-    font-size: 5em;
-    font-family: Lanista;
-    font-style: normal;
-    text-align: center;
-    margin-top: 25vh;
-    ::before {
-      content: '\\e90b';
-      background: 0 0!important;
-    }
-  }
-`;
 
 const SearchPin = ({name, translation, onClick}) => <StyledSearchPin onClick={() => onClick(name)}>
     {translation}
     <i/>
   </StyledSearchPin>
-
-const NoPluginMessage = ({text}) => <StyledNoPluginMessage>
-    {text}
-    <i/>
-  </StyledNoPluginMessage>
 
 export default ({
   setFilter,
@@ -138,9 +109,11 @@ export default ({
   onExerciseToolSelection,
   onExerciseTextSelection,
   onExerciseTextChange,
+  onPluginSelection,
   textFilterValue,
   typeFiltersState,
   toolFiltersState,
+  pluginFiltersState,
   exercises,
   loading,
   t}) => {
@@ -215,7 +188,11 @@ export default ({
       menuItem: t('plugins'),
       pane: {
         key: 'plugins',
-        content: (<NoPluginMessage text={t('No plugins loaded')}/>)
+        content: <Plugins
+          text={t('No plugins loaded')}
+          onPluginSelection={onPluginSelection}
+          pluginFiltersState={pluginFiltersState}
+        />
       }
     },
   ]

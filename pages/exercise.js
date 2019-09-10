@@ -2,7 +2,8 @@ import React from "react";
 import { withAuthSync } from '../lib/auth'
 import ExerciseScreen from "../src/screens/exercise"
 
-function Exercise({exerciseId, memberId, planexerciseId}) {
+function Exercise(props) {
+  const {exerciseId, memberId, planexerciseId} = props
   return (
     <ExerciseScreen  exerciseId={exerciseId} memberId={memberId} planexerciseId={planexerciseId}></ExerciseScreen>
   );

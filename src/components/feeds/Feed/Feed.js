@@ -14,8 +14,8 @@ const StyledFeed = styled.div`
   border: 1px solid rgba(0,0,0,.0975);
   border-radius: 5px;
   box-shadow: 0 0 27px 0 #0000001f;
-  margin-left: 6em;
-  margin-right: 2em;
+  margin-left: 4em;
+  margin-right: 1em;
   position: relative;
   border-top: 3px solid ${props => props.color};
   ::before {
@@ -30,7 +30,7 @@ const StyledFeed = styled.div`
   }
 `;
 const Header = styled.div`
-  padding: 1em;
+  padding: 1em 0;
   display: flex;
 `;
 const Photo = styled.div`
@@ -38,7 +38,7 @@ const Photo = styled.div`
 `;
 const HeaderText = styled.div`
   font-family: Abel;
-  font-size: 1.2em;
+  font-size: 1.1em;
   padding-left: 0.5em;
 `;
 const HeaderName = styled.span`
@@ -94,7 +94,7 @@ const RoundIcon = styled.div`
   width: 35px;
   height: 35px;
   float: left;
-  margin-left: 2.7em;
+  margin-left: 0.7em;
   position: relative;
   border-radius: 50%;
   -webkit-box-shadow: 0 0 0 4px white, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);
@@ -104,14 +104,24 @@ const RoundIcon = styled.div`
     line-height: 1.7em;
     margin-left: 0.4em;
   }
+  ::after {
+    content: '';
+    position: absolute;
+    top: 3em;
+    left: 1em;
+    height: 9em;
+    width: 4px;
+    background: #bbb7b7;
+    }
+  }
 `;
 const CommandsBlock = ({feed, congratulateMember, openPlan}) => {
   return (
     <StyledCommandsBlock>
-      { feed.type == FeedTypes.birthday && <StyledButton circular onClick={() => {congratulateMember(feed.member.id);} }><Icon name='icon-time-inactive' />grattulieren</StyledButton> }
+      { feed.type == FeedTypes.birthday && <StyledButton circular onClick={() => {congratulateMember(feed.member.id);} }><Icon name='icon-time-inactive' />zum Kunde</StyledButton> }
       { feed.type == FeedTypes.appointment_request && (<><StyledButton circular onClick={() => {console.log("HALLO");} }><Icon name='icon-calender-inactive' />termin verwalten</StyledButton><StyledButton circular onClick={() => {console.log("HALLO");} }><Icon name='icon-email-inactive' />kontaktieren</StyledButton></>) }
       { feed.type == FeedTypes.appointment && (<><StyledButton circular onClick={() => {console.log("HALLO");} }><Icon name='icon-calender-inactive' />termin verwalten</StyledButton><StyledButton circular onClick={() => {console.log("HALLO");} }><Icon name='icon-email-inactive' />kontaktieren</StyledButton></>) }
-      { feed.type == FeedTypes.workout_expired && (<><StyledButton circular onClick={() => {openPlan(feed.member.id, feed.id);} }><Icon name='icon-calender-inactive' />termin vereinbahre</StyledButton><StyledButton circular onClick={() => {openPlan(feed.member.id, feed.id);} }><Icon name='refresh' />Trainingsplan verlängern</StyledButton></>) }
+      { feed.type == FeedTypes.workout_expired && (<><StyledButton circular onClick={() => {openPlan(feed.member.id, feed.id);} }><Icon name='icon-calender-inactive' />Termin vereinbahre</StyledButton><StyledButton circular onClick={() => {openPlan(feed.member.id, feed.id);} }><Icon name='refresh' />Plan verlängern</StyledButton></>) }
       { feed.type == FeedTypes.workout_about_to_expire && (<><StyledButton circular onClick={() => {console.log("HALLO");} }><Icon name='icon-calender-inactive' />termin vereinbahre</StyledButton><StyledButton circular onClick={() => {console.log("HALLO");} }><Icon name='icon-email-inactive' />kontaktieren</StyledButton></>) }
       { feed.type == FeedTypes.customer_activity && (<StyledButton circular onClick={() => {console.log("grattulieren");} }><Icon name='icon-email-inactive' />kontaktieren</StyledButton>) }
       { feed.type == FeedTypes.message && (<StyledButton circular onClick={() => {console.log("antworten");} }><Icon name='icon-email-inactive' />antworten</StyledButton>) }

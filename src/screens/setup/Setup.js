@@ -618,6 +618,12 @@ class Setup extends React.Component {
               </StyledCard>
             </CardSection>
 
+            <CardSection id="section-7">
+              <CardHeader as='h3'>Timify Konfiguration</CardHeader>
+              <StyledCard style={{height: "10em"}}>
+              </StyledCard>
+            </CardSection>
+
 
             <CardSection id="section-8">
               <CardHeader as='h3'>{t( "setup:change_password" )}</CardHeader>
@@ -735,11 +741,27 @@ class Setup extends React.Component {
                       </List.Content>
                     </a>
                   </ListItem>
-                  <ListItem style={{borderBottom: 'none'}}>
+                  <ListItem>
                     <a href="#section-7" style={{display: 'flex'}}>
                       <ListIcon name='youtube' />
                       <List.Content>
                         <ListHeader style={{color: '#8b9898'}}>{t( "setup:workout_channel" )}</ListHeader>
+                      </List.Content>
+                    </a>
+                  </ListItem>
+                  <ListItem style={{borderBottom: 'none'}}>
+                    <a href="#section-7" style={{display: 'flex'}}>
+                      <ListIcon
+                        className='timify'
+                        style={{
+                          backgroundImage: "url(https://lanistacoach.s3.amazonaws.com/static/img/timify-logo.svg)",
+                          backgroundSize: "contain",
+                          backgroundRepeat: "no-repeat",
+                          backgroundPosition: "center"
+                        }}
+                      />
+                      <List.Content>
+                        <ListHeader style={{color: '#8b9898'}}>Timify</ListHeader>
                       </List.Content>
                     </a>
                   </ListItem>

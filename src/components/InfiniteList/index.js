@@ -128,7 +128,7 @@ export default class InfiniteScroll extends Component {
       if (hasMore) {
         childrenArray.push(loader)
       }
-      return React.createElement('div', {class: listClass}, childrenArray);
+      return React.createElement('div', {class: 'infinity-list'}, childrenArray);
     }
 
   }

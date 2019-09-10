@@ -194,7 +194,7 @@ class Workout extends React.Component {
     })
     const Exercise = ({execution}) => {
       return(
-        <StyledExercise onClick={() => onShowExercise(execution.id)}>
+        <StyledExercise onClick={() => onShowExercise(execution.exercise.id, workout.member.id, execution.id)}>
           <div className="exercise-images">
             <div className="exercise-start-image" style={{backgroundImage: "url(" + execution.exercise.start_image + ")"}}/>
             <div className="exercise-end-image" style={{backgroundImage: "url(" + execution.exercise.end_image + ")"}}/>

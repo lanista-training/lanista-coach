@@ -8,24 +8,29 @@ import Exercises from './Exercises';
 import ExercisesHeader from "../../components/ExercisesHeader";
 import { EXERCISES } from "../../queries";
 import ExercisesFilter from "../../components/ExercisesFilter";
+import { DataConsumer } from '../../components/DataProvider'
 
-const filterStyles = {
-
+class ExercisesWithLocalData extends Component {
+  render () {
+    return (
+      /* Then we use our context through render props */
+      <DataConsumer>
+        {({ filter, setFilter }) => {
+          return(
+            <ExercisesWithRemoteData filter={filter} setFilter={setFilter}/>
+          )
+        }}
+      </DataConsumer>
+    )
+  }
 }
 
-class ExercisesWithData extends Component {
+class ExercisesWithRemoteData extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
       currentScrollPosition: 0,
-      filter: {
-        body: [],
-        type: [],
-        tool: [],
-        text: '',
-      },
       filterTextCurrentValue: '',
       translations: [],
       initialLoading: true,
@@ -93,6 +98,7 @@ class ExercisesWithData extends Component {
     this.onExerciseTextSelection = this.onExerciseTextSelection.bind(this);
     this.onExerciseTextChange = this.onExerciseTextChange.bind(this);
     this.showExercise = this.showExercise.bind(this);
+    this.onPluginSelection = this.onPluginSelection.bind(this);
   };
 
   componentDidMount() {
@@ -114,10 +120,12 @@ class ExercisesWithData extends Component {
     if( onRemoveFilter == 'exercisetype' ) this.onExerciseTypeSelection(filterToRemove)
     if( onRemoveFilter == 'tools' ) this.onExerciseToolSelection(filterToRemove)
     if( onRemoveFilter == 'text' ) this.onExerciseTextChange('')
+    if( onRemoveFilter == 'plugin' ) this.onPluginSelection(filterToRemove)
   }
 
   onBodyPartSelection(id) {
-    const {bodyFiltersState, filterStyles, filter}  = this.state
+    const {bodyFiltersState, filterStyles, filterVisible}  = this.state
+    const {filter, setFilter} = this.props
     const {body} = filter
     const newFilter = _.remove(body, function(n) {
       return n != id;
@@ -132,17 +140,18 @@ class ExercisesWithData extends Component {
     this.setState({
       filterStyles: newFilterStyles,
       bodyFiltersState: newBodyFilterState,
-      filter: {
-        ...filter,
-        body: newFilter
-      },
+    }, () => filterVisible && this.toggleFilter())
+    setFilter({
+      ...filter,
+      body: newFilter
     })
   }
 
   onExerciseTypeSelection(id) {
-    const {typeFiltersState, filter}  = this.state
+    const {typeFiltersState, filterVisible}  = this.state
+    const {filter, setFilter} = this.props
     const {type} = filter
-    const newFilter = _.remove(type, function(n) {
+    let newFilter = _.remove(type, function(n) {
       return n != id;
     });
     if( !typeFiltersState[id] ) {
@@ -152,15 +161,34 @@ class ExercisesWithData extends Component {
     newTypeFilterState[id] = !newTypeFilterState[id]
     this.setState({
       typeFiltersState: newTypeFilterState,
-      filter: {
-        ...filter,
-        type: newFilter
-      },
+    }, () => filterVisible && this.toggleFilter())
+    setFilter({
+      ...filter,
+      type: newFilter
     })
   }
 
+  onPluginSelection(selection) {
+    const {filterVisible}  = this.state
+    const {filter, setFilter} = this.props
+    const {plugin} = filter
+
+    let newFilter = _.remove(plugin, function(n) {
+      return n != selection.name;
+    });
+    if( plugin.indexOf(selection.name) == -1 ) {
+      newFilter.push(selection.name)
+    }
+    setFilter({
+      ...filter,
+      plugin: newFilter
+    })
+    filterVisible && this.toggleFilter()
+  }
+
   onExerciseToolSelection(id) {
-    const {toolFiltersState, filter}  = this.state
+    const {toolFiltersState, filterVisible}  = this.state
+    const {filter, setFilter} = this.props
     const {tool} = filter
     const newFilter = _.remove(tool, function(n) {
       return n != id;
@@ -172,33 +200,32 @@ class ExercisesWithData extends Component {
     newToolFiltersState[id] = !newToolFiltersState[id]
     this.setState({
       toolFiltersState: newToolFiltersState,
-      filter: {
-        ...filter,
-        tool: newFilter
-      },
+    }, () => filterVisible && this.toggleFilter())
+    setFilter({
+      ...filter,
+      tool: newFilter
     })
   }
 
-  onExerciseTextSelection(text) {
-    console.log("onExerciseTextSelection")
-    console.log(text)
+  onExerciseTextSelection(e, result) {
+    this.toggleFilter()
+    this.showExercise(result.result.id)
   }
 
   onExerciseTextChange(text) {
-    console.log("onExerciseTextChange")
-    console.log(text)
-    const {filter}  = this.state
+    const {filter, setFilter}  = this.props
     this.setState({
-      filter: {
-        ...filter,
-        text: text
-      },
       filterTextCurrentValue: text,
+    })
+    setFilter({
+      ...filter,
+      text: text
     })
   }
 
   onFetchExercises(fetchMore, data) {
-    const {filter, pageSize, initialLoading} = this.state
+    const {pageSize, initialLoading} = this.state
+    const {filter} = this.props
     const previousCursor = initialLoading ? "0" : data.exercises.cursor;
     fetchMore({
       variables: {
@@ -207,6 +234,7 @@ class ExercisesWithData extends Component {
         bodyFilters: filter.body,
         typeFilters: filter.type,
         toolFilters: filter.tool,
+        pluginFilters: filter.plugin,
       },
       updateQuery: (prev, { fetchMoreResult, ...rest }) => {
         if( initialLoading ) {
@@ -253,24 +281,13 @@ class ExercisesWithData extends Component {
 
   getCommandsRight() {
     const {filterVisible} = this.state
-    return (filterVisible ? [{
-          icon: 'icon-view-list',
-          text: 'search',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'search exercise',
-          onTap: () => {
-            console.log("Search");
-            this.toggleFilter();
-          },
-      }, {}, {}, {}, {}] : [{
+    return (filterVisible ? [] : [{
           icon: 'icon-search',
           text: 'search',
           type: 'type-1',
           typex: 'Ionicons',
           name: 'search exercise',
           onTap: () => {
-            console.log("Search");
             this.toggleFilter();
           }
       }, {
@@ -305,7 +322,17 @@ class ExercisesWithData extends Component {
 
   getCommandsLeft() {
     const {filterVisible} = this.state
-    return (filterVisible ? [] : [{
+    return (filterVisible ? [{
+          icon: 'icon-back',
+          text: 'Back',
+          type: 'type-1',
+          typex: 'Ionicons',
+          name: 'back',
+          className: 'search-back-button',
+          onTap: () => {
+            this.toggleFilter();
+          },
+      }, {}, {}, {}, {}] : [{
           //icon: CustomerIcon,
           icon: 'icon-back',
           text: 'Back',
@@ -358,15 +385,15 @@ class ExercisesWithData extends Component {
   }
 
   render() {
-    const {processing} = this.state;
+    const {filter} = this.props
     const {
+      processing,
       filtering,
       exercises,
       folderMenuVisible,
       closeFolderMenu,
       menuDirection,
       folderMenu,
-      filter,
       filterVisible,
       filterStyles,
       typeFiltersState,
@@ -383,6 +410,7 @@ class ExercisesWithData extends Component {
           bodyFilters: filter.body,
           typeFilters: filter.type,
           toolFilters: filter.tool,
+          pluginFilters: filter.plugin,
           textFilter: filter.text,
         }}
         onCompleted={ (data) => {
@@ -394,7 +422,8 @@ class ExercisesWithData extends Component {
         {({ data, loading, error, fetchMore }) => {
           const hasMore = data && data.exercises ? data.exercises.hasMore : true
           const result = (data && data.exercises) ? data.exercises : {exercises: []}
-
+          console.log("filter.plugin")
+          console.log(filter.plugin)
           return (
             <Scene
               commandsLeft={this.getCommandsLeft()}
@@ -419,8 +448,10 @@ class ExercisesWithData extends Component {
                   onExerciseToolSelection={this.onExerciseToolSelection}
                   onExerciseTextSelection={this.onExerciseTextSelection}
                   onExerciseTextChange={this.onExerciseTextChange}
+                  onPluginSelection={this.onPluginSelection}
                   typeFiltersState={typeFiltersState}
                   toolFiltersState={toolFiltersState}
+                  pluginFiltersState={filter.plugin}
                   exercises={
                     (data && data.exercises)
                     ?
@@ -430,8 +461,12 @@ class ExercisesWithData extends Component {
                       :
                         data.exercises.exercises.length, (i) =>
                         (
-                          {title: data.exercises.exercises[i].name})
+                          {
+                            title: data.exercises.exercises[i].name,
+                            id: data.exercises.exercises[i].id,
+                          }
                         )
+                      )
                     :
                       []
                   }
@@ -463,4 +498,4 @@ class ExercisesWithData extends Component {
   }
 }
 
-export default ExercisesWithData;
+export default ExercisesWithLocalData;

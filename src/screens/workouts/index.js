@@ -83,8 +83,6 @@ class WorkoutsWithData extends Component {
   }
 
   openWorkout(workoutId) {
-    console.log("openWorkout")
-    console.log(workoutId)
     Router.push({
       pathname: '/workout',
       query: { workout: workoutId }

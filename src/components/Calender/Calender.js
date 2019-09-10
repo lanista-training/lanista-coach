@@ -6,7 +6,9 @@ import Slider from 'react-slick'
 import moment from 'moment'
 
 const StyledCalender = styled.div`
-  height: auto;
+  display: flex;
+  flex-flow: column;
+  height: 100%;
   .calender-header {
     display: flex;
     flex: 1 auto;
@@ -53,13 +55,16 @@ const StyledCalender = styled.div`
       text-align: center;
       padding: 0.5em;
     }
+    .hole-day-tasks {
+
+    }
     .tasks-list {
-      height: 20em;
       flex-grow: 0;
       max-width: none;
       flex-basis: auto;
       overflow: scroll;
       border-top: 1px solid rgba(224,224,224,1);
+      min-height: 16em;
       ::-webkit-scrollbar {
         display: none!important;
       }
@@ -91,7 +96,7 @@ const StyledCalender = styled.div`
                   padding-left: 2px;
                   padding-right: 4px;
                   border: 0;
-                  height: 50px;
+                  height: 48px;
                   padding: 0;
                   overflow: hidden;
                   text-align: right;
@@ -308,6 +313,26 @@ const StyledCalender = styled.div`
       }
     }
   }
+  .calender-footer {
+    height: 2em;
+    display: flex;
+    line-height: 2em;
+  }
+`;
+const EventsContainer = styled.div`
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  margin-right: 10px;
+  top: 0;
+  .event{
+    width: 100%;
+    background: rgb(155,201,61);
+    color: white;
+    border-radius: 5px;
+    padding: 0.5em;
+  }
 `;
 
 const createDaysOfWeek = (weekIndex) => {
@@ -340,14 +365,36 @@ function SamplePrevArrow({ onClick }) {
   );
 }
 
-const Calender = ({t}) => {
+function renderHoleDayTasks( data ) {
+
+  let holeDayTasks = []
+  let filteredData = []
+  data.map( task => {
+    if( task.type == 'USER_BIRTHDAY') filteredData.push(task)
+  })
+  if( data ) {
+    filteredData.map((task, index) => {
+      console.log( index )
+      console.log( task )
+      if( task.type == 'USER_BIRTHDAY' ) {
+        holeDayTasks.push(
+          <div style={{background: 'rgb(33, 150, 243)', color: 'white', paddingLeft: '1em', borderBottom: (index < filteredData.length - 1 ? '1px dotted white' : '')}}>
+            {task.member.first_name} {task.member.last_name} hat Geburtstag
+          </div>
+        )
+      }
+    })
+  }
+  return holeDayTasks
+}
+
+const Calender = ({t, selectedDay, setSelectedDay, data}) => {
   let currentWeek = 0;
-  const [selectedDay, setSelectedDay] = useState(new Date())
   const [pagesState, setPagesState] = useState({
-    //pages: renderWeeks(1, 1),
     currentPage: 1,
     frameIndex: 1,
   });
+  const [expanded, setExpanded] = useState(data && data.length > 0);
 
   function Week({week}) {
     const currentMonday = moment().startOf('week')
@@ -367,76 +414,144 @@ const Calender = ({t}) => {
     const weeks = []
     const {frameIndex, currentPage} = pagesState
     if( frameIndex == 0 ) {
-      weeks.push(<div><div className='days'><Week week={currentPage}/></div></div>)
-      weeks.push(<div><div className='days'><Week week={currentPage+1}/></div></div>)
-      weeks.push(<div><div className='days'><Week week={currentPage-1}/></div></div>)
+      weeks.push(<div key={frameIndex + '-' + currentPage} ><div className='days'><Week week={currentPage}/></div></div>)
+      weeks.push(<div key={frameIndex + '-' + currentPage+1}><div className='days'><Week week={currentPage+1}/></div></div>)
+      weeks.push(<div key={frameIndex + '-' + currentPage-1}><div className='days'><Week week={currentPage-1}/></div></div>)
     } else if( frameIndex == 1 ) {
-      weeks.push(<div><div className='days'><Week week={currentPage-1}/></div></div>)
-      weeks.push(<div><div className='days'><Week week={currentPage}/></div></div>)
-      weeks.push(<div><div className='days'><Week week={currentPage+1}/></div></div>)
+      weeks.push(<div key={frameIndex + '-' + currentPage-1}><div className='days'><Week week={currentPage-1}/></div></div>)
+      weeks.push(<div key={frameIndex + '-' + currentPage}><div className='days'><Week week={currentPage}/></div></div>)
+      weeks.push(<div key={frameIndex + '-' + currentPage+1}><div className='days'><Week week={currentPage+1}/></div></div>)
     } else if( frameIndex == 2 ) {
-      weeks.push(<div><div className='days'><Week week={currentPage+1}/></div></div>)
-      weeks.push(<div><div className='days'><Week week={currentPage-1}/></div></div>)
-      weeks.push(<div><div className='days'><Week week={currentPage}/></div></div>)
+      weeks.push(<div key={frameIndex + '-' + currentPage+1}><div className='days'><Week week={currentPage+1}/></div></div>)
+      weeks.push(<div key={frameIndex + '-' + currentPage-1}><div className='days'><Week week={currentPage-1}/></div></div>)
+      weeks.push(<div key={frameIndex + '-' + currentPage}><div className='days'><Week week={currentPage}/></div></div>)
     }
     return weeks
   }
 
   function selection(i) {
-    let selection
+    let selectionDate
     if( i.target.classList.contains('day') ) {
-       selection = i.target.getAttribute('date-option')
+       selectionDate = i.target.getAttribute('date-option')
     } else {
-      selection = i.target.parentNode.getAttribute('date-option')
+      selectionDate = i.target.parentNode.getAttribute('date-option')
     }
-    console.log(selection)
-    setSelectedDay(new Date(selection))
+    if( selectionDate ) {
+      setSelectedDay(new Date(selectionDate))
+    }
+
   }
 
-  function renderTimeTitles() {
+  function renderTimeTitles(data, compact) {
     const timeTitels = []
-    for( var i =0; i < 24; i++) {
-      timeTitels.push(
-        <tr>
-          <td rowspan="2">
-            <span>{i}:00</span>
-          </td>
-        </tr>
-      )
-      timeTitels.push(
-        <tr></tr>
-      )
-      timeTitels.push(
-        <tr>
-          <td rowspan="2">
-            <span>{i}:30</span>
-          </td>
-        </tr>
-      )
-      timeTitels.push(
-        <tr></tr>
-      )
+    if( compact == true ) {
+      for( var i = 0; i < data.length; i++ ) {
+        if( data[i].type == 'APPOINTMENT' ){
+          timeTitels.push(
+            <tr style={{borderBottom: "1px solid rgba(224,224,224,1)"}}>
+              <td rowspan="1">
+                <span>{moment(data[i].start_date).format("HH:mm")}</span>
+              </td>
+            </tr>
+          )
+        }
+      }
+    } else {
+      for( var i =0; i < 24; i++) {
+        timeTitels.push(
+          <tr>
+            <td rowspan="2">
+              <span>{i}:00</span>
+            </td>
+          </tr>
+        )
+        timeTitels.push(
+          <tr></tr>
+        )
+        timeTitels.push(
+          <tr>
+            <td rowspan="2">
+              <span>{i}:30</span>
+            </td>
+          </tr>
+        )
+        timeTitels.push(
+          <tr></tr>
+        )
+      }
     }
     return timeTitels
   }
 
-  function renderTimeEntries() {
+  function renderTimeEntries(data, compact) {
     const timeEntries = []
-    for( var i =0; i < 24; i++) {
-      timeEntries.push(
-        <tr>
-          <td tabindex="0">
-          </td>
-        </tr>
-      )
-      timeEntries.push(
-        <tr>
-          <td tabindex="0">
-          </td>
-        </tr>
-      )
+    if( compact == true ) {
+      console.log( "data.length" )
+      console.log( data.length )
+      if( data.length === 0 ) {
+        timeEntries.push(
+          <tr style={{ position: "absolute", width: "248px", left: "-37px"}}>
+            <td tabindex="0" style={{ width: "100%", position: "absolute", textAlign: "center", borderBottom: "none", paddingTop: "2em"}}>
+              Keine Termine für Heute
+            </td>
+          </tr>
+        )
+      } else {
+        for( var i = 0; i < data.length; i++ ) {
+          if( data[i].type == 'APPOINTMENT' ){
+            timeEntries.push(
+              <tr>
+                <td tabindex="0">
+                  {data[i].title} : {data[i].member.first_name} {data[i].member.last_name}
+                </td>
+              </tr>
+            )
+          }
+        }
+      }
+    } else {
+      for( var i =0; i < 24; i++) {
+        timeEntries.push(
+          <tr>
+            <td tabindex="0">
+            </td>
+          </tr>
+        )
+        timeEntries.push(
+          <tr>
+            <td tabindex="0">
+            </td>
+          </tr>
+        )
+      }
     }
     return timeEntries
+  }
+
+  function renderEventsContainer(data, compact) {
+    if( compact == true ) {
+
+    } else {
+      console.log("renderEventsContainer")
+      console.log( data )
+      const events = data.map((event, index) => ( event.type == 'APPOINTMENT' &&
+        <div
+          className="event"
+          style={{
+            position: 'absolute',
+            top: "calc(" + ((48 * 2 * new Date(event.start_date).getHours()) + "px + 6px)"),
+            height: "calc(" + (100 / 1440 * event.duration) + "% - 14px)",
+          }}>
+          {event.title} : {event.member.first_name} {event.member.last_name}
+        </div>
+      ))
+      console.log( events )
+      return(
+        <EventsContainer>
+          {events}
+        </EventsContainer>
+      )
+    }
   }
 
   const settings = {
@@ -469,6 +584,7 @@ const Calender = ({t}) => {
   const {currentPage} = pagesState
   const currentSunday = moment().endOf('week')
   const sunday = currentSunday.add(currentPage, 'week')
+
   return (
     <StyledCalender>
       <div className="calender-header">
@@ -492,24 +608,31 @@ const Calender = ({t}) => {
         <div className="today-text">
           {moment(selectedDay).format("dddd, DD MMMM YYYY")}
         </div>
-        <div className="tasks-list">
+        <div className="hole-day-tasks">
+        </div>
+        <div className="tasks-list" style={expanded ? {} : {minHeight: '0'}}>
           <div className="tasks-list-container">
             <div className="time-titel">
               <table>
                 <tbody>
-                  {renderTimeTitles()}
+                  {renderTimeTitles(data.filter(item => item.type == 'APPOINTMENT'), true)}
                 </tbody>
               </table>
             </div>
             <div className="time-entries">
               <table>
                 <tbody>
-                  {renderTimeEntries()}
+                  {renderTimeEntries(data.filter(item => item.type == 'APPOINTMENT'), true)}
+                  {renderEventsContainer(data.filter(item => item.type == 'APPOINTMENT'), true)}
                 </tbody>
               </table>
             </div>
           </div>
         </div>
+      </div>
+      <div className="calender-footer">
+        <div style={{flex: 1, paddingLeft: '1em'}} onClick={() => setSelectedDay(new Date())}>Heute</div>
+        <div style={{flex: 1, paddingRight: '1em', textAlign: 'right'}} onClick={() => setExpanded(!expanded)}>{expanded ? 'Close' : 'Expand'}</div>
       </div>
     </StyledCalender>
   )

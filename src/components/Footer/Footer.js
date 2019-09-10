@@ -6,10 +6,9 @@ const Footer = styled.div`
   bottom: 0;
   padding: 0.5em;
   padding-left: 1em;
-  background-color: white;
   width: 100%;
-  border-top: 1px solid rgba(0,0,0,.0975);
   display: flex;
+  flex-flow: row;
   z-index: 10;
 `;
 

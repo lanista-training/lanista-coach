@@ -35,7 +35,11 @@ const ListSection = styled.div`
   overflow: auto;
   padding-top: 1.5em;
   width: 100%;
-  margin-bottom: 4em;
+  .infinity-list {
+    display: flex;
+    flex-flow: wrap;
+    justify-content: center;
+  }
 `;
 const ListItem = styled.div`
   height: 177px;
@@ -87,55 +91,42 @@ const Exercise = ({exercise, onShowExercise}) => {
   )
 }
 
-class Exercises extends React.Component {
+export default ({
+  exercises,
+  filtering,
+  isFilterOn,
+  showExercise,
+  t,
+  onRequestPage,
+  hasMore,
+  initialLoading,
+  loading,
+  setPageSize,
+  onShowExercise
+}) => {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      value: null,
-    }
-  }
-
-  render() {
-    const {
-      exercises,
-      filtering,
-      isFilterOn,
-      showExercise,
-      t,
-      onRequestPage,
-      hasMore,
-      initialLoading,
-      loading,
-      setPageSize,
-      onShowExercise,
-    } = this.props;
-
-    var items = [];
-    exercises.map((exercise, i) => {
-      items.push(
-        <Exercise exercise={exercise} onShowExercise={onShowExercise}/>
-      );
-    });
-
-    return(
-      <Stage>
-        <ListSection className='hide-scrollbar' id="infinte-list-wrapper">
-          <InfiniteList
-            initialLoading={initialLoading}
-            loading={loading}
-            loader={<div class="">Loading...</div>}
-            loadMore={onRequestPage}
-            hasMore={hasMore}
-            setPageSize={setPageSize}
-            listClass="exercises-list"
-          >
-            {items}
-          </InfiniteList>
-        </ListSection>
-      </Stage>
+  var items = [];
+  exercises.map((exercise, i) => {
+    items.push(
+      <Exercise exercise={exercise} onShowExercise={onShowExercise}/>
     );
-  }
-};
+  });
 
-export default Exercises;
+  return (
+    <Stage>
+      <ListSection className='hide-scrollbar' id="infinte-list-wrapper">
+        <InfiniteList
+          initialLoading={initialLoading}
+          loading={loading}
+          loader={<div class="">Loading...</div>}
+          loadMore={onRequestPage}
+          hasMore={hasMore}
+          setPageSize={setPageSize}
+          listClass="exercises-list"
+        >
+          {items}
+        </InfiniteList>
+      </ListSection>
+    </Stage>
+  )
+};

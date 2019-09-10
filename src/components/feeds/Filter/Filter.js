@@ -27,7 +27,7 @@ const StyledFilter = styled.div`
   max-width: 550px;
 `;
 
-export default ({onFilterByTime, onFilterByType, filter}) => (
+export default ({onFilterByType, filter}) => (
   <StyledFilter>
     <StyledButton activeColor="rgb(33, 150, 243)" onClick={() => onFilterByType(FeedTypes.birthday)}><span className={filter == FeedTypes.birthday ? "underlined-filter active-filter" : "underlined-filter"} >BIRTHDAYS</span></StyledButton>
     <StyledButton activeColor="rgb(16, 204, 82)" onClick={() => onFilterByType(FeedTypes.customer_activity)}><span className={filter == FeedTypes.customer_activity ? "underlined-filter active-filter" : "underlined-filter"}>ACTIVITIES</span></StyledButton>

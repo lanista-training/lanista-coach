@@ -298,7 +298,7 @@ class Customer extends React.Component {
   }
 
   render() {
-    const {customer, lastMeasures, onProtocollClick} = this.props;
+    const {customer, lastMeasures, onProtocollClick, openWorkout} = this.props;
     const {birthday, plans, workouts, warnings} = customer;
 
     const dayLists = _.groupBy(workouts, (workout) => workout.formated_date);
@@ -335,7 +335,7 @@ class Customer extends React.Component {
             <WorkoutsList className="hide-scrollbar">
               {
                 plans.map(( item, key ) =>
-                  <WorkoutsListItem key={key}>
+                  <WorkoutsListItem key={key} onClick={() => openWorkout(item.id)}>
                     <div className="workoutname">{item.name}</div>
                     <div className="workoutdescription">{item.description && item.description.length > 0 ? item.description : "No description available"}</div>
                     <div className="workoutextrainfo">{item.days} Splits / {item.duration} Weeks</div>

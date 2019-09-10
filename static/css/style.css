@@ -218,6 +218,11 @@ body, html {
   content: "\e90e";
 }
 
+.icon-play.icon::before {
+  font-family: Lanista;
+  content: "\e912";
+}
+
 .hide-scrollbar::-webkit-scrollbar {
   display: none!important;
 }
@@ -312,6 +317,11 @@ body, html {
 .loader:after {
   left: 3.5em;
 }
+.synchronize-icon{
+  color: #21ba45;
+  font-weight: 700;
+  font-size: 1.3em;
+}
 @-webkit-keyframes load7 {
   0%,
   80%,
@@ -377,10 +387,24 @@ body, html {
   -moz-animation: cd-bounce-1 0.6s;
   animation: cd-bounce-1 0.6s;
 }
-
 .is-hidden .icon {
   visibility: hidden;
 }
+.search-back-button{
+  color: red!important;
+}
+.search-back-button i {
+  font-size: 1.5em!important;
+  font-weight: 700!important;
+}
+.modal-list-wrapper{
+  overflow-y: scroll;
+  height: calc(100vh - 62px);
+  ::-webkit-scrollbar {
+    display: none!important;
+  }
+}
+
 
 @-webkit-keyframes cd-bounce-1 {
   0% {

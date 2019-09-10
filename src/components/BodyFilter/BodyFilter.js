@@ -2,14 +2,17 @@ import * as React from "react";
 import styled from 'styled-components';
 
 const Filter  = styled.div`
-  width: 100%;
-  height: 100%;
   overflow: hidden;
+  margin-right: auto;
+  margin-left: auto;
+  display: block;
+  width: 115vh;
+  margin-top: -4vh;
 `;
 
 export default ({setFilter, filterStyles, onBodyPartSelection}) => (
   <Filter>
-  <svg width="100%" height="100%" viewBox="0 0 2100 2000" style={{"fillRule":"evenodd","clipRule":"evenodd","strokeLinejoin":"round","strokeMiterlimit":"2", marginTop: "-8em"}}>
+  <svg width="100%" height="100%" viewBox="0 0 2100 2000" style={{"fillRule":"evenodd","clipRule":"evenodd","strokeLinejoin":"round","strokeMiterlimit":"2", marginTop: "-6em"}}>
   <g transform="matrix(2,0,0,2,0,0)">
     <g id="shoulder" style={filterStyles.shoulder} onClick={onBodyPartSelection.bind(this, 'shoulder')}>
       <path d="M624.391,317.697C626.177,317.122 628.037,316.497 629.926,315.813L630.033,315.775C631.796,315.135 633.583,314.443 635.362,313.686C635.518,313.568 635.698,313.495 635.887,313.463C645.555,309.281 654.867,303.176 658.359,293.413C657.35,289.549 656.265,285.829 653.402,282.461C649.925,278.369 645.735,274.796 641.202,271.808C638.375,272.305 635.206,272.875 631.267,273.683C617.666,276.473 601.644,288.999 601.296,307.483C601.193,312.926 600.885,318.163 600.315,323.303C608.457,322.155 616.599,320.206 624.391,317.697Z"/>

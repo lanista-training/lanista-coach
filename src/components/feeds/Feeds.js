@@ -7,8 +7,12 @@ import { List } from 'semantic-ui-react'
 import { useSpring, animated } from 'react-spring'
 import { useGesture } from 'react-use-gesture'
 import moment from 'moment'
+import WidgetStatistic from '../../components/WidgetStatistic'
+import WidgetProgressbar from '../../components/WidgetProgressbar'
+import { MEMBERSCHEKEDIN, MYMEMBERS, EXPIREDPLANS } from "../../queries";
 
 import Calender from '../../components/Calender'
+import WidgetList from '../../components/WidgetList'
 
 const StyledDateLabel = styled.div`
   font-family: Abel;
@@ -17,6 +21,7 @@ const StyledDateLabel = styled.div`
   margin-bottom: 0.5em;
 `;
 const Stage = styled.div`
+  overflow: visible;
   max-width: 935px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -44,34 +49,19 @@ const Stage = styled.div`
   height: 100vh;
 `;
 const Timeline = styled.div`
-  overflow: auto;
-  padding-top: 1.5em;
+  overflow: visible;
   float: left;
-  margin-right: 28px;
-  max-width: 550px;
+  max-width: 410px;
   width: 100%;
-  margin-bottom: 4em;
-  ::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 4em;
-    height: 100%;
-    width: 4px;
-    background: white;
-  }
 `;
 const ToolsSection = styled.div`
   max-width: 275px;
-  position: absolute;
-  right: 0;
   width: 100%;
   padding-top: 1.5em;
   -webkit-box-align: stretch;
   -webkit-align-items: stretch;
   -ms-flex-align: stretch;
   align-items: stretch;
-  height: 79vh;
   -webkit-box-align: stretch;
   -webkit-align-items: stretch;
   -ms-flex-align: stretch;
@@ -91,6 +81,10 @@ const ToolsSection = styled.div`
   -webkit-flex-shrink: 0;
   -ms-flex-negative: 0;
   flex-shrink: 0;
+  align-items: flex-end;
+`;
+const StatisticsSection = styled.div`
+  width: 9.7em;
 `;
 const Card = styled.div`
   background-color: white;
@@ -99,12 +93,11 @@ const Card = styled.div`
   width: 100%;
   max-width: 250px;
   display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -ms-flex-direction: column;
   flex-direction: column;
   font-family: Abel;
-  overflow: hidden;
+  height: auto;
+  box-shadow: 0 0 27px 0 #0000001f;
+}
 `;
 const CardContent = styled.div`
   -webkit-box-flex: 1;
@@ -126,30 +119,27 @@ const CardHeader = styled.div`
   font-weight: bold;
   font-size: 1.2em;
 `;
-const Statistic = styled.div`
-  color: black;
-  display: flex;
-  flex-direction: row;
-`;
-const StatisticTitle = styled.div`
-  flex: 1;
-  color: #8b9898;
-`;
-const StatisticValue = styled.div`
-  color: black;
-  font-weight: bold;
-`;
 const FeedsTitle = styled.div`
-  padding-top: 1em;
+  padding-top: 0.6em;
   padding-bottom: 0.5em;
   width: 6em;
-  background: white;
+  background: #bbb7b7;
+  color: white;
   text-align: center;
-  z-index: 10;
   position: relative;
   border-radius: 5px;
   margin-bottom: 1em;
   margin-top: 1em;
+  ::before {
+    content: '';
+    position: absolute;
+    top: 2.5em;
+    left: 1.8em;
+    height: 1.2em;
+    width: 4px;
+    background: #bbb7b7;
+    }
+  }
 `;
 
 class Feeds extends React.Component {
@@ -159,6 +149,7 @@ class Feeds extends React.Component {
     this.state = {
       selectedDay: new Date(),
     };
+    this.setSelectedDay = this.setSelectedDay.bind(this)
   }
 
   componentDidMount() {
@@ -166,6 +157,12 @@ class Feeds extends React.Component {
     setTimeout(function () {
         jumpToDay(new Date());
     }, 100);
+  }
+
+  setSelectedDay(newValue) {
+    this.setState({
+      selectedDay: newValue,
+    })
   }
 
   render() {
@@ -182,6 +179,7 @@ class Feeds extends React.Component {
       setPageSize,
       congratulateMember,
       openPlan,
+      eventsQuery,
     } = this.props;
     const dataSource = [];
 
@@ -191,12 +189,12 @@ class Feeds extends React.Component {
     if( feeds && feeds.length > 0 && moment(parseInt(feeds[0].title)).format('DD-MM-YYYY') < moment(new Date()).format('DD-MM-YYYY')) {
       const targetDate = moment(new Date()).format('DD-MM-YYYY')
       items.push(
-        <FeedsTitle id={targetDate} key={targetDate}>{targetDate}</FeedsTitle>
+        <FeedsTitle id={targetDate} key='empty-day-title'>{targetDate}</FeedsTitle>
       )
       items.push(
         <Feed
           t={t}
-          key={targetDate + '-0'}
+          key='empty-day-feed'
           feed={{
             type: 'EMPTY_DAY',
             target_date: ((new Date()).getTime() + ""),
@@ -231,8 +229,30 @@ class Feeds extends React.Component {
        });
     });
 
+    const {selectedDay, showMoldal} = this.state
+    const percentage_1 = 66;
+    const persentage_2 = 75
+
     return (
       <Stage id="feed-stage">
+        <StatisticsSection>
+          <WidgetStatistic
+            title="Mitglieder im Studio"
+            query={MEMBERSCHEKEDIN}
+          />
+          <WidgetStatistic
+            title="Mitglieder mit plans von mir"
+            query={MYMEMBERS}
+          />
+          <WidgetProgressbar
+            title="Abgelaufene Pläne"
+            query={EXPIREDPLANS}
+          />
+          <WidgetProgressbar
+            title="Erstellte Pläne"
+            query={EXPIREDPLANS}
+          />
+        </StatisticsSection>
         <Timeline className='hide-scrollbar' id="infinte-list-wrapper">
           <InfiniteList
             loadMore={onRequestPage}
@@ -247,46 +267,25 @@ class Feeds extends React.Component {
           </InfiniteList>
         </Timeline>
         <ToolsSection>
-        <Card>
-          <Calender t={t}/>
-        </Card>
-        <Card style={{marginTop: '1.5em'}}>
-          <CardContent style={{ borderBottom: '1px solid #efefef' }}>
-            <CardHeader>
-              {t("dashboard:Overview")}
-            </CardHeader>
-          </CardContent>
-          <CardContent>
-            <List>
-              <List.Item>
-                <List.Icon style={{paddingLeft: 0}} name='clipboard list' />
-                <List.Content style={{width: '100%'}}>
-                  <a href=''>Trainingspläne abgleufen<span style={{ float: 'right', fontWeight: 'bold' }}>3</span></a>
-                </List.Content>
-              </List.Item>
-              <List.Item>
-                <List.Icon style={{paddingLeft: 0}} name='clipboard list' />
-                <List.Content style={{width: '100%'}}>
-                  <a href=''>Trainingspläne bald ablaufen<span style={{ float: 'right', fontWeight: 'bold' }}>12</span></a>
-                </List.Content>
-              </List.Item>
-              <List.Item>
-                <List.Icon name='calendar plus' />
-                <List.Content style={{width: '100%'}}>
-                  <a href=''>Termine angefordert<span style={{ float: 'right', fontWeight: 'bold' }}>7</span></a>
-                </List.Content>
-              </List.Item>
-              <List.Item>
-                <List.Icon name='calendar' />
-                <List.Content style={{width: '100%'}}>
-                  <a href=''>Termine heuten<span style={{ float: 'right', fontWeight: 'bold' }}>9</span></a>
-                </List.Content>
-              </List.Item>
-            </List>
-          </CardContent>
-        </Card>
-      </ToolsSection>
-    </Stage>
+          <Card>
+            <Calender
+              t={t}
+              selectedDay={moment(selectedDay).format('YYYY-MM-DD')}
+              setSelectedDay={this.setSelectedDay}
+            />
+          </Card>
+          <WidgetList
+            query={eventsQuery}
+            filter={'USER_BIRTHDAY'}
+            title="Kommende Geburtstage"
+          />
+          <WidgetList
+            query={eventsQuery}
+            filter={'PLAN_STATUS'}
+            title="Bald ablaufende Trainingspläne"
+          />
+        </ToolsSection>
+      </Stage>
     )
   }
 }

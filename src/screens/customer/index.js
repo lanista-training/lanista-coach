@@ -22,6 +22,7 @@ class CustomerWithData extends Component {
     this.onChangeLanguage = this.onChangeLanguage.bind(this);
     this.extractLastMeasures = this.extractLastMeasures.bind(this);
     this.onProtocollClick = this.onProtocollClick.bind(this);
+    this.openWorkout = this.openWorkout.bind(this);
   };
 
   componentDidMount() {
@@ -174,6 +175,15 @@ class CustomerWithData extends Component {
     });
   }
 
+  openWorkout(workoutId){
+    console.log("openWorkout")
+    console.log(workoutId)
+    Router.push({
+      pathname: '/workout',
+      query: { workout: workoutId }
+    });
+  }
+
   render() {
     const {processing, protocolls} = this.state;
     const {memberId} = this.props;
@@ -208,6 +218,7 @@ class CustomerWithData extends Component {
                 protocolls={protocolls}
                 t={this.t}
                 onProtocollClick={this.onProtocollClick}
+                openWorkout={this.openWorkout}
               />
             </Scene>
           )

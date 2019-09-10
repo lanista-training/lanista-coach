@@ -7,7 +7,8 @@ import moment from "moment"
 import Scene from "../../components/Scene";
 import Filter from "../../components/feeds/Filter"
 
-import { FEEDS } from "../../queries";
+import { FEEDS, INCOMINGEVENTS } from "../../queries";
+import BirthdayPanel from '../../components/BirthdayPanel'
 
 class DashboardWithoutMutation extends React.Component {
 
@@ -18,11 +19,11 @@ class DashboardWithoutMutation extends React.Component {
       filter: undefined,
       translations: [],
       initialLoading: true,
+      showModal: false,
+      modalPanel: <></>
     }
     this.goBack = this.goBack.bind(this)
-    this.onFilterByTime = this.onFilterByTime.bind(this)
     this.jumpToDay = this.jumpToDay.bind(this)
-    this.jumpToStart = this.jumpToStart.bind(this)
     this.t = this.t.bind(this)
     this.onChangeLanguage = this.onChangeLanguage.bind(this)
     this.processFeeds = this.processFeeds.bind(this)
@@ -37,14 +38,6 @@ class DashboardWithoutMutation extends React.Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     const {initialLoading} = this.state
-    /*
-    if( initialLoading != prevState.initialLoading && prevState.initialLoading ){
-      console.log("Jump")
-      const nearestDate = this.getNearestDate(new Date());
-      //const formatedDate = parseInt(nearestDate);
-      document.getElementById( moment(parseInt(nearestDate)).format('DD-MM-YYYY') ).scrollIntoView();
-    }
-    */
   }
 
   processFeeds(rawFeeds) {
@@ -73,24 +66,23 @@ class DashboardWithoutMutation extends React.Component {
     Router.back();
   }
 
-  onFilterByTime() {
-    console.log("Filter by past events");
-  }
-
   jumpToDay(day) {
     // CALCULATE THE CURRENT POSSITION OF THE FIRST ELEMENT FROM TODAY
 
   }
 
-  jumpToStart() {
-
-  }
-
   congratulateMember(memberId){
+    /*
+    this.setState({
+      showModal: true,
+      modalPanel: <BirthdayPanel/>,
+    })
+    */
     Router.push({
       pathname: '/customer',
       query: { customer: memberId }
     });
+
   }
 
   openPlan(memberId, planId){
@@ -123,7 +115,7 @@ class DashboardWithoutMutation extends React.Component {
   }
 
   onFetchFeeds(fetchMore, data) {
-    const {filter, pageSize, initialLoading} = this.state
+    const {filter, pageSize, initialLoading, modalPanel} = this.state
     const cursor = initialLoading ? "0" : data.feeds.cursor;
 
     fetchMore({
@@ -168,7 +160,7 @@ class DashboardWithoutMutation extends React.Component {
   }
 
   render() {
-    const {dataSource, filter, initialLoading} = this.state;
+    const {dataSource, filter, initialLoading, modalPanel} = this.state;
     const commandsRight = [{
         icon: 'icon-customer-inactive',
         iosname: 'customer-inactive',
@@ -248,10 +240,7 @@ class DashboardWithoutMutation extends React.Component {
               commandsRight={commandsRight}
               headerChildren={
                 <Filter
-                  onFilterByTime={this.jumpToStart}
                   onFilterByType={(filterValue) => {
-                    console.log("FILTER VALUE")
-                    console.log( filterValue )
                     if( filterValue === 'APT') filterValue = 'EXP_PLANS'
                     if( filterValue === 'MSG') filterValue = 'EXP_PLANS'
                     const {filter} = this.state;
@@ -284,6 +273,8 @@ class DashboardWithoutMutation extends React.Component {
                 initialLoading={initialLoading}
                 congratulateMember={this.congratulateMember}
                 openPlan={this.openPlan}
+                modalPanel={modalPanel}
+                eventsQuery={INCOMINGEVENTS}
               />
             </Scene>
           );
