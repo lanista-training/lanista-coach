@@ -1,18 +1,17 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import Scene from './Scene';
 import Router from 'next/router';
-import { Query } from "react-apollo";
 import { useQuery } from '@apollo/react-hooks';
-import { withApollo } from '../../../lib/apollo'
+import { withApollo } from '../../lib/apollo'
 import { ME } from "../../queries";
 
 const SceneWithData = (props) => {
-  const { data } = useQuery(ME);
+  const { data } = useQuery(ME, { ssr: false, fetchPolicy: 'cache-first' });
+  const me = data ? data : {};
   return(
     <Scene
-      goToSetup={() => Router.push('/configuration')}
       {...props}
-      me={data && data.me}
+      me={me}
     />
   )
 }

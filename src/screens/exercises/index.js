@@ -1,501 +1,956 @@
-import React, { Component } from 'react';
+import React, { Component, useState, useEffect, useRef } from 'react';
 import _ from 'lodash';
 import moment from "moment";
-import Router from 'next/router';
-import { Query } from "react-apollo";
 import Scene from "../../components/Scene";
 import Exercises from './Exercises';
 import ExercisesHeader from "../../components/ExercisesHeader";
-import { EXERCISES } from "../../queries";
 import ExercisesFilter from "../../components/ExercisesFilter";
-import { DataConsumer } from '../../components/DataProvider'
+import SelectionOverviewPanel from '../../components/SelectionOverviewPanel';
+import withData from "./DataProvider";
+import {
+  StyledDrawer,
+  FolderName,
+  StyledDialog,
+  CreateExerciseDialog,
+  SearchFilter,
+} from "./styles";
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import FolderIcon from '@material-ui/icons/Folder';
+import CreateNewFolderIcon from '@material-ui/icons/CreateNewFolder';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import TextField from '@material-ui/core/TextField';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Button from '@material-ui/core/Button';
+import { AnimatePresence,  motion } from "framer-motion";
 
-class ExercisesWithLocalData extends Component {
-  render () {
-    return (
-      /* Then we use our context through render props */
-      <DataConsumer>
-        {({ filter, setFilter }) => {
-          return(
-            <ExercisesWithRemoteData filter={filter} setFilter={setFilter}/>
-          )
-        }}
-      </DataConsumer>
-    )
-  }
+import Help from '../../components/icons/Help';
+import Tools from '../../components/icons/Tools';
+import Back from '../../components/icons/Back';
+import Search from '../../components/icons/Search';
+import Folder from '../../components/icons/Folder';
+import UserExercise from '../../components/icons/UserExercise';
+import Recently from '../../components/icons/Recently';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+
+const extractSuggestions = ( word, exercises ) => {
+  const result = [];
+  word && word.length > 2 && exercises.map( ({name}) => {
+    if(name.toLowerCase().indexOf(word.toLowerCase()) > -1) {
+      name.split(/,| /).map( w => {
+        if( w.toLowerCase().indexOf(word.toLowerCase()) > -1 ) {
+          if( result.indexOf(w) == -1) {
+            result.push(w)
+          }
+        };
+      })
+    }
+  });
+  return result;
 }
 
-class ExercisesWithRemoteData extends Component {
+const bodyFilterInitialState = {
+  shoulder: false,
+  biceps: false,
+  triceps: false,
+  chest: false,
+  upperback: false,
+  lowerback: false,
+  abs: false,
+  hip: false,
+  frontfemoral: false,
+  backfemoral: false,
+  lowerleg: false,
+};
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentScrollPosition: 0,
-      filterTextCurrentValue: '',
-      translations: [],
-      initialLoading: true,
-      filterVisible: false,
-      bodyFiltersState: {
-        shoulder: false,
-        biceps: false,
-        triceps: false,
-        chest: false,
-      	upperback: false,
-        lowerback: false,
-        abs: false,
-        hip: false,
-        frontfemoral: false,
-        backfemoral: false,
-        lowerleg: false,
-      },
-      typeFiltersState: {
-        bodyweight: false,
-        machine: false,
-        freeweight: false,
-        cable: false,
-        stretch: false,
-      	cardio: false,
-        specials: false,
-        unilateral: false,
-      },
-      toolFiltersState: {
-        any: false,
-        dumbbels: false,
-        barbell: false,
-        kettlebells: false,
-        bank: false,
-        others: false,
-        ball: false,
-        blast: false,
-        jumber: false,
-        foam: false,
-        miniband: false,
-      },
-      filterStyles: {
-        shoulder: {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
-        biceps: {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
-        triceps: {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
-        forearm: {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
-        chest: {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
-        upperback: {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
-        lowerback: {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
-        abs: {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
-        hip: {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
-        frontfemoral: {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
-        backfemoral: {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
-        lowerleg: {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
-      }
-    };
-    this.goBack = this.goBack.bind(this);
-    this.t = this.t.bind(this);
-    this.onChangeLanguage = this.onChangeLanguage.bind(this);
-    this.onFetchExercises = this.onFetchExercises.bind(this);
-    this.toggleFilter = this.toggleFilter.bind(this);
-    this.onBodyPartSelection = this.onBodyPartSelection.bind(this);
-    this.onRemoveFilter = this.onRemoveFilter.bind(this);
-    this.onExerciseTypeSelection = this.onExerciseTypeSelection.bind(this);
-    this.onExerciseToolSelection = this.onExerciseToolSelection.bind(this);
-    this.onExerciseTextSelection = this.onExerciseTextSelection.bind(this);
-    this.onExerciseTextChange = this.onExerciseTextChange.bind(this);
-    this.showExercise = this.showExercise.bind(this);
-    this.onPluginSelection = this.onPluginSelection.bind(this);
+const Panel = ({
+  editmode,
+  workoutId,
+  testId,
+  split,
+  member,
+  exercises,
+  total,
+  loading,
+  error,
+  hasMore,
+  onFetchExercises,
+  setPageSize,
+  cursor,
+  filter,
+  filterVisible,
+  setFilterVisible,
+  setFilter,
+  currentSelection,
+  addExercisesToPlan,
+  mutationLoading,
+  mutationError,
+  initialLoading,
+  setInitialLoading,
+
+  exerciseFolders,
+  exerciseFoldersLoading,
+  folderMode,
+  setFolderMode,
+  removeExerciseFromFolder,
+
+  addExerciseToFolder,
+  addExerciseToFolderLoading,
+  addExerciseToFolderError,
+
+  createFolder,
+  createFolderLoading,
+  createFolderError,
+  createdFolder,
+  setCreatedFolder,
+
+  deleteFolder,
+  deleteFolderLoading,
+  deleteFolderError,
+  deletedFolder,
+  setDeletedFolder,
+
+  onCreateExercise,
+  createExerciseLoading,
+  createExerciseError,
+  newExerciseId,
+  resetNewExerciseId,
+
+  addExercisesToTest,
+  addExercisesToTestLoading,
+  addExercisesToTestError,
+
+  defaultSettings,
+
+  networkStatus,
+  bu,
+
+  goBack,
+  goToExercise,
+}) => {
+
+  //
+  // Filter Tab handling
+  //
+  const [filterTabIndex, setFilterTabIndex] = React.useState(0);
+  const handleTabChange = (e, { activeIndex }) => setFilterTabIndex( activeIndex );
+
+  //
+  // Folder handling
+  //
+  const [folderDrawerOpen, setFolderDrawerOpen] = React.useState(false);
+  const toggleFolderDrawer = () => setFolderDrawerOpen(!folderDrawerOpen);
+
+  //
+  // Snackbar handling
+  const [openSnackbar, setOpenSnackbar] = React.useState(false);
+  const handleCloseSnackbar = () => setOpenSnackbar(false);
+
+  //
+  // create folder dialog
+  //
+  const [createFolderDialogOpen, setCreateFolderDialogOpen] = React.useState(false);
+  const toggleCreateFolderDialogOpen = () => {
+    setCreateFolderDialogOpen(!createFolderDialogOpen);
   };
 
-  componentDidMount() {
-    this.onChangeLanguage("de");
-  }
+  //
+  // delete folder dialog
+  //
+  const [deleteFolderDialogOpen, setDeleteFolderDialogOpen] = React.useState(false);
+  const toggleDeleteFolderDialogOpen = () => {
+    setDeleteFolderDialogOpen(!deleteFolderDialogOpen);
+  };
 
-  goBack() {
-    Router.back();
-  }
+  const [bodyFiltersState, setBodyFiltersState] = useState(bodyFilterInitialState);
+  const [typeFiltersState, setTypeFiltersState] = useState({
+    bodyweight: false,
+    machine: false,
+    freeweight: false,
+    cable: false,
+    stretch: false,
+    cardio: false,
+    specials: false,
+    unilateral: false,
+  });
+  const [toolFiltersState, setToolFiltersState] = useState({
+    any: false,
+    dumbbels: false,
+    barbell: false,
+    kettlebells: false,
+    bank: false,
+    others: false,
+    ball: false,
+    blast: false,
+    jumber: false,
+    foam: false,
+    miniband: false,
+  });
+  const [filterStyles, setFilterStyles] = useState({
+    shoulder: {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
+    biceps: {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
+    triceps: {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
+    forearm: {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
+    chest: {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
+    upperback: {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
+    lowerback: {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
+    abs: {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
+    hip: {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
+    frontfemoral: {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
+    backfemoral: {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
+    lowerleg: {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"},
+  });
+  const [mutating, setMutating] = useState(false);
 
-  toggleFilter() {
-    this.setState({
-      filterVisible: !this.state.filterVisible
-    })
-  }
-
-  onRemoveFilter(onRemoveFilter, filterToRemove) {
-    if( onRemoveFilter == 'bodypart' ) this.onBodyPartSelection(filterToRemove)
-    if( onRemoveFilter == 'exercisetype' ) this.onExerciseTypeSelection(filterToRemove)
-    if( onRemoveFilter == 'tools' ) this.onExerciseToolSelection(filterToRemove)
-    if( onRemoveFilter == 'text' ) this.onExerciseTextChange('')
-    if( onRemoveFilter == 'plugin' ) this.onPluginSelection(filterToRemove)
-  }
-
-  onBodyPartSelection(id) {
-    const {bodyFiltersState, filterStyles, filterVisible}  = this.state
-    const {filter, setFilter} = this.props
-    const {body} = filter
-    const newFilter = _.remove(body, function(n) {
-      return n != id;
-    });
-    if( !bodyFiltersState[id] ) {
-      newFilter.push(id)
-    }
-    let newBodyFilterState = {...bodyFiltersState}
-    newBodyFilterState[id] = !newBodyFilterState[id]
-    let newFilterStyles = {...filterStyles}
-    newFilterStyles[id] = (bodyFiltersState[id] ? {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"} : {"fill":"rgb(155, 201, 61)","fillRule":"nonzero"})
-    this.setState({
-      filterStyles: newFilterStyles,
-      bodyFiltersState: newBodyFilterState,
-    }, () => filterVisible && this.toggleFilter())
-    setFilter({
-      ...filter,
-      body: newFilter
-    })
-  }
-
-  onExerciseTypeSelection(id) {
-    const {typeFiltersState, filterVisible}  = this.state
-    const {filter, setFilter} = this.props
-    const {type} = filter
-    let newFilter = _.remove(type, function(n) {
-      return n != id;
-    });
-    if( !typeFiltersState[id] ) {
-      newFilter.push(id)
-    }
-    let newTypeFilterState = {...typeFiltersState}
-    newTypeFilterState[id] = !newTypeFilterState[id]
-    this.setState({
-      typeFiltersState: newTypeFilterState,
-    }, () => filterVisible && this.toggleFilter())
-    setFilter({
-      ...filter,
-      type: newFilter
-    })
-  }
-
-  onPluginSelection(selection) {
-    const {filterVisible}  = this.state
-    const {filter, setFilter} = this.props
-    const {plugin} = filter
-
-    let newFilter = _.remove(plugin, function(n) {
-      return n != selection.name;
-    });
-    if( plugin.indexOf(selection.name) == -1 ) {
-      newFilter.push(selection.name)
-    }
-    setFilter({
-      ...filter,
-      plugin: newFilter
-    })
-    filterVisible && this.toggleFilter()
-  }
-
-  onExerciseToolSelection(id) {
-    const {toolFiltersState, filterVisible}  = this.state
-    const {filter, setFilter} = this.props
-    const {tool} = filter
-    const newFilter = _.remove(tool, function(n) {
-      return n != id;
-    });
-    if( !toolFiltersState[id] ) {
-      newFilter.push(id)
-    }
-    let newToolFiltersState = {...toolFiltersState}
-    newToolFiltersState[id] = !newToolFiltersState[id]
-    this.setState({
-      toolFiltersState: newToolFiltersState,
-    }, () => filterVisible && this.toggleFilter())
-    setFilter({
-      ...filter,
-      tool: newFilter
-    })
-  }
-
-  onExerciseTextSelection(e, result) {
-    this.toggleFilter()
-    this.showExercise(result.result.id)
-  }
-
-  onExerciseTextChange(text) {
-    const {filter, setFilter}  = this.props
-    this.setState({
-      filterTextCurrentValue: text,
-    })
-    setFilter({
-      ...filter,
-      text: text
-    })
-  }
-
-  onFetchExercises(fetchMore, data) {
-    const {pageSize, initialLoading} = this.state
-    const {filter} = this.props
-    const previousCursor = initialLoading ? "0" : data.exercises.cursor;
-    fetchMore({
-      variables: {
-        after: previousCursor,
-        pageSize: pageSize,
-        bodyFilters: filter.body,
-        typeFilters: filter.type,
-        toolFilters: filter.tool,
-        pluginFilters: filter.plugin,
-      },
-      updateQuery: (prev, { fetchMoreResult, ...rest }) => {
-        if( initialLoading ) {
-          this.setState({initialLoading: false})
-        }
-        if (!fetchMoreResult) {
-          this.setState({
-            hasMore: false
-          })
-          return prev;
-        } else {
-          this.setState({
-            hasMore: fetchMoreResult.exercises.hasMore
-          })
-          if( previousCursor == 0) {
-            return {
-              ...fetchMoreResult,
-              exercises: {
-                ...fetchMoreResult.exercises,
-                exercises: fetchMoreResult.exercises.exercises,
-              },
-            };
-          } else {
-            return {
-              ...fetchMoreResult,
-              exercises: {
-                ...fetchMoreResult.exercises,
-                exercises: _.unionBy(prev.exercises.exercises, fetchMoreResult.exercises.exercises, value => value.id),
-              },
-            };
-          }
-        }
-      },
-    })
-  }
-
-  showExercise(exerciseId) {
-    console.log("showExercise")
-    Router.push({
-      pathname: '/exercise',
-      query: { exercise: exerciseId }
-    });
-  }
-
-  getCommandsRight() {
-    const {filterVisible} = this.state
-    return (filterVisible ? [] : [{
-          icon: 'icon-search',
-          text: 'search',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'search exercise',
-          onTap: () => {
-            this.toggleFilter();
-          }
-      }, {
-        icon: 'icon-folder',
-        text: 'folder',
-        type: 'type-1',
-        typex: 'Ionicons',
-        name: 'folder',
-        onTap: () => {
-          console.log("Folder Options");
-        }
-      }, {
-          icon: 'icon-user-exercise',
-          text: 'user exercise',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'user exercise',
-          onTap: () => {
-            console.log("User exercises");
-          }
-      }, {
-          icon: 'icon-time-back',
-          text: 'recently used',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'refresh',
-          onTap: () => {
-            console.log("Recently used");
-          }
-      }]);
-  }
-
-  getCommandsLeft() {
-    const {filterVisible} = this.state
-    return (filterVisible ? [{
-          icon: 'icon-back',
-          text: 'Back',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'back',
-          className: 'search-back-button',
-          onTap: () => {
-            this.toggleFilter();
-          },
-      }, {}, {}, {}, {}] : [{
-          //icon: CustomerIcon,
-          icon: 'icon-back',
-          text: 'Back',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'back',
-          onTap: () => {
-            this.goBack();
-          }
-      }, {
-          //icon: CustomerIcon,
-          icon: 'icon-tools-inactive',
-          text: 'Setting',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'settings',
-          onTap: () => {
-            console.log("Command Settings");
-          }
-      }, {
-          //icon: HelpIcon,
-          icon: 'icon-help-inactive',
-          text: 'Help',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'help-circle',
-          onTap: () => {
-            console.log("Command Help");
-          }
-      }]);
-  }
-
-  t(text) {
-    const {translations} = this.state;
+  //
+  // LANGUAGE MANAGER
+  //
+  const [translations, setTranslations] = useState([]);
+  const t = (text) => {
     const textWithoutNamespace = text ? text.split(":") : '';
     const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
     return (translation ? translation : text);
   }
-
-  onChangeLanguage( language ) {
-    const translations = require('../../../static/locales/' + language + '/exercises');
+  const onChangeLanguage = ( language ) => {
+    const domainTranslations = require('../../../static/locales/' + language + '/exercises');
     const commonTranslations = require('../../../static/locales/' + language + '/common');
     const originalLanguages = ['en', 'de', 'es', 'fr'];
+    setTranslations({...domainTranslations, ...commonTranslations});
+  }
+  useEffect(() => {
+    onChangeLanguage("de");
+  }, []);
 
-    this.setState({
-      translations: {...translations, ...commonTranslations},
-      currentLanguage: language,
-      availableLanguages: originalLanguages.filter(word => word !== language)
+
+  //
+  // Selection Mamagement
+  //
+  const [selection, setSelection] = useState([]);
+
+  useEffect(() => {
+    if(selection.length == 0) setSelection(currentSelection);
+  }, [currentSelection]);
+
+  const showExercise = (exerciseId, exercises) => {
+    console.log("showExercise", editmode)
+    if(editmode) {
+      const selectedExercise = exercises.find(exercise => exercise.id == exerciseId);
+      setSelection([...selection, {...selectedExercise, selected: true}]);
+    } else {
+      goToExercise(exerciseId);
+      /*
+      if( member && member > 0 ) {
+        Router.push({
+          pathname: '/exercise',
+          query: {
+            exercise: exerciseId,
+            member: member,
+          }
+        });
+      } else {
+        Router.push({
+          pathname: '/exercise',
+          query: {
+            exercise: exerciseId,
+          }
+        });
+      }
+      */
+    }
+  }
+
+  const showExerciseToEdit = (exerciseId) => {
+    goToExercise(exerciseId, true);
+    /*
+    Router.push({
+      pathname: '/exercise',
+      query: {
+        exercise: exerciseId,
+        editmode: true,
+      }
+    });
+    */
+  }
+
+  const removeItem = (exerciseId) => {
+    const newSelection = []
+    selection.map(exercise => {
+      if(exercise.id != exerciseId) {
+        newSelection.push(exercise)
+      }
+    })
+    setSelection([...newSelection]);
+  }
+
+  const marcSelectedExercises = () => {
+    const selectedExercises = exercises.map(exercise => {
+      if(selection && selection.findIndex(item => item.id == exercise.id) > -1) {
+        return {
+          ...exercise, selected: true
+        }
+      } else {
+        return exercise
+      }
+    })
+    return selectedExercises
+  }
+
+  useEffect(() => {
+    // MUSCLE FILTER
+    const {body} = filter;
+    let newFilterStyles = {...filterStyles};
+    body.forEach((item) => {
+      newFilterStyles[item] = {"fill":"rgb(155, 201, 61)","fillRule":"nonzero"};
+    });
+    setFilterStyles(newFilterStyles);
+
+    setFilter({
+      ...filter
+    })
+    setOpenSnackbar(workoutId > 0);
+  }, []);
+
+  useEffect(() => {
+    if( mutationLoading ) {
+      setMutating(true);
+    }
+    if( mutating && !mutationLoading ) {
+      goBack();
+    }
+  }, [mutationLoading]);
+
+  useEffect(() => {
+    if( addExercisesToTestLoading ) {
+      setMutating(true);
+    }
+    if( mutating && !addExercisesToTestLoading ) {
+      goBack();
+    }
+  }, [addExercisesToTestLoading]);
+
+  const toggleFilter = () => {
+    setFilterVisible(!filterVisible);
+  }
+
+  const onRemoveFilter = (onRemoveFilter, filterToRemove) => {
+    if( onRemoveFilter == 'bodypart' ) onBodyPartSelection(filterToRemove)
+    if( onRemoveFilter == 'exercisetype' ) onExerciseTypeSelection(filterToRemove)
+    if( onRemoveFilter == 'tools' ) onExerciseToolSelection(filterToRemove)
+    if( onRemoveFilter == 'text' ) onExerciseTextChange('')
+    if( onRemoveFilter == 'plugin' ) onPluginSelection(filterToRemove)
+    if( onRemoveFilter == 'folder' ) onFolderSelection(filterToRemove.id)
+  }
+
+  const onBodyPartSelection = (id) => {
+    const {body} = filter;
+    const newFilter = _.remove(body, function(n) {
+      return n != id;
+    });
+    if( !bodyFiltersState[id] ) {
+      newFilter.push(id);
+    }
+    let newBodyFilterState = {...bodyFiltersState};
+    newBodyFilterState[id] = !newBodyFilterState[id];
+    let newFilterStyles = {...filterStyles};
+    newFilterStyles[id] = (bodyFiltersState[id] ? {"fill":"rgb(151, 151, 151)","fillRule":"nonzero"} : {"fill":"rgb(155, 201, 61)","fillRule":"nonzero"});
+    setFilterStyles(newFilterStyles);
+    setBodyFiltersState(newBodyFilterState);
+    setFilter({
+      ...filter,
+      body: newFilter
+    });
+    filterVisible && toggleFilter();
+  }
+
+  const onExerciseTypeSelection = (id) => {
+    const {type} = filter;
+    let newFilter = _.remove(type, function(n) {
+      return n != id;
+    });
+    if( !typeFiltersState[id] ) {
+      newFilter.push(id);
+    }
+    let newTypeFilterState = {...typeFiltersState};
+    newTypeFilterState[id] = !newTypeFilterState[id];
+    setTypeFiltersState(newTypeFilterState);
+    setFilter({
+      ...filter,
+      type: newFilter
+    });
+    filterVisible && toggleFilter();
+  }
+
+  const onPluginSelection = (selection) => {
+    const {plugin} = filter
+    let newFilter = _.remove(plugin, function(n) {
+      return n != selection.name;
+    });
+    if( plugin.indexOf(selection.name) == -1 ) {
+      newFilter.push(selection.name);
+    }
+    setFilter({
+      ...filter,
+      plugin: newFilter
+    });
+    filterVisible && toggleFilter();
+  }
+
+  const onExerciseToolSelection = (id) => {
+    const {tool} = filter;
+    const newFilter = _.remove(tool, function(n) {
+      return n != id;
+    });
+    if( !toolFiltersState[id] ) {
+      newFilter.push(id);
+    }
+    let newToolFiltersState = {...toolFiltersState};
+    newToolFiltersState[id] = !newToolFiltersState[id];
+    setToolFiltersState(newToolFiltersState);
+    setFilter({
+      ...filter,
+      tool: newFilter
+    });
+    filterVisible && toggleFilter();
+  }
+
+  const onExerciseTextChange = (text) => {
+    setFilter({
+      ...filter,
+      text: text
     });
   }
 
-  render() {
-    const {filter} = this.props
-    const {
-      processing,
-      filtering,
-      exercises,
-      folderMenuVisible,
-      closeFolderMenu,
-      menuDirection,
-      folderMenu,
-      filterVisible,
-      filterStyles,
-      typeFiltersState,
-      toolFiltersState,
-    } = this.state;
-    return(
-      <Query
-        query={EXERCISES}
-        notifyOnNetworkStatusChange
-        fetchPolicy="cache-and-network"
-        variables={{
-          pageSize: 40,
-          after: "0",
-          bodyFilters: filter.body,
-          typeFilters: filter.type,
-          toolFilters: filter.tool,
-          pluginFilters: filter.plugin,
-          textFilter: filter.text,
-        }}
-        onCompleted={ (data) => {
-          this.setState({
-            initialLoading: false,
-          })
-        }}
-      >
-        {({ data, loading, error, fetchMore }) => {
-          const hasMore = data && data.exercises ? data.exercises.hasMore : true
-          const result = (data && data.exercises) ? data.exercises : {exercises: []}
-          console.log("filter.plugin")
-          console.log(filter.plugin)
-          return (
-            <Scene
-              commandsLeft={this.getCommandsLeft()}
-              commandsRight={this.getCommandsRight()}
-              processing={processing}
-              headerChildren={
-                <ExercisesHeader
-                  t={this.t}
-                  total={data && data.exercises && data.exercises.total}
-                  filter={filter}
-                  onRemoveFilter={this.onRemoveFilter}
-                />
-              }
-              t={this.t}
-            >
-              {
-                filterVisible &&
-                <ExercisesFilter
-                  filterStyles={filterStyles}
-                  onBodyPartSelection={this.onBodyPartSelection}
-                  onExerciseTypeSelection={this.onExerciseTypeSelection}
-                  onExerciseToolSelection={this.onExerciseToolSelection}
-                  onExerciseTextSelection={this.onExerciseTextSelection}
-                  onExerciseTextChange={this.onExerciseTextChange}
-                  onPluginSelection={this.onPluginSelection}
-                  typeFiltersState={typeFiltersState}
-                  toolFiltersState={toolFiltersState}
-                  pluginFiltersState={filter.plugin}
-                  exercises={
-                    (data && data.exercises)
-                    ?
-                      _.times(data.exercises.exercises.length > 10
-                      ?
-                        10
-                      :
-                        data.exercises.exercises.length, (i) =>
-                        (
-                          {
-                            title: data.exercises.exercises[i].name,
-                            id: data.exercises.exercises[i].id,
-                          }
-                        )
-                      )
-                    :
-                      []
-                  }
-                  textFilterValue={filter && filter.text}
-                  t={this.t}
-                  loading={loading}
-                />
-              }
-              {
-                !filterVisible &&
-                <Exercises
-                  exercises={result.exercises}
-                  filtering={filtering}
-                  isFilterOn={data ? (data.length != data.length) : false}
-                  onRequestPage={(page) => this.onFetchExercises(fetchMore, data, page)}
-                  loading={loading}
-                  error={error}
-                  hasMore={hasMore}
-                  setPageSize={(newPageSize) => this.setState({pageSize: newPageSize})}
-                  onShowExercise={this.showExercise}
-                  t={this.t}
-                />
-              }
-            </Scene>
-          )
-        }}
-      </Query>
-    )
+  const onFolderSelection = (id) => {
+    if( id == filter.folderId ) {
+      setFilter({
+        ...filter,
+        folder: null,
+        folderId: 0,
+      });
+    } else {
+      const folder = exerciseFolders.find(folder => folder.id == id)
+      setFilter({
+        ...filter,
+        folder: folder,
+        folderId: id,
+      });
+    }
   }
+
+  const onTogglePrivateFilter = () => {
+    setFilter({
+      ...filter,
+      private: !filter.private,
+    });
+  }
+
+  const onToggleRecentlyUsedFilter = () => {
+    setFilter({
+      ...filter,
+      recentlyUsed: !filter.recentlyUsed,
+    });
+  }
+
+  const folder = (exerciseFolders && filter && filter.folderId > 0)
+    ?
+    exerciseFolders.find(folder => folder.id == filter.folderId)
+    :
+    null;
+
+  const getCommandsRight = () => {
+    const result = [];
+    if(!filterVisible) {
+      if ( !filter.recentlyUsed ) {
+        result.push({
+          icon: <Search/>,
+          text: t('search'),
+          type: 'type-1',
+          typex: 'Ionicons',
+          name: 'search exercise',
+          onTap: () => {
+            toggleFilter();
+          }
+        });
+      }
+      if(!folder) {
+        if( !filter.recentlyUsed && !filter.private ) {
+          result.push({
+            icon: <Folder/>,
+            text: t('folder'),
+            type: 'type-1',
+            typex: 'Ionicons',
+            name: 'folder',
+            onTap: () => {
+              toggleFolderDrawer();
+            }
+          });
+        }
+        if( !filter.recentlyUsed  ) {
+          result.push({
+            icon: <UserExercise/>,
+            text: t(bu > 0 ? 'gym_exercises' : 'my_exercises'),
+            type: 'type-1',
+            typex: 'Ionicons',
+            name: 'user exercise',
+            style: filter.private ? {color: '#34acfb'} : {},
+            className: filter.private ? 'synchronize-icon' : '',
+            onTap: () => {
+              onTogglePrivateFilter();
+            }
+          });
+        }
+        if( !filter.private ) {
+          result.push({
+            icon: <Recently/>,
+            text: 'recently used',
+            type: 'type-1',
+            typex: 'Ionicons',
+            name: 'refresh',
+            style: {color: filter.recentlyUsed ? '#34acfb' : ''},
+            onTap: () => {
+              onToggleRecentlyUsedFilter();
+            }
+          });
+        }
+        if( filter.private ) {
+          result.push({
+            icon: <AddCircleOutlineIcon/>,
+            text: 'create exercise',
+            type: 'type-1',
+            typex: 'Ionicons',
+            name: 'create-exercise',
+            onTap: () => {
+              console.log("Create exercise");
+              toggleCreateExerciseDialogOpen();
+            }
+          });
+        }
+      } else {
+        if( folderMode > 0 ) {
+          result.push({
+            icon: <CheckCircleOutlineIcon/>,
+            text: 'exit edit mode',
+            type: 'type-1',
+            name: 'add-user',
+            style: {color: '#34acfb'},
+            onTap: () => {
+              setFolderMode(null);
+            }
+          });
+        } else {
+          if( !(workoutId > 0) && !(member > 0) ) {
+            result.push({
+              icon: <AddCircleOutlineIcon/>,
+              text: t('add exercise'),
+              type: 'type-1',
+              name: 'add-user',
+              style: {color: '#34acfb'},
+              onTap: () => {
+                setFolderMode(1);
+              }
+            });
+            result.push({
+              icon: <RemoveCircleOutlineIcon/>,
+              text: t('remove exercise'),
+              type: 'type-1',
+              name: 'remove-user',
+              style: {color: '#34acfb'},
+              onTap: () => {
+                setFolderMode(2);
+              }
+            });
+          }
+        }
+        if( !(workoutId > 0) && !(member > 0) ) {
+          result.push({
+            icon: <DeleteOutlineIcon/>,
+            text: t('delete folder'),
+            type: 'type-1',
+            typex: 'Ionicons',
+            name: 'delete folder',
+            onTap: () => {
+              toggleDeleteFolderDialogOpen();
+            }
+          });
+        }
+      }
+    } else {
+      result.push({
+        icon: <Search/>,
+        text: t('textsearch'),
+        type: 'type-1',
+        typex: 'Ionicons',
+        name: 'search exercise',
+        onTap: () => {
+          toggleFilter();
+        }
+      });
+    }
+    return result;
+  }
+
+  const getCommandsLeft = () => {
+    return (filterVisible ? [] : [{
+          //icon: CustomerIcon,
+          icon: <Back/>,
+          text: '',
+          type: 'type-1',
+          typex: 'Ionicons',
+          name: 'back',
+          onTap: () => {
+            // save the changes first
+            if(editmode) {
+              if(folder) {
+                onFolderSelection(null);
+                setFolderMode(null);
+              } else {
+                const newExercises = [];
+                const currentSplitLength = selection.length;
+                let counter = 1;
+                selection.map((exercise, index) => {
+                  if(exercise.selected) {
+                    newExercises.push({
+                      id: exercise.id,
+                      position: currentSplitLength + counter
+                    })
+                    counter++;
+                  }
+                });
+                if(newExercises.length > 0 ) {
+                  if( workoutId && workoutId > 0 ) {
+                    addExercisesToPlan({
+                      variables: {
+                        planId: workoutId,
+                        split: parseInt(split),
+                        exercises: JSON.stringify(newExercises),
+                        settings: JSON.stringify({
+                          weight: 0,
+                          training: defaultSettings.execution,
+                          unit: defaultSettings.unit,
+                          sets: defaultSettings.sets,
+                        }),
+                      }
+                    });
+                  } else if ( testId && testId.length > 0 ) {
+                    addExercisesToTest({
+                      variables: {
+                        testId: testId,
+                        exercises: JSON.stringify(newExercises),
+                      }
+                    });
+                  }
+                } else {
+                  goBack();
+                }
+              }
+            } else {
+              if(folder) {
+                onFolderSelection(null);
+                setFolderMode(null);
+              } else {
+                goBack();
+              }
+            }
+          }
+      }]);
+  }
+
+  const onRemoveExerciseFromFolder = (exerciseId) => {
+    removeExerciseFromFolder({
+      variables: {
+        exerciseId: exerciseId,
+        folderId: filter.folderId,
+      }
+    });
+  }
+  const onAddExerciseToFolder = (exerciseId) => {
+    addExerciseToFolder({
+      variables: {
+        exerciseId: exerciseId,
+        folderId: filter.folderId,
+      }
+    });
+  }
+
+  const onCreateFolder = (folderName) => {
+    createFolder({
+      variables: {
+        folderName: folderName,
+      }
+    })
+  };
+
+  const onDeleteFolder = (folderId) => {
+    deleteFolder({
+      variables: {
+        folderId: filter.folderId,
+      }
+    });
+  }
+
+
+  //
+  // create exercise dialog
+  //
+  const [createExerciseDialogOpen, setCreateExerciseDialogOpen] = React.useState(false);
+  const toggleCreateExerciseDialogOpen = () => {
+    !createExerciseDialogOpen && resetNewExerciseId();
+    setCreateExerciseDialogOpen(!createExerciseDialogOpen);
+  };
+  const [exerciseName, setExerciseName] = React.useState('');
+  React.useEffect(() => {
+    if(newExerciseId > 0 && createExerciseDialogOpen) {
+
+    }
+  }, [newExerciseId]);
+
+  React.useEffect(() => {
+    if( !exerciseFoldersLoading && createdFolder > 0 ) {
+      setCreatedFolder(null);
+      onFolderSelection(createdFolder);
+    } else if( !exerciseFoldersLoading && deletedFolder > 0 ) {
+      setDeletedFolder(null);
+      toggleDeleteFolderDialogOpen();
+      toggleFilter();
+    }
+  }, [exerciseFolders]);
+
+  console.log("selection", editmode, selection, currentSelection);
+
+  return(
+    <Scene
+      commandsLeft={getCommandsLeft()}
+      commandsRight={getCommandsRight()}
+      headerChildren={
+        <>
+          {folder &&
+            <FolderName className="folder-name">
+              {folder && folder.name}
+            </FolderName>
+          }
+          <ExercisesHeader
+            loading={loading}
+            t={t}
+            total={total}
+            filter={filter}
+            onRemoveFilter={onRemoveFilter}
+            folder={folder}
+            onTextFilterChange={onExerciseTextChange}
+            suggestions={extractSuggestions(filter.text, exercises)}
+          />
+        </>
+      }
+      renderLogo={folder ? () => <FolderIcon className="folder-logo"/> : null}
+      mode={folder ? 'folder' : null}
+      t={t}
+      networkStatus={networkStatus}
+    >
+      {
+        //!filterVisible &&
+        <Exercises
+          exercises={editmode ? marcSelectedExercises() : exercises}
+          onRequestPage={onFetchExercises}
+          loading={loading}
+          error={error}
+          hasMore={hasMore}
+          setPageSize={(newPageSize) => setPageSize(newPageSize)}
+          onShowExercise={editmode ? (exerciseId) => showExercise(exerciseId, exercises) : showExercise}
+          t={t}
+          openSnackbar={openSnackbar}
+          handleCloseSnackbar={handleCloseSnackbar}
+          folderMode={folderMode}
+          onRemoveExerciseFromFolder={onRemoveExerciseFromFolder}
+          onAddExerciseToFolder={onAddExerciseToFolder}
+
+          createFolderDialogOpen={createFolderDialogOpen}
+          createFolderDialogHandleClose={toggleCreateFolderDialogOpen}
+
+          onCreateFolder={onCreateFolder}
+          createFolderLoading={createFolderLoading}
+        />
+      }
+      <SearchFilter
+        anchor="right"
+        open={filterVisible}
+        onClose={() => toggleFilter()}
+      >
+        <ExercisesFilter
+
+          filterTabIndex={filterTabIndex}
+          handleTabChange={handleTabChange}
+
+          filterStyles={filterStyles}
+
+          onBodyPartSelection={onBodyPartSelection}
+          onExerciseTypeSelection={onExerciseTypeSelection}
+          onExerciseToolSelection={onExerciseToolSelection}
+          onExerciseTextChange={onExerciseTextChange}
+          onPluginSelection={onPluginSelection}
+
+          typeFiltersState={typeFiltersState}
+          toolFiltersState={toolFiltersState}
+          pluginFiltersState={filter ? filter.plugin : []}
+
+          exercises={ editmode ? marcSelectedExercises() : exercises }
+
+          textFilterValue={filter && filter.text}
+
+          t={t}
+
+          loading={loading}
+          onShowExercise={editmode ? (exerciseId) => showExercise(exerciseId, exercises) : showExercise}
+
+          onCloseFilter={toggleFilter}
+
+        />
+      </SearchFilter>
+
+      {!filterVisible && editmode && <SelectionOverviewPanel selection={selection} removeItem={removeItem}/>}
+
+      <StyledDrawer
+        anchor="right"
+        open={folderDrawerOpen}
+        onClose={() => toggleFolderDrawer()}
+      >
+        <div
+          role="presentation"
+          onClick={() => toggleFolderDrawer()}
+          onKeyDown={() => toggleFolderDrawer()}
+        >
+          <List>
+            {
+              !(workoutId > 0) && !(member > 0) &&
+                <div key={'folder-create'} className="list-item-wrapper">
+                  <ListItem button onClick={toggleCreateFolderDialogOpen}>
+                    <ListItemIcon>
+                      <CreateNewFolderIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={t("create_folder")}/>
+                  </ListItem>
+                </div>
+            }
+            {
+              exerciseFolders && exerciseFolders.map(folder => (
+                <div key={'folder-' + folder.id} className="list-item-wrapper">
+                  <ListItem button onClick={() => onFolderSelection(folder.id)}>
+                    <ListItemIcon>
+                      <FolderIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={folder.name + ' [' + folder.size + ']'}/>
+                  </ListItem>
+                </div>
+              ))
+            }
+          </List>
+        </div>
+      </StyledDrawer>
+
+      { deleteFolderDialogOpen &&
+        <StyledDialog
+          open={deleteFolderDialogOpen}
+          onClose={toggleDeleteFolderDialogOpen}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{t("delete_folder")}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              {t("delete_folder_dialog_text")}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <div className="dialog-button">
+              <Button onClick={toggleDeleteFolderDialogOpen} color="primary">
+                {t("delete_folder_cancel")}
+              </Button>
+            </div>
+            <div className="dialog-button">
+              <Button
+                onClick={() =>
+                {
+                  onDeleteFolder();
+                }}
+                color="primary" autoFocus>
+                {t("delete_folder_ok")}
+              </Button>
+              {deleteFolderLoading && <CircularProgress size={24} />}
+            </div>
+          </DialogActions>
+        </StyledDialog>
+      }
+      { createExerciseDialogOpen &&
+        <CreateExerciseDialog
+          open={createExerciseDialogOpen}
+          onClose={toggleCreateExerciseDialogOpen}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{t("create_exercise")}</DialogTitle>
+          {newExerciseId == 0 &&
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                {t("create_exercise_dialog_text")}
+              </DialogContentText>
+              <DialogContentText id="alert-dialog-description">
+                <TextField
+                  id="folder-name"
+                  variant="outlined"
+                  value={exerciseName}
+                  onChange={e => setExerciseName(e.target.value)}
+                  autoFocus={true}
+                  placeholder={t("create_exercise_placeholder")}
+                />
+              </DialogContentText>
+            </DialogContent>
+          }
+          {newExerciseId > 0 &&
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                {t("create_exercise_created")}
+              </DialogContentText>
+            </DialogContent>
+          }
+          <DialogActions>
+            <div className="dialog-button">
+              <Button onClick={toggleCreateExerciseDialogOpen} color="primary">
+                {t("create_exercise_cancel")}
+              </Button>
+            </div>
+            <div className="dialog-button">
+              <Button
+                onClick={() =>
+                {
+                  if (newExerciseId === 0 ) {
+                    onCreateExercise(exerciseName);
+                  } else {
+                    showExerciseToEdit(newExerciseId);
+                  }
+                  //toggleCreateExerciseDialogOpen();
+                }}
+                disabled={exerciseName && exerciseName.trim().length === 3}
+                color="primary" autoFocus>
+                {t(newExerciseId === 0 ? "create_exercise_ok" : "go_to_exercise")}
+              </Button>
+              {createExerciseLoading && <CircularProgress size={24} />}
+            </div>
+          </DialogActions>
+        </CreateExerciseDialog>
+      }
+    </Scene>
+  )
 }
 
-export default ExercisesWithLocalData;
+const PanelWithData = ({editmode, workout, split, member, test, goBack, goToExercise}) => {
+  const ExerciseData = withData(Panel, {editmode, workout, split, member, test, goBack, goToExercise});
+  return <ExerciseData/>
+}
+
+export default PanelWithData;

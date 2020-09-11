@@ -24,11 +24,15 @@ export const LOGIN = gql`
   mutation Login( $email: String!,  $password: String!) {
      login(email: $email, password: $password) {
          token
+         tbt
          user {
           id
+          bu
           email
           first_name
           last_name
+          photoUrl
+          accesslevel
         }
      }
   }
@@ -38,9 +42,11 @@ export const ME_QUERY = gql`
   query CurrentUserForLayout {
     me {
       id
+      email
       first_name
       last_name
-      email
+      photoUrl
+      accesslevel
     }
   }
 `

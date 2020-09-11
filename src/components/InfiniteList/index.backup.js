@@ -266,6 +266,10 @@ export default class InfiniteScroll extends Component {
     };
 
     const childrenArray = [children];
+
+    console.log("CHILDRE ARRAY")
+    console.log(childrenArray)
+    
     if( filtering ) {
       return(<div>filtering...</div>)
     } else {

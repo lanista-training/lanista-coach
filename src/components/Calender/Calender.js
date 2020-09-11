@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import { useRef, useState } from 'react'
+import React, { Component, useRef, useState } from 'react';
 import styled from 'styled-components'
 import _ from 'lodash'
 import Slider from 'react-slick'
@@ -374,8 +373,8 @@ function renderHoleDayTasks( data ) {
   })
   if( data ) {
     filteredData.map((task, index) => {
-      console.log( index )
-      console.log( task )
+      //console.log( index )
+      //console.log( task )
       if( task.type == 'USER_BIRTHDAY' ) {
         holeDayTasks.push(
           <div style={{background: 'rgb(33, 150, 243)', color: 'white', paddingLeft: '1em', borderBottom: (index < filteredData.length - 1 ? '1px dotted white' : '')}}>
@@ -486,11 +485,11 @@ const Calender = ({t, selectedDay, setSelectedDay, data}) => {
   function renderTimeEntries(data, compact) {
     const timeEntries = []
     if( compact == true ) {
-      console.log( "data.length" )
-      console.log( data.length )
+      //console.log( "data.length" )
+      //console.log( data.length )
       if( data.length === 0 ) {
         timeEntries.push(
-          <tr style={{ position: "absolute", width: "248px", left: "-37px"}}>
+          <tr key='calender-entry-0' style={{ position: "absolute", width: "248px", left: "-37px"}}>
             <td tabindex="0" style={{ width: "100%", position: "absolute", textAlign: "center", borderBottom: "none", paddingTop: "2em"}}>
               Keine Termine für Heute
             </td>
@@ -500,7 +499,7 @@ const Calender = ({t, selectedDay, setSelectedDay, data}) => {
         for( var i = 0; i < data.length; i++ ) {
           if( data[i].type == 'APPOINTMENT' ){
             timeEntries.push(
-              <tr>
+              <tr key={'calender-entry-' + i + '-' + data[i].type}>
                 <td tabindex="0">
                   {data[i].title} : {data[i].member.first_name} {data[i].member.last_name}
                 </td>
@@ -532,8 +531,8 @@ const Calender = ({t, selectedDay, setSelectedDay, data}) => {
     if( compact == true ) {
 
     } else {
-      console.log("renderEventsContainer")
-      console.log( data )
+      //console.log("renderEventsContainer")
+      //console.log( data )
       const events = data.map((event, index) => ( event.type == 'APPOINTMENT' &&
         <div
           className="event"
@@ -545,7 +544,7 @@ const Calender = ({t, selectedDay, setSelectedDay, data}) => {
           {event.title} : {event.member.first_name} {event.member.last_name}
         </div>
       ))
-      console.log( events )
+      //console.log( events )
       return(
         <EventsContainer>
           {events}

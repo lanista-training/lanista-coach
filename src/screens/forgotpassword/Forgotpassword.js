@@ -1,3 +1,4 @@
+/* eslint import/no-webpack-loader-syntax: off */
 import * as React from "react";
 import styled from 'styled-components';
 import { Input, Grid, Button, Checkbox, Icon, Modal, Header, Image } from 'semantic-ui-react';
@@ -20,7 +21,7 @@ const LanistaLogo = styled.div`
  text-align: center;
  a:hover {
    /* shows an example of how we can use themes */
-   color: ${props => props.theme.colors.orange};
+   color: #FFA500;
  }
 `;
 
@@ -34,7 +35,7 @@ const StyledLink = styled.div`
  }
  a:hover {
    /* shows an example of how we can use themes */
-   color: ${props => props.theme.colors.primary};
+   color: #d20027;
  }
 `;
 
@@ -57,7 +58,7 @@ const PasswordValidationMessage = styled.div`
 const StyledActionButton = styled(Button)`
  width: 345px;
  height: 50px;
- background: ${props => props.theme.colors.primary}!important;
+ background: #d20027!important;
  color: white!important;
  line-height: 1.5em!important;
 `;
@@ -65,8 +66,8 @@ const StyledActionButton = styled(Button)`
 const StyledBackButton = styled(Button)`
   width: 345px;
   height: 50px;
-  background: ${props => props.theme.colors.secondary}!important;
-  color: ${props => props.theme.colors.primary}!important;
+  background: #f4f2f2!important;
+  color: #d20027!important;
   line-height: 1.5em!important;
 `;
 
@@ -75,7 +76,7 @@ const Footer = styled.footer`
  font-weight: 300;
  font-style: normal;
  font: 125% / 1.45 sans-serif;
- color: ${props => props.theme.colors.secondary};
+ color: #f4f2f2;
  background-color: rgb(255, 255, 255);
  box-shadow: rgba(0, 0, 0, 0.05) 0px -1em 3em;
  min-height: 60px;
@@ -86,7 +87,7 @@ const Footer = styled.footer`
 `;
 
 const SuccessMessage = styled.div`
-  color: ${props => props.theme.colors.primary};
+  color: #d20027;
   position: relative;
   width: 100%;
   font-size: 1.5em;
@@ -101,7 +102,7 @@ const Nav = styled.nav`
  }
  a:hover {
    /* shows an example of how we can use themes */
-   color: ${props => props.theme.colors.primary};
+   color: #d20027;
  }
  a:after {
    /* shows an example of how we can use themes */
@@ -130,6 +131,7 @@ class Forgotpassword extends React.Component {
       handleEmailChange,
       t,
       currentLanguage,
+      onChangeLanguage,
       languages,
       goBack,
       onSendpasswordreset,
@@ -161,7 +163,7 @@ class Forgotpassword extends React.Component {
                 <LanistaLogo  style={{}}>
                   <LogoImage width={60} height={60}/>
                   <div style={{
-                    fontFamily: "Abel",
+                    fontFamily: "Roboto",
                     fontSize: "1.75em",
                     marginTop: "1em",
                   }}>
@@ -203,7 +205,7 @@ class Forgotpassword extends React.Component {
             </Grid>
           </Root>
           <Footer style={{}}>
-            <Nav style={{color: 'black', fontFamily: 'Abel'}}>
+            <Nav style={{color: 'black', fontFamily: 'Roboto'}}>
               © Lanista Trainingssoftware 2012
               <a>
                 Impresum

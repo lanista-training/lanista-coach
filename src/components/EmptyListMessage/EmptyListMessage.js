@@ -3,6 +3,8 @@ import styled from 'styled-components';
 
 const EmptyListMessage =  styled.div`
   width: 100%;
+  min-height: 100vh;
+  top: -50vh;
   position: relative;
   font-size: 1.5em;
   font-weight: 700;
@@ -35,8 +37,6 @@ const EmptyListMessage =  styled.div`
 
 export default ({text, styles, icon}) =>
 {
-  console.log("icon")
-  console.log(icon)
   return (
   <EmptyListMessage style={styles} icon={icon}>
     {text}

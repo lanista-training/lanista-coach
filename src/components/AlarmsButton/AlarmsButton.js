@@ -23,7 +23,7 @@ const AlarmButton = styled(Button)`
   color: rgb(155, 201, 61)!important;
 `;
 
-export default ({}) => {
+export default ({t}) => {
   const alarms = []
   return (
     <Popup

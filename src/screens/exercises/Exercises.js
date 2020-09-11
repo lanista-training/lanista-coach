@@ -1,100 +1,64 @@
 import * as React from "react";
-import styled from 'styled-components';
 import _ from 'lodash';
 import moment from "moment";
 import InfiniteList from '../../components/InfiniteList';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+import {Stage, ListSection, ListItem, StyledDialog} from './styles';
+import { Button } from 'semantic-ui-react';
 
-const Stage = styled.div`
-  max-width: 935px;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -webkit-flex-flow: row nowrap;
-  -ms-flex-flow: row nowrap;
-  -webkit-flex-flow: row nowrap;
-  -ms-flex-flow: row nowrap;
-  flex-flow: row nowrap;
-  max-width: 935px;
-  position: relative;
-  width: 100%;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  margin: 0 auto;
-  padding-top: 5em!important;
-  height: 100vh;
-`;
-const ListSection = styled.div`
-  overflow: auto;
-  padding-top: 1.5em;
-  width: 100%;
-  .infinity-list {
-    display: flex;
-    flex-flow: wrap;
-    justify-content: center;
-  }
-`;
-const ListItem = styled.div`
-  height: 177px;
-  width: 200px;
-  display: inline-table;
-  margin-left: 19px;
-  margin-top: 14px;
-  overflow: visible;
-  transition: all 100ms linear 0s;
-  border: 1px solid rgba(0,0,0,.0975);
-  border-radius: 5px;
-  box-shadow: 0 0 27px 0 #0000001f;
-  .exercise-item {
-    margin: 9px;
-    .exercise-list-img-right {
-      height: 90px;
-      width: 90px;
-      background-size: cover;
-      background-color: #e6e6e6;
-      float: right;
-      border-top-right-radius: 4px;
-    }
-    .exercise-list-img-left {
-      height: 90px;
-      width: 90px;
-      background-size: cover;
-      background-color: #e6e6e6;
-      float: left;
-      border-top-left-radius: 4px;
-    }
-    .exercise-list-text {
-      font-size: 13px;
-      font-weight: 700;
-      text-align: left;
-    }
-  }
-`;
+import {Button as DialogButton} from '@material-ui/core/Button';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import TextField from '@material-ui/core/TextField';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
-
-const Exercise = ({exercise, onShowExercise}) => {
+const Exercise = ({
+  exercise,
+  onShowExercise,
+  folderMode,
+  onAddExerciseToFolder,
+  addExerciseToFolderLoading,
+  addExerciseToFolderError,
+  onRemoveExerciseFromFolder,
+}) => {
   return (
-    <ListItem onClick={() => onShowExercise(exercise.id)}>
+    <ListItem onClick={() => !(folderMode > 0) && onShowExercise(exercise.id) } className={exercise.selected ? 'selected' : ''}>
       <div className="exercise-item">
         <div className="exercise-list-img-right" style={{backgroundImage: 'url(' + exercise.start_image + ')'}}/>
         <div className="exercise-list-img-left" style={{backgroundImage: 'url(' + exercise.end_image + ')'}}/>
         <div className="exercise-list-text">{exercise.name}</div>
+        {folderMode == 2 &&
+          <Button
+            icon='remove circle'
+            content='Entfernen'
+            onClick={() => onRemoveExerciseFromFolder(exercise.id)}
+          />
+        }
+        {folderMode == 1 &&
+          <Button
+            icon='add circle'
+            content='Hinzufügen'
+            onClick={() => onAddExerciseToFolder(exercise.id)}
+          />
+        }
       </div>
     </ListItem>
   )
 }
 
+const EmptyList = ({text}) => {
+  return (
+    <div className="empty-list">
+      {text}
+    </div>
+  )
+}
+
 export default ({
   exercises,
-  filtering,
-  isFilterOn,
   showExercise,
   t,
   onRequestPage,
@@ -102,31 +66,118 @@ export default ({
   initialLoading,
   loading,
   setPageSize,
-  onShowExercise
+  onShowExercise,
+  openSnackbar,
+  handleCloseSnackbar,
+  folderMode,
+  onAddExerciseToFolder,
+  onRemoveExerciseFromFolder,
+
+  createFolderDialogOpen,
+  createFolderDialogHandleClose,
+
+  onCreateFolder,
+  createFolderLoading,
 }) => {
+  const [folderName, setFolderName] = React.useState("");
 
   var items = [];
   exercises.map((exercise, i) => {
     items.push(
-      <Exercise exercise={exercise} onShowExercise={onShowExercise}/>
+      <Exercise
+        key={i}
+        exercise={exercise}
+        onShowExercise={onShowExercise}
+        folderMode={folderMode}
+        onAddExerciseToFolder={onAddExerciseToFolder}
+        onRemoveExerciseFromFolder={onRemoveExerciseFromFolder}
+      />
     );
   });
 
   return (
     <Stage>
       <ListSection className='hide-scrollbar' id="infinte-list-wrapper">
-        <InfiniteList
-          initialLoading={initialLoading}
-          loading={loading}
-          loader={<div class="">Loading...</div>}
-          loadMore={onRequestPage}
-          hasMore={hasMore}
-          setPageSize={setPageSize}
-          listClass="exercises-list"
-        >
-          {items}
-        </InfiniteList>
+        {
+          items && items.length > 0 &&
+          <InfiniteList
+            initialLoading={initialLoading}
+            loading={loading}
+            loader={<div class="loading-exercise">Loading...</div>}
+            loadMore={onRequestPage}
+            hasMore={hasMore}
+            setPageSize={setPageSize}
+            listClass="exercises-list"
+          >
+            {items}
+          </InfiniteList>
+        }
+        {
+          items && items.length === 0 &&
+          <EmptyList text={t('empty_list')}/>
+        }
       </ListSection>
+      {openSnackbar &&
+        <Snackbar open={openSnackbar}
+          autoHideDuration={6000}
+          onClose={handleCloseSnackbar}
+          anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+        >
+          <MuiAlert
+            elevation={6}
+            variant="filled"
+            severity="info"
+            open={openSnackbar}
+            onClose={handleCloseSnackbar}
+          >
+            Um die Selektion abzuschliessen, einfach zurück zum Plan.
+          </MuiAlert>
+        </Snackbar>
+      }
+      { createFolderDialogOpen &&
+        <StyledDialog
+          open={createFolderDialogOpen}
+          onClose={createFolderDialogHandleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{t("create_folder")}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              {t("create_folder_dialog_text")}
+            </DialogContentText>
+            <DialogContentText id="alert-dialog-description">
+              <TextField
+                id="folder-name"
+                variant="outlined"
+                value={folderMode}
+                onChange={e => setFolderName(e.target.value)}
+                autoFocus={true}
+              />
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <div className="dialog-button">
+              <Button onClick={createFolderDialogHandleClose} color="primary">
+                {t("create_folder_cancel")}
+              </Button>
+            </div>
+            <div className="dialog-button">
+              <Button
+                onClick={() =>
+                {
+                  onCreateFolder(folderName);
+                  createFolderDialogHandleClose();
+                }}
+                disabled={folderName.length === 0}
+                color="primary" autoFocus>
+                {t("create_folder_ok")}
+              </Button>
+              {createFolderLoading && <CircularProgress size={24} />}
+            </div>
+          </DialogActions>
+        </StyledDialog>
+      }
     </Stage>
   )
 };

@@ -1,249 +1,63 @@
-import React, { Component } from 'react';
-import Router from 'next/router';
-import { Query } from "react-apollo";
+import React, { Component, useState, useEffect } from 'react';
+//import Router from 'next/router';
+import { withApollo } from '../../lib/apollo';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 
 import Scene from "../../components/Scene";
 import Setup from './Setup';
-import { logout } from '../../../lib/auth';
-import { ME_QUERY } from "../../mutations/authenticate";
+import { logout } from '../../lib/auth';
+import { ME_SETTINGS } from "../../queries";
+import {
+  UPDATEUSERPERSONALDATA,
+  VERIFYPASSWORD,
+  CHANGEPASSWORD,
+  UPDATEUSERADDRESS,
+  UPDATEUSERBANNERURL,
+  UPDATEUSERWORKOUTCHANNELDATA,
+  GETNEWTOKEN,
+} from "../../mutations";
 
-class SetupWithData extends Component {
+import { refreshToken } from '../../lib/auth';
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      passwordIncorrect: null,
-      passwordConfirmed: false,
-      passwordOld: null,
-      passwordNew: null,
-      passwordConfirmation: null,
-      processing: false,
-      dataChanged: false,
-      showPasswordConfirmationButton: false,
-      email: "rd@lanista-training.com",
-      user_data: {
-        email_valid: true,
-        email_message: null,
-        first_name: "Rafael",
-        first_name_valid: true,
-        first_name_message: null,
-        last_name: "Diaz",
-        last_name_valid: true,
-        last_name_message: null,
-        language: "DE",
-        language_valid: true,
-        language_message: null,
-        company_name: "Rafael Diaz GmbH",
-        company_name_valid: true,
-        company_name_message: null,
-        phone_number: "12345678990",
-        phone_number_valid: true,
-        phone_number_message: null,
-        website: "lanista-training.com",
-        website_valid: true,
-        website_message: null,
-        city: "München",
-        city_valid: true,
-        city_message: null,
-        zip_code: "80333",
-        zip_code_valid: true,
-        zip_code_message: null,
-        street: "Theresienstraße",
-        street_valid: true,
-        street_message: null,
-        country: "DE",
-        country_valid: true,
-        country_message: null,
-        app_banner_link: "lanista-training.com/studios.html",
-        app_banner_link_valid: true,
-        app_banner_link_message: null,
-        workout_enable: "1",
-        workout_enable_valid: true,
-        workout_enable_message: null,
-        facebook_profile: "facebook.com",
-        facebook_valid: true,
-        facebook_message: null,
-        googleplus: "instagram.com",
-        googleplus_valid: true,
-        googleplus_message: null,
-        twitter: "twitter.com",
-        twitter_valid: true,
-        twitter_message: null,
-        promo_video: "youtube.com",
-        promo_video_valid: true,
-        promo_video_message: null,
-        promo_text: "testing",
-        promo_text_valid: true,
-        promo_text_message: null,
-        expiration_date: "2019-01-07",
-        expiration_date_valid: true,
-        expiration_date_message: null,
-      },
-      translations: [],
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.saveData = this.saveData.bind(this);
-    this.onTipingOldPassword = this.onTipingOldPassword.bind(this);
-    this.onTipingNewPassword = this.onTipingNewPassword.bind(this);
-    this.onTipingConfimationPassword = this.onTipingConfimationPassword.bind(this);
-    this.t = this.t.bind(this);
-    this.onChangeLanguage = this.onChangeLanguage.bind(this);
+import Help from '../../components/icons/Help';
+import Tools from '../../components/icons/Tools';
+import Back from '../../components/icons/Back';
+import Logout from '../../components/icons/Logout';
+
+const SetupWithData = ({goBack}) => {
+
+  //
+  // Translations
+  //
+  const [translations, setTranslations] = React.useState([]);
+  const t = (text) => {
+    const textWithoutNamespace = text.split(":");
+    const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
+    return (translation ? translation : text);
+  }
+  const onChangeLanguage = ( language ) => {
+    const domainTranslations = require('../../../static/locales/' + language + '/setup');
+    const commonTranslations = require('../../../static/locales/' + language + '/common');
+    const originalLanguages = ['en', 'de', 'es', 'fr', 'pt', 'ru'];
+    setTranslations({...domainTranslations, ...commonTranslations});
+  }
+  React.useEffect(() => {
+    onChangeLanguage("de");
+  }, []);
+
+  const saveData = () => {
+    console.log("saveData");
   }
 
-  componentDidMount() {
-    this.onChangeLanguage("de");
-  }
-
-  saveData() {
-    const component = this;
-    this.setState({
-      processing: true
-    }, () => {
-      setTimeout(function(){
-        component.setState({
-          processing: false,
-          dataChanged: false,
-        });
-      }, 2000);
-    });
-  }
-
-  verifyPassword() {
-    console.log("Verifying password");
-    const component = this;
-    const success = Math.random() >= 0.5;
-    this.setState({
-      processing: true
-    }, () => {
-      setTimeout(function(){
-        if( success ) {
-          component.setState({
-            processing: false,
-            passwordIncorrect: true,
-            showPasswordConfirmationButton: false,
-          });
-        } else {
-          component.setState({
-            processing: false,
-            passwordConfirmed: true,
-            passwordIncorrect: false,
-            showPasswordConfirmationButton: false,
-          });
-        }
-      }, 2000);
-    });
-  }
-
-  changePassword() {
-    console.log("Change password");
-    const component = this;
-    this.setState({
-      processing: true
-    }, () => {
-      setTimeout(function() {
-        component.setState({
-          processing: false,
-          passwordNew: "",
-          passwordOld: "",
-          passwordConfirmation: "",
-        });
-      }, 2000)
-    });
-  }
-
-  goBack() {
-    Router.back();
-  }
-
-  onTipingOldPassword(password) {
-    this.setState({
-      passwordOld: password,
-      showPasswordConfirmationButton: password.length > 0,
-      passwordIncorrect: false,
-    })
-  }
-
-  onTipingNewPassword(password) {
-    this.setState({
-      passwordNew: password,
-    })
-  }
-
-  onTipingConfimationPassword(password) {
-    this.setState({
-      passwordConfirmation: password,
-    })
-  }
-
-  getCommandsRight(client) {
-    const {
-      dataChanged,
-      showPasswordConfirmationButton,
-      passwordNew,
-      passwordConfirmation,
-    } = this.state;
-
-    return showPasswordConfirmationButton ?
-    ([{
-        icon: 'icon-sync',
-        iosname: 'iconfinder_Reload_2134660',
-        text: 'logout',
-        type: 'type-4',
-        typex: 'Ionicons',
-        name: 'save',
-        className: 'green-icon',
-        onTap: () => {
-          this.verifyPassword();
-        }
-    },{
-        icon: 'icon-logout',
+  const getCommandsRight = (client) => {
+    return [{
+        icon: <Logout/>,
         iosname: 'iconfinder_Out_2134656',
-        text: 'logout',
+        text: t("logout"),
         type: 'type-4',
         typex: 'Ionicons',
         name: 'logout',
-        onTap: () => {
-          logout();
-          console.log("Logout");
-        }
-    }])
-    :
-    passwordNew && passwordNew.length > 6 && passwordNew == passwordConfirmation
-    ?
-    ([{
-        icon: 'icon-sync',
-        iosname: 'iconfinder_Reload_2134660',
-        text: 'logout',
-        type: 'type-4',
-        typex: 'Ionicons',
-        name: 'save',
-        className: 'green-icon',
-        onTap: () => {
-          this.changePassword();
-        }
-    },{
-        icon: 'icon-logout',
-        iosname: 'iconfinder_Out_2134656',
-        text: 'logout',
-        type: 'type-4',
-        typex: 'Ionicons',
-        name: 'logout',
-        className: 'logout-button',
-        onTap: () => {
-          logout();
-          client.clearStore();
-          client.resetStore();
-          console.log("Logout and reset store");
-        }
-    }])
-    :
-    ([{
-        icon: 'icon-logout',
-        iosname: 'iconfinder_Out_2134656',
-        text: 'logout',
-        type: 'type-4',
-        typex: 'Ionicons',
-        name: 'logout',
+        style: {color: "#db2828"},
         className: 'logout-button',
         onTap: () => {
           console.log("Logout and reset store...");
@@ -251,329 +65,556 @@ class SetupWithData extends Component {
           client.resetStore();
           console.log("done !");
         }
+    }];
+  }
+
+  const getCommandsLeft = () => {
+    return ([{
+        icon: <Back/>,
+        iosname: 'tools-inactive',
+        text: '',
+        type: 'type-1',
+        typex: 'Ionicons',
+        name: 'back',
+        style: {color: '#34acfb'},
+        onTap: () => {
+          goBack();
+        }
     }]);
   }
 
-  getCommandsLeft() {
-    return ([{
-          //icon: CustomerIcon,
-          icon: 'icon-back',
-          iosname: 'iconfinder_Arrow_1214951',
-          text: 'Back',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'back',
-          onTap: () => {
-            this.goBack();
-          }
-      }, {
-          //icon: CustomerIcon,
-          icon: 'icon-tools-inactive',
-          iosname: 'tools-inactive',
-          text: 'Setting',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'settings',
-          onTap: () => {
-            console.log("Command Settings");
-          }
-      }, {
-          //icon: HelpIcon,
-          icon: 'icon-help-inactive',
-          iosname: 'help-inactive',
-          text: 'Help',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'help-circle',
-          onTap: () => {
-            console.log("Command Help");
-          }
-      }]);
+  const validateEmail = () => {
+    if( email !== null &&  !(/^[\w-]+(\.[\w-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)*?\.[a-z]{2,6}|(\d{1,3}\.){3}\d{1,3})(:\d{4})?$/.test( email )) ) {
+      return t("email_invalid")
+    }
+    if( email !== null && email.trim().length === 0 ) {
+      return t("email_invalid")
+    }
+    return null;
   }
 
-  handleChange(changes) {
-    const {t} = this.props;
-    switch(changes.name) {
-      case 'email':
-        if( /^[\w-]+(\.[\w-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)*?\.[a-z]{2,6}|(\d{1,3}\.){3}\d{1,3})(:\d{4})?$/.test( changes.value) ) {
-
-        } else {
-
-        }
-        this.setState({
-          email: changes.value,
-          dataChanged: true,
-        });
-        break;
-      case 'first_name':
-        this.setState({
-          user_data: {
-            ...this.state.user_data,
-            first_name_valid: true,
-            first_name_message: null,
-            first_name: changes.value
-          },
-          dataChanged: true,
-        });
-        break;
-      case 'last_name':
-        this.setState({
-          user_data: {
-            ...this.state.user_data,
-            last_name_valid: true,
-            last_name_message: null,
-            last_name: changes.value
-          },
-          dataChanged: true,
-        });
-        break;
-      case 'language':
-        this.setState({
-          user_data: {
-            ...this.state.user_data,
-            language_valid: true,
-            language_message: null,
-            language: changes.value,
-          },
-          dataChanged: true,
-        });
-        break;
-      case 'company_name':
-        this.setState({
-          user_data: {
-            ...this.state.user_data,
-            company_name_valid: true,
-            company_name_message: null,
-            company_name: changes.value
-          },
-          dataChanged: true,
-        });
-        break;
-      case 'phone_number':
-        this.setState({
-          user_data: {
-            ...this.state.user_data,
-            phone_number_valid: true,
-            phone_number_message: null,
-            phone_number: changes.value
-          },
-          dataChanged: true,
-        });
-        break;
-      case 'website':
-        this.setState({
-          user_data: {
-            ...this.state.user_data,
-            website_valid: true,
-            website_message: null,
-            website: changes.value
-          },
-          dataChanged: true,
-        });
-        break;
-      case 'city':
-        this.setState({
-          user_data: {
-            ...this.state.user_data,
-            city_valid: true,
-            city_message: null,
-            city: changes.value
-          },
-          dataChanged: true,
-        });
-        break;
-      case 'zip_code':
-        this.setState({
-          user_data: {
-            ...this.state.user_data,
-            zip_code_valid: true,
-            zip_code_message: null,
-            zip_code: changes.value
-          },
-          dataChanged: true,
-        });
-        break;
-      case 'street':
-        this.setState({
-          user_data: {
-            ...this.state.user_data,
-            street_valid: true,
-            street_message: null,
-            street: changes.value
-          },
-          dataChanged: true,
-        });
-        break;
-      case 'country':
-        this.setState({
-          user_data: {
-            ...this.state.user_data,
-            country_valid: true,
-            country_message: null,
-            country: changes.value
-          },
-          dataChanged: true,
-        });
-        break;
-      case 'app_banner_link':
-        this.setState({
-          user_data: {
-            ...this.state.user_data,
-            app_banner_link_valid: true,
-            app_banner_link_message: null,
-            app_banner_link: changes.value
-          },
-          dataChanged: true,
-        });
-        break;
-      case 'workout_enable':
-        this.setState({
-          user_data: {
-            ...this.state.user_data,
-            workout_enable_valid: true,
-            workout_enable_message: null,
-            workout_enable: changes.value ? 1 : 0,
-          },
-          dataChanged: true,
-        });
-        break;
-      case 'facebook_profile':
-        this.setState({
-          user_data: {
-            ...this.state.user_data,
-            facebook_profile_valid: true,
-            facebook_profile_message: null,
-            facebook_profile: changes.value
-          },
-          dataChanged: true,
-        });
-        break;
-      case 'googleplus':
-        this.setState({
-          user_data: {
-            ...this.state.user_data,
-            googleplus_valid: true,
-            googleplus_message: null,
-            googleplus: changes.value
-          },
-          dataChanged: true,
-        });
-        break;
-      case 'twitter':
-        this.setState({
-          user_data: {
-            ...this.state.user_data,
-            twitter_valid: true,
-            twitter_message: null,
-            twitter: changes.value
-          },
-          dataChanged: true,
-        });
-        break;
-      case 'promo_video':
-        this.setState({
-          user_data: {
-            ...this.state.user_data,
-            promo_video_valid: true,
-            promo_video_message: null,
-            promo_video: changes.value
-          },
-          dataChanged: true,
-        });
-        break;
-      case 'promo_text':
-        this.setState({
-          user_data: {
-            ...this.state.user_data,
-            promo_text_valid: true,
-            promo_text_message: null,
-            promo_text: changes.value
-          },
-          dataChanged: true,
-        });
-        break;
-      default:
-
-    }
+  const handleChange = (changes) => {
     return true;
   }
 
-  t(text) {
-    const {translations} = this.state;
-    const textWithoutNamespace = text.split(":");
-    const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
-    return (translation ? translation : text);
+  const [user_data, setUser_data] = useState('');
+
+  // Personal data
+  const [readyToSavePersonalData, setReadyToSavePersonalData] = useState(false);
+  const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [language, setLanguage] = useState('');
+
+  // User photo
+  const [photoUrl, setPhotoUrl] = useState('');
+  const [photoUrlFullSize, setPhotoUrlFullSize] = useState('');
+
+  // Licence data
+  const [expirationDate, setExpirationDate] = useState(new Date());
+
+  // Business address
+  const [readyToSaveAddress, setReadyToSaveAddress] = useState(false);
+  const [companyName, setCompanyName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [website, setWebsite] = useState('');
+  const [country, setCountry] = useState('');
+  const [city, setCity] = useState('');
+  const [zipcode, setZipcode] = useState('');
+  const [street, setStreet] = useState('');
+
+  // App configuration
+  const [readyToSaveBannerLink, setReadyToSaveBannerLink] = useState(false);
+  const [bannerLink, setBannerLink] = useState('');
+  const [bannerImageUrl, setBannerImageUrl] = useState('');
+
+  // Workout channel configuration
+  const [readyToSaveWorkout, setReadyToSaveWorkout] = useState(false);
+  const [workoutEnable, setWorkoutEnable] = useState('');
+  const [facebook, setFacebook] = useState('');
+  const [googleplus, setGoogleplus] = useState('');
+  const [twitter, setTwitter] = useState('');
+  const [promoVideo, setPromoVideo] = useState('');
+  const [promoText, setPromoText] = useState('');
+  const [workoutImageUrl, setWorkoutImageUrl] = useState('');
+
+  // Data privacy policy
+  const [dataPrivacyPolicy, setDataPrivacyPolicy] = useState(0);
+
+  // Role in team
+  const [role, setRole] = useState(0);
+
+  // Password reset
+  const [passwordOld, setPasswordOld] = useState('');
+  const [passwordNew, setPasswordNew] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  const [passwordOldErrorMessage, setPasswordOldErrorMessage] = useState(null);
+  const [passwordNewErrorMessage, setPasswordNewErrorMessage] = useState(null);
+  const [passwordConfirmationErrorMessage, setPasswordConfirmationErrorMessage] = useState(null);
+  const [passwordConfirmed, setPasswordConfirmed] = useState(false);
+  const [passwordChanged, setPasswordChanged] = useState(false);
+
+  const [dataChanged, setDataChanged] = useState(false);
+
+  useEffect(() => {
+    setPasswordOldErrorMessage(null);
+  }, [passwordOld]);
+
+  useEffect(() => {
+    setPasswordConfirmationErrorMessage(null);
+  }, [passwordConfirmation]);
+
+  //
+  // Remote actions
+  //
+  const { data, loading, error, client, refetch } = useQuery(ME_SETTINGS);
+  const [updateUserPersonalData, {
+    loading: updateUserPersonalDataLoading,
+    error: updateUserPersonalDataError
+  }] = useMutation(
+    UPDATEUSERPERSONALDATA,
+    {
+      update(cache,  { data: { updateUserPersonalData } }) {
+        const {id} = updateUserPersonalData;
+        if(id > 0) {
+          refetch();
+          setReadyToSavePersonalData(false);
+        }
+      }
+    }
+  );
+  const [updateUserAddress, {
+    loading: updateUserAddressLoading,
+    error: updateUserAddressError
+  }] = useMutation(
+    UPDATEUSERADDRESS,
+    {
+      update(cache,  { data: { updateUserAddress } }) {
+        const {id} = updateUserAddress;
+        if(id > 0) {
+          refetch();
+          setReadyToSaveAddress(false);
+        }
+      }
+    }
+  );
+  const [updateUserBannerLink, {
+    loading: updateUserBannerLinkLoading,
+    error: updateUserBannerLinkError
+  }] = useMutation(
+    UPDATEUSERBANNERURL,
+    {
+      update(cache,  { data: { updateUserBannerLink } }) {
+        const {id} = updateUserBannerLink;
+        if(id > 0) {
+          refetch();
+          setReadyToSaveBannerLink(false);
+        }
+      }
+    }
+  );
+  const [updateUserWorkoutChannelData, {
+    loading: updateUserWorkoutChannelDataLoading,
+    error: updateUserWorkoutChannelDataError
+  }] = useMutation(
+    UPDATEUSERWORKOUTCHANNELDATA,
+    {
+      update(cache,  { data: { updateUserWorkoutChannelData } }) {
+        const {id} = updateUserWorkoutChannelData;
+        if(id > 0) {
+          refetch();
+          setReadyToSaveWorkout(false);
+        }
+      }
+    }
+  );
+  const [getNewTocken, {
+    loading: getNewTockenLoading,
+    error: getNewTockenError
+  }] = useMutation(
+    GETNEWTOKEN,
+    {
+      update(cache,  { data: { getNewTocken } }) {
+        const {token} = getNewTocken;
+        console.log("getNewTocken")
+        console.log(token)
+        refreshToken({token: token});
+        refetch();
+      }
+    }
+  );
+
+
+  const onUpdatePersonalData = () => {
+    console.log("onUpdatePersonalData")
+    updateUserPersonalData({
+      variables: {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        language: language,
+      }
+    })
+  };
+
+  const onUpdateUserAddress = () => {
+    console.log("onUpdatePersonalData")
+    updateUserAddress({
+      variables: {
+        companyName: companyName,
+        phoneNumber: phoneNumber,
+        website: website,
+        country: country,
+        city: city,
+        zipcode: zipcode,
+        street: street,
+      }
+    })
+  };
+
+  const onUpdateUserBannerLink = () => {
+    console.log("onUpdateUserBannerLink")
+    updateUserBannerLink({
+      variables: {
+        url: bannerLink,
+      }
+    })
+  };
+
+  const onUpdateUserWorkoutChannelData = () => {
+    console.log("onUpdateUserWorkoutChannelData")
+    updateUserWorkoutChannelData({
+      variables: {
+        workoutEnable: workoutEnable,
+        facebook: facebook,
+        googleplus: googleplus,
+        twitter: twitter,
+        promoVideo: promoVideo,
+        promoText: promoText,
+      }
+    })
+  };
+
+
+  const [verifyPassword, {
+    loading: verifyPasswordLoading,
+    error: verifyPasswordError
+  }] = useMutation(
+    VERIFYPASSWORD,
+    {
+      update(cache,  { data: { verifyPassword } }) {
+        const {error} = verifyPassword;
+        if(error == 0) {
+          setPasswordConfirmed(true);
+          setPasswordOldErrorMessage(null);
+        } else {
+          setPasswordOldErrorMessage(t("password_verification_error_" + error));
+        }
+      }
+    }
+  );
+
+  const [changePassword, {
+    loading: changePasswordLoading,
+    error: changePasswordError
+  }] = useMutation(
+    CHANGEPASSWORD,
+    {
+      update(cache,  { data: { changePassword } }) {
+        const {error} = changePassword;
+        if(error == 0) {
+          setPasswordNew(null);
+          setPasswordOld(null);
+          setPasswordConfirmation(null);
+          setPasswordConfirmed(false);
+          setPasswordChanged(true);
+          setPasswordNewErrorMessage(null);
+        } else {
+          setPasswordNewErrorMessage(t("password_verification_error_" + error));
+        }
+      }
+    }
+  );
+
+  const onVerifyPassword = () => {
+    if( passwordOld.length < 6 ) {
+      setPasswordOldErrorMessage(t('invalid_old_password'));
+    } else {
+      verifyPassword({
+        variables: {
+          password: passwordOld,
+        }
+      })
+    }
   }
 
-  onChangeLanguage( language ) {
-    const translations = require('../../../static/locales/' + language + '/setup');
-    const commonTranslations = require('../../../static/locales/' + language + '/common');
-    const originalLanguages = ['en', 'de', 'es', 'fr'];
+  const onChangePassword = () => {
+    if( passwordNew !== passwordConfirmation ) {
+      setPasswordConfirmationErrorMessage(t("password_confirmation_error"));
+    } else {
+      changePassword({
+        variables: {
+          oldPassword: passwordOld,
+          newPassword: passwordNew,
+        }
+      })
+    }
+  }
 
-    this.setState({
-      translations: {...translations, ...commonTranslations},
-      currentLanguage: language,
-      availableLanguages: originalLanguages.filter(word => word !== language)
+  const onRefreshLicenceStatus = () => {
+    console.log("onRefreshLicenceStatus")
+    getNewTocken({
+      variables: {}
     });
   }
 
-  render() {
-    const {
-      user_data,
-      email,
-      processing,
-      passwordOld,
-      passwordNew,
-      passwordConfirmation,
-      passwordIncorrect,
-      passwordConfirmed,
-      dataChanged,
-    } = this.state;
-    const languages = [
-      { key: 'DE', text: 'Deutsch', value: 'DE' },
-      { key: 'ES', text: 'Español', value: 'ES' },
-      { key: 'EN', text: 'English', value: 'EN' },
-      { key: 'PT', text: 'Português', value: 'PT' },
-      { key: 'FR', text: 'Français', value: 'FR' },
-      { key: 'RU', text: 'ру́сский', value: 'RU' },
-    ]
+  useEffect(() => {
+    if( data && data.me ) {
+      const {
+        first_name,
+        last_name,
+        email,
+        language,
+        photoUrl,
+        photoUrlFullSize,
+        // Lizence data
+        expiration_date,
+        // Business data
+        company_name,
+        phone_nr,
+        website,
+        country,
+        city,
+        zipcode,
+        street,
+        // App configuration
+        banner_link,
+        banner_photoUrl,
+        // Workout channel configuration
+        workout_enable,
+        facebook,
+        googleplus,
+        twitter,
+        promo_video,
+        promo_text,
+        workout_imageUrl,
+        // Data privacy
+        dataPrivacyPolicy,
+        // Role in team
+        role,
+      } = data.me;
 
-    return(
-      <Query
-        query={ME_QUERY}
-      >
-        {({ client, data, loading, error }) => {
-          return (
-            <Scene
-              commandsLeft={this.getCommandsLeft()}
-              commandsRight={this.getCommandsRight(client)}
-              processing={processing}
-              t={this.t}
-            >
-              <Setup
-                t={this.t}
-                dataChanged={dataChanged}
-                goBack={this.goBack}
-                languages={languages}
-                userData={user_data}
-                email={email}
-                handleChange={this.handleChange}
-                onTipingOldPassword={this.onTipingOldPassword}
-                onTipingNewPassword={this.onTipingNewPassword}
-                onTipingConfimationPassword={this.onTipingConfimationPassword}
-                passwordOld={passwordOld}
-                passwordNew={passwordNew}
-                passwordConfirmation={passwordConfirmation}
-                passwordIncorrect={passwordIncorrect}
-                passwordConfirmed={passwordConfirmed}
-                saveData={this.saveData}
-              />
-            </Scene>
-          );
-        }}
-      </Query>
-    )
+      setFirstName(first_name);
+      setLastName(last_name);
+      setLanguage(language);
+      setEmail(email);
+
+      setCompanyName(company_name);
+      setPhoneNumber(phone_nr);
+      setWebsite(website);
+      setCountry(country);
+      setCity(city);
+      setZipcode(zipcode);
+      setStreet(street);
+
+      setPhotoUrl(photoUrl);
+      setPhotoUrlFullSize(photoUrlFullSize);
+
+      setExpirationDate(expiration_date);
+
+      setBannerLink(banner_link);
+      setBannerImageUrl(banner_photoUrl);
+
+      setWorkoutEnable(workout_enable);
+      setFacebook(facebook);
+      setGoogleplus(googleplus);
+      setTwitter(twitter);
+      setPromoVideo(promo_video);
+      setPromoText(promo_text);
+      setWorkoutImageUrl(workout_imageUrl);
+
+    }
+  }, [data]);
+
+  useEffect(() => {
+    const {me} = data ? data : {};
+    if(
+      me && (
+      firstName != me.first_name
+      || lastName != me.last_name
+      || language != me.language
+      || email != me.email)
+    ) {
+      setReadyToSavePersonalData(true);
+    } else {
+      setReadyToSavePersonalData(false);
+    }
+  }, [firstName, lastName, language, email]);
+
+  useEffect(() => {
+    const {me} = data ? data : {};
+    if(
+      me && (
+      companyName != me.company_name
+      || phoneNumber != me.phone_nr
+      || website != me.website
+      || country != me.country
+      || city != me.city
+      || zipcode != me.zipcode
+      || street != me.street)
+    ) {
+      setReadyToSaveAddress(true);
+    } else {
+      setReadyToSaveAddress(false);
+    }
+  }, [companyName, phoneNumber, website, country, city, zipcode, street]);
+
+  useEffect(() => {
+    const {me} = data ? data : {};
+    if(
+      me && bannerLink != me.banner_link
+    ) {
+      setReadyToSaveBannerLink(true);
+    } else {
+      setReadyToSaveBannerLink(false);
+    }
+  }, [bannerLink]);
+
+  useEffect(() => {
+    const {me} = data ? data : {};
+    if(
+      me && (
+        workoutEnable != me.workout_enable
+        || facebook != me.facebook
+        || googleplus != me.googleplus
+        || twitter != me.twitter
+        || promoVideo != me.promo_video
+        || promoText != me.promo_text
+      )
+    ) {
+      setReadyToSaveWorkout(true);
+    } else {
+      setReadyToSaveWorkout(false);
+    }
+  }, [workoutEnable, facebook, googleplus, twitter, promoVideo, promoText]);
+
+  const goToShop = () => {
+    console.log("goToShop");
+    const {
+      id,
+      ll,
+      email,
+      language,
+    } = data.me;
+    window.open( 'https://lanista-training.com/tpmanager/shop/selectproduct/lang/' + language.toUpperCase() + '/email/' + email + '/rr/' + ll + '/lk/' + id,'_blank');
   }
+
+  return (
+    <Scene
+      commandsLeft={getCommandsLeft()}
+      commandsRight={getCommandsRight(client)}
+      t={t}
+    >
+      <Setup
+        t={t}
+        dataChanged={dataChanged}
+        goBack={goBack}
+        userData={user_data}
+        refetch={refetch}
+
+        bu={data && data.me && data.me.bu}
+        id={data && data.me && data.me.id}
+
+        readyToSavePersonalData={readyToSavePersonalData}
+        onUpdatePersonalData={onUpdatePersonalData}
+        updateUserPersonalDataLoading={updateUserPersonalDataLoading}
+        email={email}
+        setEmail={setEmail}
+        emailErrorMessage={validateEmail()}
+        firstName={firstName}
+        setFirstName={setFirstName}
+        lastName={lastName}
+        setLastName={setLastName}
+        language={language}
+        setLanguage={setLanguage}
+
+        photoUrl={photoUrl}
+        photoUrlFullSize={photoUrlFullSize}
+
+        expirationDate={expirationDate}
+
+        readyToSaveAddress={readyToSaveAddress}
+        onUpdateUserAddress={onUpdateUserAddress}
+        updateUserAddressLoading={updateUserAddressLoading}
+        companyName={companyName}
+        setCompanyName={setCompanyName}
+        phoneNumber={phoneNumber}
+        setPhoneNumber={setPhoneNumber}
+        website={website}
+        setWebsite={setWebsite}
+        country={country}
+        setCountry={setCountry}
+        city={city}
+        setCity={setCity}
+        zipcode={zipcode}
+        setZipcode={setZipcode}
+        street={street}
+        setStreet={setStreet}
+
+        bannerLink={bannerLink}
+        setBannerLink={setBannerLink}
+        bannerPhotoUrl={bannerImageUrl}
+        onUpdateUserBannerLink={onUpdateUserBannerLink}
+        updateUserBannerLinkLoading={updateUserBannerLinkLoading}
+        readyToSaveBannerLink={readyToSaveBannerLink}
+
+        expirationDate={expirationDate}
+
+        readyToSaveWorkout={readyToSaveWorkout}
+        workoutEnable={workoutEnable}
+        setWorkoutEnable={setWorkoutEnable}
+        facebook={facebook}
+        setFacebook={setFacebook}
+        googleplus={googleplus}
+        setGoogleplus={setGoogleplus}
+        twitter={twitter}
+        setTwitter={setTwitter}
+        promoVideo={promoVideo}
+        setPromoVideo={setPromoVideo}
+        promoText={promoText}
+        setPromoText={setPromoText}
+        workoutImageUrl={workoutImageUrl}
+        onUpdateUserWorkoutChannelData={onUpdateUserWorkoutChannelData}
+        updateUserWorkoutChannelDataLoading={updateUserWorkoutChannelDataLoading}
+
+        dataPrivacyPolicy={dataPrivacyPolicy}
+
+        role={role}
+
+        handleChange={handleChange}
+
+        onOldPasswordChange={(value) => setPasswordOld(value)}
+        onNewPasswordChange={(value) => setPasswordNew(value)}
+        onConfirmationPasswordChange={(value) => setPasswordConfirmation(value)}
+        passwordOldErrorMessage={passwordOldErrorMessage}
+        passwordNewErrorMessage={passwordNewErrorMessage}
+        passwordConfirmationErrorMessage={passwordConfirmationErrorMessage}
+        passwordOld={passwordOld}
+        passwordNew={passwordNew}
+        passwordConfirmation={passwordConfirmation}
+        onVerifyPassword={onVerifyPassword}
+        onChangePassword={onChangePassword}
+        passwordConfirmed={passwordConfirmed}
+        passwordChanged={passwordChanged}
+        verifyPasswordLoading={verifyPasswordLoading}
+        changePasswordLoading={changePasswordLoading}
+        endProcess={() => setPasswordChanged(false)}
+
+        goToShop={goToShop}
+        onRefreshLicenceStatus={onRefreshLicenceStatus}
+      />
+    </Scene>
+  );
 }
 
-export default SetupWithData;
+export default withApollo(SetupWithData);

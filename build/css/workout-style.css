@@ -1,0 +1,548 @@
+@font-face {
+  font-family: 'lanista';
+  src:  url('../fonts/icomoon.eot?cm8f97');
+  src:  url('../fonts/icomoon.eot?cm8f97#iefix') format('embedded-opentype'),
+    url('../fonts/icomoon.ttf?cm8f97') format('truetype'),
+    url('../fonts/icomoon.woff?cm8f97') format('woff'),
+    url('../fonts/icomoon.svg?cm8f97#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body, html {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  overscroll-behavior: none;
+  font-family: 'Roboto', sans-serif;
+  background-color: rgb(250, 250, 250);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+#__next {
+  height: 100vh;
+}
+
+.selected-exercise {box-shadow: 0 1px 15px rgba(26, 128, 1, 0.78)!important;}
+.scene{
+  transition: all 0.3s ease-in-out;
+  position: absolute;
+}
+
+.none-enter {
+  z-index: 1;
+}
+
+.ui.floating.label {
+  padding: 0.3em;
+  top: -0.3em!important;
+}
+
+.ui.active.button, .ui.active.button:hover {
+    color: rgb(155, 201, 61)!important;
+    font-weight: bold!important;
+}
+
+.green-icon i {
+  color: rgb(155,201,61)!important;
+  font-weight: bold!important;
+  text-shadow: 0px 0px 12px rgba(155, 201, 61, 1);
+}
+
+@keyframes glowing {
+  0% { box-shadow: 0 0 -10px #c4a300; }
+  40% { box-shadow: 0 0 20px #c4a300; }
+  60% { box-shadow: 0 0 20px #c4a300; }
+  100% { box-shadow: 0 0 -10px #c4a300; }
+}
+
+.button-glow {
+  animation: glowing 5000ms infinite;
+}
+
+.icon-time-inactive.icon::before {
+  font-family: Lanista;
+  content: "\e94e";
+}
+
+.icon-birthday-inactive.icon::before {
+  font-family: Lanista;
+  content: "\e939";
+}
+
+.icon-email-inactive.icon::before {
+  font-family: Lanista;
+  content: "\e94a";
+}
+
+.icon-calender-inactive.icon::before {
+  font-family: Lanista;
+  content: "\e91a";
+}
+
+.icon-customer-inactive.icon::before {
+  font-family: Lanista;
+  content: "\e943";
+}
+
+.icon-training-plan-inactive.icon::before {
+  font-family: Lanista;
+  content: "\e92a";
+}
+
+.icon-back.icon::before {
+  font-family: Lanista;
+  content: "\e953";
+}
+
+.icon-logout.icon::before {
+  font-family: Lanista;
+  content: "\e955";
+}
+
+.icon-shop.icon::before {
+  font-family: Lanista;
+  content: "\e956";
+}
+
+.icon-more.icon::before {
+  font-family: Lanista;
+  content: "\e954";
+}
+
+.icon-sync.icon::before {
+  font-family: Lanista;
+  content: "\e957";
+}
+
+.icon-tools-inactive.icon::before {
+  font-family: Lanista;
+  content: "\e951";
+}
+
+.icon-help-inactive.icon::before {
+  font-family: Lanista;
+  content: "\e91f";
+}
+
+.icon-exercise-inactive.icon::before {
+  font-family: Lanista;
+  content: "\e952";
+}
+
+.icon-create-workout.icon::before {
+  font-family: Lanista;
+  content: "\e900";
+}
+
+.icon-create-protocoll.icon::before {
+  font-family: Lanista;
+  content: "\e901";
+}
+
+.icon-measure.icon::before {
+  font-family: Lanista;
+  content: "\e902";
+}
+
+.icon-activity.icon::before {
+  font-family: Lanista;
+  content: "\e92d";
+}
+
+.icon-user-remove.icon::before {
+  font-family: Lanista;
+  content: "\e95d";
+}
+
+.icon-folder.icon::before {
+  font-family: Lanista;
+  content: "\e95a";
+}
+
+.icon-time-back.icon::before {
+  font-family: Lanista;
+  content: "\e958";
+}
+
+.icon-plus.icon::before {
+  font-family: Lanista;
+  content: "\e95b";
+}
+
+.icon-remove.icon::before {
+  font-family: Lanista;
+  content: "\e95c";
+}
+
+.icon-chart.icon::before {
+  font-family: Lanista;
+  content: "\e903";
+}
+
+.icon-list.icon::before {
+  font-family: Lanista;
+  content: "\e904";
+}
+
+.icon-export.icon::before {
+  font-family: Lanista;
+  content: "\e905";
+}
+
+.icon-done.icon::before {
+  font-family: Lanista;
+  content: "\e906";
+}
+
+.icon-undone.icon::before {
+  font-family: Lanista;
+  content: "\e907";
+}
+
+.icon-pdf.icon::before {
+  font-family: Lanista;
+  content: "\e908";
+}
+
+.icon-search.icon::before {
+  font-family: Lanista;
+  content: "\e909";
+}
+
+.icon-user-exercise.icon::before {
+  font-family: Lanista;
+  content: "\e90a";
+}
+
+.icon-plugin.icon::before {
+  font-family: Lanista;
+  content: "\e90b";
+}
+
+.icon-view-list.icon::before {
+  font-family: Lanista;
+  content: "\e90e";
+}
+
+.icon-play.icon::before {
+  font-family: Lanista;
+  content: "\e912";
+}
+
+.icon-adjustment.icon::before {
+  font-family: Lanista;
+  content: "\e913";
+}
+
+.icon-edit.icon::before {
+  font-family: Lanista;
+  content: "\e914";
+}
+
+.icon-create-user.icon::before {
+  font-family: Lanista;
+  content: "\e959";
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none!important;
+}
+
+.hide-scrollbar {
+  scrollbar-width: none;
+}
+
+.DayPicker {
+  font-size: 1.06rem!important;
+}
+.DayPicker-Caption {
+  text-align: center!important;
+}
+
+.DayPicker-NavButton--prev {
+  left: 1.5em!important;
+}
+
+.DayPicker-NavButton {
+  background-size: 80%!important;
+}
+
+.DayPicker-Footer {
+  text-align: center;
+}
+
+*:focus {
+    outline: 0;
+}
+
+.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+  width: 33px!important;
+}
+
+.ui.basic.red.label {
+  color: white!important;
+}
+
+.logout-button {
+  color: #db2828!important;
+}
+
+.command-red {
+  color: #db2828!important;
+}
+
+.command-green {
+  color: rgb(155, 201, 61)!important;
+}
+
+.command-blue {
+  color: #34acfb!important;
+}
+
+.logout-button i {
+  font-weight: bold!important;
+}
+
+.data-protection-warning-button i {
+  color: #db2828;
+  font-size: 0.8em;
+}
+
+.ui.card ul {
+  padding: 0!important;
+  margin: 0!important;
+}
+
+.loader,
+.loader:before,
+.loader:after {
+  border-radius: 50%;
+  width: 2.5em;
+  height: 2.5em;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation: load7 1.8s infinite ease-in-out;
+  animation: load7 1.8s infinite ease-in-out;
+}
+.loader {
+  color: #8B9898;
+  font-size: 6px;
+  margin: 4em auto;
+  position: relative;
+  text-indent: -9999em;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+  margin-bottom: 10em;
+}
+.loader:before,
+.loader:after {
+  content: '';
+  position: absolute;
+  top: 0;
+}
+.loader:before {
+  left: -3.5em;
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+.loader:after {
+  left: 3.5em;
+}
+.synchronize-icon{
+  color: #21ba45;
+  font-weight: 700;
+  font-size: 1.3em;
+}
+@-webkit-keyframes load7 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 2.5em 0 -1.3em;
+  }
+  40% {
+    box-shadow: 0 2.5em 0 0;
+  }
+}
+@keyframes load7 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 2.5em 0 -1.3em;
+  }
+  40% {
+    box-shadow: 0 2.5em 0 0;
+  }
+}
+
+.customers-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.self-protocolled {
+  color: rgb(13,112,206)!important;
+}
+.search-icon-active{color: white!important;background: rgb(155, 201, 61)!important;padding: 15px!important;margin: 17px!important;}
+
+.exercises-list {
+  text-align: center;
+}
+
+.bounce-in .feed-content {
+  visibility: visible;
+  -webkit-animation: cd-bounce-2 0.6s;
+  -moz-animation: cd-bounce-2 0.6s;
+  animation: cd-bounce-2 0.6s;
+}
+
+.is-hidden .feed-content {
+  visibility: hidden;
+}
+
+.bounce-in .icon {
+  visibility: visible;
+  -webkit-animation: cd-bounce-1 0.6s;
+  -moz-animation: cd-bounce-1 0.6s;
+  animation: cd-bounce-1 0.6s;
+}
+.is-hidden .icon {
+  visibility: hidden;
+}
+.search-back-button{
+  color: red!important;
+}
+.search-back-button i {
+  font-size: 1.5em!important;
+  font-weight: 700!important;
+}
+.modal-list-wrapper{
+  overflow-y: scroll;
+  height: calc(100vh - 62px);
+  ::-webkit-scrollbar {
+    display: none!important;
+  }
+}
+
+@-webkit-keyframes cd-bounce-1 {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(0.5);
+  }
+
+  60% {
+    opacity: 1;
+    -webkit-transform: scale(1.2);
+  }
+
+  100% {
+    -webkit-transform: scale(1);
+  }
+}
+@-moz-keyframes cd-bounce-1 {
+  0% {
+    opacity: 0;
+    -moz-transform: scale(0.5);
+  }
+
+  60% {
+    opacity: 1;
+    -moz-transform: scale(1.2);
+  }
+
+  100% {
+    -moz-transform: scale(1);
+  }
+}
+@keyframes cd-bounce-1 {
+  0% {
+    opacity: 0;
+    -webkit-transform: scale(0.5);
+    -moz-transform: scale(0.5);
+    -ms-transform: scale(0.5);
+    -o-transform: scale(0.5);
+    transform: scale(0.5);
+  }
+
+  60% {
+    opacity: 1;
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    -o-transform: scale(1.2);
+    transform: scale(1.2);
+  }
+
+  100% {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
+@-webkit-keyframes cd-bounce-2 {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateX(-100px);
+  }
+
+  60% {
+    opacity: 1;
+    -webkit-transform: translateX(20px);
+  }
+
+  100% {
+    -webkit-transform: translateX(0);
+  }
+}
+@-moz-keyframes cd-bounce-2 {
+  0% {
+    opacity: 0;
+    -moz-transform: translateX(-100px);
+  }
+
+  60% {
+    opacity: 1;
+    -moz-transform: translateX(20px);
+  }
+
+  100% {
+    -moz-transform: translateX(0);
+  }
+}
+@keyframes cd-bounce-2 {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateX(-100px);
+    -moz-transform: translateX(-100px);
+    -ms-transform: translateX(-100px);
+    -o-transform: translateX(-100px);
+    transform: translateX(-100px);
+  }
+
+  60% {
+    opacity: 1;
+    -webkit-transform: translateX(20px);
+    -moz-transform: translateX(20px);
+    -ms-transform: translateX(20px);
+    -o-transform: translateX(20px);
+    transform: translateX(20px);
+  }
+
+  100% {
+    -webkit-transform: translateX(0);
+    -moz-transform: translateX(0);
+    -ms-transform: translateX(0);
+    -o-transform: translateX(0);
+    transform: translateX(0);
+  }
+}

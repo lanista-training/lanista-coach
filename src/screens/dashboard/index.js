@@ -1,121 +1,126 @@
 import * as React from "react";
 import Dashboard from './Dashboard';
-import Router from 'next/router';
-import { Query } from "react-apollo";
+
+import { withApollo } from '../../lib/apollo';
+import { useQuery } from '@apollo/react-hooks';
+
 import _ from 'lodash';
-import moment from "moment"
+import moment from 'moment';
 import Scene from "../../components/Scene";
 import Filter from "../../components/feeds/Filter"
 
-import { FEEDS, INCOMINGEVENTS } from "../../queries";
+import { FEEDS, INCOMINGEVENTS, ME } from "../../queries";
 import BirthdayPanel from '../../components/BirthdayPanel'
 
-class DashboardWithoutMutation extends React.Component {
+import {getCommandsLeft, getCommandsRight} from "./commands";
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      dataSource: [],
-      filter: undefined,
-      translations: [],
-      initialLoading: true,
-      showModal: false,
-      modalPanel: <></>
+const Panel = ({
+  goToCustomers,
+  goToCustomer,
+  goToExercises,
+  goToWorkouts,
+  goToTests,
+  goBack,
+  goToSetup,
+}) => {
+  // infinity list variables
+  const [initialLoading, setInitialLoading] = React.useState(true);
+  const [hasMore, setHasMore] = React.useState(true);
+  const [pageSize, setPageSize] = React.useState(20);
+  const [filter, setFilter] = React.useState(undefined);
+
+  const { data, error, loading, fetchMore, networkStatus } = useQuery(FEEDS, {
+    fetchPolicy: "network-only",
+    notifyOnNetworkStatusChange: true,
+    variables: {
+      pageSize: pageSize,
+      after:  "0",
+      filter: filter,
+    },
+    onCompleted: (data) => {
+      setInitialLoading(false)
     }
-    this.goBack = this.goBack.bind(this)
-    this.jumpToDay = this.jumpToDay.bind(this)
-    this.t = this.t.bind(this)
-    this.onChangeLanguage = this.onChangeLanguage.bind(this)
-    this.processFeeds = this.processFeeds.bind(this)
-    this.getNearestDate = this.getNearestDate.bind(this)
-    this.congratulateMember = this.congratulateMember.bind(this)
-    this.openPlan = this.openPlan.bind(this)
-  }
+  });
 
-  componentDidMount() {
-    this.onChangeLanguage("de");
-  }
+  const {data: meData} = useQuery(ME, { ssr: false, fetchPolicy: 'cache-first' });
+  const me = meData ? meData : {};
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    const {initialLoading} = this.state
-  }
+  // translation variables
+  const [translations, setTranslations] = React.useState([]);
+  const [currentLanguage, setCurrentLanguage] = React.useState('');
+  const [availableLanguages, setAvailableLanguages] = React.useState([]);
 
-  processFeeds(rawFeeds) {
-    let targetDates = []
-    let dataSource = _.groupBy(rawFeeds, o => o.target_date.toLocaleString().split(',')[0].split( ".").join("-"));
+  const [targetDates, setTargetDates] = React.useState([]);
+
+  React.useEffect(() => {
+    onChangeLanguage("de");
+    const pendingUserId = window.localStorage.getItem('pending_user_id');
+    window.localStorage.removeItem('pending_user_id');
+    if( pendingUserId && pendingUserId > 0 ) {
+      goToCustomer(pendingUserId);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    //onFetchFeeds(fetchMore, data, "DOWN");
+  }, [pageSize]);
+
+  const processFeeds = (rawFeeds) => {
+    let newTargetDates = []
+    let dataSource = _.groupBy(rawFeeds, o => moment(new Date(parseInt(o.target_date))).format('D-MM-YYYY') );
     dataSource = _.reduce(dataSource, (acc, next, index) => {
-      targetDates.push(parseInt(index))
+      newTargetDates.push(parseInt(index))
       acc.push({
         title: index,
         data: next
       });
       return acc;
-    }, []);
-    this.targetDates = targetDates
+    }, [])
+    //setTargetDates(newTargetDates);
     return dataSource;
   }
 
-  getNearestDate(date) {
+  const getNearestDate = (date) => {
     const nearest = this.targetDates.find(function(targetDate) {
       return (new Date(targetDate) > date);
     });
     return nearest
   }
 
-  goBack() {
-    Router.back();
-  }
-
-  jumpToDay(day) {
+  const jumpToDay = (day) => {
     // CALCULATE THE CURRENT POSSITION OF THE FIRST ELEMENT FROM TODAY
 
   }
 
-  congratulateMember(memberId){
-    /*
-    this.setState({
-      showModal: true,
-      modalPanel: <BirthdayPanel/>,
-    })
-    */
-    Router.push({
-      pathname: '/customer',
-      query: { customer: memberId }
-    });
-
+  const congratulateMember = (memberId) => {
+    goToCustomer(memberId);
   }
 
-  openPlan(memberId, planId){
-    console.log("openPlan")
-    console.log(memberId)
-    console.log(planId)
-    Router.push({
-      pathname: '/workout',
-      query: { workout: planId }
-    });
+  const openMember = (memberId) => {
+    goToCustomer(memberId);
   }
 
-  t(text) {
-    const {translations} = this.state;
+  const openPlan = (memberId, planId) => {
+    goToCustomer(memberId);
+  }
+
+  const t = (text) => {
     const textWithoutNamespace = text.split(":");
     const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
     return (translation ? translation : text);
   }
 
-  onChangeLanguage( language ) {
-    const translations = require('../../../static/locales/' + language + '/dashboard');
+  const onChangeLanguage = ( language ) => {
+    const domainTranslations = require('../../../static/locales/' + language + '/dashboard');
     const commonTranslations = require('../../../static/locales/' + language + '/common');
     const originalLanguages = ['en', 'de', 'es', 'fr'];
-
-    this.setState({
-      translations: {...translations, ...commonTranslations},
-      currentLanguage: language,
-      availableLanguages: originalLanguages.filter(word => word !== language)
-    });
+    setTranslations({...domainTranslations, ...commonTranslations});
+    setCurrentLanguage(language);
+    setAvailableLanguages(originalLanguages.filter(word => word !== language));
   }
 
-  onFetchFeeds(fetchMore, data) {
-    const {filter, pageSize, initialLoading, modalPanel} = this.state
+  const onFetchFeeds = (data) => {
+
     const cursor = initialLoading ? "0" : data.feeds.cursor;
 
     fetchMore({
@@ -125,18 +130,12 @@ class DashboardWithoutMutation extends React.Component {
         filter: filter,
       },
       updateQuery: (prev, { fetchMoreResult, ...rest }) => {
-        if( initialLoading ) {
-          this.setState({initialLoading: false})
-        }
+        setInitialLoading(false);
         if (!fetchMoreResult) {
-          this.setState({
-            hasMore: false
-          })
+          setHasMore(false);
           return prev;
         } else {
-          this.setState({
-            hasMore: fetchMoreResult.feeds.hasMore
-          })
+          setHasMore(fetchMoreResult.feeds.hasMore)
           if( cursor == "0" ) {
             return {
               ...fetchMoreResult,
@@ -159,129 +158,65 @@ class DashboardWithoutMutation extends React.Component {
     })
   }
 
-  render() {
-    const {dataSource, filter, initialLoading, modalPanel} = this.state;
-    const commandsRight = [{
-        icon: 'icon-customer-inactive',
-        iosname: 'customer-inactive',
-        text: '',
-        type: 'type-4',
-        typex: 'Ionicons',
-        name: 'people',
-        onTap: () => {
-          Router.push("/customers");
-        }
-    }, {
-        icon: 'icon-exercise-inactive',
-        iosname: 'exercise-inactive',
-        text: '',
-        type: 'type-4',
-        typex: 'Ionicons',
-        name: 'exercises',
-        onTap: () => {
-          Router.push("/exercises");
-        }
-    }, {
-        icon: 'icon-training-plan-inactive',
-        iosname: 'workout-inactive',
-        text: '',
-        type: 'type-4',
-        typex: 'Ionicons',
-        name: 'calendar',
-        onTap: () => {
-          console.log("Command Workouts.");
-          Router.push("/workouts");
-        }
-    }];
+  const result = (data && data.feeds) ? data.feeds : {feeds: []}
+  const {bu, hasInterface, role} = me && me.me ? me.me : {};
 
-    const commandsLeft = [{
-        icon: 'icon-tools-inactive',
-        iosname: 'tools-inactive',
-        text: 'Setting',
-        type: 'type-1',
-        typex: 'Ionicons',
-        name: 'settings',
-        onTap: () => {
-          console.log("Command Settings");
-        }
-    }, {
-        icon: 'icon-help-inactive',
-        iosname: 'help-inactive',
-        text: 'Help',
-        type: 'type-1',
-        typex: 'Ionicons',
-        name: 'help-circle',
-        onTap: () => {
-          console.log("Command Help");
-        }
-    }];
+  return (
+    <Scene
+      commandsLeft={getCommandsLeft(t)}
+      commandsRight={getCommandsRight(
+        t,
+        goToCustomers,
+        goToExercises,
+        goToWorkouts,
+        goToTests,
+      )}
+      headerChildren={
+        <Filter
+          onFilterByType={(filterValue) => {
+            if( filterValue === 'APT') filterValue = 'EXP_PLANS'
+            if( filterValue === 'MSG') filterValue = 'EXP_PLANS'
+            const newFilter = (filter == filterValue ? undefined : filterValue);
+            console.log("filterValue")
+            console.log(filterValue)
+            setFilter(newFilter)
+            setInitialLoading(true)
+            setPageSize(20)
+          }}
+          filter={filter}
+          t={t}
+        />
+      }
+      processing={false}
+      t={t}
+      networkStatus={networkStatus}
+      goToSetup={goToSetup}
+    >
+      <Dashboard
+        t={t}
+        type={ (bu > 0 ? 'GYM_' : 'PERSONAL_') + role }
+        goBack={goBack}
+        feeds={processFeeds(result.feeds)}
+        jumpToDay={jumpToDay}
+        onRequestPage={(direction) => onFetchFeeds(data, direction)}
+        setPageSize={ (newPageSize) => setPageSize(newPageSize) }
+        loading={loading}
+        error={error || (data && !data.feeds)}
+        hasMore={hasMore}
+        initialLoading={initialLoading}
+        congratulateMember={congratulateMember}
+        openMember={openMember}
+        openPlan={openPlan}
+        modalPanel={false}
+        eventsQuery={INCOMINGEVENTS}
+        accesslevel={me ? me.accesslevel : 2}
+        bu={bu}
+        hasInterface={hasInterface}
 
-    return (
-      <Query
-        notifyOnNetworkStatusChange={true}
-        query={FEEDS}
-        variables={{
-          pageSize:20,
-          after: "0",
-        }}
-        onCompleted={ (data) => {
-          this.setState({
-            initialLoading: false,
-          })
-        }}
-      >
-        {({ data, loading, error, fetchMore }) => {
-          const hasMore = (data && data.feeds) ? data.feeds.hasMore : false
-          const result = (data && data.feeds) ? data.feeds : {feeds: []}
-
-          return (
-            <Scene
-              commandsLeft={commandsLeft}
-              commandsRight={commandsRight}
-              headerChildren={
-                <Filter
-                  onFilterByType={(filterValue) => {
-                    if( filterValue === 'APT') filterValue = 'EXP_PLANS'
-                    if( filterValue === 'MSG') filterValue = 'EXP_PLANS'
-                    const {filter} = this.state;
-                    const newFilter = (filter == filterValue ? undefined : filterValue);
-                    this.setState({
-                      filter: newFilter,
-                      initialLoading: true,
-                      pageSize: 20,
-                    }, () => {
-                      this.onFetchFeeds(fetchMore, data, "DOWN");
-                    });
-
-                  }}
-                  filter={filter}
-                />
-              }
-              processing={false}
-              t={this.t}
-            >
-              <Dashboard
-                t={this.t}
-                goBack={this.goBack}
-                feeds={this.processFeeds(result.feeds)}
-                jumpToDay={this.jumpToDay}
-                onRequestPage={(direction) => this.onFetchFeeds(fetchMore, data, direction)}
-                setPageSize={(newPageSize) => this.setState({pageSize: newPageSize})}
-                loading={loading}
-                error={error}
-                hasMore={hasMore}
-                initialLoading={initialLoading}
-                congratulateMember={this.congratulateMember}
-                openPlan={this.openPlan}
-                modalPanel={modalPanel}
-                eventsQuery={INCOMINGEVENTS}
-              />
-            </Scene>
-          );
-        }}
-      </Query>
-    );
-  }
+        setFilter={setFilter}
+      />
+    </Scene>
+  )
 }
 
-export default DashboardWithoutMutation;
+export default withApollo(Panel);

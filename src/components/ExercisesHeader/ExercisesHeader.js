@@ -1,84 +1,40 @@
 import * as React from "react";
-import styled from 'styled-components';
-import { Icon } from 'semantic-ui-react'
+import { Icon } from 'semantic-ui-react';
+import {
+  ExercisesHeader,
+  SearchInfo,
+  FiltersWrapper,
+  Filters,
+  StyledSearchPin,
+  StyledFolderPin,
+  StyledBodyPin,
+  StyledTypePin,
+  StyledPopper,
+} from './styles';
+import FolderIcon from '@material-ui/icons/Folder';
+import Paper from '@material-ui/core/Paper';
+import InputBase from '@material-ui/core/InputBase';
+import SearchIcon from '@material-ui/icons/Search';
+import IconButton from '@material-ui/core/IconButton';
+import Divider from '@material-ui/core/Divider';
+import ClearIcon from '@material-ui/icons/Clear';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
-const ExercisesHeader  = styled.div`
-  font-size: 22px;
-  line-height: 21px;
-  text-align: right;
-  width: 100%;
-  display: flex;
-  flex-flow: row-reverse;
-`;
-const SearchInfo  = styled.div`
-  margin-top: 25px;
-  -webkit-letter-spacing: -1px;
-  -moz-letter-spacing: -1px;
-  -ms-letter-spacing: -1px;
-  -webkit-letter-spacing: -1px;
-  -moz-letter-spacing: -1px;
-  -ms-letter-spacing: -1px;
-  -webkit-letter-spacing: -1px;
-  -moz-letter-spacing: -1px;
-  -ms-letter-spacing: -1px;
-  letter-spacing: -1px;
-  font-size: 26px;
-  color: #4c4c4c;
-  width: 17vw;
-  text-align: right;
-  padding-right: 1em;
-`;
-const FiltersWrapper  = styled.div`
-  width: 76vw;
-  overflow: scroll;
-  ::-webkit-scrollbar {
-    display: none!important;
-  }
-`;
-const Filters  = styled.div`
-  text-align: left;
-  width: auto;
-  display: -webkit-box;;
-  padding: 0.8em;
-`;
-const StyledSearchPin =  styled.div`
-  width: auto!important;
-  text-transform: none;
-  background: #e8e8e8;
-  border-radius: .28571429rem;
-  box-shadow: none;
-  line-height: 1.5em;
-  font-size: 1em;
-  padding: 0 1em;
-  margin: 0 0.5em;
-  i {
-    font-size: .92857143em;
-    opacity: .5;
-    width: auto;
-    font-family: Icons;
-    font-style: normal;
-    font-weight: 400;
-    text-align: center;
-    speak: none;
-    margin-left: 0.5em;
-    ::before {
-      content: "\f056";
-      background: 0 0!important;
-    }
-  }
-`;
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 
+import useDebounce from './use-debounce';
 
-
-const SearchBodyPartPin = ({name, translation, onClick}) => <StyledSearchPin onClick={() => onClick('bodypart', name)}>
+const SearchBodyPartPin = ({name, translation, onClick}) => <StyledBodyPin onClick={() => onClick('bodypart', name)}>
     {translation}
     <i/>
-  </StyledSearchPin>
+  </StyledBodyPin>
 
-const SearchExerciseTypePin = ({name, translation, onClick}) => <StyledSearchPin onClick={() => onClick('exercisetype', name)}>
+const SearchExerciseTypePin = ({name, translation, onClick}) => <StyledTypePin onClick={() => onClick('exercisetype', name)}>
     {translation}
     <i/>
-  </StyledSearchPin>
+  </StyledTypePin>
 
 const SearchExerciseToolPin = ({name, translation, onClick}) => <StyledSearchPin onClick={() => onClick('tools', name)}>
   {translation}
@@ -95,37 +51,150 @@ const SearchPluginPin = ({name, onClick}) => <StyledSearchPin onClick={() => onC
   <i/>
 </StyledSearchPin>
 
-export default ({total, t, filter, onRemoveFilter}) => (
-  <ExercisesHeader>
-    <SearchInfo>
-      {total} {t('exercises')}
-    </SearchInfo>
-    <FiltersWrapper>
-      <Filters>
-      {
-        (filter.text && filter.text.length > 0) && (<SearchTextPin key="exercise-text-pin" name={filter.text} translation={filter.text} onClick={onRemoveFilter}/>)
+const SearchFolderPin = ({name, id, onClick}) => <StyledFolderPin onClick={() => onClick('folder', {id: id})}>
+  <FolderIcon/>
+  <div className="pin-text">{name}</div>
+  <i/>
+</StyledFolderPin>
+
+export default ({
+  t,
+
+  loading,
+  total,
+
+  filter,
+
+  onRemoveFilter,
+  onTextFilterChange,
+
+  suggestions,
+  setSearch,
+}) => {
+
+  const [searchTerm, setSearchTerm] = React.useState(filter.text);
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
+
+
+  //
+  // Suggestions
+  //
+  const inputEl = React.useRef(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
+
+  //
+  // Lock suggestoins
+  //
+  const [lock, setLock] = React.useState(true);
+
+  React.useEffect(() => {
+    if( suggestions &&  suggestions.length > 0 ) {
+      if( suggestions.length == 1 && suggestions[0] == filter.text ) {
+        setAnchorEl(null)
+      } else {
+        setAnchorEl(inputEl.current);
       }
-      {
-        filter.body.map((item, index) =>
-          <SearchBodyPartPin key={index} name={item} translation={t(item)} onClick={onRemoveFilter}/>
-        )
-      }
-      {
-        filter.type.map((item, index) =>
-          <SearchExerciseTypePin key={index} name={item} translation={t(item)} onClick={onRemoveFilter}/>
-        )
-      }
-      {
-        filter.tool.map((item, index) =>
-          <SearchExerciseToolPin key={index} name={item} translation={t(item)} onClick={onRemoveFilter}/>
-        )
-      }
-      {
-        filter.plugin.map((item, index) =>
-          <SearchPluginPin key={index} name={item} onClick={onRemoveFilter}/>
-        )
-      }
-      </Filters>
-    </FiltersWrapper>
-  </ExercisesHeader>
-);
+    } else {
+      setAnchorEl(null)
+    }
+  }, [suggestions]);
+
+
+  React.useEffect(
+    () => {
+      onTextFilterChange(debouncedSearchTerm);
+    },
+    [debouncedSearchTerm]
+  );
+
+  return (
+    <ExercisesHeader>
+      <SearchInfo>
+        {total} <span>{t('exercises')}</span>
+      </SearchInfo>
+      <FiltersWrapper>
+        <Filters>
+        {
+          filter.body.map((item, index) =>
+            <SearchBodyPartPin key={index} name={item} translation={t(item)} onClick={onRemoveFilter}/>
+          )
+        }
+        {
+          filter.type.map((item, index) =>
+            <SearchExerciseTypePin key={index} name={item} translation={t(item)} onClick={onRemoveFilter}/>
+          )
+        }
+        {
+          filter.tool.map((item, index) =>
+            <SearchExerciseToolPin key={index} name={item} translation={t(item)} onClick={onRemoveFilter}/>
+          )
+        }
+        {
+          filter.plugin.map((item, index) =>
+            <SearchPluginPin key={index} name={item} onClick={onRemoveFilter}/>
+          )
+        }
+        </Filters>
+      </FiltersWrapper>
+      <div className="text-search-wrapper">
+        <div className="text-search" ref={inputEl}>
+          <div className="input-area">
+            <input
+              placeholder={t("textsearch")}
+              inputProps={{ 'aria-label': 'search exercises lanista' }}
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+              }}
+              autoFocus={true}
+              onKeyUp={() => {
+                console.log("onkeyup")
+                setLock(false);
+              }}
+            />
+            <ClearIcon onClick={() => setSearchTerm('')}/>
+          </div>
+          <Divider orientation="vertical" />
+          <SearchIcon className="search-button"/>
+        </div>
+        <StyledPopper
+          id={id}
+          open={open && !lock}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+        >
+          <div className="suggestions-area">
+            <List component="nav" aria-label="search suggestions">
+              {
+                suggestions.map((suggestion, index) => (
+                    <ListItem key={index} button onClick={() => {
+                      setSearchTerm(suggestion);
+                      setLock(true);
+                      handleClose();
+                    }}>
+                      <ListItemText primary={suggestion} />
+                    </ListItem>
+                  )
+                )
+              }
+            </List>
+          </div>
+        </StyledPopper>
+      </div>
+      {loading && <LinearProgress color="secondary"/>}
+    </ExercisesHeader>
+  )
+};

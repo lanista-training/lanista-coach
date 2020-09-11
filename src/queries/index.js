@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 
 export const MEMBERS = gql`
-  query Members($pageSize:Int, $after:String, $filter:String) {
-    members(pageSize: $pageSize, after: $after, filter: $filter) {
+  query Members($pageSize:Int, $after:String, $filter:String, $last:Boolean, $folderId:ID, $substractFolderMembers: Boolean) {
+    members(pageSize: $pageSize, after: $after, filter: $filter, last: $last, folderId: $folderId, substractFolderMembers: $substractFolderMembers) {
       cursor
       hasMore
       total
@@ -11,6 +11,7 @@ export const MEMBERS = gql`
         first_name
         last_name
         email
+        photoUrl
       }
     }
   }
@@ -83,11 +84,52 @@ query expiredPlans {
 }
 `
 
+export const PERSONALTRAINERSTATISTIC1 = gql`
+query PersonalTrainerStatistic1 {
+  personalTrainerStatistic1 {
+    status
+    data
+    total
+  }
+}
+`
+
+export const PERSONALTRAINERSTATISTIC2 = gql`
+query PersonalTrainerStatistic2 {
+  personalTrainerStatistic2 {
+    status
+    data
+    total
+  }
+}
+`
+
+export const MEMBERSACTIVITY = gql`
+query membersActivity {
+  membersActivity {
+    status
+    data
+    total
+  }
+}
+`
+
+export const PLANSCREATED = gql`
+query plansCreated {
+  plansCreated {
+    status
+    data
+    total
+  }
+}
+`
+
 export const MESSAGES = gql`
 query messages {
   messages {
     status
     data {
+      id
       text
       creation_date
       status
@@ -115,6 +157,7 @@ query chat($memberId:ID!) {
       status
       creation_date
       exercise_name
+      exercise_id
       exercise_start_image
       exercise_end_image
     }
@@ -146,16 +189,20 @@ export const CALENDARENTRIES = gql`
 `
 
 export const EXERCISE = gql`
-  query Exercise($exerciseId:ID!, $memberId:ID, $planexerciseId:ID) {
-    exercise(exerciseId: $exerciseId, memberId: $memberId, planexerciseId: $planexerciseId) {
+  query Exercise($exerciseId:ID!, $memberId:ID, $planexerciseId:ID, $language: String) {
+    exercise(exerciseId: $exerciseId, memberId: $memberId, planexerciseId: $planexerciseId, language: $language) {
       id
       name
       start_image
       end_image
+      start_image_full_size
+      end_image_full_size
       coaching_notes
       mistakes
       muscle
       videoUrl
+      editable
+      owner
       member {
         id
         first_name
@@ -200,15 +247,54 @@ export const EXERCISE = gql`
         position
         weight
         rounds
-        repetitions
-        training_unit
+        training
+        unit
+        sets {
+          weight
+          training
+          unit
+        }
       }
     }
   }
 `
+
+export const EXERCISE_EDIT = gql`
+  query ExerciseEdit($exerciseId:ID!) {
+    exercise(exerciseId: $exerciseId) {
+      id
+      name_DE
+      name_EN
+      name_ES
+      name_FR
+      name_PT
+      name_RU
+      coaching_notes_DE
+      coaching_notes_EN
+      coaching_notes_ES
+      coaching_notes_FR
+      coaching_notes_PT
+      coaching_notes_RU
+      mistakes_DE
+      mistakes_EN
+      mistakes_ES
+      mistakes_FR
+      mistakes_PT
+      mistakes_RU
+      muscle
+      videoUrl
+      editable
+      owner
+      muscle
+      exercise_type
+      addition
+    }
+  }
+`
+
 export const EXERCISES = gql`
-  query Exercises($pageSize:Int, $after:String, $bodyFilters:[String] = [], $typeFilters:[String] = [], $toolFilters:[String] = [], $textFilter:String, $pluginFilters:[String] = []) {
-    exercises(pageSize: $pageSize, after: $after, bodyFilters: $bodyFilters, typeFilters: $typeFilters, toolFilters: $toolFilters, textFilter: $textFilter, pluginFilters: $pluginFilters) {
+  query Exercises($pageSize:Int, $after:String, $bodyFilters:[String] = [], $typeFilters:[String] = [], $toolFilters:[String] = [], $textFilter:String, $pluginFilters:[String] = [], $folderId: ID, $substractFolderExercises: Boolean, $private: Boolean, $recentlyUsed: Boolean) {
+    exercises(pageSize: $pageSize, after: $after, bodyFilters: $bodyFilters, typeFilters: $typeFilters, toolFilters: $toolFilters, textFilter: $textFilter, pluginFilters: $pluginFilters, folderId: $folderId, substractFolderExercises: $substractFolderExercises, private: $private, recentlyUsed: $recentlyUsed) {
       cursor
       hasMore
       total
@@ -244,7 +330,9 @@ export const WORKOUT = gql`
       duration
       changed_date
       creator_full_name
+      creator_id
       creator_image
+      template
       member {
         id
       }
@@ -258,6 +346,7 @@ export const WORKOUT = gql`
           rounds
           repetitions
           training_unit
+          hasIndications
           exercise {
             id
             name
@@ -301,13 +390,54 @@ export const PLUGINS = gql`
 `
 
 export const ME = gql`
-  query CurrentUserForLayout {
+  query Me {
     me {
       id
+      email
       first_name
       last_name
-      email
+      photoUrl
+      role
       bu
+      hasInterface
+      accesslevel
+      language
+      dataPrivacyPolicy
+    }
+  }
+`
+
+export const ME_SETTINGS = gql`
+  query Me {
+    me {
+      id
+      email
+      first_name
+      last_name
+      photoUrl
+      role
+      bu
+      accesslevel
+      language
+      dataPrivacyPolicy
+      expiration_date
+      company_name
+      phone_nr
+      website
+      country
+      zipcode
+      street
+      city
+      banner_link
+      banner_photoUrl
+      workout_enable
+      facebook
+      googleplus
+      twitter
+      promo_video
+      promo_text
+      workout_imageUrl
+      ll
     }
   }
 `
@@ -316,11 +446,37 @@ export const MEMBER = gql`
   query Member($memberId:ID!) {
     member(memberId: $memberId) {
       id
+      status
       first_name
       last_name
       email
       birthday
       gender
+      phone_nr
+      note
+      country
+      zipcode
+      street
+      city
+      language
+      dpSigned
+      dpSignatureType
+      photoUrl
+      photoUrlFullSize
+      workouts {
+        id
+        image_url
+        start_image_url
+        end_image_url
+        execution_date
+        formated_date
+        weight
+        round
+        repetitions
+        training_unit
+        self_protocolled
+        exercise_id
+      }
       plans {
         id
         name
@@ -331,17 +487,6 @@ export const MEMBER = gql`
         creator_id
         creator_full_name
         expiration_date
-      }
-      workouts {
-        image_url
-        execution_date
-        formated_date
-        weight
-        round
-        repetitions
-        training_unit
-        self_protocolled
-        exercise_id
       }
       calipers {
         target_date
@@ -358,11 +503,46 @@ export const MEMBER = gql`
       }
       warnings {
         name
-        description
         warning_type
         object_id
-        creator_full_name,
         rating,
+      }
+      goals {
+        id
+        description
+        warning_flag
+        creation_date
+        target_date
+        rating {
+          id
+          date
+          value
+          creation_date
+        }
+        start_date
+        target_date
+        creator {
+          first_name
+          last_name
+          photoUrl
+        }
+      }
+      notes {
+        id
+        text
+        note_date
+        exercise {
+          id
+          name
+          start_image
+          end_image
+        }
+        creator {
+          id
+          photoUrl
+          first_name
+          last_name
+        }
       }
     }
   }
@@ -372,11 +552,12 @@ export const MEMBER_MEASURES = gql`
   query Member($memberId:ID!) {
     member(memberId: $memberId) {
       id
+      photoUrl
       gender
       first_name
       last_name
       birthday
-       measures {
+      measures {
         target_date
         arm_right
         arm_left
@@ -387,6 +568,7 @@ export const MEMBER_MEASURES = gql`
         wide_hips
         quads_right
         quads_left
+        note
       }
       calipers {
         target_date
@@ -400,16 +582,30 @@ export const MEMBER_MEASURES = gql`
         sprailium
         abs
         quads
+        fatmass
+        musclemass
+        visceralfat
+        fatfreemass
+        bodywater
+        note
       }
       tests {
         id
         name
         description
+        withScore
         testnodes {
           id
           name
           scale
           type
+          values
+          exercise {
+            name
+            start_image
+            end_image
+          }
+          imageUrl
         }
         testresults {
           id
@@ -419,7 +615,191 @@ export const MEMBER_MEASURES = gql`
           creator_full_name
           score
           testtype
+          editable
         }
+      }
+    }
+  }
+`
+
+export const MEMBER_ANAMNESE = gql`
+  query Member($memberId:ID!) {
+    member(memberId: $memberId) {
+      id
+      photoUrl
+      gender
+      first_name
+      last_name
+      birthday
+      lifestyles {
+        id
+        description
+        rating {
+          id
+          date
+          value
+          creator {
+            id
+            first_name
+            last_name
+            photoUrl
+            role
+          }
+          creation_date
+        }
+        warning_flag
+        creation_date
+        start_date
+        end_date
+        creator {
+          id
+          first_name
+          last_name
+          photoUrl
+        }
+      }
+      drugs {
+        id
+        description
+        warning_flag
+        creation_date
+        start_date
+        end_date
+        rating {
+          id
+          date
+          value
+          creator {
+            id
+            first_name
+            last_name
+            photoUrl
+            role
+          }
+          creation_date
+        }
+        creator {
+          id
+          first_name
+          last_name
+          photoUrl
+        }
+      }
+      sport_activities {
+        id
+        description
+        rating {
+          id
+          date
+          value
+          creator {
+            id
+            first_name
+            last_name
+            photoUrl
+            role
+          }
+          creation_date
+        }
+        warning_flag
+        creation_date
+        start_date
+        end_date
+        creator {
+          id
+          first_name
+          last_name
+          photoUrl
+        }
+      }
+      goals {
+        id
+        description
+        rating {
+          id
+          date
+          value
+          creator {
+            id
+            first_name
+            last_name
+            photoUrl
+            role
+          }
+          creation_date
+        }
+        warning_flag
+        creation_date
+        start_date
+        end_date
+        creator {
+          id
+          first_name
+          last_name
+          photoUrl
+        }
+      }
+      physios {
+        id
+        description
+        rating {
+          id
+          date
+          value
+          creator {
+            id
+            first_name
+            last_name
+            photoUrl
+            role
+          }
+          creation_date
+        }
+        warning_flag
+        creation_date
+        start_date
+        end_date
+        creator {
+          id
+          first_name
+          last_name
+          photoUrl
+        }
+      }
+      findings {
+        id
+        title
+        description
+        position {
+          x
+          y
+        }
+        warning_flag
+        last_change
+        creation_date
+        start_date
+        end_date
+        creator {
+          id
+          first_name
+          last_name
+          photoUrl
+          role
+        }
+        rating {
+          id
+          date
+          value
+          creator {
+            id
+            first_name
+            last_name
+            photoUrl
+            role
+          }
+          creation_date
+        }
+        visible
       }
     }
   }
@@ -431,6 +811,7 @@ export const TESTS = gql`
       id
       name
       description
+      imageUrl
     }
   }
 `
@@ -449,7 +830,6 @@ export const MEMBER_TEST_RESULT = gql`
           id
           name
           scale
-          type
         }
         testresults {
           id
@@ -460,65 +840,6 @@ export const MEMBER_TEST_RESULT = gql`
           score
           testtype
         }
-      }
-    }
-  }
-`
-
-export const MEMBER_ANANMESE = gql`
-  query Member($memberId:ID!) {
-    member(memberId: $memberId) {
-      id
-      first_name
-      last_name
-      goals {
-        id
-        description
-        warning_flag
-        creation_date
-        creator_user_id
-        creator_full_name
-        rating
-        start_date
-      }
-      drugs {
-        id
-        description
-        warning_flag
-        creation_date
-        creator_user_id
-        creator_full_name
-        start_date
-      }
-      physios {
-        id
-        description
-        warning_flag
-        creation_date
-        creator_user_id
-        creator_full_name
-        rating
-        start_date
-      }
-      sport_activities {
-        id
-        description
-        warning_flag
-        creation_date
-        creator_user_id
-        creator_full_name
-        rating
-        start_date
-      }
-      lifestyles {
-        id
-        description
-        warning_flag
-        creation_date
-        creator_user_id
-        creator_full_name
-        rating
-        start_date
       }
     }
   }
@@ -538,5 +859,126 @@ export const RECOMMENDATION = gql`
 export const EXERCISESFILTER = gql`
   query ExercisesFilter {
     filter @client
+  }
+`;
+
+
+export const GETGOAL = gql`
+  query GetGoal($goalId:ID!) {
+    getGoal(goalId: $goalId) {
+      id
+      description
+      warning_flag
+      creation_date
+      rating
+      start_date
+      target_date
+      creator {
+        first_name
+        last_name
+        photoUrl
+      }
+      targets {
+        id
+        type
+        unit
+        target_value
+        target_history {
+          id
+          value
+          change_date
+        }
+      }
+    }
+  }
+`;
+
+export const GETMEMBERFILES = gql`
+  query getMemberFiles($memberId:ID!) {
+    getMemberFiles(memberId: $memberId) {
+      filename
+      mimetype
+      encoding
+    }
+  }
+`;
+
+export const EXERCISEFOLDERS = gql`
+  query ExerciseFolders {
+    exerciseFolders {
+      id
+      name
+      size
+    }
+  }
+`;
+
+export const MEMBERFOLDERS = gql`
+  query MemberFolders {
+    memberFolders {
+      id
+      name
+      size
+    }
+  }
+`;
+
+export const OWNTESTS = gql`
+  query OwnTests {
+    ownTests {
+      id
+      name
+      description
+      previewImages
+    }
+  }
+`;
+
+export const OWNTEST = gql`
+  query OwnTest($testId:ID!) {
+    ownTest(testId: $testId) {
+      id
+      name
+      description
+      testExercises {
+        id
+        values
+        exercise {
+          id
+          name
+          start_image
+          end_image
+        }
+      }
+    }
+  }
+`;
+
+export const PROTOCOLLS = gql`
+  query Protocolls($memberId:ID!, $pageSize:Int, $after:Int) {
+    protocolls(memberId: $memberId, pageSize: $pageSize, after: $after) {
+      id
+      image_url
+      execution_date
+      formated_date
+      weight
+      round
+      repetitions
+      training_unit
+      self_protocolled
+      exercise_id
+    }
+  }
+`;
+
+export const GETTRAINERSLIST = gql`
+  query GetTrainersList($tbt:String!) {
+    getTrainersList(tbt: $tbt) {
+      email
+      role
+      photoUrl
+      first_name
+      last_name
+    }
   }
 `;

@@ -1,11 +1,11 @@
 import * as React from "react";
-import styled from 'styled-components';
 import { Modal } from 'semantic-ui-react'
 import Feeds from '../../components/feeds'
 
 export default ({
   feeds,
   t,
+  type,
   currentScrollPosition,
   jumpToNow,
   jumpToDay,
@@ -17,16 +17,22 @@ export default ({
   initialLoading,
   setPageSize,
   congratulateMember,
+  openMember,
   openPlan,
   showModal,
   modalPanel,
   eventsQuery,
+  accesslevel,
+  bu,
+  hasInterface,
+  setFilter,
 }) => {
   return (
     <>
       <Feeds
         feeds={feeds}
         t={t}
+        type={type}
         currentScrollPosition={currentScrollPosition}
         jumpToDay={jumpToDay}
         onRequestPage={onRequestPage}
@@ -37,8 +43,13 @@ export default ({
         initialLoading={initialLoading}
         setPageSize={setPageSize}
         congratulateMember={congratulateMember}
+        openMember={openMember}
         openPlan={openPlan}
         eventsQuery={eventsQuery}
+        accesslevel={accesslevel}
+        bu={bu}
+        hasInterface={hasInterface}
+        setFilter={setFilter}
       />
       <Modal
         open={showModal}

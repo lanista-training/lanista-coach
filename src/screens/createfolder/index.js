@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { RouteComponentProps, withRouter } from "react-router";
-import { translate } from 'react-i18next';
 import Scene from "../../components/Scene";
 
-import Template from './Template';
+import Template from './CreateFolder';
 
-@translate(['common', 'setup'], { wait: true })
 class TemplateWithData extends Component {
 
   constructor(props) {

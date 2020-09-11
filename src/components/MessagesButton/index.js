@@ -1,21 +1,44 @@
+import * as React from 'react';
 import MessagesButton from './MessagesButton';
+import { withApollo } from '../../lib/apollo';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import { Query } from "react-apollo"
 import { MESSAGES } from "../../queries";
+import { UPDATECHATMESSAGESTATUS } from "../../mutations";
 
-export default function({query, t, filter, title}) {
-  return (
-    <Query
-      notifyOnNetworkStatusChange={true}
-      fetchPolicy='network-only'
-      query={MESSAGES}
-    >
-      {({ data, loading, error }) => {
-        return (<MessagesButton
-          data={data && data.messages && data.messages.data ? data.messages.data : []}
-          loading={loading}
-          error={error}
-        />)
-      }}
-    </Query>
+const Panel = ({t, filter, title}) => {
+
+  const {data, loading, error, refetch} = useQuery(MESSAGES, {
+    fetchPolicy: 'network-only'
+  });
+
+  const [updateChatMessageStatus, {
+    loading: updateChatMessageStatusLoading,
+    error: updateChatMessageStatusError
+  }] = useMutation(
+    UPDATECHATMESSAGESTATUS,
+    {
+      update(cache,  { data: { updateChatMessateStatus } }) {
+        refetch();
+      }
+    }
   );
-}
+
+  const onUpdateChatMessageStatus = (messageId) => {
+    updateChatMessageStatus({
+      variables: {
+        messageId: messageId
+      }
+    })
+  }
+
+  return (
+    <MessagesButton
+      data={data && data.messages && data.messages.data ? data.messages.data : []}
+      loading={loading}
+      error={error}
+      onUpdateChatMessageStatus={onUpdateChatMessageStatus}
+    />)
+};
+
+export default withApollo(Panel);

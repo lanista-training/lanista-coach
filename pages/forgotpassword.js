@@ -1,9 +1,16 @@
 import React from "react";
+import Router from 'next/router';
 import ForgotpasswordScreen from "../src/screens/forgotpassword"
 
 function Forgotpassword({memberId}) {
+
+  const goBack = () => Router.back()
+
   return (
-    <ForgotpasswordScreen  memberId={memberId}></ForgotpasswordScreen>
+    <ForgotpasswordScreen
+      memberId={memberId}
+      goBack={goBack}
+    />
   );
 }
 

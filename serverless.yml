@@ -3,9 +3,12 @@ service: lanista-coach-app
 provider:
   name: aws
   runtime: nodejs10.x
-  stage: dev
+  versionFunctions: false
+  stage: prod
   region: eu-central-1
   memorySize: 512
+environment:
+  ENV: prod
 
 plugins:
   - serverless-nextjs-plugin

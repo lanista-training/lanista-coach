@@ -1,147 +1,99 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import _ from 'lodash';
 import moment from "moment";
-import Router from 'next/router';
-import { Query } from "react-apollo";
+//import Router from 'next/router';
 import Scene from "../../components/Scene";
 import Test from './Test';
 import TestHeader from "../../components/TestHeader";
-import { MEMBER_TEST_RESULT } from "../../queries";
+import withData from "./DataProvider";
 
-class TestWithData extends Component {
+import Help from '../../components/icons/Help';
+import Tools from '../../components/icons/Tools';
+import Back from '../../components/icons/Back';
+import Pdf from '../../components/icons/Pdf';
+import SendAsEmail from '../../components/icons/SendAsEmail';
+import Remove from '../../components/icons/Remove';
 
-  constructor(props) {
-    super(props);
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
-    this.state = {
-      processing: false,
-      translations: [],
-      comments: [],
-    };
-    this.goBack = this.goBack.bind(this);
-    this.t = this.t.bind(this);
-    this.onChangeLanguage = this.onChangeLanguage.bind(this);
-    this.extractTestData = this.extractTestData.bind(this);
-  };
-
-  componentDidMount() {
-    this.onChangeLanguage("de");
+const extractTestName = ( member, testType ) => {
+  let testName = ''
+  if( member && member.tests ) {
+    member.tests.map((test) => {
+     if( test.id === testType ) {
+       testName = test.name
+     }
+   })
   }
+  return testName
+}
 
-  goBack() {
-    Router.back();
+const extractTestEditable = ( member, testType, testId ) => {
+  let testEditable = ''
+  if( member && member.tests ) {
+    member.tests.map((test) => {
+     if( test.id === testType ) {
+       test.testresults.map((result, index) => {
+         if( result.id == testId ) {
+           testEditable = result.editable
+         }
+       })
+     }
+    })
   }
+  return testEditable
+}
 
-  getCommandsRight() {
-    return ([{
-          icon: 'icon-pdf',
-          text: 'generate pdf',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'new measure',
-          onTap: () => {
-            console.log("Generate PDF");
+const extractCreatorFullName = ( member, testType, testId ) => {
+  let testEditable = ''
+  if( member && member.tests ) {
+    member.tests.map((test) => {
+     if( test.id === testType ) {
+       test.testresults.map((result, index) => {
+         if( result.id == testId ) {
+           testEditable = result.creator_full_name
+         }
+       })
+     }
+    })
+  }
+  return testEditable
+}
+
+const extractTestData = ( member, testType, testId ) => {
+  let testData = []
+
+  member && member.tests && member.tests.map((test) => {
+    if( test.id == testType ) {
+      const testNodes = test.testnodes
+      test.testresults.map((result, index) => {
+        if( result.id == testId ) {
+          let testResult = '';
+          if( testType.indexOf('1-') > -1 ) {
+            testResult = result.results.length > 0 ? JSON.parse(result.results) : new Array(testNodes.length);
+          } else {
+            testResult = result.results.split("|");
           }
-      }, {
-          icon: 'icon-email-inactive',
-          text: 'send email',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'folder',
-          onTap: () => {
-            console.log("Send email");
-          }
-      }, {
-          icon: 'icon-remove',
-          text: 'delete test',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'last',
-          onTap: () => {
-            console.log("Delete test");
-          }
-      }]);
-  }
 
+          const testComments = result.comments.split("|");
+          if( test.id.indexOf('1-') > -1 ) {
+            //
+            // process exercise test
+            //
+            let resultPosition = 0;
+            testNodes.map((node, index) => {
+              testData.push({
+                ...node,
+                score: testResult[index] ? testResult[index] : [],
+                comment: testComments[index],
+              });
+            });
 
-  getCommandsLeft() {
-    return ([{
-          //icon: CustomerIcon,
-          icon: 'icon-back',
-          text: 'Back',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'back',
-          onTap: () => {
-            this.goBack();
-          }
-      }, {
-          //icon: CustomerIcon,
-          icon: 'icon-tools-inactive',
-          text: 'Setting',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'settings',
-          onTap: () => {
-            console.log("Command Settings");
-          }
-      }, {
-          //icon: HelpIcon,
-          icon: 'icon-help-inactive',
-          text: 'Help',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'help-circle',
-          onTap: () => {
-            console.log("Command Help");
-          }
-      }]);
-  }
-
-  t(text) {
-    const {translations} = this.state;
-    const textWithoutNamespace = text.split(":");
-    const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
-    return (translation ? translation : text);
-  }
-
-  onChangeLanguage( language ) {
-    const translations = require('../../../static/locales/' + language + '/dashboard');
-    const commonTranslations = require('../../../static/locales/' + language + '/common');
-    const originalLanguages = ['en', 'de', 'es', 'fr'];
-
-    this.setState({
-      translations: {...translations, ...commonTranslations},
-      currentLanguage: language,
-      availableLanguages: originalLanguages.filter(word => word !== language)
-    });
-  }
-
-  extractTestName( data ) {
-    const {testType} = this.props;
-    let testName = ''
-    if( data && data.member && data.member.tests ) {
-      data.member.tests.map((test) => {
-       if( test.id === testType ) {
-         testName = test.name
-       }
-     })
-    }
-    return testName
-  }
-
-  extractTestData( data ) {
-    const {testType, testId} = this.props
-    let testData = []
-
-    data && data.member && data.member.tests && data.member.tests.map((test, inde) => {
-      if( test.id == testType ) {
-        const testNodes = test.testnodes
-        test.testresults.map((result, index) => {
-          if( result.id == testId ) {
-            const testResult = result.results.split("|")
-            const testComments = result.comments.split("|")
-            // start processing
+          } else {
+            //
+            // process standard lanista test
+            //
             let resultPosition = 0
             testNodes.map((node, index) => {
               if( node.type == 2 ) {
@@ -157,73 +109,350 @@ class TestWithData extends Component {
               }
             })
           }
-        })
-      }
-    })
-    return testData
-  }
-
-  render() {
-    const {processing} = this.state;
-    const {memberId, testId, testType} = this.props;
-
-    return(
-      <Query
-        query={MEMBER_TEST_RESULT}
-        notifyOnNetworkStatusChange
-        variables={{
-          memberId: memberId,
-          testresultId: testId,
-        }}
-      >
-        {({ data, loading, error, fetchMore }) => {
-          if (data && data.member) {
-            const {member} = data
-            const {first_name, last_name, id, t} = member
-            return (
-              <Scene
-                commandsLeft={this.getCommandsLeft()}
-                commandsRight={this.getCommandsRight()}
-                processing={processing}
-                headerChildren={
-                  <TestHeader
-                    userId={id}
-                    firstName={first_name}
-                    lastName={last_name}
-                    testName={this.extractTestName(data)}
-                  />
-                }
-                t={this.t}
-              >
-                <Test
-                  t={this.t}
-                  test={this.extractTestData(data)}
-                  testType={testType}
-                />
-              </Scene>
-            )
-          } else {
-            return(<Scene
-              commandsLeft={this.getCommandsLeft()}
-              commandsRight={this.getCommandsRight()}
-              processing={processing}
-              headerChildren={
-                <TestHeader
-                  userId={0}
-                  firstName={''}
-                  lastName={''}
-                  testName={''}
-                />
-              }
-              t={this.t}
-            >
-
-            </Scene>)
-          }
-        }}
-      </Query>
-    )
-  }
+        }
+      })
+    }
+  });
+  return testData;
 }
 
-export default TestWithData;
+const extractTestResults = ( member, testType, testId ) => {
+  let testresult = '';
+  member && member.tests && member.tests.map((test) => {
+    if( test.id == testType ) {
+      test.testresults.map(result => {
+        if( result.id == testId) {
+          const {results} = result;
+          if( results.length > 0 ) {
+            testresult = result.results;
+          } else {
+            // CREATE A NEW RESULT OBJECT
+            const {testnodes} = test;
+            const newResultObject = [];
+            testnodes.map(node => {
+              if( node.type == 2 ) {
+                newResultObject.push('');
+                newResultObject.push('');
+              } else {
+                newResultObject.push('');
+              }
+            });
+            testresult = newResultObject.join('|');
+          }
+        }
+      })
+    }
+  })
+  return testresult;
+}
+
+const Panel = ({
+  memberId,
+  testId,
+  testType,
+
+  member,
+  memberLoading,
+  memberError,
+
+  saveTestResults,
+  saveTestResultsLoading,
+  saveTestResultsError,
+
+  saveTestComments,
+  saveTestCommentsLoading,
+  saveTestCommentsError,
+
+  saveOwnTestComments,
+  saveOwnTestCommentsLoading,
+  saveOwnTestCommentsError,
+
+  saveOwnTestResults,
+  saveOwnTestResultsLoading,
+  saveOwnTestResultsError,
+
+  deleteTestRecord,
+  deleteTestRecordLoading,
+  deleteTestRecordError,
+
+  deleteOwnTestRecord,
+  deleteOwnTestRecordLoading,
+  deleteOwnTestRecordError,
+
+  generateTestPdf,
+  generateTestPdfLoading,
+  generateTestPdfError,
+
+  sendTest,
+  sendTestLoading,
+  sendTestError,
+
+  goBack,
+}) => {
+  const testData = extractTestData(member, testType, testId);
+  const testEditable = extractTestEditable( member, testType, testId );
+
+  //
+  // Snackbar managment
+  //
+  const [openSnackbar, setOpenSnackbar] = React.useState(false);
+  const [snackbarMessage, setSnackbarMessage] = React.useState('');
+  const toggleSnackbar = () => setOpenSnackbar(!openSnackbar);
+
+  //
+  // Language management
+  //
+  const [translations, setTranslations] = useState([]);
+  const t = (text) => {
+    const textWithoutNamespace = text.split(":");
+    const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
+    return (translation ? translation : text);
+  }
+  const onChangeLanguage = ( language ) => {
+    const translations = require('../../../static/locales/' + language + '/testsmanager');
+    const commonTranslations = require('../../../static/locales/' + language + '/common');
+    setTranslations({...translations, ...commonTranslations})
+  }
+  useEffect(() => {
+    if( translations && translations.length == 0 ) onChangeLanguage("de")
+  }, [translations]);
+
+  //
+  // Modal panel
+  //
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const getCommandsRight = () => {
+    const commands = [];
+
+    if( testType.indexOf('0-') > -1 ) {
+      commands.push({
+        icon: <Pdf/>,
+        text: t("generate_pdf"),
+        type: 'type-1',
+        typex: 'Ionicons',
+        name: 'new measure',
+        onTap: () => {
+          onGenerateTestPdf(testId);
+        }
+      });
+      commands.push({
+        icon: <SendAsEmail/>,
+        text: t('send_as_email'),
+        type: 'type-1',
+        typex: 'Ionicons',
+        name: 'folder',
+        onTap: () => {
+          onSendTest(testId);
+        }
+      });
+    }
+    if( testEditable ) {
+      commands.push({
+        icon: <Remove/>,
+        text: t("delete_test"),
+        type: 'type-1',
+        typex: 'Ionicons',
+        name: 'last',
+        onTap: () => {
+          handleOpen();
+        }
+      });
+    }
+    return commands;
+  }
+
+
+  const getCommandsLeft = () => {
+    return ([{
+        icon: <Back/>,
+        iosname: 'tools-inactive',
+        text: '',
+        type: 'type-1',
+        typex: 'Ionicons',
+        name: 'back',
+        style: {color: '#34acfb'},
+        onTap: () => {
+          goBack();
+        }
+    }]);
+  }
+
+  const onSaveTestItem = (position, value) => {
+    if( testType.indexOf('1-') > -1 ) {
+      member.tests.map((test) => {
+        if( test.id == testType ) {
+          test.testresults.map((result, index) => {
+            if( result.id == testId ) {
+              const testResult = result.results.length > 0 ? JSON.parse(result.results) : new Array(test.testnodes.length);
+              testResult[position] = value;
+              const curatedTestResult = test.testnodes.map( (tmp, i) => testResult[i] ? testResult[i] : [] );
+              // send new results
+              saveOwnTestResults({
+                variables: {
+                  memberId: memberId,
+                  testId: testId,
+                  testResult: JSON.stringify(curatedTestResult),
+                }
+              });
+            }
+          })
+        }
+      });
+    } else {
+      // preapre the new value
+      const oldResult = extractTestResults(member, testType, testId);
+      const newResultObject = oldResult.split('|');
+      newResultObject[position] = value + '';
+      const newResult = newResultObject.join('|');
+      // send new results
+      saveTestResults({
+        variables: {
+          memberId: memberId,
+          testId: testId,
+          testResult: newResult,
+        }
+      });
+    }
+  }
+
+  const onSaveTestComments = (comments) => {
+    // send new results
+    if( testType.indexOf('1-') > -1 ) {
+      saveOwnTestComments({
+        variables: {
+          memberId: memberId,
+          testId: testId,
+          comments: comments,
+        }
+      });
+    } else {
+      saveTestComments({
+        variables: {
+          memberId: memberId,
+          testId: testId,
+          comments: comments,
+        }
+      });
+    }
+  }
+
+  const onDeleteTestRecord = (recordId) => {
+    if( testType.indexOf('1-') > -1 ) {
+      deleteOwnTestRecord({
+        variables: {
+          memberId: memberId,
+          testId: recordId,
+        }
+      })
+    } else {
+      deleteTestRecord({
+        variables: {
+          memberId: memberId,
+          testId: recordId,
+        }
+      })
+    }
+  }
+
+  const onGenerateTestPdf = (testId) => {
+    generateTestPdf({
+      variables: {
+        testId: testId,
+      }
+    })
+  }
+
+  const [sendingTest, setSendingTest] = useState(false);
+  useEffect(() => {
+    if( !sendTestLoading && sendingTest ) {
+      setSendingTest(false);
+      setSnackbarMessage("Test erfolgreich gesendet !")
+      toggleSnackbar();
+    }
+    if( !sendTestLoading && sendTestError ) {
+      setSendingTest(false);
+      setSnackbarMessage("Test könnte nicht gesendet werden !")
+      toggleSnackbar();
+    }
+  }, [sendTestLoading, sendTestError]);
+  const onSendTest = (testId) => {
+    setSendingTest(true);
+    sendTest({
+      variables: {
+        testId: testId,
+      }
+    })
+  }
+
+  const {first_name, last_name, id} = member ? member : {};
+
+  return (
+    <Scene
+      commandsLeft={getCommandsLeft()}
+      commandsRight={getCommandsRight()}
+      headerChildren={
+        <TestHeader
+          t={t}
+          userId={id}
+          firstName={first_name}
+          lastName={last_name}
+          testName={extractTestName( member, testType )}
+          creatorFullName={extractCreatorFullName(member, testType, testId)}
+          editable={extractTestEditable(member, testType, testId)}
+        />
+      }
+      t={t}
+    >
+      <Test
+        t={t}
+        testId={testId}
+        test={testData}
+        testType={testType}
+
+        editable={testEditable}
+
+        onSaveTestItem={onSaveTestItem}
+        saveTestResultsLoading={saveTestResultsError}
+        saveTestResultsError={saveTestResultsError}
+
+        onDeleteTestRecord={onDeleteTestRecord}
+        deleteTestRecordLoading={deleteTestRecordLoading || deleteOwnTestRecordLoading}
+        deleteTestRecordError={deleteTestRecordError || deleteOwnTestRecordError}
+
+        onSaveTestComments={onSaveTestComments}
+        saveTestCommentsLoading={saveTestCommentsLoading || saveOwnTestCommentsLoading}
+        saveTestCommentsError={saveTestCommentsError || saveOwnTestCommentsError}
+
+        open={open}
+        handleClose={handleClose}
+
+        goBack={goBack}
+      />
+
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={toggleSnackbar}
+      >
+        <MuiAlert onClose={toggleSnackbar} severity="warning" variant="filled">
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
+
+    </Scene>
+  )
+}
+
+const PanelWithData = ({memberId, testId, testType, goBack}) => {
+  const TestData = withData(Panel, {memberId, testId, testType, goBack});
+  return <TestData/>
+}
+
+export default PanelWithData;

@@ -1,10 +1,19 @@
 import React from "react";
+import Router from 'next/router';
 import { withAuthSync } from '../lib/auth'
 import TestScreen from "../src/screens/test"
 
 function Test({memberId, testType, testId}) {
+
+  const goBack = () => Router.back()
+
   return (
-    <TestScreen  memberId={memberId} testType={testType} testId={testId}></TestScreen>
+    <TestScreen
+      memberId={memberId}
+      testType={testType}
+      testId={testId}
+      goBack={goBack}
+    />
   );
 }
 

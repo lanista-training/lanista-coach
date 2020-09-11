@@ -1,40 +1,51 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import _ from 'lodash';
 import moment from "moment";
 import Router from 'next/router';
-import { Mutation } from "react-apollo";
+import { useMutation } from '@apollo/react-hooks';
+import { withApollo } from '../../lib/apollo';
 import Scene from "../../components/Scene";
 import Forgotpassword from './Forgotpassword';
 import { SENDPASSWORDRESET } from "../../mutations";
 
-class ForgotpasswordWithData extends Component {
+const Panel = ({goBack}) => {
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      processing: false,
-      translations: [],
-      currentLanguage: 'de',
-      availableLanguages: ['en', 'de', 'es', 'pt', 'ru', 'fr'],
-      emailIsValid: true,
-    };
-    this.goBack = this.goBack.bind(this);
-    this.t = this.t.bind(this);
-    this.onChangeLanguage = this.onChangeLanguage.bind(this);
-    this.validateEmail = this.validateEmail.bind(this);
-    this.handleEmailChange = this.handleEmailChange.bind(this);
-  };
-
-  componentDidMount() {
-    this.onChangeLanguage("de");
+  //
+  // Translation variables and routines
+  //
+  const [translations, setTranslations] = React.useState([]);
+  const [currentLanguage, setCurrentLanguage] = React.useState('de');
+  const [availableLanguages, setAvailableLanguages] = React.useState(['en', 'de', 'es', 'pt', 'ru', 'fr']);
+  useEffect(() => {
+    onChangeLanguage("de");
+  }, []);
+  const t = (text) => {
+    const textWithoutNamespace = text.split(":");
+    const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
+    return (translation ? translation : text);
+  }
+  const onChangeLanguage = ( language ) => {
+    const domainTranslations = require('../../../static/locales/' + language + '/login');
+    const commonTranslations = require('../../../static/locales/' + language + '/common');
+    const originalLanguages = ['en', 'de', 'es', 'fr', 'pt', 'ru'];
+    setTranslations({...domainTranslations, ...commonTranslations});
+    setCurrentLanguage(language);
+    setAvailableLanguages(originalLanguages.filter(word => word !== language));
   }
 
-  goBack() {
-    Router.back();
-  }
+  //
+  // Component variables
+  //
+  const [email, setEmail] = useState(null);
+  const [emailIsValid, setEmailIsValid] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
-  getCommandsRight() {
+  //
+  // Mutation
+  //
+  const [sendpasswordreset, { loading, data, error, networkStatus }] = useMutation(SENDPASSWORDRESET);
+
+  const getCommandsRight = () => {
     return ([{
           icon: 'icon-create-workout',
           text: 'new user',
@@ -75,7 +86,7 @@ class ForgotpasswordWithData extends Component {
   }
 
 
-  getCommandsLeft() {
+  const getCommandsLeft = () => {
     return ([{
           //icon: CustomerIcon,
           icon: 'icon-back',
@@ -84,7 +95,7 @@ class ForgotpasswordWithData extends Component {
           typex: 'Ionicons',
           name: 'back',
           onTap: () => {
-            this.goBack();
+            goBack();
           }
       }, {
           //icon: CustomerIcon,
@@ -109,98 +120,49 @@ class ForgotpasswordWithData extends Component {
       }]);
   }
 
-  t(text) {
-    const {translations} = this.state;
-    const textWithoutNamespace = text.split(":");
-    const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
-    return (translation ? translation : text);
-  }
-
-  validateEmail(callback) {
-    const {email} = this.state;
+  const validateEmail = () => {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    console.log("validateEmail")
-    console.log(email)
     // data validation
     if( email == "" || email === undefined ) {
-      this.setState({
-        emailIsValid: false,
-        errorMessage: this.t("login:email_empty"),
-      });
+      setEmailIsValid(false);
+      setErrorMessage(t("login:email_empty"));
     } else if( !re.test(email) ) {
-      this.setState({
-        emailIsValid: false,
-        errorMessage: this.t("login:email_invalid"),
-      });
+      setEmailIsValid(false);
+      setErrorMessage(t("login:email_invalid"));
     } else {
-      callback();
+      sendpasswordreset({ variables: { email: email } });
     }
   }
 
-  onChangeLanguage( language ) {
-    const translations = require('../../../static/locales/' + language + '/login');
-    const commonTranslations = require('../../../static/locales/' + language + '/common');
-    const originalLanguages = ['en', 'de', 'es', 'fr'];
-
-    this.setState({
-      translations: {...translations, ...commonTranslations},
-      currentLanguage: language,
-      availableLanguages: originalLanguages.filter(word => word !== language),
-    });
-  }
-
-  handleEmailChange(event){
+  const handleEmailChange = (event) => {
     if (typeof event === 'string' ) {
-      this.setState({
-        email: event,
-        emailIsValid: null,
-        errorMessage: null,
-      });
+      setEmail(event);
+      setEmailIsValid(null);
+      setErrorMessage(null);
     } else {
-      this.setState({
-        email: event.target.value,
-        emailIsValid: null,
-        errorMessage: null,
-      });
+      setEmail(event.target.value);
+      setEmailIsValid(null);
+      setErrorMessage(null);
     }
   }
 
-  render() {
-    const {
-      availableLanguages,
-      currentLanguage,
-      email, errorMessage,
-      emailIsValid,
-    } = this.state;
+  const errorCode = error && (error.message.indexOf(": ") > -1 ? error.message.split(': ')[1] : error.message);
 
-    return(
-      <Mutation
-        mutation={SENDPASSWORDRESET}
-        notifyOnNetworkStatusChange
-        variables={{ email: email }}
-      >
-        {(sendpasswordreset, { loading, data, error, networkStatus }) => {
-          const errorCode = error && (error.message.indexOf(": ") > -1 ? error.message.split(': ')[1] : error.message);
-          console.log('passwordresetsuccessfull')
-          console.log( data && data.sendpasswordreset && data.sendpasswordreset == "PASSWORDRESETSENT")
-          return (
-            <Forgotpassword
-              customer={data && data.member ? data.member : {}}
-              languages={availableLanguages}
-              currentLanguage={currentLanguage}
-              goBack={this.goBack}
-              onSendpasswordreset={() => this.validateEmail(sendpasswordreset)}
-              errorMessage={errorMessage || ( errorCode && this.t(errorCode))}
-              emailIsValid={emailIsValid}
-              handleEmailChange={this.handleEmailChange}
-              passwordresetsuccessfull={(data && data.sendpasswordreset && data.sendpasswordreset == "PASSWORDRESETSENT")}
-              t={this.t}
-            />
-          )
-        }}
-      </Mutation>
-    )
-  }
+  return (
+    <Forgotpassword
+      customer={data && data.member ? data.member : {}}
+      languages={availableLanguages}
+      currentLanguage={currentLanguage}
+      goBack={goBack}
+      onSendpasswordreset={validateEmail}
+      errorMessage={errorMessage || ( errorCode && t(errorCode))}
+      emailIsValid={emailIsValid}
+      handleEmailChange={handleEmailChange}
+      passwordresetsuccessfull={(data && data.sendpasswordreset && data.sendpasswordreset == "PASSWORDRESETSENT")}
+      t={t}
+    />
+  )
+
 }
 
-export default ForgotpasswordWithData;
+export default withApollo(Panel);

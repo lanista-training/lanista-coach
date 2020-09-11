@@ -6,20 +6,20 @@ const StyledWidget = styled.div`
   background-color: white;
   border: 1px solid rgba(0,0,0,.0975);
   box-shadow: 0 0 27px 0 #0000001f;
-  border-radius: 5px;
-  max-width: 250px;
-  min-width: 250px;
+  border-radius: 15px;
+  max-width: 270px;
+  min-width: 270px;
   display: flex;
   flex-flow: column;
   margin-top: 1.5em;
   .widget-title {
     flex: 1;
-    padding: 5px 0px 5px 0px;
+    padding: 15px 0px 15px 0px;
     text-align: center;
-    border-bottom: 1px solid rgba(0,0,0,.0975);
+    -webkit-font-smoothing: antialiased;
   }
   .widget-content {
-    height: 11.5em;
+    height: 14em;
     padding: 0 0.5em;
     overflow: scroll;
     ::-webkit-scrollbar {
@@ -27,9 +27,9 @@ const StyledWidget = styled.div`
     }
     .list-item {
       padding: 0.5em;
-      border-bottom: 1px dotted rgba(0,0,0,.0975);
       display: flex;
       width: 100%;
+      cursor: pointer;
       .member {
         flex: 1;
         display: flex;
@@ -53,9 +53,12 @@ const StyledWidget = styled.div`
       .member-name{
         padding-top: 0.5em;
         padding-left: 0.5em;
+        font-weight: 900;
       }
       .target-date {
         padding-top: 0.5em;
+        font-size: 0.9em;
+        margin-right: 10px;
       }
     }
     .empty-list{
@@ -65,7 +68,14 @@ const StyledWidget = styled.div`
   }
 `;
 
-export default function({t, data, loading, error, title}) {
+export default function({
+  t,
+  data,
+  loading,
+  error,
+  title,
+  openMember,
+}) {
   return (
     <StyledWidget>
       <div className="widget-title">
@@ -79,7 +89,7 @@ export default function({t, data, loading, error, title}) {
         }
         {
           data && data.incomingEvents && data.incomingEvents.data.map( item => (
-            <div className="list-item">
+            <div key={item.id} className="list-item" onClick={() => openMember(item.member.id)}>
               <div className="member">
                 <div className="member-image"
                   style={{backgroundImage: 'url("' + item.member.photoUrl + '")',}}
@@ -89,7 +99,7 @@ export default function({t, data, loading, error, title}) {
                   {item.member.first_name} {item.member.last_name}
                 </div>
               </div>
-              <div className="target-date">{moment(parseInt(item.target_date)).format("DD.MM.YYYY")}</div>
+              <div className="target-date">{moment(parseInt(item.target_date)).format("DD.MMMM")}</div>
             </div>
           ))
         }

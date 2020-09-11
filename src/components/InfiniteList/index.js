@@ -21,10 +21,10 @@ export default class InfiniteScroll extends Component {
 
     if( initialLoading !== prevProps.initialLoading ){
       if ( initialLoading ) {
-        console.log('=============== initialLoading started ===============')
+        //console.log('=============== initialLoading started ===============')
         document.getElementById("infinte-list-wrapper").scrollTo({ top: 0 })
       } else {
-        console.log('=============== initialLoading finished ===============')
+        //console.log('=============== initialLoading finished ===============')
         if( hasMore ){
           this.calculatePageSize();
         }
@@ -33,9 +33,9 @@ export default class InfiniteScroll extends Component {
 
     if( !initialLoading && loading !== prevProps.loading ){
       if ( loading ) {
-        console.log('=============== loading started ===============')
+        //console.log('=============== loading started ===============')
       } else {
-        console.log('=============== loading finished ===============')
+        //console.log('=============== loading finished ===============')
         if( !hasMore && !hasMoreUp ) {
           this.detachScrollListener();
         }
@@ -47,7 +47,6 @@ export default class InfiniteScroll extends Component {
   attachScrollListener() {
     let scrollEl = document.getElementById("infinte-list-wrapper");
     if (!this.props.hasMore || !scrollEl) {
-      console.log("NO ATTACHING")
       return;
     }
     scrollEl.addEventListener(
@@ -106,7 +105,7 @@ export default class InfiniteScroll extends Component {
   }
 
   loadMore() {
-    console.log('=============== loadMore ===============')
+    //console.log('=============== loadMore ===============')
     const {loadMore} = this.props
     loadMore()
   }
@@ -121,7 +120,12 @@ export default class InfiniteScroll extends Component {
       initialLoading,
       listClass,
     } = this.props;
+
     const childrenArray = [children];
+
+    //console.log("childrenArray")
+    //console.log(childrenArray)
+
     if( initialLoading ) {
       return React.createElement('div', props, initialLoading);
     } else {

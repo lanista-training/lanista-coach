@@ -9,6 +9,11 @@ const Panel = styled.div`
   bottom: 10px;
   right: 150px;
   z-index: 20;
+  .wrappe {
+    max-width: 800px;
+    margin-right: auto;
+    margin-left: auto;
+  }
   .slick-slider {
     position: relative;
     display: block;
@@ -22,6 +27,7 @@ const Panel = styled.div`
     -ms-touch-action: pan-y;
         touch-action: pan-y;
     -webkit-tap-highlight-color: transparent;
+    min-height: 64px;
     .step{
       width: 2.086956em;
       height: 2.086956em;
@@ -170,7 +176,7 @@ function SamplePrevArrow({ onClick }) {
   );
 }
 
-export default ({data}) => {
+export default ({data, style, goToExercise}) => {
   const settings = {
     speed: 500,
     slidesToShow: 5,
@@ -183,18 +189,20 @@ export default ({data}) => {
   };
   const exercises = []
   data.map(exercise => exercises.push(
-    <Exercise>
+    <Exercise key={"recommendation-" + exercise.id} onClick={() => goToExercise(exercise.id)}>
       <div className="images-section">
-        <div className="start-image" style={{backgroundImage: 'url(' + exercise.start_image + ')'}}/>
-        <div className="end-image" style={{backgroundImage: 'url(' + exercise.end_image + ')'}}/>
+        <div className="start-image" style={{backgroundImage: 'url(' + exercise.end_image + ')'}}/>
+        <div className="end-image" style={{backgroundImage: 'url(' + exercise.start_image + ')'}}/>
       </div>
     </Exercise>
   ))
   return (
-    <Panel>
-      <Slider {...settings}>
-        {exercises}
-      </Slider>
+    <Panel style={style}>
+      <div className="wrappe">
+        <Slider {...settings}>
+          {exercises}
+        </Slider>
+      </div>
     </Panel>
   )
 };

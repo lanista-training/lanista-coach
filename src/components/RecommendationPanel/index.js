@@ -1,10 +1,11 @@
+import React from 'react';
 import RecommendationPanel from './RecommendationPanel';
 import { Query } from "react-apollo"
 import { RECOMMENDATION } from "../../queries";
-import { withApollo } from '../../../lib/apollo'
+import { withApollo } from '../../lib/apollo'
 import { useQuery } from '@apollo/react-hooks'
 
-const Panel = function({exerciseId, closePanel, visible}) {
+const Panel = function({exerciseId, closePanel, visible, style, goToExercise}) {
 
   const { loading, error, data, fetchMore, networkStatus } = useQuery(
     RECOMMENDATION,
@@ -20,6 +21,8 @@ const Panel = function({exerciseId, closePanel, visible}) {
     data={data && data.recommendExercise ? data.recommendExercise : []}
     loading={loading}
     error={error}
+    style={style}
+    goToExercise={goToExercise}
   />)
 
 }

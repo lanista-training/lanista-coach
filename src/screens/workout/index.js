@@ -1,117 +1,498 @@
-import React, { Component } from 'react';
-import _ from 'lodash';
-import moment from "moment";
-import Router from 'next/router';
-import { withApollo } from '../../../lib/apollo'
-import { useMutation, useQuery } from '@apollo/react-hooks';
-import Scene from "../../components/Scene";
-import Workout from './Workout';
-import WorkoutHeader from "../../components/WorkoutHeader";
-import { WORKOUT } from "../../queries";
+import React, { Component } from 'react'
+import _ from 'lodash'
+import moment from "moment"
+import arrayMove from 'array-move'
+//import Router from 'next/router';
 
-const Panel = ({workoutId}) => {
-  const { loading, error, data } = useQuery(WORKOUT, {variables: {
-    workoutId: workoutId,
-  }});
-  return (
-    <WorkoutWithData
-      loading={loading}
-      data={data}
-      error={error}
-    />
-  )
-}
+import { withApollo } from '../../lib/apollo'
+import { useMutation, useQuery } from '@apollo/react-hooks'
+import gql from "graphql-tag";
 
-class WorkoutWithData extends Component {
+import Scene from "../../components/Scene"
+import Workout from './Workout'
+import WorkoutHeader from "../../components/WorkoutHeader"
+import { WORKOUT, MEMBER, WORKOUTS, ME } from "../../queries"
+import {
+  CHANGESPLITORDER,
+  DELETEPLAN,
+  APPLYSETTINGSTOPLAN,
+  UPDATEPLAN,
+  GENERATEPLANPDF,
+  SENDPLAN,
+  CLONEPLAN,
+  DELETESPLIT,
+  SHIFTPLITRIGHT,
+  SHIFTPLITLEFT,
+  DUPLICATESPLIT,
+} from "../../mutations";
+import {StyledDrawer} from './styles';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import TextField from '@material-ui/core/TextField';
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      processing: false,
-      translations: [],
-    };
-    this.goBack = this.goBack.bind(this);
-    this.t = this.t.bind(this);
-    this.onChangeLanguage = this.onChangeLanguage.bind(this);
-    this.showExercise = this.showExercise.bind(this);
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import MuiAlert from '@material-ui/lab/Alert';
+
+import DefaultSettingsPanel from '../../components/DefaultSettingsPanel';
+import WorkoutEditPanel from '../../components/WorkoutEditPanel';
+import PrintPlanPanel from '../../components/PrintPlanPanel';
+import SendPlanPanel from '../../components/SendPlanPanel';
+
+import Help from '../../components/icons/Help';
+import Tools from '../../components/icons/Tools';
+import Back from '../../components/icons/Back';
+import Plus from '../../components/icons/Plus';
+import Settings from '../../components/icons/Settings';
+import Export from '../../components/icons/Export';
+import Edit from '../../components/icons/Edit';
+
+const GET_DEFAULTSETTINGS = gql`
+  {
+    defaultSettings @client {
+      sets
+      unit
+      execution
+    }
+  }
+`;
+
+const CURRENTTAB = gql`
+  {
+    currentTab @client
+  }
+`;
+
+const Panel = ({workoutId, goBack, goToExercises, goToRoot, goToWorkouts, goToExercise, goToCustomers}) => {
+
+  const [openSnackbar, setOpenSnackbar] = React.useState(false);
+  const [snackbarMessage, setSnackbarMessage] = React.useState('');
+  const toggleSnackbar = () => setOpenSnackbar(!openSnackbar);
+
+  const [defaultSettingsDrawerOpen, setDefaultSettingsDrawerOpen] = React.useState(false);
+  const toggleDefaultSettingsDrawer = () => setDefaultSettingsDrawerOpen(!defaultSettingsDrawerOpen);
+
+  const [shareDrawerOpen, setShareDrawerOpen] = React.useState(false);
+  const toggleSharesDrawer = () => setShareDrawerOpen(!shareDrawerOpen);
+
+  const [optionsDrawerOpen, setOptionsDrawerOpen] = React.useState(false);
+  const toggleOptionsDrawer = () => setOptionsDrawerOpen(!optionsDrawerOpen);
+
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const toggleDialogOpen = () => setDialogOpen(!dialogOpen);
+
+  const [applySettingsDialogOpen, setApplySettingsDialogOpen] = React.useState(false);
+  const toggleApplySettingsDialogOpen = () => setApplySettingsDialogOpen(!applySettingsDialogOpen);
+
+  const [defaultSettingsOpen, setDefaultSettingsOpen] = React.useState(false);
+  const toggleDefaultSettingsOpen = () => setDefaultSettingsOpen(!defaultSettingsOpen);
+
+  const [printPanelOpen, setPrintPanelOpen] = React.useState(false);
+  const [sendPanelOpen, setSendPanelOpen] = React.useState(false);
+  const togglePrintPanelOpen = () => setPrintPanelOpen(!printPanelOpen);
+  const toggleSendPanelOpen = () => setSendPanelOpen(!sendPanelOpen);
+  const [printType, setPrintType] = React.useState(0);
+
+  const [workoutEditOpen, setWorkoutEditOpen] = React.useState(false);
+  const toggleWorkoutEditOpen = () => setWorkoutEditOpen(!workoutEditOpen);
+
+
+  //
+  // Queries
+  //
+  const { loading, error, data, refetch, networkStatus } = useQuery(WORKOUT, {
+    variables: {
+      workoutId: workoutId,
+    },
+    fetchPolicy: "cache-and-network",
+    notifyOnNetworkStatusChange: true,
+  });
+  const { data:meData } = useQuery(ME);
+  const {me} = meData ? meData : {me: {}}
+  //
+  // Local state
+  //
+  const initialValues = {
+    sets: 3,
+    unit: 0,
+    execution: 8,
   };
+  const { data: defaultSettingsData, client } = useQuery(GET_DEFAULTSETTINGS);
+  const defaultSettings = defaultSettingsData && defaultSettingsData.defaultSettings ? defaultSettingsData.defaultSettings : initialValues;
+  if( !(defaultSettingsData && defaultSettingsData.defaultSettings) ) {
+    client.writeData({
+      data: { defaultSettings: {__typename: 'defaultSettings', ...initialValues} }
+    });
+  }
+  const setDefaultSettings = (settings) => client.writeData({
+    data: { defaultSettings: {__typename: 'defaultSettings', ...settings} }
+  });
 
-  componentDidMount() {
-    this.onChangeLanguage("de");
+  //
+  //
+  //
+  const [workout, setWorkout] = React.useState([]);
+  const [translations, setTranslations] = React.useState([]);
+  const [currenLanguage, setCurrentLanguage] = React.useState('');
+  const [availableLanguages, setAvailableLanguages] = React.useState([]);
+  const [workoutChanged, setWorkoutChanged] = React.useState(false);
+
+  const { data: currentTab } = useQuery(CURRENTTAB);
+  const activeSplitIndex = (currentTab && currentTab.currentTab) ? currentTab.currentTab : 0;
+  const setActiveSplitIndex = (tabIndex) => client.writeData({ data: { currentTab: tabIndex } });
+
+  const [changeSplitOder, { loading: mutationLoading, error: mutationError }] = useMutation(
+    CHANGESPLITORDER,
+    {
+      update(cache,  { data: { changeSplitOder } }) {
+        refetch();
+      }
+    }
+  );
+
+  const [deleteSplit, { loading: deleteSplitLoading, error: deleteSplitError }] = useMutation(
+    DELETESPLIT,
+    {
+      update(cache,  { data: { deleteSplit } }) {
+        const {split} = deleteSplit;
+        if(split) {
+          setActiveSplitIndex(activeSplitIndex-1);
+        }
+        refetch();
+      }
+    }
+  );
+
+  const [shiftSplitRight, { loading: shiftSplitRightLoading, error: shiftSplitRightError }] = useMutation(
+    SHIFTPLITRIGHT,
+    {
+      update(cache,  { data: { shiftSplitRight } }) {
+        let {workout} = cache.readQuery({
+          query: WORKOUT,
+          variables: {
+            workoutId: workoutId,
+          },
+        });
+        const {splits} = workout;
+        const newSplits = arrayMove(splits, shiftSplitRight.split-1, shiftSplitRight.split)
+        newSplits.map((split, index) => {
+          split.id = index + 1;
+          split.name = (index + 1) + '';
+        })
+        workout.splits = newSplits;
+        cache.writeQuery({
+          query: WORKOUT,
+          variables: {
+            workoutId: workoutId,
+          },
+          data: { workout: workout },
+        });
+        setActiveSplitIndex(shiftSplitRight.split);
+      }
+    }
+  );
+
+  const [shiftSplitLeft, { loading: shiftSplitLeftLoading, error: shiftSplitLeftError }] = useMutation(
+    SHIFTPLITLEFT,
+    {
+      update(cache,  { data: { shiftSplitLeft } }) {
+        let {workout} = cache.readQuery({
+          query: WORKOUT,
+          variables: {
+            workoutId: workoutId,
+          },
+        });
+        const {splits} = workout;
+        const newSplits = arrayMove(splits, shiftSplitLeft.split-1, shiftSplitLeft.split - 2);
+        newSplits.map((split, index) => {
+          split.id = index + 1;
+          split.name = (index + 1) + '';
+        })
+        workout.splits = newSplits;
+        cache.writeQuery({
+          query: WORKOUT,
+          variables: {
+            workoutId: workoutId,
+          },
+          data: { workout: workout },
+        });
+        setActiveSplitIndex(shiftSplitLeft.split-2);
+      }
+    }
+  );
+
+  const [duplicateSplit, { loading: duplicateSplitLoading, error: duplicateSplitError }] = useMutation(
+    DUPLICATESPLIT,
+    {
+      update(cache,  { data: { duplicateSplit } }) {
+        refetch();
+        setTimeout(() => setActiveSplitIndex(duplicateSplit.split - 1), 300);
+      }
+    }
+  );
+
+  const [applySettingsToPlan, { loading: applySettingsLoading, error: applySettingsError }] = useMutation(
+    APPLYSETTINGSTOPLAN,
+    {
+      update(cache,  { data: { applySettingsToPlan } }) {
+        refetch();
+      }
+    }
+  );
+
+  const [deletePlan, { loading: deleteLoading, error: deleteError }] = useMutation(
+    DELETEPLAN,
+    {
+      update(cache,  { data: { deletePlan } }) {
+        if(deletePlan.template) {
+          const {workouts} = cache.readQuery({
+            query: WORKOUTS,
+            variables: {
+              filter: '',
+            }
+          });
+          const indexOfWorkout = workouts.findIndex((workout) => workout.id == deletePlan.id);
+          let newWorkouts = [...workouts];
+          newWorkouts.splice(indexOfWorkout, 1);
+          cache.writeQuery({
+            query: WORKOUTS,
+            variables: {
+              filter: '',
+            },
+            data: { workouts: [...newWorkouts] },
+          });
+        }
+        goBack();
+      }
+    }
+  );
+
+  const [generatePlanPdf, { loading: generateplanpdfLoading, error: generateplanpdfError }] = useMutation(
+    GENERATEPLANPDF,
+    {
+      update(cache,  { data: { generatePlanPdf } }) {
+        window.open(generatePlanPdf.filename,'_blank');
+        togglePrintPanelOpen();
+      }
+    }
+  );
+
+  const [sendPlan, { loading: sendplanLoading, error: sendplanfError }] = useMutation(
+    SENDPLAN,
+    {
+      update(cache,  { data: { sendPlan } }) {
+        toggleSendPanelOpen();
+        setSnackbarMessage("Plan erfolgreich gesendet !")
+        toggleSnackbar();
+      }
+    }
+  );
+
+  const [updatePlan, { loading: updateLoading, error: updateError }] = useMutation(
+    UPDATEPLAN,
+    {
+      update(cache,  { data: { updatePlan } }) {
+        let {workout} = cache.readQuery({
+          query: WORKOUT,
+          variables: {
+            workoutId: workoutId,
+          },
+        });
+        workout.name = updatePlan.name;
+        workout.description = updatePlan.description;
+        workout.duration = updatePlan.duration;
+        cache.writeQuery({
+          query: WORKOUT,
+          variables: {
+            workoutId: workoutId,
+          },
+          data: { workout: workout },
+        });
+      }
+    }
+  );
+
+  const [clonePlan, { loading: clonePlanLoading, error: clonePlanError }] = useMutation(
+    CLONEPLAN,
+    {
+      update(cache,  { data: {clonePlan} }) {
+        const {id} = clonePlan;
+        if( id > 0 ) {
+          localStorage.setItem('openplan', id);
+          goToRoot();
+          goToWorkouts();
+          /*
+          Router.push({
+            pathname: '/'
+          }).then(() => {
+            Router.push({
+              pathname: '/workouts'
+            });
+          });
+          */
+        }
+
+      }
+    }
+  );
+
+  React.useEffect(() => {
+    onChangeLanguage("de");
+  }, []);
+
+  React.useEffect(() => {
+    const {workout} = data ? data : {}
+    setWorkout(workout);
+    if( workout && workout.splits && workout.splits.length == 1 && workout.splits[0].exercises.length == 0 ) {
+      changeDefaultSettings();
+    }
+  }, [data]);
+
+  const getCommandsRight = () =>  {
+    let rightCommand = [];
+    if( (workout && !workout.template) || (workout && me.id == workout.creator_id) ) {
+      rightCommand.push(
+        {
+          icon: <Plus/>,
+          name: 'add-exercises',
+          text: t('add exercise'),
+          onTap: () => {
+            goToExercises(workout.id, activeSplitIndex+1, true);
+            /*
+            Router.push({
+              pathname: '/exercises',
+              query: {
+                editmode: true,
+                workout: workout.id,
+                split: activeSplitIndex+1,
+              }
+            });
+            */
+          }
+        },
+      );
+      rightCommand.push(
+        {
+          icon: <Settings/>,
+          text: t("default values"),
+          name: 'default-values',
+          onTap: () => {
+            toggleDefaultSettingsDrawer();
+          }
+        }
+      );
+    }
+    rightCommand.push(
+      {
+        icon: <Export/>,
+        name: 'export-plan',
+        text: t('export'),
+        onTap: () => {
+          toggleSharesDrawer();
+        }
+      }
+    );
+    if( (workout && !workout.template )|| (workout && me.id == workout.creator_id)) {
+      rightCommand.push(
+        {
+          icon: <Edit/>,
+          text: t('edit'),
+          name: 'change-plan',
+          onTap: () => {
+            toggleOptionsDrawer();
+          }
+        }
+      );
+    }
+    return rightCommand;
   }
 
-  goBack() {
-    Router.back();
-  }
-
-  getCommandsRight() {
+  const getCommandsLeft = () => {
     return ([{
-      icon: 'icon-create-protocoll',
-      text: 'folder',
-      type: 'type-1',
-      typex: 'Ionicons',
-      name: 'folder',
-      onTap: () => {
-        console.log("Create Protocoll");
-      }
+        icon: <Back/>,
+        iosname: 'tools-inactive',
+        text: '',
+        type: 'type-1',
+        typex: 'Ionicons',
+        name: 'back',
+        style: {color: '#34acfb'},
+        onTap: () => {
+          setActiveSplitIndex(0);
+          goBack();
+        }
     }]);
+
   }
 
-
-  getCommandsLeft() {
-    return ([{
-      //icon: CustomerIcon,
-      icon: 'icon-back',
-      text: 'Back',
-      type: 'type-1',
-      typex: 'Ionicons',
-      name: 'back',
-      onTap: () => {
-        this.goBack();
-      }
-    }, {
-      //icon: CustomerIcon,
-      icon: 'icon-tools-inactive',
-      text: 'Setting',
-      type: 'type-1',
-      typex: 'Ionicons',
-      name: 'settings',
-      onTap: () => {
-        console.log("Command Settings");
-      }
-    }, {
-      //icon: HelpIcon,
-      icon: 'icon-help-inactive',
-      text: 'Help',
-      type: 'type-1',
-      typex: 'Ionicons',
-      name: 'help-circle',
-      onTap: () => {
-        console.log("Command Help");
-      }
-    }]);
-  }
-
-  t(text) {
-    const {translations} = this.state;
+  const t = (text) => {
     const textWithoutNamespace = text.split(":");
     const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
     return (translation ? translation : text);
   }
 
-  onChangeLanguage( language ) {
-    const translations = require('../../../static/locales/' + language + '/workout');
+  const revertChanges = () => {
+    setWorkoutChanged(false)
+    setWorkout(data.workout)
+  }
+
+  const saveSplit = (splitId) => {
+    changeSplitOder({
+      variables: {
+        planId: workout.id,
+        split: parseInt(splitId),
+        newOrder: workout.splits[splitId-1].exercises.map(execution => parseInt(execution.id)),
+      },
+    })
+  }
+
+  const onDeleteExercise = (executionId) => {
+    // 1. Search for the split
+    let splitIndex = -1;
+    let executionIndex = -1;
+    workout.splits.map((split, index) => {
+      let i = split.exercises.findIndex((execution => execution.id == executionId));
+      if(i > -1) {
+        executionIndex = i;
+        splitIndex = index;
+      }
+    })
+    if( splitIndex > -1 && executionIndex > -1) {
+      workout.splits[splitIndex].exercises.splice(executionIndex, 1);
+      setWorkout({...workout});
+      saveSplit(splitIndex + 1);
+    }
+  }
+
+  const onChangeExerciseOrder = (splitIndex, oldIndex, newIndex) => {
+    if( oldIndex !== newIndex ) {
+      workout.splits[splitIndex-1].exercises = arrayMove(workout.splits[splitIndex-1].exercises, oldIndex, newIndex)
+      setWorkout({...workout});
+      saveSplit(splitIndex);
+    }
+  }
+
+  const onChangeLanguage = ( language ) => {
+    const domailTranslations = require('../../../static/locales/' + language + '/workout');
     const commonTranslations = require('../../../static/locales/' + language + '/common');
     const originalLanguages = ['en', 'de', 'es', 'fr'];
 
-    this.setState({
-      translations: {...translations, ...commonTranslations},
-      currentLanguage: language,
-      availableLanguages: originalLanguages.filter(word => word !== language)
-    });
+    setTranslations({...domailTranslations, ...commonTranslations});
+    setCurrentLanguage(language);
+    setAvailableLanguages(originalLanguages.filter(word => word !== language));
   }
 
-  showExercise(exerciseId, memberId, planexerciseId) {
+  const showExercise = (exerciseId, memberId, planexerciseId) => {
+    console.log("showExercise", exerciseId, memberId, planexerciseId)
+    goToExercise(exerciseId, memberId, planexerciseId);
+    /*
     Router.push({
       pathname: '/exercise',
       query: {
@@ -120,32 +501,388 @@ class WorkoutWithData extends Component {
         planexercise: planexerciseId
       }
     });
+    */
   }
 
-  render() {
-    const {processing} = this.state;
-    const {loading, error, data} = this.props;
-    return (
-      <Scene
-        commandsLeft={this.getCommandsLeft()}
-        commandsRight={this.getCommandsRight()}
-        processing={processing}
-        headerChildren={
-          <WorkoutHeader
-            title={data && data.workout ? data.workout.name : ''}
-            subtitle={data && data.workout ? ('Planduar: ' + data.workout.duration + ' Wochen') : ''}
-          />
-        }
-        t={this.t}
-      >
-        <Workout
-          workout={data && data.workout ? data.workout : undefined}
-          t={this.t}
-          onShowExercise={this.showExercise}
-        />
-      </Scene>
-    )
+  const saveWorkout = ({name, description, duration}) => {
+    updatePlan({
+      variables: {
+        planId: workoutId,
+        name: name,
+        description: description,
+        duration: duration,
+      }
+    })
   }
+
+  const changeDefaultSettings = () => {
+    toggleDefaultSettingsOpen();
+  }
+
+  const applyDefaultSettings = () => {
+    toggleApplySettingsDialogOpen();
+  }
+
+  const changePlan = () => {
+    toggleWorkoutEditOpen();
+  }
+
+  const onDeletePlan = () => {
+    toggleDialogOpen();
+  }
+
+  const onPrintPlan = () => {
+    togglePrintPanelOpen();
+  }
+
+  const printPlan = () => {
+    generatePlanPdf({
+      variables: {
+        planId: workoutId,
+        langauge: 'DE',
+        printType: printType,
+      }
+    })
+  }
+
+  const onSendPlan = () => {
+    sendPlan({
+      variables: {
+        planId: workoutId,
+        langauge: 'DE',
+        printType: printType,
+      }
+    })
+  }
+
+  const emailPlan = () => {
+    toggleSendPanelOpen();
+  }
+
+  const assignPlan = () => {
+    goToCustomers();
+    /*
+    Router.replace({
+      pathname: '/customers',
+      query: { workout: workoutId }
+    });
+    */
+  }
+
+  const createTemplate = () => {
+    clonePlan({
+      variables: {
+        planId: workoutId,
+      }
+    });
+  }
+
+  const createSplit = () => {
+    const {splits} = workout;
+    splits.push({
+      id: splits.length + 1,
+      name: (splits.length + 1) + '',
+      exercises: [],
+    })
+    setWorkout({...workout, splits});
+  }
+
+  const onDeleteSplit = () => {
+    deleteSplit({
+      variables: {
+        planId: workoutId,
+        split: activeSplitIndex + 1,
+      }
+    })
+  }
+
+  const onCopySplit = () => {
+    duplicateSplit({
+      variables: {
+        planId: workoutId,
+        split: activeSplitIndex + 1,
+      }
+    })
+  }
+
+  const onShiftSplitRight = () => {
+    shiftSplitRight({
+      variables: {
+        planId: workoutId,
+        split: activeSplitIndex + 1,
+      }
+    })
+  }
+
+  const onShiftSplitLeft = () => {
+    shiftSplitLeft({
+      variables: {
+        planId: workoutId,
+        split: activeSplitIndex + 1,
+      }
+    })
+  }
+
+  return (
+    <Scene
+      commandsLeft={getCommandsLeft()}
+      commandsRight={getCommandsRight()}
+      headerChildren={
+        <WorkoutHeader
+          title={workout ? workout.name : ''}
+          subtitle={workout ? ('Plandauer: ' + workout.duration + ' Wochen') : ''}
+        />
+      }
+      t={t}
+      networkStatus={networkStatus}
+    >
+      <Workout
+        workout={workout}
+        loading={loading}
+        error={error}
+        t={t}
+        onShowExercise={showExercise}
+        onChangeExerciseOrder={onChangeExerciseOrder}
+        onDeleteExercise={onDeleteExercise}
+        defaultSettings={defaultSettings}
+        setDefaultSettings={setDefaultSettings}
+        editable={(workout && !workout.template) || (workout && me.id == workout.creator_id)}
+        createSplit={createSplit}
+        activeSplitIndex={activeSplitIndex}
+        setActiveSplitIndex={setActiveSplitIndex}
+        onDeleteSplit={onDeleteSplit}
+        onCopySplit={onCopySplit}
+        onShiftSplitRight={onShiftSplitRight}
+        onShiftSplitLeft={onShiftSplitLeft}
+        changePlan={changePlan}
+
+      />
+
+
+    <StyledDrawer anchor="right"
+      open={defaultSettingsDrawerOpen}
+      onClose={() => toggleDefaultSettingsDrawer()}
+    >
+      <div
+        role="presentation"
+        onClick={() => toggleDefaultSettingsDrawer()}
+        onKeyDown={() => toggleDefaultSettingsDrawer()}
+      >
+        <List>
+          <div className="list-item-wrapper">
+            <ListItem button key="new-plan" onClick={changeDefaultSettings}>
+              <ListItemText primary={"VOREINSTELLUNGEN ÄNDERN"} />
+            </ListItem>
+          </div>
+          <div className="list-item-wrapper">
+            <ListItem button key="new-plan-from-templates" onClick={applyDefaultSettings}>
+              <ListItemText primary={"VOREINSTELLUNGEN FÜR ALLE ÜBUNGEN IM PLAN ANWENDEN"} />
+            </ListItem>
+          </div>
+        </List>
+      </div>
+    </StyledDrawer>
+
+
+
+    <StyledDrawer
+      anchor="right"
+      open={shareDrawerOpen}
+      onClose={() => toggleSharesDrawer()}
+    >
+      <div
+        role="presentation"
+        onClick={() => toggleSharesDrawer()}
+        onKeyDown={() => toggleSharesDrawer()}
+      >
+        <List>
+          <div className="list-item-wrapper">
+            <ListItem button key="new-plan" onClick={onPrintPlan}>
+              <ListItemText primary={"PDF ERSTELLEN"} />
+            </ListItem>
+          </div>
+          <div className="list-item-wrapper">
+            <ListItem button key="new-plan-from-templates" onClick={emailPlan}>
+              <ListItemText primary={"EMAILEN"} />
+            </ListItem>
+          </div>
+          <div className="list-item-wrapper">
+            <ListItem button key="new-plan-from-templates" onClick={assignPlan}>
+              <ListItemText primary={"ANDEREM KUNDEN ZUORDNEN"} />
+            </ListItem>
+          </div>
+          <div className="list-item-wrapper">
+            <ListItem button key="new-plan-from-templates" onClick={createTemplate}>
+              <ListItemText primary={"ALS MEINE VORLAGE SPEICHERN"} />
+            </ListItem>
+          </div>
+        </List>
+      </div>
+    </StyledDrawer>
+
+
+
+    <StyledDrawer
+      anchor="right"
+      open={optionsDrawerOpen}
+      onClose={() => toggleOptionsDrawer()}
+    >
+      <div
+        role="presentation"
+        onClick={() => toggleOptionsDrawer()}
+        onKeyDown={() => toggleOptionsDrawer()}
+      >
+        <List>
+          <div className="list-item-wrapper">
+            <ListItem button key="new-plan" onClick={changePlan}>
+              <ListItemText primary={"TRAININGSPLAN ÄNDERN"} />
+            </ListItem>
+          </div>
+          <div className="list-item-wrapper">
+            <ListItem button key="new-plan-from-templates" onClick={onDeletePlan}>
+              <ListItemText primary={"TRAININGSPLAN LÖSCHEN"} />
+            </ListItem>
+          </div>
+        </List>
+      </div>
+    </StyledDrawer>
+
+
+
+
+    <Dialog
+      open={dialogOpen}
+      onClose={toggleDialogOpen}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">{"Trainingsplan löschen?"}</DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-description">
+          Trainingsplan sicher löschen?
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={toggleDialogOpen} color="primary">
+          Zurück
+        </Button>
+        <Button onClick={() => {
+          deletePlan({
+            variables: {
+              planId: workoutId,
+            }
+          })
+        }} color="primary" autoFocus>
+          Löschen
+        </Button>
+      </DialogActions>
+    </Dialog>
+
+
+    {defaultSettings &&
+      <Dialog
+        open={applySettingsDialogOpen}
+        onClose={toggleApplySettingsDialogOpen}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Trainingsplan ändern?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="settings-dialog-description">
+            Folgende Konfiguration wird auf alle Übungen angewendet:
+          </DialogContentText>
+          <DialogContentText id="settings-dialog">
+            {defaultSettings.sets} Sätze. Je {defaultSettings.execution} {defaultSettings.unit == 0 ? 'Wdh.' : defaultSettings.unit == 1 ? 'Sek.' : 'Min.'}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={toggleApplySettingsDialogOpen} color="primary">
+            Zurück
+          </Button>
+          <Button onClick={() => {
+            console.log("Button click");
+            applySettingsToPlan({
+              variables: {
+                planId: workoutId,
+                sets: defaultSettings.sets,
+                unit: defaultSettings.unit,
+                execution: defaultSettings.execution,
+              }
+            })
+            toggleApplySettingsDialogOpen();
+          }} color="primary" autoFocus>
+            Anwenden
+          </Button>
+        </DialogActions>
+      </Dialog>
+    }
+
+
+
+    { defaultSettings &&
+      <DefaultSettingsPanel
+        open={defaultSettingsOpen}
+        onClose={toggleDefaultSettingsOpen}
+        defaultSettings={defaultSettings}
+        setDefaultSettings={setDefaultSettings}
+      />
+    }
+
+
+
+    <WorkoutEditPanel
+      t={t}
+      open={workoutEditOpen}
+      onClose={toggleWorkoutEditOpen}
+      workout={workout}
+      saveWorkout={saveWorkout}
+      saveLoading={updateLoading}
+      saveError={updateError}
+    />
+
+
+
+    <PrintPlanPanel
+      open={printPanelOpen}
+      onClose={togglePrintPanelOpen}
+      printType={printType}
+      setPrintType={setPrintType}
+      onPrintPlan={printPlan}
+      loading={generateplanpdfLoading}
+      error={generateplanpdfError}
+    />
+
+
+
+    <SendPlanPanel
+      open={sendPanelOpen}
+      onClose={toggleSendPanelOpen}
+      printType={printType}
+      setPrintType={setPrintType}
+      onSendPlan={onSendPlan}
+      loading={sendplanLoading}
+      error={sendplanfError}
+    />
+
+
+
+    <Snackbar
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'center',
+      }}
+      open={openSnackbar}
+      autoHideDuration={6000}
+      onClose={toggleSnackbar}
+    >
+      <MuiAlert onClose={toggleSnackbar} severity="warning" variant="filled">
+        {snackbarMessage}
+      </MuiAlert>
+    </Snackbar>
+
+
+    </Scene>
+  )
 }
 
 export default withApollo(Panel);

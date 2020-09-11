@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { RouteComponentProps, withRouter } from "react-router";
-import { translate } from 'react-i18next';
 import Scene from "../../components/Scene";
 import Folder from './Folder';
 import folders from '../folder/test_data';
 import customers from '../customers/test_data';
 import CustomerSearchField from '../../components/CustomerSearchField';
 
-@translate(['common', 'setup'], { wait: true })
 class CreateFolderWithData extends Component {
 
   constructor(props) {
@@ -155,7 +153,7 @@ class CreateFolderWithData extends Component {
           typex: 'Ionicons',
           name: 'help-circle',
           onTap: () => {
-            console.log("Command Help");
+            window.open("https://desk.zoho.eu/portal/lanista/de/home",'_blank');
           }
       }]);
   }

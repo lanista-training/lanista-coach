@@ -1,0 +1,44 @@
+.de-flag {
+  background-image: url('../img/de.png');
+  background-size: contain!important;
+  height: 45px;
+  width: 45px;
+  background-color: initial;
+  bottom: -25px;
+}
+
+.es-flag{
+  background-image: url('../img/es.png');
+  background-size: contain!important;
+  height: 45px;
+  width: 45px;
+  background-color: initial;
+  bottom: -25px;
+}
+
+.en-flag{
+  background-image: url('../img/en.png');
+  background-size: contain!important;
+  height: 45px;
+  width: 45px;
+  background-color: initial;
+  bottom: -25px;
+}
+
+.fr-flag{
+  background-image: url('../img/fr.png');
+  background-size: contain!important;
+  height: 45px;
+  width: 45px;
+  background-color: initial;
+  bottom: -25px;
+}
+
+.pt-flag{
+  background-image: url('../img/br.png');
+  background-size: contain!important;
+  height: 45px;
+  width: 45px;
+  background-color: initial;
+  bottom: -25px;
+}

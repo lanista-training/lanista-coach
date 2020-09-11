@@ -1,0 +1,22 @@
+{
+  "split": "Split",
+  "created at": "Erstellt am",
+  "from trainer": "Von Trainer",
+  "sets": "Sätze",
+  "repetitions": "Wdh.",
+  "plan duration" : "Plandauer",
+  "week": "Woche",
+  "weeks": "Wochen",
+  "rep": "Wdh.",
+  "sec": "Sek.",
+  "min": "Min.",
+  "no description available": "Keine Beschreibung vorhanden",
+  "DELETE_SPLIT": "Split löschen",
+  "DUPLICATE_SPLIT": "Split duplizieren",
+  "SHIFT_SPLIT_TO_LEFT": "Split verschieben",
+  "SHIFT_SPLIT_TO_RIGHT": "Split verschieben",
+  "add exercise": "Übung hinzufügen",
+  "default values": "Voreinstellung",
+  "export": "Plan weiterleigen",
+  "edit": "Ändern / Löschen"
+}

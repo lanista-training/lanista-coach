@@ -1,5 +1,4 @@
 import * as React from "react";
-import styled from "@/lib/styledComponents";
 
 class Template extends React.Component {
 
@@ -11,7 +10,7 @@ class Template extends React.Component {
   }
 
   render() {
-    <div>Template</div>
+    return(<div>Template</div>)
   }
 };
 

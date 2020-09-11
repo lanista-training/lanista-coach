@@ -1,0 +1,20 @@
+{
+  "forgot_password": "Passwort vergessen?",
+  "email_empty": "Bitte gebe deine Email Adresse ein.",
+  "email_invalid": "Die eingegebene Email ist nicht korrekt.",
+  "password_empty": "Bitte gebe deine Passwort ein.",
+  "password_to_short": "Dein Passwort muss mindestens 6 Zeichen lang sein.",
+  "terms_and_conditions": "Ich habe die AGBs gelesen und stimme ihnen zu",
+  "to_login": "Zur Anmeldung",
+  "password_confirmation_error": "Password confirmation error",
+  "agreed_to_la_error": "Please agreed to our license agreements",
+  "email_blank":"Email",
+  "password_blank":"Passwort",
+  "password_confirmation_blank":"Password wiederholen",
+  "trainingssoftware": "Lanista Trainingssoftware © 2012",
+  "impressum": "Impressum",
+  "datenschutz": "Datenschutz",
+  "info": "Info",
+  "UNEXPECTEDERROR": "Es ist ein Fehler aufgetretten",
+  "USERNOTFOUND": "Email oder Passwort sind nicht korrekt"
+}

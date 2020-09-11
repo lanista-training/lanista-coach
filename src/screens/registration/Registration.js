@@ -1,3 +1,4 @@
+/* eslint import/no-webpack-loader-syntax: off */
 import * as React from "react";
 import styled from 'styled-components';
 import { Input, Grid, Button, Checkbox, Icon, Modal, Header, Image } from 'semantic-ui-react';
@@ -8,7 +9,7 @@ import {LegalContent} from "./legalContent";
 const StyledRegisterButton = styled(Button)`
   width: 345px;
   height: 50px;
-  background: ${props => props.theme.colors.primary}!important;
+  background: #d20027!important;
   color: white!important;
   line-height: 1.5em!important;
 `;
@@ -17,8 +18,8 @@ const StyledBackButton = styled(Button)`
   width: 345px;
   height: 50px;
   margin-top: 4.5em!important;
-  background: ${props => props.theme.colors.secondary}!important;
-  color: ${props => props.theme.colors.primary}!important;
+  background: #f4f2f2!important;
+  color: #d20027!important;
   line-height: 1.5em!important;
 `;
 
@@ -34,7 +35,7 @@ const LanistaLogo = styled.div`
   text-align: center;
   a:hover {
     /* shows an example of how we can use themes */
-    color: ${props => props.theme.colors.orange};
+    color: #FFA500;
   }
 `;
 
@@ -59,7 +60,7 @@ const Footer = styled.footer`
   font-weight: 300;
   font-style: normal;
   font: 125% / 1.45 sans-serif;
-  color: ${props => props.theme.colors.secondary};
+  color: #f4f2f2;
   background-color: rgb(255, 255, 255);
   box-shadow: rgba(0, 0, 0, 0.05) 0px -1em 3em;
   min-height: 60px;
@@ -77,7 +78,7 @@ const Nav = styled.nav`
   }
   a:hover {
     /* shows an example of how we can use themes */
-    color: ${props => props.theme.colors.primary};
+    color: #d20027;
   }
   a:after {
     /* shows an example of how we can use themes */
@@ -89,7 +90,7 @@ const Nav = styled.nav`
 `;
 
 const SuccessfullMessage  = styled.div`
-  color: ${props => props.theme.colors.primary};
+  color: #d20027;
   width: 100%;
   font-size: 2em;
   font-weight: 700;
@@ -201,7 +202,7 @@ class Registration extends React.Component {
                 <LanistaLogo  style={{}}>
                   <LogoImage width={60} height={60}/>
                   <div style={{
-                    fontFamily: "Abel",
+                    fontFamily: "Roboto",
                     fontSize: "1.75em",
                     marginTop: "1em",
                   }}>
@@ -304,7 +305,7 @@ class Registration extends React.Component {
             </Grid>
           </Root>
           <Footer style={{}}>
-            <Nav style={{color: 'black', fontFamily: 'Abel'}}>
+            <Nav style={{color: 'black', fontFamily: 'Roboto'}}>
               © Lanista Trainingssoftware 2012
               <a>
                 Impresum

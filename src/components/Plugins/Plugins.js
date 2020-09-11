@@ -2,7 +2,11 @@ import React from 'react'
 import styled from 'styled-components';
 
 const PluginsList = styled.div`
-  padding-top: 7vh;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
   .cards {
     display: flex;
     -webkit-box-pack: center;
@@ -11,14 +15,49 @@ const PluginsList = styled.div`
     ::-webkit-scrollbar {
       display: none!important;
     }
+    background: white;
+    width: 100%;
+    height: 95%;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 0 27px 0 #0000001f;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-content: center;
   }
   .selected-plugin {
     border: 1px solid rgb(155,201,61);
     box-shadow: 0 0 10px rgb(155,201,61);
   }
+  .list-wrapper {
+    background: white;
+    width: 100%;
+    height: 95%;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 0 27px 0 #0000001f;
+    z-index: 1;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-flow: column;
+    -ms-flex-flow: column;
+    flex-flow: column;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+  }
 `;
 const Plugin = styled.div`
   padding: 1em;
+  width: 20em;
 `;
 const StyledNoPluginMessage =  styled.div`
   font-size: 1.5em;
@@ -78,5 +117,9 @@ export default ({data, text, onPluginSelection, pluginFiltersState}) => {
      </div>
     </PluginsList>)
   :
-    (<NoPluginMessage text={text}/>)
+    (<PluginsList>
+      <div className="list-wrapper">
+        <NoPluginMessage text={text}/>
+      </div>
+    </PluginsList>)
 };

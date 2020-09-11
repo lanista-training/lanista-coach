@@ -1,286 +1,323 @@
-import * as React from "react";
-import styled from 'styled-components';
+import * as React from 'react';
+import cookie from 'js-cookie';
 import _ from 'lodash';
-import { Grid, Tab, Icon, Statistic, List, Image } from 'semantic-ui-react';
-import moment from "moment";
-import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts'
+import {
+  Grid,
+  Tab,
+  Icon,
+  Statistic,
+  Image,
+  Button,
+  List,
+  Modal,
+  Placeholder
+} from 'semantic-ui-react';
+import {useDropzone} from 'react-dropzone';
+import moment from 'moment';
+import {
+  Stage,
+  StyledTab,
+  CardsList,
+  CardsListWrapper,
+  Card,
+  WarningListItem,
+  Header,
+  StatisticValue,
+  FilesPanel,
+  StyledDropZone,
+} from './styles';
 
-const Stage = styled.div`
-  padding-top: 8em!important;
-  max-width: 85vw;
-  display: block!important;
-  margin-right: auto!important;
-  margin-left: auto!important;
-  height: 98vh;
-  ::-webkit-scrollbar {
-    width: 0px!important;
-    background: transparent!important; /* make scrollbar transparent */
-  }
-`;
-const ActivityList = styled(List)`
-  margin-top: 3em!important;
-  width: 100%;
-  height: calc(100vh - 27.5em);
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  overflow-x: scroll;
-  margin-left: 1em;
-  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
-  ::-webkit-scrollbar {
-    width: 0px!important;
-    height: 0px!important;
-    background: transparent!important; /* make scrollbar transparent */
-  }
-`;
-const StyledTab = styled(Tab)`
-  width: 100%;
-  .ui.grid {
-    margin: initial!important;
-  }
-  .ui.grid .column {
-    margin: 0!important;
-    padding: 0!important;
-  }
-  .menu {
-    border: none!important;
-    background-color: white!important;
-    box-shadow: 0 0.08em 0.25em 0.075em rgba(0, 0, 0, 0.075)!important;
-    border-radius: 5px!important;
-    margin-left: 4px!important;
-  }
-  .item {
-    font-family: Abel;
-    font-size: 1.2em!important;
-    font-weight: bold!important;
-    color: #b1b1b1!important;!important;
-    text-align: left;
-    margin: 0!important;
-    padding-left: 1em!important;
-    min-width: 12em;
-    line-height: 2em!important;
-    border-bottom-style: solid!important;
-    border-width: 1px!important;
-    border-color: rgba(0,0,0,.0975)!important;
-  }
-  .text.menu {
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
-  }
-  .item.active i {
-    color: rgb(155,201,61)!important;
-  }
-  .item.active {
-    color: black!important;
-  }
-  .tab {
-    border: none!important;
-    background-color: transparent;
-    padding: 0!important;
-    height: 10em;
-    overflow: hidden;
-  }
-  i.icon, i.icons {
-    margin-right: 0.5em!important;
-    font-size: 1.2em;
-    float: right!important;
-    color: #e0e0e0!important;
-  }
-`;
-const DailyList = styled.div`
-  border-top: none!important;
-  padding-top: 0!important;
-  padding-bottom: 0!important;
-  overflow-y: scroll;
-  min-width: 210px;
-  ::-webkit-scrollbar {
-    width: 0px!important;
-    background: transparent!important; /* make scrollbar transparent */
-  }
-`;
-const Exercise = styled(List.Item)`
-  position: relative;
-  display: inline-block;
-  font-size: 20px;
-  cursor: pointer;
-  border-radius: 3px;
-  -webkit-transition: 450ms all;
-  -webkit-transition: 450ms all;
-  transition: 450ms all;
-  -webkit-transform-origin: center left;
-  -ms-transform-origin: center left;
-  -webkit-transform-origin: center left;
-  -ms-transform-origin: center left;
-  transform-origin: center left;
-  padding: 0!important;
-  overflow: hidden;
-  background: white;
-  margin-right: 0.5em;
-  margin-left: 0!important;
-  margin-top: 0.5em;
-  box-shadow: 0 0.08em 0.25em 0.075em rgba(0, 0, 0, 0.075);
-`;
-const WorkoutsList = styled.div`
-  width: 100%;
-  height: 100%;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  overflow-x: scroll;
-  margin-left: 1em;
-  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
-`;
+import Rating from '@material-ui/lab/Rating';
+import { withStyles } from '@material-ui/core/styles';
+import Menu from '@material-ui/core/Menu';
 
-const WorkoutsListWrapper = styled.div`
-  width: 100%;
-  padding-right: 1em;
-`;
+import Typography from '@material-ui/core/Typography';
 
-const WorkoutsListItem = styled.div`
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-  -ms-flex-positive: 1;
-  flex-grow: 1;
-  -webkit-flex-shrink: 0;
-  -ms-flex-negative: 0;
-  flex-shrink: 0;
-  width: 20vw;
-  min-width: 20em;
-  margin: 0 1em;
-  background-color: #efefef;
-  border-radius: 4px;
-  padding: 1.2em;
-  display: flex;
-  flex-flow: column;
-  .workoutname {
-    font-size: 1.2em;
-    font-weight: 700;
-    line-height: 1.2em;
-    max-height: 2.4em;
-    min-height: 2.4em;
-  }
-  .workoutdescription {
-    font-size: 1em;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    line-height: 1.4em;
-    max-height: 2.8em;
-    min-height: 2.8em;
-    margin-top: 0.7em;
-  }
-  .workoutsplits {
-    font-size: 1em;
-  }
-  .workoutauthor {
-    font-size: 1em;
-  }
-  .footer {
-    font-weight: 700;
-  }
-  .workoutcreatorname {
-    float: left;
-  }
-  .workoutexpiration {
-    float: right;
-  }
-  .workoutextrainfo {
-    padding: 0.8em 0;
-    text-align: right;
-  }
-`;
-const Header = styled.div`
-  font-family: Lato,'Helvetica Neue',Arial,Helvetica,sans-serif;
-  margin: 0;
-  margin-right: 0.5em;
-  background-color: rgb(239,239,239);
-  line-height: 2.5em;
-  border-radius: 5px;
-  padding-left: 0.7em;
-  font-weight: 100;
-  font-size: 1.2em;
-`;
+import SentimentVeryDissatisfiedIcon from '@material-ui/icons/SentimentVeryDissatisfied';
+import SentimentDissatisfiedIcon from '@material-ui/icons/SentimentDissatisfied';
+import SentimentSatisfiedIcon from '@material-ui/icons/SentimentSatisfied';
+import SentimentSatisfiedAltIcon from '@material-ui/icons/SentimentSatisfiedAltOutlined';
+import SentimentVerySatisfiedIcon from '@material-ui/icons/SentimentVerySatisfied';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
 
-const ExerciseImages = styled.div`
-  max-width: 200px;
-  min-width: 200px;
-  height: 100px;
-  max-height: 100px;
-  background-position: right top,left top;
-  background-repeat: no-repeat;
-  background-size: 50.5% auto,50.5% auto;
-  background-color: #efefef;
-`;
-const Protocolls = styled(List.Content)`
-  padding: 0.5em;
-  border-top: none!important;
-`;
-const ExerciseProtocolls = styled.div`
-  padding: 0.8em 0;
-`;
-const Protocoll = styled.div`
-  font-size: 12px!important;
-  color: rgb(116,116,116);
-  padding-left: 1em;
-  line-height: 1.4em;
-  -webkit-font-smoothing: antialiased;
-  .self-protocolled {
-    color: blue!important;
+import WorkoutsList from './WorkoutsList';
+import ActivityList from './ActivityList';
+
+import ScrollBooster from 'scrollbooster';
+
+const customIcons = {
+  1: {
+    icon: <SentimentVeryDissatisfiedIcon />,
+    label: 'Very Dissatisfied',
+  },
+  2: {
+    icon: <SentimentDissatisfiedIcon />,
+    label: 'Dissatisfied',
+  },
+  3: {
+    icon: <SentimentSatisfiedIcon />,
+    label: 'Neutral',
+  },
+  4: {
+    icon: <SentimentSatisfiedAltIcon />,
+    label: 'Satisfied',
+  },
+  5: {
+    icon: <SentimentVerySatisfiedIcon />,
+    label: 'Very Satisfied',
+  },
+  6: {
+    icon: <SentimentVerySatisfiedIcon />,
+    label: 'Very Satisfied',
+  },
+};
+
+const IconContainer = (props) => {
+  const { value, ...other } = props;
+  return <span {...other}>{customIcons[value].icon}</span>;
+}
+
+const getTranslationKey = (warningType) => {
+  switch(warningType) {
+  case 'DRU':
+    return 'drug';
+  case 'SPO':
+    return 'sport';
+  case 'GOA':
+    return 'goal';
+  default:
+    return 'finding';
   }
-`;
-const StatisticValue = styled.div`
-  color: #1b1c1d;
-  font-family: Lato,Helvetica Neue,Arial,Helvetica,sans-serif;
-  font-size: 56px;
-  font-size: 4rem;
-  font-weight: 400;
-  line-height: 1em;
-  text-align: center;
-  text-transform: uppercase;
-  font-size: 3rem!important;
-`;
+}
 
-class Customer extends React.Component {
+const StyledRating = withStyles({
+  iconFilled: {
+    color: '#86d8da',
+  },
+  iconHover: {
+    color: '#86d8da',
+  },
+})(Rating);
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      value: null,
+const FileDropZone = ({memberId, updateMemberFiles, closeFileUploadPanel, loading}) => {
+
+  const {acceptedFiles, getRootProps, getInputProps} = useDropzone({
+    accept: 'image/jpeg, image/png, application/pdf'
+  });
+
+  const files = acceptedFiles.map((file, index) => {
+      let reader = new FileReader();
+      let uploadBaseUrl = document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/' + 'file/user/';
+      const token = cookie.get('token');
+      reader.addEventListener('loadend', function(e) {
+        fetch(uploadBaseUrl + memberId + '/files/' + file.name, {
+          method: "POST",
+          body: new Blob([reader.result], {type: file.type}),
+          headers: {
+            authorization: token ? `Bearer ${token}` : ''
+          },
+        })
+        .then((response) => {
+          if (response.ok) {
+            if(index == acceptedFiles.length-1) {
+              closeFileUploadPanel()
+              updateMemberFiles()
+              //startLoading(false);
+            }
+          } else {
+            alert('Error uploading [' + file.name + ']');
+          }
+        })
+        .catch((error) => {
+          console.log("ERROR UPLOADING FILE")
+          console.log(error)
+          updateMemberFiles()
+          closeFileUploadPanel()
+        });
+    });
+    reader.readAsArrayBuffer(file);
+    return (
+      <li key={file.path}>
+        {decodeURI(file.path)} - {file.size} bytes
+      </li>
+    )
+  });
+
+  return ( (!loading ) ?
+      <StyledDropZone>
+        <section className="container">
+          <Button basic icon='close' onClick={() => {
+            closeFileUploadPanel()
+          }}/>
+          <div {...getRootProps({className: 'dropzone'})}>
+            <input {...getInputProps()} />
+            <p>Drag 'n' drop some files here, or click to select files</p>
+          </div>
+        </section>
+      </StyledDropZone>
+      :
+      <div class="loading">
+        <CircularProgress />
+      </div>
+  );
+}
+
+const Customer = ({
+
+  removeMemberFile,
+  customer,
+  lastMeasures,
+  onProtocollClick,
+  openWorkout,
+  addFiles,
+
+  protocolls,
+  protocollsLoading,
+
+  memberFiles,
+  loadingMemberFiles,
+
+  updateMemberFiles,
+  showGoal,
+  createGoal,
+  loading,
+  openSnackbar,
+  handleCloseSnackbar,
+  snackbarMessage,
+  createWorkout,
+  t,
+  me,
+
+  onCreateNote,
+  createNoteLoading,
+  createNoteError,
+
+  onDeleteNote,
+  deleteNoteLoading,
+  deleteNoteError,
+
+  onUpdateNote,
+  updateNoteLoading,
+  updateNoteError,
+
+  onCreatePlanFromWorkout,
+  onAddWorkoutsToPlan,
+  createPlanFromWorkoutLoading,
+  createPlanFromWorkoutError,
+
+  onGoToMeasures,
+
+  onWarningClick,
+
+}) => {
+  //
+  // Use protocolls list
+  //
+  const [protocollsOptionsAnchorEl, setProtocollsOptionsAnchorEl] = React.useState(null);
+  const handleProtocollsOptionsClose = () => {
+    setSelectedDay(null);
+    setProtocollsOptionsAnchorEl(null);
+  };
+  const handleProtocollsOptionsClick = (event, day) => {
+    setSelectedDay(day);
+    setProtocollsOptionsAnchorEl(event.currentTarget);
+  };
+
+  //
+  // Create plan from workout
+  //
+  React.useEffect(() => {
+    if( createPlanFromWorkoutError || !createPlanFromWorkoutLoading) {
+      setSelectedDay(null);
+      handleProtocollsOptionsClose();
     }
-    this.prepareMeasuresData = this.prepareMeasuresData.bind(this)
-    this.translateRating = this.translateRating.bind(this)
-    this.formatHeader = this.formatHeader.bind(this)
-  }
+  }, [createPlanFromWorkoutError, createPlanFromWorkoutLoading]);
 
-  translateRating(rating) {
-    switch(rating) {
-      case 0:
-        return 'Niedrig'
-      case 1:
-        return 'Normal'
-      case 2:
-        return 'Schlimm'
-      case 3:
-        return 'Sehr schnill'
-      case 4:
-        return 'Äußerst schlimm'
-      default:
-        return 'Normal'
+
+  //
+  // Protocoll list notes
+  //
+  const [notesAnchorEl, setNotesAnchorEl] = React.useState(null);
+  const [selectedDay, setSelectedDay] = React.useState(null);
+  const [selectedNoteId, setSelectedNoteId] = React.useState(null);
+
+  const [editingMode, setEditingMode] = React.useState(false);
+  const toggleEditingMode = () => setEditingMode(!editingMode);
+
+  //
+  // Note management
+  //
+  const [newNote, setNewNote] = React.useState('');
+  const onNewNoteChange = (event) => setNewNote(event.target.value);
+
+  const [editNote, setEditNote] = React.useState('');
+  const onEditNoteChange = (event) => setEditNote(event.target.value);
+  React.useEffect(() => {
+    if( customer && customer.notes && selectedNoteId > 0 ) {
+      const selectedNote = customer.notes.find(note => note.id == selectedNoteId);
+      setEditNote(selectedNote.text);
     }
+  }, [selectedNoteId]);
+
+  React.useEffect(() => {
+    !createNoteLoading && setNewNote('');
+  }, [createNoteLoading]);
+  React.useEffect(() => {
+    setTimeout(() => {
+      const list = notesListEl.current && notesListEl.current ? notesListEl.current.closest('.MuiPaper-root') : null;
+      list && list.scrollTo(0, 2000);
+    }, 300);
+  }, [selectedDay]);
+  const handleNotesClick = (event, day) => {
+    console.log("handleNotesClick")
+    setSelectedDay(day);
+    setNotesAnchorEl(event.currentTarget);
+  };
+  const handleNotesClose = () => {
+    setSelectedDay(null);
+    setNotesAnchorEl(null);
+    setEditingMode(false);
+    setSelectedNoteId(null);
+    setEditNote(false);
+  };
+  const notesListEl = React.useRef(null);
+  React.useEffect(() => {
+    if(notesAnchorEl === null) {
+      setSelectedDay(null);
+      setEditingMode(false);
+      setSelectedNoteId(null);
+      setEditNote(false);
+    }
+  }, [notesAnchorEl]);
+
+  //
+  // Files management
+  //
+  const [uploadingFiles, setUploadingFiles] = React.useState(false);
+  const [fileDownloadMode, setFileDownloadMode] = React.useState(false);
+  const [modalOpen, setModalOpen] = React.useState(false);
+  const [selectedFile, setSelectedFile] = React.useState(null);
+  const loadingFiles = uploadingFiles || loadingMemberFiles;
+
+  const handleOpen = (file) => {
+    setModalOpen(true);
+    setSelectedFile(file);
+  }
+  const handleClose = () => {
+    setModalOpen(false);
+    setSelectedFile(null);
   }
 
-  formatHeader(text) {
-    return moment(new Date(text)).format("DD-MM-YYYY")
+  const onRemoveFile = () => {
+    removeMemberFile(selectedFile)
+    handleClose()
   }
 
-  prepareMeasuresData(rawData) {
+  const prepareMeasuresData = (rawData) => {
     const chartData = []
     if( rawData ) {
       rawData.map( function (measure) {
@@ -297,152 +334,332 @@ class Customer extends React.Component {
     }
   }
 
-  render() {
-    const {customer, lastMeasures, onProtocollClick, openWorkout} = this.props;
-    const {birthday, plans, workouts, warnings} = customer;
+  const {birthday, plans, workouts, warnings, files, goals, notes} = customer;
 
-    const dayLists = _.groupBy(workouts, (workout) => workout.formated_date);
-    console.log( dayLists )
+  //const dayLists = _.slice(_.groupBy(workouts && workouts, (workout) => workout.formated_date), 0, 20);
+  const dayLists = _.groupBy(workouts && workouts, (workout) => workout.formated_date);
 
-    const protocolls = []
+  const token = cookie.get('token');
 
-    const panes = [
-      { menuItem: { key: 'data',  icon: 'chevron right', content: 'Persönliche Date' }, render: () =>
-        <Tab.Pane style={{ marginTop: "1.5em" }}>
-          <Statistic.Group widths='two'>
-            <Statistic size='mini'>
-              <StatisticValue>{isNaN(birthday) ? '' : moment().diff(parseInt(birthday), 'years')} Jahre</StatisticValue>
-              <Statistic.Label>alt</Statistic.Label>
-            </Statistic>
-            <Statistic size='mini'>
-              <StatisticValue>{lastMeasures.weight} Kg</StatisticValue>
-              <Statistic.Label>Gewicht</Statistic.Label>
-            </Statistic>
-            <Statistic size='mini'>
-              <StatisticValue>{lastMeasures.height} cm</StatisticValue>
-              <Statistic.Label>Größe</Statistic.Label>
-            </Statistic>
-            <Statistic size='mini'>
-              <StatisticValue>{lastMeasures.fat} %</StatisticValue>
-              <Statistic.Label>Fettanteil</Statistic.Label>
-            </Statistic>
-          </Statistic.Group>
-        </Tab.Pane>
-      },
-      { menuItem: { key: 'workouts',  icon: 'chevron right', content: 'Workouts' }, render: () =>
-        <Tab.Pane>
-          <WorkoutsListWrapper>
-            <WorkoutsList className="hide-scrollbar">
+  const panes = [
+    { menuItem: { key: 'data',  icon: 'chevron right', content: 'Kundeninfo' }, render: () =>
+      <Tab.Pane>
+        <div className="info-list-viewport">
+          <div className="info-list-content">
+            <Card key="card-info" onClick={onGoToMeasures}>
+              <div className="workout-wrapper personal-data">
               {
-                plans.map(( item, key ) =>
-                  <WorkoutsListItem key={key} onClick={() => openWorkout(item.id)}>
-                    <div className="workoutname">{item.name}</div>
-                    <div className="workoutdescription">{item.description && item.description.length > 0 ? item.description : "No description available"}</div>
-                    <div className="workoutextrainfo">{item.days} Splits / {item.duration} Weeks</div>
-                    <div className="footer">
-                      <div className="workoutcreatorname">{item.creator_full_name}</div>
-                      <div className="workoutexpiration">{isNaN(item.expiration_date) ? '' : moment(parseInt(item.expiration_date)).format("DD-MM-YYYY")}</div>
-                    </div>
-                  </WorkoutsListItem>
-                )
+                loading &&
+                <Placeholder>
+                  <Placeholder.Header image>
+                    <Placeholder.Line />
+                    <Placeholder.Line />
+                  </Placeholder.Header>
+                  <Placeholder.Paragraph>
+                    <Placeholder.Line />
+                    <Placeholder.Line />
+                    <Placeholder.Line />
+                    <Placeholder.Line />
+                  </Placeholder.Paragraph>
+                </Placeholder>
               }
-
-            </WorkoutsList>
-          </WorkoutsListWrapper>
-        </Tab.Pane>
-      },
-      { menuItem: { key: 'anamnese',  icon: 'chevron right', content: 'Messungen' }, render: () =>
-        <Tab.Pane>
-          <ResponsiveContainer>
-            <LineChart
-              data={this.prepareMeasuresData(customer.calipers)}
-              margin={{
-                top: 20, right: 5, left: 0, bottom: -5,
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="weight" stroke="#8884d8" activeDot={{ r: 8 }} />
-            </LineChart>
-          </ResponsiveContainer>
-        </Tab.Pane>
-      },
-      { menuItem: { key: 'measures',  icon: 'chevron right', content: 'Warnungen' }, render: () =>
-        <Tab.Pane>
-          <WorkoutsListWrapper>
-            <WorkoutsList className="hide-scrollbar">
               {
-                warnings.map(( item, key ) =>
-                  <WorkoutsListItem key={key} style={{backgroundImage: 'url(https://lanistacoach.s3.amazonaws.com/static/img/injury-background.jpg)',  backgroundSize: 'cover'}}>
-                    <div className="workoutname">{item.name}</div>
-                    <div className="workoutdescription">{item.description && item.description.length > 0 ? item.description : "No description available"}</div>
-                    <div className="workoutextrainfo">{this.translateRating(item.rating)}</div>
-                    <div className="footer">
-                      <div className="workoutcreatorname"></div>
-                      <div className="workoutexpiration">{item.creator_full_name}</div>
-                    </div>
-                  </WorkoutsListItem>
-                )
+                !loading &&
+                <Statistic.Group widths='two'>
+                  <Statistic size='mini'>
+                    <StatisticValue><span>{birthday ? moment(parseInt(birthday)).format('DD/MM/YYYY') : 'N.E.'}</span></StatisticValue>
+                    <Statistic.Label>{t("BIRTHDAY")}</Statistic.Label>
+                  </Statistic>
+                  <Statistic size='mini'>
+                    <StatisticValue><span>{lastMeasures.weight}</span> {t("KG")}</StatisticValue>
+                    <Statistic.Label>{t("WEIGHT")}</Statistic.Label>
+                  </Statistic>
+                  <Statistic size='mini'>
+                    <StatisticValue><span>{lastMeasures.height}</span> cm</StatisticValue>
+                    <Statistic.Label>{t("SIZE")}</Statistic.Label>
+                  </Statistic>
+                  <Statistic size='mini'>
+                    <StatisticValue><span>{lastMeasures.fat}</span> %</StatisticValue>
+                    <Statistic.Label>{t("BODYFAT")}</Statistic.Label>
+                  </Statistic>
+                </Statistic.Group>
               }
-            </WorkoutsList>
-          </WorkoutsListWrapper>
-        </Tab.Pane>
-      },
-    ]
-
-    return(
-      <Stage>
-        <StyledTab
-          menu={{
-            fluid: true,
-            vertical: true,
-            text: true,
-          }}
-          panes={panes}
+              </div>
+            </Card>
+            <Card key={"create-goal-button"} onClick={createGoal}>
+              <div className="workout-wrapper member-goal create-button">
+                <div className="workoutname">{"Neue Kundenziel eingeben"}</div>
+                <div className="target-section">
+                  <Icon name='target' className="card-decoration"/>
+                  <div className="no-date-section">
+                    <Button
+                      icon='plus'
+                      size='small'
+                    />
+                  </div>
+                </div>
+              </div>
+            </Card>
+            {
+              goals && goals.map(( item, key ) =>
+                <Card key={key} onClick={() => showGoal(item) }>
+                  <div className="workout-wrapper member-goal">
+                    <div className="workoutname">{item.description}</div>
+                    <div className="target-section">
+                      <Icon name='target' className="card-decoration"/>
+                      {
+                        <Rating
+                          name="customized-icons"
+                          defaultValue={item.rating[item.rating.length-1].value+1}
+                          getLabelText={value => customIcons[value].label}
+                          IconContainerComponent={IconContainer}
+                          readOnly
+                        />
+                      }
+                    </div>
+                  </div>
+                </Card>
+              )
+            }
+          </div>
+        </div>
+      </Tab.Pane>
+    },
+    { menuItem: { key: 'workouts',  icon: 'chevron right', content: <div>Pläne<div className="counter">{plans ? plans.length : 0}</div></div> }, render: () =>
+      <Tab.Pane>
+        <WorkoutsList
+          t={t}
+          plans={plans}
+          createWorkout={createWorkout}
+          openWorkout={openWorkout}
         />
-        <ActivityList divided relaxed>
-        {
-          _.map(dayLists, (dayList, titel) =>
-          {
-            const protocolls = _.groupBy(dayList, (workout) => workout.exercise_id)
-            return(
-              <DailyList>
-                <Header as='h3'>
-                  {this.formatHeader(titel)}
-                  <Icon name='sticky note outline' style={{float: "right", fontSize: "1.3em", paddingRight: "1em"}}/>
-                </Header>
-                <List.Content style={{ fontSize: "1em", overflowY: "scroll", height: "calc(100vh - 34vh)", paddingBottom: "1em"}} className={"hide-scrollbar"}>
-                {
-                  _.map(protocolls, (protocoll, exercise_id) => {
-                    return (
-                      <Exercise onClick={() => onProtocollClick(exercise_id)}>
-                        <ExerciseImages style={{backgroundImage: "url(https://lanista-training.com" + protocoll[0].image_url + "_1.jpg), url(https://lanista-training.com" + protocoll[0].image_url + "_2.jpg)"}}></ExerciseImages>
-                        <ExerciseProtocolls>
-                          {
-                            protocoll.map( (execution, index) => {
-                              return (
-                                  <Protocoll className={execution.self_protocolled ? "self-protocolled" : ""}>
-                                    {execution.weight} Kg / {execution.training} Wdh.
-                                  </Protocoll>
-                              );
-                            })
-                          }
-                        </ExerciseProtocolls>
-                      </Exercise>
-                    )
-                  })
-                }
-                </List.Content>
-              </DailyList>
-            )
-          })
-        }
-        </ActivityList>
-      </Stage>
-    );
-  }
+      </Tab.Pane>
+    },
+    { menuItem: { key: 'files',  icon: 'chevron right', content: <div>Files<div className="counter">{memberFiles ? memberFiles.length : 0}</div></div> }, render: () =>
+      <Tab.Pane>
+        <div className="files-list-viewport">
+          <div className="files-list-content">
+            {!fileDownloadMode &&
+              <Button basic icon='upload' onClick={() => {
+                setFileDownloadMode(true)
+              }}/>
+            }
+            {fileDownloadMode && <FileDropZone
+                memberId={customer.id}
+                closeFileUploadPanel={ () => setFileDownloadMode(false) }
+                updateMemberFiles={updateMemberFiles}
+                loading={loadingFiles}
+              />
+            }
+            {!fileDownloadMode && memberFiles && memberFiles.map(file => (
+              <Card key={file.flinename}>
+                <div className="workout-wrapper member-file" >
+                  <div className="workoutname">{decodeURI(file.filename)}</div>
+                  <div className="member-file-icons">
+                    <div className="member-file-icon trash">
+                      <Icon name='trash alternate outline' onClick={() => handleOpen(file)}/>
+                    </div>
+                    <div className="member-file-icon file">
+                      <a href={'https://kxt70ua3ml.execute-api.eu-central-1.amazonaws.com/prod/file/user/' + customer.id + '/files/' + token + '/' + file.filename} target="_blank">
+                        <Icon name='file alternate outline'/>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </Tab.Pane>
+    },
+    { menuItem: { key: 'warnings',  icon: 'chevron right', content: <div>{t("WARNINGS")}<div className="counter">{warnings ? warnings.length : 0}</div></div> }, render: () =>
+      <Tab.Pane>
+        <div className="warnings-list-viewport">
+          <div className="warnings-list-content">
+            {
+              warnings.map(( item, key ) =>
+                <Card key={key} onClick={() => onWarningClick(item)}>
+                  <div className={"workout-wrapper meber-warning " + item.warning_type} >
+                    <div className="workoutname">{item.name}</div>
+                    <div className="footer">
+                      <div className="workoutextrainfo">
+                        {
+                          item.warning_type == 'MED' &&
+                          <StyledRating
+                            name="customized-icons"
+                            defaultValue={item.rating+1}
+                            IconContainerComponent={IconContainer}
+                            readOnly
+                          />
+                        }
+                        {
+                          item.warning_type != 'MED' &&
+                          <Rating
+                            name="customized-icons"
+                            defaultValue={item.rating+1}
+                            IconContainerComponent={IconContainer}
+                            readOnly
+                          />
+                        }
+                        <div>
+                          {t(getTranslationKey(item.warning_type) + "_rating_" + (item.rating + 1))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              )
+            }
+          </div>
+        </div>
+      </Tab.Pane>
+    },
+  ]
+
+  const notesList = selectedDay ? notes.filter( note => moment(new Date(parseInt(note.note_date))).format("YYYY-MM-DD") == selectedDay) : [];
+  //
+  // Tab management
+  //
+  const [activeTab, setActiveTab] = React.useState(0);
+  const handleTabChange = (e, { activeIndex }) => setActiveTab(activeIndex);
+  React.useEffect(() => {
+    if( activeTab == 0 ) {
+      //
+      // Info scrolling
+      //
+      const infoViewport = document.querySelector('.info-list-viewport');
+      const infoContent = document.querySelector('.info-list-content');
+      setTimeout(function () {
+        new ScrollBooster({
+          viewport: infoViewport,
+          content: infoContent,
+          scrollMode: 'transform',
+          direction: 'horizontal',
+          emulateScroll: true,
+        });
+      }, 3000);
+    }
+    if( activeTab == 2 ) {
+      //
+      // Info scrolling
+      //
+      const filesViewport = document.querySelector('.files-list-viewport');
+      const filesContent = document.querySelector('.files-list-content');
+      setTimeout(function () {
+        new ScrollBooster({
+          viewport: filesViewport,
+          content: filesContent,
+          scrollMode: 'transform',
+          direction: 'horizontal',
+          emulateScroll: true,
+        });
+      }, 1500);
+    }
+    if( activeTab == 3 ) {
+      //
+      // Info scrolling
+      //
+      const warningsViewport = document.querySelector('.warnings-list-viewport');
+      const warningsContent = document.querySelector('.warnings-list-content');
+      setTimeout(function () {
+        new ScrollBooster({
+          viewport: warningsViewport,
+          content: warningsContent,
+          scrollMode: 'transform',
+          direction: 'horizontal',
+          emulateScroll: true,
+        });
+      }, 1500);
+    }
+  }, [activeTab]);
+
+  return(
+    <Stage>
+      <StyledTab
+        menu={{
+          fluid: true,
+          vertical: true,
+          text: true,
+        }}
+        panes={panes}
+        activeIndex={activeTab}
+        onTabChange={handleTabChange}
+      />
+
+      <ActivityList
+        t={t}
+        me={me}
+        workouts={workouts}
+        notesAnchorEl={notesAnchorEl}
+        setNotesAnchorEl={setNotesAnchorEl}
+        onCreateNote={onCreateNote}
+        plans={plans}
+        loading={loading}
+        notesListEl={notesListEl}
+        handleNotesClose={handleNotesClose}
+        notesList={notesList}
+        onNewNoteChange={onNewNoteChange}
+        newNote={newNote}
+        protocollsOptionsAnchorEl={protocollsOptionsAnchorEl}
+        handleProtocollsOptionsClose={handleProtocollsOptionsClose}
+        dayLists={dayLists}
+        notes={notes}
+        onProtocollClick={onProtocollClick}
+        handleProtocollsOptionsClick={handleProtocollsOptionsClick}
+        onCreatePlanFromWorkout={onCreatePlanFromWorkout}
+        handleNotesClick={handleNotesClick}
+        selectedDay={selectedDay}
+        editingMode={editingMode}
+        selectedNoteId={selectedNoteId}
+        setSelectedNoteId={setSelectedNoteId}
+        toggleEditingMode={toggleEditingMode}
+        editNote={editNote}
+        onEditNoteChange={onEditNoteChange}
+        onUpdateNote={onUpdateNote}
+        onDeleteNote={onDeleteNote}
+        onAddWorkoutsToPlan={onAddWorkoutsToPlan}
+      />
+
+
+      <Modal
+        basic size='small'
+        open={modalOpen}
+        onClose={handleClose}
+      >
+        <Header icon='trash' content='Dokument löschen' />
+        <Modal.Content>
+          <p>
+            {t("DELETEDOCUMENTWARNING_1")} "{selectedFile && selectedFile.filename}" {t("DELETEDOCUMENTWARNING_2")}
+          </p>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button basic color='red' inverted onClick={onRemoveFile}>
+            <Icon name='remove' /> {t("DELETEDOCUMENT_YES")}
+          </Button>
+          <Button color='green' inverted onClick={handleClose}>
+            <Icon name='checkmark' /> {t("DELETEDOCUMENT_NO")}
+          </Button>
+        </Modal.Actions>
+      </Modal>
+
+
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+      >
+        <MuiAlert onClose={handleClose} severity="warning" variant="filled">
+          {snackbarMessage}
+        </MuiAlert>
+      </Snackbar>
+
+
+    </Stage>
+  );
 };
 
 export default Customer;

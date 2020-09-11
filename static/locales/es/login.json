@@ -1,5 +1,5 @@
 {
-  "forgot_password": "Passwort vergessen?",
+  "forgot_password": "Olvidastes tu contraseña?",
   "email_empty": "Bitte gebe deine Email Adresse ein.",
   "email_invalid": "Die eingegebene Email ist nicht korrekt.",
   "password_empty": "Bitte gebe deine Passwort ein.",
@@ -16,5 +16,11 @@
   "datenschutz": "Datenschutz",
   "info": "Info",
   "UNEXPECTEDERROR": "Es ist ein Fehler aufgetretten",
-  "USERNOTFOUND": "Email oder Passwort sind nicht korrekt"
+  "USERNOTFOUND": "Email oder Passwort sind nicht korrekt",
+  "Failed to fetch": "Verbindungsproblem. Bitte prüfe deine Internetverbindung.",
+  "reset password": "Passwort zurücksetzen",
+  "Response not successful": "Keine Verbindung zum server möglich. Bitte versuche es später noch mal",
+  "check your mailbox": "Bitte überprüfe deinen Email-Eingang",
+  "legal title": "Allgemeine Geschäftsbedingungen für die Nutzung der Lanista-App",
+  "registration successfull": "Trainer erfolgreich registriert"
 }

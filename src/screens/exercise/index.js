@@ -1,608 +1,453 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import _ from 'lodash';
+import arrayMove from 'array-move';
 import moment from "moment";
-import Router from 'next/router';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import Scene from "../../components/Scene";
-import Exercise from './Exercise';
-import ExerciseHeader from "../../components/ExerciseHeader";
+import withData from "./DataProvider";
+import Exercise from "./Exercise";
+import ExerciseHeader from "./ExerciseHeader";
 import Header from "../../components/Header";
-import { withApollo } from '../../../lib/apollo'
-import { useMutation, useQuery } from '@apollo/react-hooks';
-import { EXERCISE, PLANEXERCISE, ME, PLANEXERCISESETTINGS } from "../../queries";
-import { CREATENOTE, CREATECHATMESSAGE, SAVEEXERCISESETTINGS } from "../../mutations";
+import RecommendationPanel from '../../components/RecommendationPanel';
+import {getCommandsLeft, getCommandsRight} from "./commands.js";
+import {SidePanelButton} from "./styles";
 
-const Panel = ({exerciseId, planexerciseId, memberId}) => {
-  const [createNote, { loading: mutationLoading, error: mutationError }] = useMutation(
-    CREATENOTE,
-    {
-      update(cache,  { data: { createNote } }) {
-        let {exercise} = cache.readQuery({
-          query: EXERCISE,
-          variables: {
-            exerciseId: exerciseId,
-            memberId: memberId,
-            planexerciseId: planexerciseId,
-          },
-        });
-        const {me} = cache.readQuery({
-          query: ME
-        });
-        exercise.notes.push(
-          {
-            creator: {
-              first_name: me.first_name,
-              last_name: me.last_name,
-              photoUrl: "http://lanista-training.com/tpmanager/img/p/" + me.id + "_photo.jpg",
-              __typename: "User"
-            },
-            id: createNote.id,
-            note_date: createNote.note_date,
-            text: createNote.text,
-            __typename: "Note"
-          }
-        )
-        cache.writeQuery({
-          query: EXERCISE,
-          variables: {
-            exerciseId: exerciseId,
-            memberId: memberId,
-            planexerciseId: planexerciseId,
-          },
-          data: { exercise: exercise },
-        });
-      }
-    }
-  );
-  const [createChatMessage, { loading: mutationMessageLoading, error: mutationMessageError }] = useMutation(
-    CREATECHATMESSAGE,
-    {
-      update(cache,  { data: { createChatMessage } }) {
-        let {exercise} = cache.readQuery({
-          query: EXERCISE,
-          variables: {
-            exerciseId: exerciseId,
-            memberId: memberId,
-            planexerciseId: planexerciseId,
-          },
-        });
-        const {me} = cache.readQuery({
-          query: ME
-        });
-        exercise.chats.push(
-          {
-            id: createChatMessage.id,
-            first_name: me.first_name,
-            last_name: me.last_name,
-            type: 0,
-            status: 0,
-            photoUrl: "http://lanista-training.com/tpmanager/img/p/" + me.id + "_photo.jpg",
-            creation_date: createChatMessage.creation_date,
-            text: createChatMessage.text,
-            exercise_name: exercise.name,
-            exercise_start_image: exercise.start_image,
-            exercise_end_image: exercise.end_image,
-            __typename: "ChatMessage"
-          }
-        )
-        cache.writeQuery({
-          query: EXERCISE,
-          variables: {
-            exerciseId: exerciseId,
-            memberId: memberId,
-            planexerciseId: planexerciseId,
-          },
-          data: { exercise: exercise },
-        });
-      }
-    }
-  );
-
-  const [saveExerciseSettings, { loading: mutationSettingsLoading, error: mutationSettingsError }] = useMutation(
-    SAVEEXERCISESETTINGS,
-    {
-      update(cache,  { data: {saveExerciseSettings} }) {
-        let {exercise} = cache.readQuery({
-          query: EXERCISE,
-          variables: {
-            exerciseId: exerciseId,
-            memberId: memberId,
-            planexerciseId: planexerciseId,
-          },
-        });
-        const {me} = cache.readQuery({
-          query: ME
-        });
-        console.log("saveExerciseSettings")
-        console.log(saveExerciseSettings)
-        console.log(exercise)
-        exercise.settings.indications = saveExerciseSettings.indications
-        exercise.settings.rounds = saveExerciseSettings.rounds
-        exercise.settings.weight = saveExerciseSettings.weight
-        exercise.settings.repetitions = saveExerciseSettings.repetitions
-        exercise.settings.training_unit = saveExerciseSettings.training_unit
-        cache.writeQuery({
-          query: EXERCISE,
-          variables: {
-            exerciseId: exerciseId,
-            memberId: memberId,
-            planexerciseId: planexerciseId,
-          },
-          data: { exercise: exercise },
-        });
-      }
-    }
-  );
-
-  const { loading, error, data } = useQuery(EXERCISE, {variables: {
-    exerciseId: exerciseId,
-    memberId: memberId,
-    planexerciseId: planexerciseId,
-  }});
-
-  return (
-    <ExerciseWithData
-      exerciseId={exerciseId}
-      planexerciseId={planexerciseId}
-      memberId={memberId}
-      createNote={createNote}
-      createChatMessage={createChatMessage}
-      saveExerciseSettings={saveExerciseSettings}
-      loading={loading || mutationLoading}
-      data={data}
-      error={error}
-    />
-  )
+const groupWorkouts = (workouts) => {
+  var grouped = _.mapValues(_.groupBy(workouts, 'formated_date'), clist => clist.map(workout => _.omit(workout, 'formated_date')));
+  return grouped;
 }
 
-class ExerciseWithData extends Component {
+const Panel = ({
+  exercise,
+  refetch,
+  loading,
+  saveExerciseSettings,
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      processing: false,
-      activeTab: 0,
-      activeTabName: props.memberId > 0 ? '' : 'info',
-      translations: [],
-      isVideoOpen: false,
-      note: '',
-      message: '',
-      // Form data
-      settings: {
-        indications: "",
-        sets: 0,
-        weight:0,
-        training: 0,
-        unit: 0,
-      }
-    };
-    this.goBack = this.goBack.bind(this);
-    this.t = this.t.bind(this);
-    this.onChangeLanguage = this.onChangeLanguage.bind(this);
-    this.onTabChange = this.onTabChange.bind(this);
-    this.onToggleVideo = this.onToggleVideo.bind(this);
-    this.onNoteChange = this.onNoteChange.bind(this);
-    this.onMessageChange = this.onMessageChange.bind(this);
-    this.saveNote = this.saveNote.bind(this);
-    this.sendMessage = this.sendMessage.bind(this);
-    this.onIndicationsChange = this.onIndicationsChange.bind(this);
-    this.onSetsChange = this.onSetsChange.bind(this);
-    this.onWeightChange = this.onWeightChange.bind(this);
-    this.onRepetitionsChange = this.onRepetitionsChange.bind(this);
-    this.onUnitChange = this.onUnitChange.bind(this);
-    this.hasSettingsChange = this.hasSettingsChange.bind(this);
-    this.sendSettings = this.sendSettings.bind(this);
-  };
+  createProtocoll,
+  createProtocollLoading,
+  createProtocollError,
 
-  componentDidMount() {
-    this.onChangeLanguage("de");
-    const {data} = this.props
-    if(data && data.exercise) {
-      const {settings} = data.exercise
-      this.setState({
-        settings: {
-          indications: settings.indications,
-          sets: settings.rounds,
-          weight:settings.weight,
-          training: settings.repetitions,
-          unit: settings.training_unit,
-        }
-      })
-    }
+  deleteProtocoll,
+  deleteProtocollLoading,
 
-  }
+  createNote,
+  createNoteLoading,
+  createNoteError,
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    console.log("componentDidUpdate")
-    const {data} = this.props
-    console.log(data)
-    console.log(prevProps.data)
-    if( prevProps.data !== data ) {
-      console.log("DATA CHANGED")
-      if( data && data.exercise && data.exercise.settings) {
-        console.log("Initializing settings data")
-        const {settings} = data.exercise
-        console.log(settings)
-        this.setState({
-          settings: {
-            indications: settings.indications,
-            sets: settings.rounds,
-            weight:settings.weight,
-            training: settings.repetitions,
-            unit: settings.training_unit,
-          }
-        })
-      }
-    }
-  }
+  deleteNote,
+  deleteNoteLoading,
 
-  goBack() {
-    Router.back();
-  }
+  exerciseId,
+  planexerciseId,
+  memberId,
+  tab,
+  editmode,
 
-  sendSettings() {
-    const {indications, sets, weight, training, unit} = this.state.settings
-    const {saveExerciseSettings, planexerciseId} = this.props
-    saveExerciseSettings({ variables: {
-      planexerciseId: planexerciseId,
-      indications: indications,
-      sets: sets,
-      weight: weight,
-      training: training,
-      unit: unit,
-    }})
-  }
+  deleteExercise,
+  deleteExerciseLoading,
+  deleteExerciseError,
+  exerciseDeleted,
 
-  getCommandsRight() {
-    const {activeTabName, note, message} = this.state
-    return (activeTabName == 'info' ? [
-      {
-          //icon: CustomerIcon,
-          icon: 'icon-play',
-          text: 'plan-video',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'back',
-          onTap: () => {
-            this.onToggleVideo()
-          }
-      }
-    ]
-    : (activeTabName == 'notes' && note && note.length > 0) ? [
-      {
-          //icon: CustomerIcon,
-          icon: 'icon-sync',
-          text: 'save-note',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'back',
-          className: 'synchronize-icon',
-          onTap: () => {
-            this.saveNote()
-          },
-      }
-    ]
-    : (activeTabName == 'chats' && message && message.length > 0) ? [
-      {
-          //icon: CustomerIcon,
-          icon: 'icon-sync',
-          text: 'save-note',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'back',
-          className: 'synchronize-icon',
-          onTap: () => {
-            this.sendMessage()
-          },
-      }
-    ]
-    : (activeTabName == 'settings' && this.hasSettingsChange()) ? [
-      {
-          //icon: CustomerIcon,
-          icon: 'icon-sync',
-          text: 'save-note',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'back',
-          className: 'synchronize-icon',
-          onTap: () => {
-            this.sendSettings()
-          },
-      }
-    ]
-    :
-    []);
-  }
+  createChatMessage,
+  createChatMessageLoading,
+  createChatMessageError,
 
-  getCommandsLeft() {
-    return ([{
-        //icon: CustomerIcon,
-        icon: 'icon-back',
-        text: 'Back',
-        type: 'type-1',
-        typex: 'Ionicons',
-        name: 'back',
-        onTap: () => {
-          this.goBack();
-        }
-    }, {
-        //icon: CustomerIcon,
-        icon: 'icon-tools-inactive',
-        text: 'Setting',
-        type: 'type-1',
-        typex: 'Ionicons',
-        name: 'settings',
-        onTap: () => {
-          console.log("Command Settings");
-        }
-    }, {
-        //icon: HelpIcon,
-        icon: 'icon-help-inactive',
-        text: 'Help',
-        type: 'type-1',
-        typex: 'Ionicons',
-        name: 'help-circle',
-        onTap: () => {
-          console.log("Command Help");
-        }
-    }]);
-  }
+  deleteChatMessage,
+  deleteChatMessageLoading,
 
-  onNoteChange(e, {value}) {
-    this.setState({
-      note: value,
-    })
-  }
+  networkStatus,
 
-  saveNote() {
-    const {createNote, exerciseId, memberId} = this.props
-    createNote({ variables: {
-       text: this.state.note,
-       exerciseId: exerciseId,
-       memberId: memberId,
-     }})
-    this.setState({
-      note: ''
-    })
-  }
-
-  onMessageChange(e, {value}) {
-    this.setState({
-      message: value,
-    })
-  }
-
-  sendMessage() {
-    const {createChatMessage, exerciseId, memberId} = this.props
-    createChatMessage({ variables: {
-       text: this.state.message,
-       exerciseId: exerciseId,
-       memberId: memberId,
-     }})
-    this.setState({
-      message: ''
-    })
-  }
-
-  //onTabChange(e, { activeIndex }) {
-  onTabChange(e, {activeIndex, panes}) {
-    this.setState({
-      activeTab: activeIndex,
-      activeTabName: panes[activeIndex].id
-    })
-  }
-
-  t(text) {
-    const {translations} = this.state;
+  goBack,
+  goToExercise,
+}) => {
+  //
+  // Chart type switch
+  //
+  const [activeChart, setActiveChart] = React.useState(true);
+  const toggleActiveChart = () => setActiveChart(!activeChart);
+  //
+  // Translations
+  //
+  const [translations, setTranslations] = React.useState([]);
+  const t = (text) => {
     const textWithoutNamespace = text.split(":");
     const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
     return (translation ? translation : text);
   }
-
-  onChangeLanguage( language ) {
-    const translations = require('../../../static/locales/' + language + '/dashboard');
+  const onChangeLanguage = ( language ) => {
+    const domainTranslations = require('../../../static/locales/' + language + '/exercise');
     const commonTranslations = require('../../../static/locales/' + language + '/common');
     const originalLanguages = ['en', 'de', 'es', 'fr'];
+    setTranslations({...domainTranslations, ...commonTranslations});
+  }
+  React.useEffect(() => {
+    onChangeLanguage("de");
+  }, []);
 
-    this.setState({
-      translations: {...translations, ...commonTranslations},
-      currentLanguage: language,
-      availableLanguages: originalLanguages.filter(word => word !== language)
+  //
+  // Tabs management
+  //
+  const [activeTab, setActiveTab] = useState(tab ? tab : 0);
+  const [activeTabName, setActiveTabName] = useState((exercise && exercise.member) ? '' : 'info');
+  const onTabChange = (e, {activeIndex, panes}) => {
+    setActiveTab(activeIndex);
+    setActiveTabName(panes[activeIndex].id);
+  }
+
+  //
+  // Video player
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
+  const onToggleVideo = () => {
+    setIsVideoOpen(!isVideoOpen);
+  }
+
+  //
+  // Message management
+  //
+  const [message, setMessage] = useState('');
+  const onMessageChange = (value) => {
+    setMessage(value);
+  }
+
+  // Settings management
+  const [settings, setSettings] = useState({
+    indications: "",
+    sets: 0,
+    weight:0,
+    training: 0,
+    unit: 0,
+    setsConfiguration: [],
+  });
+
+  React.useEffect(() => {
+    if(exercise) {
+      const {settings} = exercise;
+      if(settings) {
+        setSettings({
+          indications: settings.indications,
+          sets: settings.rounds,
+          weight:settings.weight,
+          training: settings.training,
+          unit: settings.unit,
+          setsConfiguration: settings.sets ? JSON.parse(JSON.stringify(settings.sets)) : [],
+        });
+      }
+    }
+  }, [exercise]);
+
+
+  React.useEffect(() => {
+    if(settings
+      && exercise
+      && exercise.settings
+      && (
+        (settings.setsConfiguration.length > 0 && exercise.settings.sets.length > 0 && settings.setsConfiguration.length !== exercise.settings.sets.length)
+        || exercise.settings.training != settings.training
+        || exercise.settings.weight != settings.weight
+        || exercise.settings.unit != settings.unit
+      )) {
+      onSendSettings();
+    }
+  }, [settings]);
+
+
+  const onSettingsChange = (newSettings) => {
+    setSettings({...newSettings});
+  }
+
+  const onSendSettings = () => {
+    const {indications, sets, weight, training, unit, setsConfiguration} = settings;
+    saveExerciseSettings({ variables: {
+      planexerciseId: planexerciseId,
+      indications: indications,
+      sets: sets,
+      weight: parseFloat(weight),
+      training: training,
+      unit: unit,
+      setsConfig: JSON.stringify(setsConfiguration.map(set => ({
+        weight: set.weight,
+        training: set.training,
+        unit: set.unit,
+      }))),
+    }});
+  }
+
+  //
+  // Protocoll management
+  //
+  const onCreateProtocoll = (targetDate, training, unit, weight) => {
+    createProtocoll({
+      variables: {
+        exerciseId: exerciseId,
+        memberId: memberId,
+        executionDate: moment(targetDate).format('YYYY-MM-DD hh:mm:ss'),
+        training: typeof training === 'string' ? parseInt(training.replace(',', '.')) : training,
+        unit: unit,
+        weight: typeof weight === 'string' ? parseFloat(weight.replace(',', '.')) : weight,
+      }
+    })
+  }
+
+  const onDeleteProtocoll = (id) => {
+    deleteProtocoll({
+      variables: {
+        protocollId: id,
+      }
+    })
+  }
+
+  //
+  // Chart management
+  //
+  const onCreateChatMessage = () => {
+    createChatMessage({
+      variables: {
+        text: message,
+        memberId: memberId,
+        exerciseId: exerciseId,
+      }
+    });
+    setMessage('');
+  }
+  const onDeleteChatMessage = (messageId) => {
+    deleteChatMessage({
+      variables: {
+        messageId: messageId,
+      }
     });
   }
 
-  groupWorkouts(workouts) {
-    var grouped = _.mapValues(_.groupBy(workouts, 'formated_date'), clist => clist.map(workout => _.omit(workout, 'formated_date')));
-    return grouped
+  //
+  // Notes management
+  //
+  const onCreateNote = (note) => {
+    createNote({
+      variables: {
+        text: note,
+        memberId: memberId,
+        exerciseId: exerciseId,
+        planexerciseId: planexerciseId,
+      }
+    })
   }
-
-  onToggleVideo() {
-    const {isVideoOpen} = this.state
-    this.setState({
-      isVideoOpen: !isVideoOpen
+  const onDeleteNote = (id) => {
+    deleteNote({
+      variables: {
+        noteId: id,
+      }
     })
   }
 
-  onIndicationsChange(event) {
-    const {settings} = this.state
-    this.setState({
-      settings: {
-        ...settings,
-        indications: event.target.value && event.target.value.length > 0 ? event.target.value : null,
-      },
+  //
+  // Edit mode
+  //
+  const [editMode, setEditMode] = React.useState(false);
+  const toggleEditMode = () => setEditMode(!editMode);
+  React.useEffect(() => {
+    if(editmode) {
+      setEditMode(true);
+    }
+  }, [editmode])
+  //
+  // Edit name mode
+  //
+  const [editNameMode, setEditNameMode] = React.useState(false);
+  const toggleEditNameMode = () => setEditNameMode(!editNameMode);
+
+  //
+  // Edit image mode
+  //
+  const [editImageMode, setEditImageMode] = React.useState(false);
+  const toggleEditImageMode = (image) => setEditImageMode(editImageMode > 0 ? false : image);
+
+  //
+  // Edit video mode
+  //
+  const [editVideoMode, setEditVideoMode] = React.useState(false);
+  const toggleEditVideoMode = () => setEditVideoMode(!editVideoMode);
+
+  //
+  // Edit indexes mode
+  //
+  const [editIndexesMode, setEditIndexesMode] = React.useState(false);
+  const toggleEditIndexesMode = () => setEditIndexesMode(!editIndexesMode);
+
+  //
+  // Delete exercise
+  //
+  const onDeleteExercise = () => {
+    console.log("onDeleteExercise");
+    deleteExercise({
+      variables: {
+        exerciseId: exercise.id,
+      }
     })
   }
-
-  onSetsChange(value) {
-    const {settings} = this.state
-    const {sets} = settings
-    if( isNaN(value) ) {
-      if( value == 'up') {
-        this.setState({
-          settings: {
-            ...settings,
-            sets: sets + 1,
-          },
-        })
-      } else {
-        this.setState({
-          settings: {
-            ...settings,
-            sets: sets > 0 ? sets - 1 : 0,
-          },
-        })
-      }
-    } else {
-      this.setState({
-        settings: {
-          ...settings,
-          sets: value,
-        },
-      })
+  React.useEffect(() => {
+    if( exerciseDeleted ) {
+      goBack()
     }
-  }
+  }, [exerciseDeleted]);
 
-  onWeightChange(value) {
-    const {settings} = this.state
-    const {weight} = settings
-    if( isNaN(value) ) {
-      if( value == 'up') {
-        this.setState({
-          settings: {
-            ...settings,
-            weight: weight + 1,
-          },
-        })
-      } else {
-        this.setState({
-          settings: {
-            ...settings,
-            weight: weight > 0 ? weight - 1 : 0,
-          },
+  //
+  // Delete Dialog
+  //
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = (value) => {
+    setOpen(false);
+  };
+
+  //
+  // Licence exired handling
+  //
+  const [showLicenceExpiredWarning, setShowLicenceExpiredWarning] = useState(false);
+  const toggleLicenceExpiredWarning = () => setShowLicenceExpiredWarning(!showLicenceExpiredWarning);
+  useEffect(() => {
+    if( createProtocollError && createProtocollError.message.indexOf('LICENCEINVALID') > -1 ) {
+      toggleLicenceExpiredWarning();
+    } else  if( createNoteError && createNoteError.message.indexOf('LICENCEINVALID') > -1 ) {
+      toggleLicenceExpiredWarning();
+    }  else  if( createChatMessageError && createChatMessageError.message.indexOf('LICENCEINVALID') > -1 ) {
+      toggleLicenceExpiredWarning();
+    } else {
+      setShowLicenceExpiredWarning(false);
+    }
+  }, [createProtocollError, createNoteError, createChatMessageError]);
+
+  return (
+    <Scene
+      commandsLeft={getCommandsLeft({
+          goBack,
+          t,
         })
       }
-    } else {
-      this.setState({
-        settings: {
-          ...settings,
-          weight: parseFloat(value),
-        },
-      })
+      commandsRight={ getCommandsRight(
+        t,
+        activeTabName,
+        exercise && exercise.owner,
+        editMode,
+        toggleEditMode,
+        onToggleVideo,
+        toggleEditVideoMode,
+        handleClickOpen,
+        activeChart,
+        toggleActiveChart
+      )}
+      headerChildren={<ExerciseHeader
+        owner={editMode && exercise && exercise.owner}
+        exercise={exercise}
+        editNameMode={editNameMode}
+        toggleEditNameMode={toggleEditNameMode}/>
+      }
+      t={t}
+      networkStatus={networkStatus}
+
+      showLicenceExpiredWarning={showLicenceExpiredWarning}
+      onCloseLicenceExpiredWarning={toggleLicenceExpiredWarning}
+    >
+      <Exercise
+        exercise={exercise ? exercise : {}}
+        refetch={refetch}
+        groppedWorkouts={groupWorkouts(exercise ? exercise.workouts : [])}
+        settings={settings}
+
+        t={t}
+
+        activeTab={activeTab}
+        onTabChange={onTabChange}
+
+        isVideoOpen={isVideoOpen}
+        onToggleVideo={onToggleVideo}
+
+        onSettingsChange={onSettingsChange}
+        onSyncSettings={onSendSettings}
+
+        onCreateNote={onCreateNote}
+        createNoteLoading={createNoteLoading}
+
+        onCreateChatMessage={onCreateChatMessage}
+        createChatMessageLoading={createChatMessageLoading}
+
+        onDeleteChatMessage={onDeleteChatMessage}
+        deleteChatMessageLoading={deleteChatMessageLoading}
+
+        onDeleteNote={onDeleteNote}
+        deleteNoteLoading={deleteNoteLoading}
+
+        message={message}
+        onMessageChange={onMessageChange}
+
+        onCreateProtocoll={onCreateProtocoll}
+        createProtocollLoading={createProtocollLoading}
+
+        deleteProtocoll={onDeleteProtocoll}
+        deleteProtocollLoading={deleteProtocollLoading}
+
+        loading={loading}
+
+        editable={exercise ? exercise.editable : false}
+        owner= {editMode && exercise && exercise.owner}
+
+        editNameMode={editNameMode}
+        toggleEditNameMode={toggleEditNameMode}
+
+        editImageMode={editImageMode}
+        toggleEditImageMode={toggleEditImageMode}
+
+        editVideoMode={editVideoMode}
+        toggleEditVideoMode={toggleEditVideoMode}
+
+        editIndexesMode={editIndexesMode}
+        toggleEditIndexesMode={toggleEditIndexesMode}
+
+        activeChart={activeChart}
+
+      />
+    { exercise && (activeTab == 5 || activeTabName == 'info') &&
+      <RecommendationPanel
+        exerciseId={exercise.id}
+        style={{position: "fixed", top: "calc(100vh - 70px)"}}
+        goToExercise={goToExercise}
+      />
     }
-
-  }
-
-  onRepetitionsChange(direction) {
-    const {settings} = this.state
-    const {training} = settings
-    if( direction == 'up') {
-      this.setState({
-        settings: {
-          ...settings,
-          training: training + 1,
-        },
-      })
-    } else {
-      this.setState({
-        settings: {
-          ...settings,
-          training: training > 0 ? training - 1 : 0,
-        },
-      })
-    }
-  }
-
-  onUnitChange(direction) {
-    const {settings} = this.state
-    const {unit} = settings
-    if( direction == 'up') {
-      this.setState({
-        settings: {
-          ...settings,
-          unit: (unit + 1) % 3,
-        },
-      })
-    } else {
-      this.setState({
-        settings: {
-          ...settings,
-          unit: unit == 0 ? 2 : ((unit - 1) % 3),
-        },
-      })
-    }
-  }
-
-  hasSettingsChange() {
-    const remoteSettings = this.props.data && this.props.data.exercise.settings
-    const {settings} = this.state
-    if(remoteSettings) {
-      console.log( "remoteSettings" )
-      console.log(remoteSettings)
-      console.log(settings)
-      const {indications, sets, weight, training, unit} = settings
-      return (remoteSettings.indications != indications || remoteSettings.rounds != sets || remoteSettings.weight != weight || remoteSettings.repetitions != training || remoteSettings.training_unit != unit)
-    } else {
-      return false;
-    }
-  }
-
-  render() {
-    const {processing, activeTab, isVideoOpen, note, message, settings} = this.state;
-    const {exerciseId, planexerciseId, memberId, loading, error, data} = this.props;
-    const exercise = data && (exerciseId  ? (data.exercise ? data.exercise : {}) : (data.planexercise ? data.planexercise.exercise : {}))
-    return (
-      <Scene
-        commandsLeft={this.getCommandsLeft()}
-        commandsRight={this.getCommandsRight()}
-        processing={processing}
-        headerChildren={
-          data && data.exercise && data.exercise.member && (<ExerciseHeader
-            userId={data.exercise.member.id}
-            firstName={data.exercise.member.first_name}
-            lastName={data.exercise.member.last_name}
-            exerciseName={data.exercise.name}
-          />)
-        }
-        t={this.t}
+    { open &&
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
       >
-        <Exercise
-          exercise={exercise}
-          workouts={data && data.exercise && data.exercise.workouts ? this.groupWorkouts(data.exercise.workouts) : undefined}
-          notes={data && data.exercise && data.exercise.notes ? data.exercise.notes : undefined}
-          chats={data && data.exercise && data.exercise.chats ? data.exercise.chats : undefined}
-          settings={settings}
-          t={this.t}
-          activeTag={activeTab}
-          onTabChange={this.onTabChange}
-          isVideoOpen={isVideoOpen}
-          onToggleVideo={this.onToggleVideo}
-          note={note}
-          message={message}
-          onIndicationsChange={this.onIndicationsChange}
-          onSetsChange={this.onSetsChange}
-          onWeightChange={this.onWeightChange}
-          onTrainingChange={this.onRepetitionsChange}
-          onUnitChange={this.onUnitChange}
-          onNoteChange={this.onNoteChange}
-          onMessageChange={this.onMessageChange}
-          filterStyles={{
-            shoulder: {"fill":(exercise.muscle == "3" ? "red" : "rgb(151, 151, 151)"), "fillRule":"nonzero"},
-            biceps: {"fill":(exercise.muscle == "8" ? "red" : "rgb(151, 151, 151)"),"fillRule":"nonzero"},
-            triceps: {"fill":(exercise.muscle == "9" ? "red" : "rgb(151, 151, 151)"),"fillRule":"nonzero"},
-            forearm: {"fill":(exercise.muscle == "10" ? "red" : "rgb(151, 151, 151)"),"fillRule":"nonzero"},
-            chest: {"fill":(exercise.muscle == "1" ? "red" : "rgb(151, 151, 151)"),"fillRule":"nonzero"},
-            upperback: {"fill":(exercise.muscle == "2" ? "red" : "rgb(151, 151, 151)"),"fillRule":"nonzero"},
-            lowerback: {"fill":(exercise.muscle == "5" ? "red" : "rgb(151, 151, 151)"),"fillRule":"nonzero"},
-            abs: {"fill":(exercise.muscle == "7" ? "red" : "rgb(151, 151, 151)"),"fillRule":"nonzero"},
-            hip: {"fill":(exercise.muscle == "6" ? "red" : "rgb(151, 151, 151)"),"fillRule":"nonzero"},
-            frontfemoral: {"fill":(exercise.muscle == "4" ? "red" : "rgb(151, 151, 151)"),"fillRule":"nonzero"},
-            backfemoral: {"fill":(exercise.muscle == "4" ? "red" : "rgb(151, 151, 151)"),"fillRule":"nonzero"},
-            lowerleg: {"fill":(exercise.muscle == "11" ? "red" : "rgb(151, 151, 151)"),"fillRule":"nonzero"},
-          }}
-          loading={loading}
-        />
-      </Scene>
-    )
-  }
+        <DialogTitle id="alert-dialog-title">{t("delete_dialog_title")}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {t("delete_dialog_description")}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            {t("delete_cancel")}
+          </Button>
+          <Button onClick={onDeleteExercise} color="primary" autoFocus>
+            {t("delete_ok")}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    }
+    </Scene>
+  )
 }
 
-export default withApollo(Panel)
+const PanelWithData = ({exerciseId, planexerciseId, memberId, tab, editmode, goBack, goToExercise}) => {
+  const ExerciseData = withData(Panel, {exerciseId, planexerciseId, memberId, tab, editmode, goBack, goToExercise});
+  return <ExerciseData/>
+}
+
+export default PanelWithData;

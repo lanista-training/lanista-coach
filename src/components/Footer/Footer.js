@@ -3,13 +3,9 @@ import styled from 'styled-components';
 
 const Footer = styled.div`
   position: fixed;
-  bottom: 0;
-  padding: 0.5em;
-  padding-left: 1em;
+  bottom: 0px;
   width: 100%;
-  display: flex;
-  flex-flow: row;
-  z-index: 10;
+  height: 0px;
 `;
 
 export default ({children}) => {

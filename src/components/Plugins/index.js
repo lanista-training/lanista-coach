@@ -1,3 +1,4 @@
+import * as React from "react";
 import Plungins from './Plugins';
 import { Query } from "react-apollo"
 import { PLUGINS } from "../../queries";
@@ -10,8 +11,6 @@ export default function({text, onPluginSelection, pluginFiltersState}) {
       query={PLUGINS}
     >
       {({ data, loading, error }) => {
-        console.log("plugins")
-        console.log(data)
         return (<Plungins
           data={data && data.plugins ? data.plugins : []}
           loading={loading}

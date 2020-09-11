@@ -1,0 +1,501 @@
+*
+{
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+input
+{
+  -webkit-user-select: auto !important;
+  -khtml-user-select: auto !important;
+  -moz-user-select: auto !important;
+  -ms-user-select: auto !important;
+  user-select: auto !important;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: thin;
+  src: local('Roboto Thin'),
+       local('Roboto-Thin'),
+       url(Roboto-Thin.ttf)
+       format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: light;
+  src: local('Roboto Light'),
+       local('Roboto-Light'),
+       url(Roboto-Light.ttf)
+       format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: regular;
+  font-weight: 400;
+  src: local('Roboto Regular'),
+       local('Roboto-Regular'),
+       url(Roboto-Regular.ttf)
+       format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: medium;
+  font-weight: 500;
+  src: local('Roboto Medium'),
+       local('Roboto-Medium'),
+       url(Roboto-Medium.ttf)
+       format('truetype');
+}
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: bold;
+  font-weight: 700;
+  src: local('Roboto Bold'),
+       local('Roboto-Bold'),
+       url(Roboto-Bold.ttf)
+       format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: black;
+  font-weight: 900;
+  src: local('Roboto Black'),
+       local('Roboto-Black'),
+       url(Roboto-Black.ttf)
+       format('truetype');
+}
+
+@font-face {
+  font-family: 'lanista';
+  src:  url('icomoon.eot');
+  src:  url('icomoon.eot') format('embedded-opentype'),
+    url('icomoon.ttf') format('truetype'),
+    url('icomoon.woff') format('woff'),
+    url('icomoon.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Material-Icons';
+  src:  url('materialdesignicons-webfont.eot');
+  src:  url('materialdesignicons-webfont.eot') format('embedded-opentype'),
+    url('materialdesignicons-webfont.ttf') format('truetype'),
+    url('materialdesignicons-webfont.woff') format('woff'),
+    url('materialdesignicons-webfont.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  background-color: rgb(220, 0, 78);
+}
+
+body, html {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  overscroll-behavior: none;
+  font-family: 'Roboto';
+}
+
+.scene{
+  transition: all 0.3s ease-in-out;
+  position: absolute;
+}
+
+.none-enter {
+  z-index: 1;
+}
+
+.ui.floating.label {
+  padding: 0.3em;
+  top: -0.3em!important;
+}
+
+.ui.active.button, .ui.active.button:hover {
+    color: rgb(155, 201, 61)!important;
+    font-weight: bold!important;
+}
+
+.green-icon i {
+  color: rgb(155,201,61)!important;
+  font-weight: bold!important;
+  text-shadow: 0px 0px 12px rgba(155, 201, 61, 1);
+}
+
+@keyframes glowing {
+  0% { box-shadow: 0 0 -10px #c4a300; }
+  40% { box-shadow: 0 0 20px #c4a300; }
+  60% { box-shadow: 0 0 20px #c4a300; }
+  100% { box-shadow: 0 0 -10px #c4a300; }
+}
+
+.button-glow {
+  animation: glowing 5000ms infinite;
+}
+
+.icon-time-inactive.icon::before {
+  font-family: Lanista;
+  content: "\e94e";
+}
+
+.icon-birthday-inactive.icon::before {
+  font-family: Lanista;
+  content: "\e939";
+}
+
+.icon-email-inactive.icon::before {
+  font-family: Lanista;
+  content: "\e94a";
+}
+
+.icon-calender-inactive.icon::before {
+  font-family: Lanista;
+  content: "\e91a";
+}
+
+.icon-customer-inactive.icon::before {
+  font-family: Lanista;
+  content: "\e943";
+}
+
+.icon-training-plan-inactive.icon::before {
+  font-family: Lanista;
+  content: "\e92a";
+}
+
+.icon-back.icon::before {
+  font-family: Lanista;
+  content: "\e953";
+}
+
+.icon-logout.icon::before {
+  font-family: Lanista;
+  content: "\e955";
+}
+
+.icon-shop.icon::before {
+  font-family: Lanista;
+  content: "\e956";
+}
+
+.icon-more.icon::before {
+  font-family: Lanista;
+  content: "\e954";
+}
+
+.icon-sync.icon::before {
+  font-family: Lanista;
+  content: "\e957";
+}
+
+.icon-tools-inactive.icon::before {
+  font-family: Lanista;
+  content: "\e951";
+}
+
+.icon-help-inactive.icon::before {
+  font-family: Lanista;
+  content: "\e91f";
+}
+
+.icon-exercise-inactive.icon::before {
+  font-family: Lanista;
+  content: "\e952";
+}
+
+.icon-create-workout.icon::before {
+  font-family: Lanista;
+  content: "\e900";
+}
+
+.icon-create-protocoll.icon::before {
+  font-family: Lanista;
+  content: "\e901";
+}
+
+.icon-measure.icon::before {
+  font-family: Lanista;
+  content: "\e902";
+}
+
+.icon-activity.icon::before {
+  font-family: Lanista;
+  content: "\e92d";
+}
+
+.icon-user-remove.icon::before {
+  font-family: Lanista;
+  content: "\e95d";
+}
+
+.icon-folder.icon::before {
+  font-family: Lanista;
+  content: "\e95a";
+}
+
+.icon-time-back.icon::before {
+  font-family: Lanista;
+  content: "\e958";
+}
+
+.icon-plus.icon::before {
+  font-family: Lanista;
+  content: "\e95b";
+}
+
+.icon-remove.icon::before {
+  font-family: Lanista;
+  content: "\e95c";
+}
+
+.icon-chart.icon::before {
+  font-family: Lanista;
+  content: "\e903";
+}
+
+.icon-list.icon::before {
+  font-family: Lanista;
+  content: "\e904";
+}
+
+.icon-export.icon::before {
+  font-family: Lanista;
+  content: "\e905";
+}
+
+.icon-done.icon::before {
+  font-family: Lanista;
+  content: "\e906";
+}
+
+.icon-undone.icon::before {
+  font-family: Lanista;
+  content: "\e907";
+}
+
+.icon-pdf.icon::before {
+  font-family: Lanista;
+  content: "\e908";
+}
+
+.icon-search.icon::before {
+  font-family: Lanista;
+  content: "\e909";
+}
+
+.icon-user-exercise.icon::before {
+  font-family: Lanista;
+  content: "\e90a";
+}
+
+.icon-plugin.icon::before {
+  font-family: Lanista;
+  content: "\e90b";
+}
+
+.icon-view-list.icon::before {
+  font-family: Lanista;
+  content: "\e90e";
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none!important;
+}
+
+.DayPicker {
+  font-size: 1.06rem!important;
+}
+.DayPicker-Caption {
+  text-align: center!important;
+}
+
+.DayPicker-NavButton--prev {
+  left: 1.5em!important;
+}
+
+.DayPicker-NavButton {
+  background-size: 80%!important;
+}
+
+.DayPicker-Footer {
+  text-align: center;
+}
+
+*:focus {
+    outline: 0;
+}
+
+.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+  width: 33px!important;
+}
+
+.ui.basic.red.label {
+  color: white!important;
+}
+
+.logout-button {
+  color: #db2828!important;
+}
+
+.command-red {
+  color: #db2828!important;
+}
+
+.command-green {
+  color: rgb(155, 201, 61)!important;
+}
+
+.logout-button i {
+  font-weight: bold!important;
+}
+
+.ui.card ul {
+  padding: 0!important;
+  margin: 0!important;
+}
+
+.loader,
+.loader:before,
+.loader:after {
+  border-radius: 50%;
+  width: 2.5em;
+  height: 2.5em;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation: load7 1.8s infinite ease-in-out;
+  animation: load7 1.8s infinite ease-in-out;
+}
+.loader {
+  color: #8B9898;
+  font-size: 6px;
+  margin: 4em auto;
+  position: relative;
+  text-indent: -9999em;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+  margin-bottom: 10em;
+}
+.loader:before,
+.loader:after {
+  content: '';
+  position: absolute;
+  top: 0;
+}
+.loader:before {
+  left: -3.5em;
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+.loader:after {
+  left: 3.5em;
+}
+@-webkit-keyframes load7 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 2.5em 0 -1.3em;
+  }
+  40% {
+    box-shadow: 0 2.5em 0 0;
+  }
+}
+@keyframes load7 {
+  0%,
+  80%,
+  100% {
+    box-shadow: 0 2.5em 0 -1.3em;
+  }
+  40% {
+    box-shadow: 0 2.5em 0 0;
+  }
+}
+
+.customers-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.self-protocolled {
+  color: #4aacd8!important;
+}
+.search-icon-active{color: white!important;background: rgb(155, 201, 61)!important;padding: 15px!important;margin: 17px!important;}
+
+.ui.circular.button {
+  background-color: transparent;
+}
+
+.ui.button:hover {
+  background-color: transparent;
+}
+
+.ui.button:focus {
+    background-color: transparent;
+}
+
+.exercises-list {
+  text-align: center;
+}
+
+.de-flag {
+  background-image: url('../img/de.png');
+  background-size: contain!important;
+  height: 45px;
+  width: 45px;
+  background-color: initial;
+  bottom: -25px;
+}
+
+.es-flag{
+  background-image: url('../img/es.png');
+  background-size: contain!important;
+  height: 45px;
+  width: 45px;
+  background-color: initial;
+  bottom: -25px;
+}
+
+.en-flag{
+  background-image: url('../img/en.png');
+  background-size: contain!important;
+  height: 45px;
+  width: 45px;
+  background-color: initial;
+  bottom: -25px;
+}
+
+.fr-flag{
+  background-image: url('../img/fr.png');
+  background-size: contain!important;
+  height: 45px;
+  width: 45px;
+  background-color: initial;
+  bottom: -25px;
+}
+
+.pt-flag{
+  background-image: url('../img/br.png');
+  background-size: contain!important;
+  height: 45px;
+  width: 45px;
+  background-color: initial;
+  bottom: -25px;
+}
+
+.ru-flag{
+  background-image: url('../img/ru.png');
+  background-size: contain!important;
+  height: 45px;
+  width: 45px;
+  background-color: initial;
+  bottom: -25px;
+}

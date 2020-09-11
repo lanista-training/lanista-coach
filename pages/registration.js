@@ -1,11 +1,15 @@
-import { Component } from 'react'
-import RegistrationScreen from "../src/screens/registration"
+import { Component } from 'react';
+import Router from 'next/router';
+import RegistrationScreen from "../src/screens/registration";
 
-class Registration extends Component {
+function Registration() {
 
-  render () {
-    return (<RegistrationScreen/>)
-  }
+  const goBack = () => Router.back();
+
+  return (
+    <RegistrationScreen goBack={goBack} />
+  );
+  
 }
 
 export default Registration

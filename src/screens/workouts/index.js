@@ -2,13 +2,24 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import styled from 'styled-components';
 import moment from "moment";
-import Router from 'next/router';
-import { Query } from "react-apollo";
+//import Router from 'next/router';
+import { withApollo } from '../../lib/apollo'
+import { useMutation, useQuery } from '@apollo/react-hooks'
 import Scene from "../../components/Scene";
 import Workouts from './Workouts';
 import WorkoutsHeader from "../../components/WorkoutsHeader";
-import { WORKOUTS, PLUGINS } from "../../queries";
+import { MEMBER, WORKOUTS, PLUGINS } from "../../queries";
+import { CLONEPLAN, CREATEPLAN } from "../../mutations";
 import { Search } from 'semantic-ui-react';
+
+import Help from '../../components/icons/Help';
+import Tools from '../../components/icons/Tools';
+import Back from '../../components/icons/Back';
+import Plus from '../../components/icons/Plus';
+import SearchIcon from '../../components/icons/Search';
+import List from '../../components/icons/List';
+
+import CreatePlanDialogPanel from '../customer/CreatePlanDialogPanel';
 
 const Centered  = styled.div`
   padding-top: 26vh;
@@ -18,223 +29,204 @@ const Centered  = styled.div`
   flex-flow: column;
 `;
 
-class WorkoutsWithData extends Component {
+const Counter  = styled.div`
+  width: 7em;
+  display: flex;
+  align-self: center;
+  font-weight: 900;
+  font-size: 20px;
+  justify-content: flex-end;
+  margin-right: 1em;
+  span {
+    margin-right: 5px;
+    font-weight: 100;
+  }
+`;
 
-  constructor(props) {
-    super(props);
+const WorkoutsPanel = ({memberId, goBack, goToWorkout}) => {
+  //
+  // Create Plan dialog
+  //
+  const [dialogCreatePlanOpen, setDialogCreatePlanOpen] = React.useState(false);
+  const handleOpenDialogCreatePlan = () => {setDialogCreatePlanOpen(true)}
+  const handleCloseDialogCreatePlan = () => {setDialogCreatePlanOpen(false)}
 
-    this.state = {
-      processing: false,
-      filter: '',
-      translations: [],
-      pluginMenuIsOpen: false,
-      textSearchIsOpen: false,
-    };
-    this.goBack = this.goBack.bind(this);
-    this.t = this.t.bind(this);
-    this.onChangeLanguage = this.onChangeLanguage.bind(this);
-    this.setFilter = this.setFilter.bind(this);
-    this.onOpenPluginsMenu = this.onOpenPluginsMenu.bind(this);
-    this.onClosePluginsMenu = this.onClosePluginsMenu.bind(this);
-    this.curateTextSearchResults = this.curateTextSearchResults.bind(this);
-    this.openWorkout = this.openWorkout.bind(this)
-  };
+  const [translations, setTranslations] = React.useState([]);
+  const [currentLanguage, setCurrentLanguage] = React.useState('');
+  const [availableLanguages, setAvailableLanguages] = React.useState([]);
 
-  componentDidMount() {
-    this.onChangeLanguage("de");
+  const [filter, setFilter] = React.useState('');
+  console.log("filter", filter)
+  const { loading: workoutsLoading, error: workoutsError, data: workoutsData, networkStatus } = useQuery(WORKOUTS, {
+    variables: {
+      filter: filter,
+    },
+    fetchPolicy: "network-only",
+    notifyOnNetworkStatusChange: true,
+  });
+  const {workouts} = workoutsData ? workoutsData : [];
+
+  const { loading: pluginsLoading, error: pluginsError, data: pluginsData } = useQuery(PLUGINS);
+  const {plugins} = pluginsData ? pluginsData: {plugins:[]};
+
+  const [clonePlan, { loading: clonePlanLoading, error: clonePlanError }] = useMutation(
+    CLONEPLAN,
+    {
+      update(cache,  { data: {clonePlan} }) {
+        goBack();
+      }
+    }
+  );
+
+  const [createPlan, { loading: createPlanLoading, error: createPlanError }] = useMutation(
+    CREATEPLAN,
+    {
+      update(cache,  { data: {createPlan} }) {
+        if( createPlan.id > 0 ) {
+          goToWorkout(createPlan.id);
+          /*
+          Router.push({
+            pathname: '/workout',
+            query: { workout: createPlan.id }
+          });
+          */
+        }
+      }
+    }
+  );
+
+  React.useEffect(() => {
+    onChangeLanguage("de");
+    const planId = localStorage.getItem('openplan');
+    if( planId && planId > 0 ) {
+      localStorage.removeItem('openplan');
+      goToWorkout(planId);
+      /*
+      Router.push({
+        pathname: '/workout',
+        query: { workout: planId }
+      });
+      */
+    }
+  }, []);
+
+  const onTextSearch = (text) => {
+    setFilter('text:' + text);
   }
 
-  goBack() {
-    Router.back();
+  const openWorkout = (workoutId) => {
+    if( memberId && memberId > 0 ) {
+      clonePlan({
+        variables: {
+          memberId: memberId,
+          planId: workoutId,
+        }
+      });
+    } else {
+      goToWorkout(workoutId);
+      /*
+      Router.push({
+        pathname: '/workout',
+        query: { workout: workoutId }
+      });
+      */
+    }
+
   }
 
-  setFilter(newFilter) {
-    const {filter} = this.state
-    this.setState({
-      filter: filter == newFilter ? '' : newFilter
-    })
-    this.onClosePluginsMenu()
-  }
-
-  onOpenPluginsMenu() {
-    this.setState({
-      pluginMenuIsOpen: true
-    })
-  }
-
-  onClosePluginsMenu() {
-    this.setState({
-      pluginMenuIsOpen: false
-    })
-  }
-
-  toggleTextSearch() {
-    const {textSearchIsOpen} = this.state
-    this.setState({
-      textSearchIsOpen: !textSearchIsOpen,
-      filter: ''
-    })
-  }
-
-  onTextSearch(text) {
-    this.setState({
-      filter: 'text:' + text
-    })
-  }
-
-  openWorkout(workoutId) {
-    Router.push({
-      pathname: '/workout',
-      query: { workout: workoutId }
-    });
-  }
-
-  curateTextSearchResults(results) {
+  const curateTextSearchResults = (results) => {
     return results.map((workout) => ({
       title: workout.name,
       description: workout.description
     }))
   }
 
-  getCommandsRight() {
-    const {textSearchIsOpen} = this.state
+  const getCommandsRight = () => {
     return ([{
-          icon: 'icon-plus',
-          text: 'new user',
+          icon: <Plus/>,
+          text: t('new plan'),
           type: 'type-1',
           typex: 'Ionicons',
           name: 'new user',
           onTap: () => {
             console.log("Create Workout");
-          }
-      }, {
-          icon: textSearchIsOpen ? 'icon-list' : 'icon-search',
-          text: 'folder',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'folder',
-          onTap: () => {
-            this.toggleTextSearch()
+            handleOpenDialogCreatePlan();
           }
       }]);
   }
 
-  getCommandsLeft() {
+  const getCommandsLeft = () => {
     return ([{
-          //icon: CustomerIcon,
-          icon: 'icon-back',
-          text: 'Back',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'back',
-          onTap: () => {
-            this.goBack();
-          }
-      }, {
-          //icon: CustomerIcon,
-          icon: 'icon-tools-inactive',
-          text: 'Setting',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'settings',
-          onTap: () => {
-            console.log("Command Settings");
-          }
-      }, {
-          //icon: HelpIcon,
-          icon: 'icon-help-inactive',
-          text: 'Help',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'help-circle',
-          onTap: () => {
-            console.log("Command Help");
-          }
-      }]);
+        icon: <Back/>,
+        iosname: 'tools-inactive',
+        text: '',
+        type: 'type-1',
+        typex: 'Ionicons',
+        name: 'back',
+        style: {color: '#34acfb'},
+        onTap: () => {
+          goBack();
+        }
+    }]);
   }
 
-  t(text) {
-    const {translations} = this.state;
+  const t = (text) => {
     const textWithoutNamespace = text.split(":");
     const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
     return (translation ? translation : text);
   }
 
-  onChangeLanguage( language ) {
-    const translations = require('../../../static/locales/' + language + '/dashboard');
+  const onChangeLanguage = ( language ) => {
+    const translations = require('../../../static/locales/' + language + '/workouts');
     const commonTranslations = require('../../../static/locales/' + language + '/common');
     const originalLanguages = ['en', 'de', 'es', 'fr'];
 
-    this.setState({
-      translations: {...translations, ...commonTranslations},
-      currentLanguage: language,
-      availableLanguages: originalLanguages.filter(word => word !== language)
-    });
+    setTranslations({...translations, ...commonTranslations})
+    setCurrentLanguage(language)
+    setAvailableLanguages(originalLanguages.filter(word => word !== language))
   }
 
-  render() {
-    const {processing, filter, pluginMenuIsOpen, textSearchIsOpen} = this.state;
-    const {memberId} = this.props;
-    return(
-      <Query
-        query={WORKOUTS}
-        notifyOnNetworkStatusChange
-        fetchPolicy="cache-and-network"
-        variables={{
-          memberId: memberId,
-          filter: filter
-        }}
-      >
-        {({ data, loading, error, fetchMore }) => {
-          return (
-            <Scene
-              commandsLeft={this.getCommandsLeft()}
-              commandsRight={this.getCommandsRight()}
-              processing={processing}
-              t={this.t}
-              headerChildren={
-                <Query
-                  query={PLUGINS}
-                  notifyOnNetworkStatusChange
-                  fetchPolicy="cache-and-network"
-                >
-                  {({ data, loading, error, fetchMore }) => {
-                    return(<WorkoutsHeader
-                      setFilter={this.setFilter}
-                      filter={filter}
-                      plugins={(data && data.plugins) ? data.plugins : [] }
-                      pluginMenuIsOpen={pluginMenuIsOpen}
-                      onOpenPluginsMenu={this.onOpenPluginsMenu}
-                      onClosePluginsMenu={this.onClosePluginsMenu}
-                    />)
-                  }}
-                </Query>
-              }
-            >
-              {
-                textSearchIsOpen ?
-                (
-                  <Centered>
-                    <Search
-                      loading={loading}
-                      onSearchChange={(event, { value }) => this.onTextSearch(value)}
-                      results={this.curateTextSearchResults(data.workouts)}
-                    />
-                  </Centered>
-                ) : (
-                  <Workouts
-                    workouts={data && data.workouts ? data.workouts : []}
-                    t={this.t}
-                    openWorkout={this.openWorkout}
-                  />
-                )
-              }
-            </Scene>
-          )
-        }}
-      </Query>
-    )
-  }
+  return (
+    <Scene
+      commandsLeft={getCommandsLeft()}
+      commandsRight={getCommandsRight()}
+      t={t}
+      headerChildren={
+        <>
+          <WorkoutsHeader
+            t={t}
+            setFilter={setFilter}
+            onTextSearchChange={(event) => onTextSearch(event.target.value)}
+            filter={filter}
+            plugins={(plugins) ? plugins : [] }
+          />
+          <Counter className="counter"><span>{t("plans")}</span> {workouts && workouts.length}</Counter>
+       </>
+      }
+      networkStatus={networkStatus}
+    >
+    <Workouts
+      workouts={workouts ? workouts : []}
+      t={t}
+      openWorkout={openWorkout}
+      clonePlanLoading={clonePlanLoading}
+    />
+
+    <CreatePlanDialogPanel
+      t={t}
+
+      open={dialogCreatePlanOpen}
+
+      handleCloseDialogCreatePlan={handleCloseDialogCreatePlan}
+
+      creatingPlan={createPlanLoading}
+      createPlan={createPlan}
+
+      memberId={memberId}
+    />
+
+    </Scene>
+  )
 }
 
-export default WorkoutsWithData;
+export default withApollo(WorkoutsPanel);

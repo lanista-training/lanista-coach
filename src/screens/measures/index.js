@@ -1,224 +1,489 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import _ from 'lodash';
 import moment from "moment";
-import Router from 'next/router';
-import { Query } from "react-apollo";
+//import Router from 'next/router';
 import Scene from "../../components/Scene";
 import Measures from './Measures';
 import CustomerHeader from "../../components/CustomerHeader";
-import { MEMBER_MEASURES, TESTS } from "../../queries";
+import Dialog from "../../components/LanistaDialog";
+import Button from "../../components/LanistaButton";
 
-class MeasuresWithData extends Component {
+import {StyledDrawer, StyledDialog} from "./styles";
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      processing: false,
-      translations: [],
-      showDataAsChart: true,
-      activeIndex: 0,
-      showCreateTestMenu: false,
+import DialogTitle from '@material-ui/core/DialogTitle';
+
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import CheckIcon from '@material-ui/icons/Check';
+
+import BodyDataForm from './BodyDataForm';
+import CaliperForm from './CaliperForm';
+import MeasurementsForm from './MeasurementsForm';
+
+import withData from "./DataProvider";
+
+import Help from '../../components/icons/Help';
+import Tools from '../../components/icons/Tools';
+import Back from '../../components/icons/Back';
+import Plus from '../../components/icons/Plus';
+import ListIcon from '../../components/icons/List';
+import Chart from '../../components/icons/Chart';
+import Export from '../../components/icons/Export';
+
+const findLastCaliperValues = (records) => {
+  let lastAbs = 0;
+  let lastAuxiliar = 0;
+  let lastChest = 0;
+  let lastQuads = 0;
+  let lastScapula = 0;
+  let lastSprailium = 0;
+  let lastTrizeps = 0;
+
+  if( records && records.length > 0) {
+    let allRecordsFound = false;
+    for(var i = records.length - 1; i >= 0 && !allRecordsFound; i--) {
+      lastAbs = !(lastAbs > 0) && records[i].abs ? records[i].abs : lastAbs;
+      lastAuxiliar = lastAuxiliar === 0 && records[i].auxiliar ? records[i].auxiliar : lastAuxiliar;
+      lastChest = lastChest === 0 && records[i].chest ? records[i].chest : lastChest;
+      lastQuads = lastQuads === 0 && records[i].quads ? records[i].quads : lastQuads;
+      lastScapula = lastScapula === 0 && records[i].scapula ? records[i].scapula : lastScapula;
+      lastSprailium = lastSprailium === 0 && records[i].sprailium ? records[i].sprailium : lastSprailium;
+      lastTrizeps = lastTrizeps === 0 && records[i].trizeps ? records[i].trizeps : lastTrizeps;
+      if( lastAbs > 0 && lastAuxiliar > 0 && lastChest > 0 && lastQuads > 0 && lastScapula > 0 && lastSprailium > 0 && lastTrizeps > 0) {
+        allRecordsFound = true;
+      }
     }
-    this.goBack = this.goBack.bind(this)
-    this.t = this.t.bind(this)
-    this.onChangeLanguage = this.onChangeLanguage.bind(this)
-    this.changeDataPresentation = this.changeDataPresentation.bind(this)
-    this.goToTest = this.goToTest.bind(this)
-    this.handleTabChange = this.handleTabChange.bind(this)
-    this.closeCreateTestmenu = this.closeCreateTestmenu.bind(this)
-  };
-
-  componentDidMount() {
-    this.onChangeLanguage("de");
   }
 
-  handleTabChange(e, { activeIndex }) {
-    this.setState({ activeIndex })
+  return {
+    abs: lastAbs,
+    auxiliar: lastAuxiliar,
+    chest: lastChest,
+    quads: lastQuads,
+    scapula: lastScapula,
+    sprailium: lastSprailium,
+    trizeps: lastTrizeps,
+  }
+}
+
+const findLastMeasuresValues = (records) => {
+  let lastArmRight = 0;
+  let lastArmLeft = 0;
+  let lastWaist = 0;
+  let lastUmbilical = 0;
+  let lastChest = 0;
+  let lastSpinaIlicaAnt = 0;
+  let lastWideHips = 0;
+  let lastQuadsRight = 0;
+  let lastQuadsLeft = 0;
+
+  if( records && records.length > 0) {
+    let allRecordsFound = false;
+    for(var i = records.length - 1; i >= 0 && !allRecordsFound; i--) {
+      lastArmRight = !(lastArmRight > 0) && records[i].arm_right ? records[i].arm_right : lastArmRight;
+      lastArmLeft = lastArmLeft === 0 && records[i].arm_left ? records[i].arm_left : lastArmLeft;
+      lastWaist = lastWaist === 0 && records[i].waist ? records[i].waist : lastWaist;
+      lastUmbilical = lastUmbilical === 0 && records[i].umbilical ? records[i].umbilical : lastUmbilical;
+      lastChest = lastChest === 0 && records[i].chest ? records[i].chest : lastChest;
+      lastSpinaIlicaAnt = lastSpinaIlicaAnt === 0 && records[i].spina_ilica_ant ? records[i].spina_ilica_ant : lastSpinaIlicaAnt;
+      lastWideHips = lastWideHips === 0 && records[i].wide_hips ? records[i].wide_hips : lastWideHips;
+      lastQuadsRight = lastQuadsRight === 0 && records[i].quads_right ? records[i].quads_right : lastQuadsRight;
+      lastQuadsLeft = lastQuadsLeft === 0 && records[i].quads_left ? records[i].quads_left : lastQuadsLeft;
+      if( lastArmRight > 0 && lastArmLeft > 0 && lastWaist > 0 && lastUmbilical > 0 && lastChest > 0 && lastSpinaIlicaAnt > 0 && lastWideHips > 0  && lastQuadsRight > 0  && lastQuadsLeft > 0) {
+        allRecordsFound = true;
+      }
+    }
   }
 
-  closeCreateTestmenu() {
-    this.setState({ showCreateTestMenu: false })
+  return {
+    arm_right: lastArmRight,
+    arm_left: lastArmLeft,
+    waist: lastWaist,
+    umbilical: lastUmbilical,
+    chest: lastChest,
+    spina_ilica_ant: lastSpinaIlicaAnt,
+    wide_hips: lastWideHips,
+    lastQuadsRight: lastQuadsRight,
+    lastQuadsLeft: lastQuadsLeft,
   }
 
-  goBack() {
-    Router.back();
+}
+
+const Panel = ({
+  tabIndex,
+  setTabIndex,
+
+  memberId,
+
+  tests,
+  testsLoading,
+  testsError,
+
+  member,
+  memberLoading,
+  memberError,
+
+  saveValues,
+  saveValuesLoading,
+  saveValuesError,
+
+  createTest,
+  createTestLoading,
+  createTestError,
+
+  generateMeasuresPdf,
+  generateMeasuresPdfLoading,
+  generateMeasuresPdfError,
+
+  sendMeasuresPdf,
+  sendMeasuresPdfLoading,
+  sendMeasuresPdfError,
+
+  goBack,
+  goToTest,
+
+}) => {
+  //
+  // Language management
+  //
+  const [translations, setTranslations] = useState([]);
+  const t = (text) => {
+    const textWithoutNamespace = text.split(":");
+    const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
+    return (translation ? translation : text);
+  }
+  const onChangeLanguage = ( language ) => {
+    const translations = require('../../../static/locales/' + language + '/measures');
+    const commonTranslations = require('../../../static/locales/' + language + '/common');
+    setTranslations({...translations, ...commonTranslations})
+  }
+  useEffect(() => {
+    if( translations && translations.length == 0 ) onChangeLanguage("de")
+  }, [translations]);
+
+
+  //
+  // Share Measure Drawler
+  //
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const toggleDrawer = () => setDrawerOpen(!drawerOpen);
+
+
+  const handleTabChange = (e, { activeIndex }) => {
+    setTabIndex(activeIndex);
   }
 
-  goToTest(testData) {
+  const closeCreateTestmenu = () => {
+    setShowCreateTestMenu(false);
+  }
+
+  /*
+  const goToTest = (testData) => {
     Router.push({
       pathname: '/test',
       query: {
-        memberId: this.props.memberId,
+        memberId: memberId,
         testType: testData.testtype,
         testId: testData.id,
       }
     });
   }
+  */
 
-  changeDataPresentation() {
-    const {showDataAsChart} = this.state
-    this.setState({
-      showDataAsChart: !showDataAsChart
-    })
+  const changeDataPresentation = () => {
+    setShowDataAsChart(!showDataAsChart);
   }
 
-  getCommandsRight() {
-    const {showDataAsChart, activeIndex} = this.state
-    if( activeIndex == 3 ){
+  const getCommandsRight = () => {
+    if( tabIndex == 3 ){
       return ([{
-            icon: 'icon-plus',
-            text: 'new user',
-            type: 'type-1',
-            typex: 'Ionicons',
-            name: 'new measure',
-            onTap: () => {
-              console.log("Create Test");
-              this.setState({
-                showCreateTestMenu: true
-              })
-            }
-        }]);
+        icon: <Plus/>,
+        text: t("create_test"),
+        type: 'type-1',
+        typex: 'Ionicons',
+        name: 'new measure',
+        onTap: () => {
+          console.log("Create Test");
+          setShowCreateTestMenu(true);
+        }
+      }]);
     } else {
       return ([{
-            icon: 'icon-plus',
-            text: 'new user',
-            type: 'type-1',
-            typex: 'Ionicons',
-            name: 'new measure',
-            onTap: () => {
-              console.log("Create Measure");
-
-            }
-        }, {
-            icon: showDataAsChart ? 'icon-list' : 'icon-chart',
-            text: 'folder',
-            type: 'type-1',
-            typex: 'Ionicons',
-            name: 'folder',
-            onTap: () => {
-              console.log("Show table");
-              this.changeDataPresentation();
-            }
-        }, {
-            icon: 'icon-export',
-            text: 'last',
-            type: 'type-1',
-            typex: 'Ionicons',
-            name: 'last',
-            onTap: () => {
-              console.log("Export");
-            }
-        }]);
+        icon: <Plus/>,
+        text: t('create_measure'),
+        type: 'type-1',
+        typex: 'Ionicons',
+        name: 'new measure',
+        onTap: () => {
+          console.log("Create Measure");
+          handleCreateMeasuresDialogOpen();
+        }
+      }, {
+        icon: showDataAsChart ? <ListIcon/> : <Chart/>,
+        text: showDataAsChart ? t("show_as_list") : t("show_as_chart"),
+        type: 'type-1',
+        typex: 'Ionicons',
+        name: 'folder',
+        onTap: () => {
+          changeDataPresentation();
+        }
+      }, {
+        icon: <Export/>,
+        text: t("export_document"),
+        type: 'type-1',
+        typex: 'Ionicons',
+        name: 'last',
+        onTap: () => {
+          toggleDrawer();
+        }
+      }]);
     }
 
   }
 
-  getCommandsLeft() {
+  const getCommandsLeft = () => {
     return ([{
-          //icon: CustomerIcon,
-          icon: 'icon-back',
-          text: 'Back',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'back',
-          onTap: () => {
-            this.goBack();
-          }
-      }, {
-          //icon: CustomerIcon,
-          icon: 'icon-tools-inactive',
-          text: 'Setting',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'settings',
-          onTap: () => {
-            console.log("Command Settings");
-          }
-      }, {
-          //icon: HelpIcon,
-          icon: 'icon-help-inactive',
-          text: 'Help',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'help-circle',
-          onTap: () => {
-            console.log("Command Help");
-          }
-      }]);
+        icon: <Back/>,
+        iosname: 'tools-inactive',
+        text: '',
+        type: 'type-1',
+        typex: 'Ionicons',
+        name: 'back',
+        style: {color: '#34acfb'},
+        onTap: () => {
+          goBack();
+        }
+    }]);
   }
 
-  t(text) {
-    const {translations} = this.state;
-    const textWithoutNamespace = text.split(":");
-    const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
-    return (translation ? translation : text);
+  const [processing, setProcessing] = useState(false);
+  const [showDataAsChart, setShowDataAsChart] = useState(true);
+  const [showCreateTestMenu, setShowCreateTestMenu] = useState(false);
+
+  //
+  // create measures dialog
+  //
+  const [createMeasuresDialogOpen, setCreateMeasuresDialogOpen] = useState(false);
+  const [selectedRecord, setSelectedRecord] = useState(null);
+  const handleCreateMeasuresDialogOpen = () => {
+    setCreateMeasuresDialogOpen(true);
+  };
+  const handleCreateMeasuresDialogClose = () => {
+    setCreateMeasuresDialogOpen(false);
+  };
+
+  useEffect(() => {
+    if( selectedRecord === null ) {
+
+    } else {
+      handleCreateMeasuresDialogOpen();
+    }
+  }, [selectedRecord]);
+
+  useEffect(() => {
+    !createMeasuresDialogOpen && setSelectedRecord(null);
+  }, [createMeasuresDialogOpen]);
+
+  const getForm = () => {
+    if( tabIndex == 0 ) {
+      const {calipers} = member;
+      const lastRecord = calipers && calipers.length > 0 ? {...calipers[selectedRecord === null ? calipers.length - 1 : selectedRecord]} : null;
+      if( selectedRecord === null && lastRecord ) {
+        lastRecord.target_date = null;
+      }
+      return <>
+        <DialogTitle id="alert-dialog-title">{t("body data")}</DialogTitle>
+        <DialogContent>
+          <BodyDataForm
+            t={t}
+            lastRecord={lastRecord}
+            onClose={handleCreateMeasuresDialogClose}
+            onSave={onSaveValues}
+            loading={saveValuesLoading}
+            error={saveValuesError}
+          />
+        </DialogContent>
+      </>
+  } else if( tabIndex == 1 ) {
+      const {calipers} = member;
+      const lastRecord = calipers && calipers.length > 0 ? selectedRecord === null ? findLastCaliperValues(calipers) : calipers[selectedRecord] : null;
+      if( selectedRecord === null && lastRecord ) {
+        lastRecord.target_date = null;
+      }
+      return <>
+        <DialogTitle id="alert-dialog-title">{t("caliper")}</DialogTitle>
+        <DialogContent>
+          <CaliperForm
+            t={t}
+            lastRecord={lastRecord}
+            onClose={handleCreateMeasuresDialogClose}
+            onSave={onSaveValues}
+            loading={saveValuesLoading}
+            error={saveValuesError}
+          />
+        </DialogContent>
+      </>
+  } else if( tabIndex == 2 ) {
+      const {measures} = member;
+      const lastRecord = measures && measures.length > 0 ? selectedRecord === null ? findLastMeasuresValues(measures) : measures[selectedRecord] : null;
+      //if( selectedRecord === null ) {
+      //  lastRecord.target_date = null;
+      //}
+      return <>
+        <DialogTitle id="alert-dialog-title">{t("body circumferences")}</DialogTitle>
+        <DialogContent>
+          <MeasurementsForm
+            t={t}
+            lastRecord={lastRecord}
+            onClose={handleCreateMeasuresDialogClose}
+            onSave={onSaveValues}
+            loading={saveValuesLoading}
+            error={saveValuesError}
+          />
+        </DialogContent>
+      </>
+    }
   }
 
-  onChangeLanguage( language ) {
-    const translations = require('../../../static/locales/' + language + '/anamnese');
-    const commonTranslations = require('../../../static/locales/' + language + '/common');
-    const originalLanguages = ['en', 'de', 'es', 'fr'];
+  const onSaveValues = (date, values, note) => {
+    saveValues({
+      variables: {
+        date: date,
+        data: values,
+        memberId: memberId,
+        note: note,
+      }
+    })
+  }
 
-    this.setState({
-      translations: {...translations, ...commonTranslations},
-      currentLanguage: language,
-      availableLanguages: originalLanguages.filter(word => word !== language)
+  const onCreateTest = (testType) => {
+    createTest({
+      variables: {
+        memberId: memberId,
+        testType: testType,
+      }
+    })
+  }
+
+  const onGenerateMeasuresPdf = () => {
+    generateMeasuresPdf({
+      variables: {
+        memberId: memberId,
+      }
+    })
+  }
+
+  const onSendMeasuresPdf = () => {
+    sendMeasuresPdf({
+      variables: {
+        memberId: memberId,
+      }
     });
+    setGeneratingPdf(true);
   }
+  const [generatingPdf, setGeneratingPdf] = useState(false);
 
-  render() {
-    const {processing, showDataAsChart, activeIndex, showCreateTestMenu} = this.state;
-    const {memberId} = this.props;
 
-    return(
-      <Query
-        query={TESTS}
-        notifyOnNetworkStatusChange
-        fetchPolicy="cache-and-network"
-      >
-        {({ loading: loadingTests, data: { tests } }) => (
-          <Query
-            query={MEMBER_MEASURES}
-            notifyOnNetworkStatusChange
-            fetchPolicy="cache-and-network"
-            variables={{
-              memberId: memberId,
-            }}
-          >
-            {({ data, loading, error, fetchMore }) => {
-              return (
-                <Scene
-                  commandsLeft={this.getCommandsLeft()}
-                  commandsRight={this.getCommandsRight()}
-                  processing={processing}
-                  headerChildren={
-                    <CustomerHeader
-                      userId={data && data.member ? data.member.id : ''}
-                      firstName={data && data.member ? data.member.first_name : ''}
-                      lastName={data && data.member ? data.member.last_name : ''}
-                    />
-                  }
-                  t={this.t}
-                >
-                  <Measures
-                    customer={data && data.member ? data.member : {}}
-                    t={this.t}
-                    showDataAsChart={showDataAsChart}
-                    goToTest={this.goToTest}
-                    activeIndex={activeIndex}
-                    handleTabChange={this.handleTabChange}
-                    showCreateTestMenu={showCreateTestMenu}
-                    closeCreateTestmenu={this.closeCreateTestmenu}
-                    testsTypes={tests}
-                  />
-                </Scene>
-              )
-            }}
-          </Query>
-        )}
-      </Query>
-    )
-  }
+  return (
+    <Scene
+      commandsLeft={getCommandsLeft()}
+      commandsRight={getCommandsRight()}
+      processing={processing}
+      headerChildren={
+        <CustomerHeader
+          firstName={member ? member.first_name : ''}
+          lastName={member ? member.last_name : ''}
+          photoUrl={member ? member.photoUrl : ''}
+          editable={false}
+        />
+      }
+      t={t}
+    >
+      <Measures
+        customer={member ? member : {}}
+        t={t}
+        showDataAsChart={showDataAsChart}
+        goToTest={goToTest}
+
+        activeIndex={tabIndex}
+        handleTabChange={handleTabChange}
+        showCreateTestMenu={showCreateTestMenu}
+        closeCreateTestmenu={closeCreateTestmenu}
+
+        testsTypes={tests}
+        setSelectedRecord={setSelectedRecord}
+
+        onCreateTest={onCreateTest}
+        createTestLoading={createTestLoading}
+        createTestError={createTestError}
+      />
+
+
+      { createMeasuresDialogOpen &&
+        <Dialog
+          open={createMeasuresDialogOpen}
+          onClose={handleCreateMeasuresDialogClose}
+        >
+          {getForm()}
+        </Dialog>
+      }
+
+      { generatingPdf &&
+        <StyledDialog
+          open={generatingPdf}
+          onClose={() => setGeneratingPdf(false)}
+        >
+          { sendMeasuresPdfLoading && !sendMeasuresPdfError &&
+            <>
+              <CircularProgress color="inherit" />
+              <div className="loading-message">{t("generating-email")}</div>
+            </>
+          }
+          { !sendMeasuresPdfLoading && !sendMeasuresPdfError &&
+            <>
+              <CheckIcon />
+              <div className="loading-message">{t("email-sent")}</div>
+                <Button onClick={() => setGeneratingPdf(false)}>
+                  OK
+                </Button>
+            </>
+          }
+        </StyledDialog>
+      }
+
+      <StyledDrawer anchor="right" open={drawerOpen} onClose={() => toggleDrawer()}>
+        <div
+          role="presentation"
+          onClick={() => toggleDrawer()}
+          onKeyDown={() => toggleDrawer()}
+        >
+          <List>
+            <div className="list-item-wrapper">
+              <ListItem button key="new-plan" onClick={onGenerateMeasuresPdf}>
+                <ListItemText primary={t("create_pdf")} />
+              </ListItem>
+            </div>
+            <div className="list-item-wrapper">
+              <ListItem button key="new-plan-from-templates" onClick={onSendMeasuresPdf}>
+                <ListItemText primary={t("email_measures")} />
+              </ListItem>
+            </div>
+          </List>
+        </div>
+      </StyledDrawer>
+
+
+    </Scene>
+  )
 }
 
-export default MeasuresWithData;
+const PanelWithData = ({memberId, goBack, goToTest}) => {
+  const MeasuresData = withData(Panel, {memberId, goBack, goToTest});
+  return <MeasuresData/>
+}
+
+export default PanelWithData;

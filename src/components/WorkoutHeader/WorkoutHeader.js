@@ -20,7 +20,7 @@ const WorkoutHeader  = styled.div`
     white-space: nowrap;
     overflow: hidden;
     float: left;
-    padding-top: 20px;
+    padding-top: 12px;
     text-transform: uppercase;
     font-size: 25px;
     -webkit-letter-spacing: -1px;
@@ -39,7 +39,7 @@ const WorkoutHeader  = styled.div`
 
 export default ({title, subtitle}) => (
   <WorkoutHeader>
-    <div className="workout-title">{title}</div>
-    <div className="workout-sub-title">{subtitle}</div>
+    <div key={"header-1"} className="workout-title">{title}</div>
+    <div key={"header-2"} className="workout-sub-title">{subtitle}</div>
   </WorkoutHeader>
 );

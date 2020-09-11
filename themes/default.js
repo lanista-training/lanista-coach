@@ -14,7 +14,7 @@ const theme = {
     secondary: "#f4f2f2",
   },
   header: {
-    height: '70px'
+    height: '60px'
   },
   footer: {
     height: '60px'

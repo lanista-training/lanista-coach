@@ -1,139 +1,452 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import _ from 'lodash';
 import moment from "moment";
 import Router from 'next/router';
-import { Query } from "react-apollo";
 import Scene from "../../components/Scene";
 import Anamnese from './Anamnese';
 import CustomerHeader from "../../components/CustomerHeader";
-import { MEMBER_ANANMESE } from "../../queries";
 
-class AnamneseWithData extends Component {
+import withData from "./DataProvider";
 
-  constructor(props) {
-    super(props);
+import Help from '../../components/icons/Help';
+import Tools from '../../components/icons/Tools';
+import Back from '../../components/icons/Back';
 
-    this.state = {
-      processing: false,
-      translations: [],
-      activeIndex: 0,
-    };
-    this.goBack = this.goBack.bind(this);
-    this.t = this.t.bind(this);
-    this.onChangeLanguage = this.onChangeLanguage.bind(this);
-    this.handleTabChange = this.handleTabChange.bind(this)
-  };
+const Panel = ({
+  me,
 
-  componentDidMount() {
-    this.onChangeLanguage("de");
-  }
+  tabIndex,
+  setTabIndex,
 
-  handleTabChange(e, { activeIndex }) {
-    this.setState({ activeIndex })
-  }
+  memberId,
+  tab,
+  id,
 
-  goBack() {
-    Router.back();
-  }
+  member,
+  memberLoading,
+  memberError,
 
-  getCommandsRight() {
-    return ([]);
-  }
+  saveFinding,
+  saveFindingLoading,
+  saveFindingError,
 
+  createFinding,
+  createFindingLoading,
+  createFindingError,
 
-  getCommandsLeft() {
-    return ([{
-          //icon: CustomerIcon,
-          icon: 'icon-back',
-          text: 'Back',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'back',
-          onTap: () => {
-            this.goBack();
-          }
-      }, {
-          //icon: CustomerIcon,
-          icon: 'icon-tools-inactive',
-          text: 'Setting',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'settings',
-          onTap: () => {
-            console.log("Command Settings");
-          }
-      }, {
-          //icon: HelpIcon,
-          icon: 'icon-help-inactive',
-          text: 'Help',
-          type: 'type-1',
-          typex: 'Ionicons',
-          name: 'help-circle',
-          onTap: () => {
-            console.log("Command Help");
-          }
-      }]);
-  }
+  deleteFinding,
+  deleteFindingLoading,
+  deleteFindingError,
 
-  t(text) {
-    const {translations} = this.state;
+  createLifestyle,
+  createLifestyleLoading,
+  createLifestyleError,
+
+  saveLifestyle,
+  saveLifestyleLoading,
+  saveLifestyleError,
+
+  deleteLifestyle,
+  deleteLifestyleLoading,
+  deleteLifestyleError,
+
+  createDrug,
+  createDrugLoading,
+  createDrugError,
+
+  saveDrug,
+  saveDrugLoading,
+  saveDrugError,
+
+  deleteDrug,
+  deleteDrugLoading,
+  deleteDrugError,
+
+  createSportActivity,
+  createSportActivityLoading,
+  createSportActivityError,
+
+  saveSportActivity,
+  saveSportActivityLoading,
+  saveSportActivityError,
+
+  deleteSportActivity,
+  deleteSportActivityLoading,
+  deleteSportActivityError,
+
+  createGoal,
+  createGoalLoading,
+  createGoalError,
+
+  saveGoal,
+  saveGoalLoading,
+  saveGoalError,
+
+  deleteGoal,
+  deleteGoalLoading,
+  deleteGoalError,
+
+  createPhysio,
+  createPhysioLoading,
+  createPhysioError,
+
+  savePhysio,
+  savePhysioLoading,
+  savePhysioError,
+
+  deletePhysio,
+  deletePhysioLoading,
+  deletePhysioError,
+
+  goBack,
+}) => {
+  //
+  // Language management
+  //
+  const [translations, setTranslations] = useState([]);
+  const t = (text) => {
     const textWithoutNamespace = text.split(":");
     const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
     return (translation ? translation : text);
   }
-
-  onChangeLanguage( language ) {
+  const onChangeLanguage = ( language ) => {
     const translations = require('../../../static/locales/' + language + '/anamnese');
-    const commonTranslations = require('../../../static/locales/' + language + '/common');
-    const originalLanguages = ['en', 'de', 'es', 'fr'];
+    setTranslations({...translations})
+  }
+  useEffect(() => {
+    if( translations && translations.length == 0 ) onChangeLanguage("de")
+  }, [translations]);
 
-    this.setState({
-      translations: {...translations, ...commonTranslations},
-      currentLanguage: language,
-      availableLanguages: originalLanguages.filter(word => word !== language)
-    });
+
+  const handleTabChange = (e, { activeIndex }) => {
+    setTabIndex(activeIndex);
   }
 
-  render() {
-    const {processing, activeIndex} = this.state;
-    const {memberId} = this.props;
-
-    return(
-      <Query
-        query={MEMBER_ANANMESE}
-        notifyOnNetworkStatusChange
-        fetchPolicy="cache-and-network"
-        variables={{
-          memberId: memberId,
-        }}
-      >
-        {({ data, loading, error, fetchMore }) => {
-          return (
-            <Scene
-              commandsLeft={this.getCommandsLeft()}
-              commandsRight={this.getCommandsRight()}
-              processing={processing}
-              headerChildren={
-                <CustomerHeader
-                  userId={data && data.member ? data.member.id : ''}
-                  firstName={data && data.member ? data.member.first_name : ''}
-                  lastName={data && data.member ? data.member.last_name : ''}
-                />
-              }
-              t={this.t}
-            >
-              <Anamnese
-                customer={data && data.member ? data.member : {}}
-                t={this.t}
-                activeIndex={activeIndex}
-                handleTabChange={this.handleTabChange}
-              />
-            </Scene>
-          )
-        }}
-      </Query>
-    )
+  /*
+  const goBack = () => {
+    Router.back();
   }
+  */
+
+  const getCommandsRight = () => {
+    return ([]);
+  }
+
+  const getCommandsLeft = () => {
+    return ([{
+        icon: <Back/>,
+        iosname: 'tools-inactive',
+        text: '',
+        type: 'type-1',
+        typex: 'Ionicons',
+        name: 'back',
+        style: {color: '#34acfb'},
+        onTap: goBack
+    }]);
+  }
+
+  const onSaveFinding = ({id, title, description, warningFlag, visible, rating, startDate, endDate}) => {
+    saveFinding({
+      variables: {
+        findingId: id,
+        title: title,
+        description: description,
+        warningFlag: warningFlag,
+        visible: visible,
+        rating: rating,
+        startDate: startDate + '',
+        endDate: endDate + '',
+      }
+    })
+  }
+
+  const onCreateFinding = ({title, xPosition, yPosition, description, warningFlag, visible, rating, startDate, endDate}) => {
+    createFinding({
+      variables: {
+        memberId: memberId,
+        xPosition: parseInt(xPosition),
+        yPosition: parseInt(yPosition),
+        title: title,
+        description: description,
+        warningFlag: warningFlag,
+        visible: visible,
+        rating: rating,
+        startDate: startDate + '',
+        endDate: endDate + '',
+      }
+    })
+  }
+
+  const onDeleteFinding = ({id}) => {
+    deleteFinding({
+      variables: {
+        findingId: id,
+      }
+    })
+  }
+
+  const onCreateLifestyle = (description) => {
+    createLifestyle({
+      variables: {
+        memberId: memberId,
+        description: description,
+      }
+    })
+  }
+
+  const onSaveLifestyle = ({itemId, description, rating, warningFlag, startDate, endDate}) => {
+    saveLifestyle({
+      variables: {
+        itemId: itemId,
+        description: description,
+        rating: rating,
+        warningFlag: warningFlag,
+        startDate: startDate + '',
+        endDate: endDate + '',
+      }
+    })
+  }
+
+  const onDeleteLifestyle = (itemId) => {
+    deleteLifestyle({
+      variables: {
+        itemId: itemId,
+      }
+    })
+  }
+
+  const onCreateDrug = (description) => {
+    createDrug({
+      variables: {
+        memberId: memberId,
+        description: description,
+      }
+    })
+  }
+
+  const onSaveDrug = ({itemId, description, rating, warningFlag, startDate, endDate}) => {
+    saveDrug({
+      variables: {
+        itemId: itemId,
+        description: description,
+        rating: rating,
+        warningFlag: warningFlag,
+        startDate: startDate + '',
+        endDate: endDate + '',
+      }
+    })
+  }
+
+  const onDeleteDrug = (itemId) => {
+    deleteDrug({
+      variables: {
+        itemId: itemId,
+      }
+    })
+  }
+
+  const onCreateSportActivity = (description) => {
+    createSportActivity({
+      variables: {
+        memberId: memberId,
+        description: description,
+      }
+    })
+  }
+
+  const onSaveSportActivity = ({itemId, description, rating, warningFlag, startDate, endDate}) => {
+    saveSportActivity({
+      variables: {
+        itemId: itemId,
+        description: description,
+        rating: rating,
+        warningFlag: warningFlag,
+        startDate: startDate + '',
+        endDate: endDate + '',
+      }
+    })
+  }
+
+  const onDeleteSportActivity = (itemId) => {
+    deleteSportActivity({
+      variables: {
+        itemId: itemId,
+      }
+    })
+  }
+
+  const onCreateGoal = (description) => {
+    createGoal({
+      variables: {
+        memberId: memberId,
+        description: description,
+      }
+    })
+  }
+
+  const onSaveGoal = ({itemId, description, rating, warningFlag, startDate, endDate}) => {
+    saveGoal({
+      variables: {
+        itemId: itemId,
+        description: description,
+        rating: rating,
+        warningFlag: warningFlag,
+        startDate: startDate + '',
+        endDate: endDate + '',
+      }
+    })
+  }
+
+  const onDeleteGoal = (itemId) => {
+    deleteGoal({
+      variables: {
+        itemId: itemId,
+      }
+    })
+  }
+
+  const onCreatePhysio = (description) => {
+    createPhysio({
+      variables: {
+        memberId: memberId,
+        description: description,
+      }
+    })
+  }
+
+  const onSavePhysio = ({itemId, description, rating, warningFlag, startDate, endDate}) => {
+    savePhysio({
+      variables: {
+        itemId: itemId,
+        description: description,
+        rating: rating,
+        warningFlag: warningFlag,
+        startDate: startDate + '',
+        endDate: endDate + '',
+      }
+    })
+  }
+
+  const onDeletePhysio = (itemId) => {
+    deletePhysio({
+      variables: {
+        itemId: itemId,
+      }
+    })
+  }
+
+  return (
+    <Scene
+      commandsLeft={getCommandsLeft()}
+      commandsRight={getCommandsRight()}
+      headerChildren={
+        <CustomerHeader
+          userId={member ? member.id : ''}
+          firstName={member ? member.first_name : ''}
+          lastName={member ? member.last_name : ''}
+          photoUrl= {member ? member.photoUrl : ''}
+        />
+      }
+      t={t}
+    >
+      <Anamnese
+        me={me}
+
+        tab={tab}
+        id={id}
+
+        customer={member ? member : {}}
+        loading={memberLoading}
+        error={memberError}
+
+        t={t}
+
+        activeIndex={tabIndex}
+        handleTabChange={handleTabChange}
+
+        onSaveFinding={onSaveFinding}
+        saveFindingLoading={saveFindingLoading}
+        saveFindingError={saveFindingError}
+
+        onCreateFinding={onCreateFinding}
+        createFindingLoading={createFindingLoading}
+        createFindingError={createFindingError}
+
+        onDeleteFinding={onDeleteFinding}
+        deleteFindingLoading={deleteFindingLoading}
+        deleteFindingError={deleteFindingError}
+
+        onCreateLifestyle={onCreateLifestyle}
+        createLifestyleLoading={createLifestyleLoading}
+        createLifestyleError={createLifestyleError}
+
+        onSaveLifestyle={onSaveLifestyle}
+        saveLifestyleLoading={saveLifestyleLoading}
+        saveLifestyleError={saveLifestyleError}
+
+        onDeleteLifestyle={onDeleteLifestyle}
+        deleteLifestyleLoading={deleteLifestyleLoading}
+        deleteLifestyleError={deleteLifestyleError}
+
+        onCreateDrug={onCreateDrug}
+        createDrugLoading={createDrugLoading}
+        createDrugError={createDrugError}
+
+        onSaveDrug={onSaveDrug}
+        saveDrugLoading={saveDrugLoading}
+        saveDrugError={saveDrugError}
+
+        onDeleteDrug={onDeleteDrug}
+        deleteDrugLoading={deleteDrugLoading}
+        deleteDrugError={deleteDrugError}
+
+        onCreateSportActivity={onCreateSportActivity}
+        createSportActivityLoading={createSportActivityLoading}
+        createSportActivityError={createSportActivityError}
+
+        onSaveSportActivity={onSaveSportActivity}
+        saveSportActivityLoading={saveSportActivityLoading}
+        saveSportActivityError={saveSportActivityError}
+
+        onDeleteSportActivity={onDeleteSportActivity}
+        deleteSportActivityLoading={deleteSportActivityLoading}
+        deleteSportActivityError={deleteSportActivityError}
+
+        onCreateGoal={onCreateGoal}
+        createGoalLoading={createGoalLoading}
+        createGoalError={createGoalError}
+
+        onSaveGoal={onSaveGoal}
+        saveGoalLoading={saveGoalLoading}
+        saveGoalError={saveGoalError}
+
+        onDeleteGoal={onDeleteGoal}
+        deleteGoalLoading={deleteGoalLoading}
+        deleteGoalError={deleteGoalError}
+
+        onCreatePhysio={onCreatePhysio}
+        createPhysioLoading={createPhysioLoading}
+        createPhysioError={createPhysioError}
+
+        onSaveLifestyle={onSaveLifestyle}
+        saveLifestyleLoading={saveLifestyleLoading}
+        saveLifestyleError={saveLifestyleError}
+
+        onSavePhysio={onSavePhysio}
+        savePhysioLoading={savePhysioLoading}
+        savePhysioError={savePhysioError}
+
+        onDeletePhysio={onDeletePhysio}
+        deletePhysioLoading={deletePhysioLoading}
+        deletePhysioError={deletePhysioError}
+      />
+    </Scene>
+  )
 }
 
-export default AnamneseWithData;
+const PanelWithData = ({memberId, tab, id, goBack}) => {
+  const AnamneseData = withData(Panel, {memberId, tab, id, goBack});
+  return <AnamneseData/>
+}
+
+export default PanelWithData;
