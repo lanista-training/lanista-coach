@@ -1,4 +1,5 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import cookie from 'js-cookie';
 import _ from 'lodash';
 import {
@@ -661,5 +662,183 @@ const Customer = ({
     </Stage>
   );
 };
+
+Customer.propTypes = {
+  /**
+   * Function to translate content
+  */
+  t: PropTypes.func,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  me: PropTypes.object,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  removeMemberFile: PropTypes.func,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  customer: PropTypes.object,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  lastMeasures: PropTypes.array,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  onProtocollClick: PropTypes.func,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  openWorkout: PropTypes.func,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  addFiles: PropTypes.func,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  protocolls: PropTypes.array,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  protocollsLoading: PropTypes.bool,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  memberFiles: PropTypes.array,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  loadingMemberFiles: PropTypes.bool,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  updateMemberFiles: PropTypes.func,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  showGoal: PropTypes.func,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  createGoal: PropTypes.func,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  loading: PropTypes.bool,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  openSnackbar: PropTypes.func,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  handleCloseSnackbar: PropTypes.func,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  snackbarMessage: PropTypes.string,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  createWorkout: PropTypes.func,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+
+  onCreateNote: PropTypes.func,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  createNoteLoading: PropTypes.bool,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  createNoteError: PropTypes.object,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  onDeleteNote: PropTypes.func,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  deleteNoteLoading: PropTypes.bool,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  deleteNoteError: PropTypes.object,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  onUpdateNote: PropTypes.func,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  updateNoteLoading: PropTypes.bool,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  updateNoteError: PropTypes.object,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  onCreatePlanFromWorkout: PropTypes.func,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  onAddWorkoutsToPlan: PropTypes.func,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  createPlanFromWorkoutLoading: PropTypes.bool,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  createPlanFromWorkoutError: PropTypes.object,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  onGoToMeasures: PropTypes.func,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  onWarningClick: PropTypes.func,
+}
 
 export default Customer;

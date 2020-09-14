@@ -1,4 +1,5 @@
 import * as React from "react";
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import _ from 'lodash';
 import { Grid, Tab, Icon, Statistic, List, Image } from 'semantic-ui-react';
@@ -13,7 +14,7 @@ import GoalsPane from './GoalsPane';
 import SportActivitiesPane from './SportActivitiesPane';
 import PhysiosPane from './PhysiosPane';
 
-export default ({
+const Screen = ({
   me,
 
   tab,
@@ -256,3 +257,323 @@ export default ({
     </Stage>
   );
 };
+
+Screen.propTypes = {
+  /**
+   * Function to translate content
+  */
+  t: PropTypes.func,
+
+  /**
+   * Object wiht the trainer logged in
+  */
+  me: PropTypes.object,
+
+  /**
+   * The fist tab to be shown after mounting
+  */
+  tab: PropTypes.number,
+
+  /**
+   * Open the entry with this id after render
+  */
+  id: PropTypes.number,
+
+  /**
+   * The customer object
+  */
+  customer: PropTypes.object,
+
+  /**
+   * Graphql loading object
+  */
+  loading: PropTypes.bool,
+
+  /**
+   * Graphql error object
+  */
+  error: PropTypes.object,
+
+  /**
+   * Graphql error object
+  */
+  activeIndex: PropTypes.number,
+
+  /**
+   * Graphql error object
+  */
+  handleTabChange: PropTypes.func,
+
+  /**
+   * Graphql error object
+  */
+  onSaveFinding: PropTypes.func,
+
+  /**
+   * Graphql error object
+  */
+  saveFindingLoading: PropTypes.bool,
+
+  /**
+   * Graphql error object
+  */
+  saveFindingError: PropTypes.object,
+
+  /**
+   * Graphql error object
+  */
+  onCreateFinding: PropTypes.func,
+
+  /**
+   * Graphql error object
+  */
+  createFindingLoading: PropTypes.bool,
+
+  /**
+   * Graphql error object
+  */
+  createFindingError: PropTypes.object,
+
+  /**
+   * Graphql error object
+  */
+  onDeleteFinding: PropTypes.func,
+
+  /**
+   * Graphql error object
+  */
+  deleteFindingLoading: PropTypes.bool,
+
+  /**
+   * Graphql error object
+  */
+  deleteFindingError: PropTypes.object,
+
+  /**
+   * Graphql error object
+  */
+  onCreateLifestyle: PropTypes.func,
+
+  /**
+   * Graphql error object
+  */
+  createLifestyleLoading: PropTypes.bool,
+
+  /**
+   * Graphql error object
+  */
+  createLifestyleError: PropTypes.object,
+
+  /**
+   * Graphql error object
+  */
+  onSaveLifestyle: PropTypes.func,
+
+  /**
+   * Graphql error object
+  */
+  saveLifestyleLoading: PropTypes.bool,
+
+  /**
+   * Graphql error object
+  */
+  saveLifestyleError: PropTypes.object,
+
+  /**
+   * Graphql error object
+  */
+  onDeleteLifestyle: PropTypes.func,
+
+  /**
+   * Graphql error object
+  */
+  deleteLifestyleLoading: PropTypes.bool,
+
+  /**
+   * Graphql error object
+  */
+  deleteLifestyleError: PropTypes.object,
+
+  /**
+   * Graphql error object
+  */
+  onCreateDrug: PropTypes.func,
+
+  /**
+   * Graphql error object
+  */
+  createDrugLoading: PropTypes.bool,
+
+  /**
+   * Graphql error object
+  */
+  createDrugError: PropTypes.object,
+
+  /**
+   * Graphql error object
+  */
+  onSaveDrug: PropTypes.func,
+
+  /**
+   * Graphql error object
+  */
+  saveDrugLoading: PropTypes.bool,
+
+  /**
+   * Graphql error object
+  */
+  saveDrugError: PropTypes.object,
+
+  /**
+   * Graphql error object
+  */
+  onDeleteDrug: PropTypes.func,
+
+  /**
+   * Graphql error object
+  */
+  deleteDrugLoading: PropTypes.bool,
+
+  /**
+   * Graphql error object
+  */
+  deleteDrugError: PropTypes.object,
+
+  /**
+   * Graphql error object
+  */
+  onCreateSportActivity: PropTypes.func,
+
+  /**
+   * Graphql error object
+  */
+  createSportActivityLoading: PropTypes.bool,
+
+  /**
+   * Graphql error object
+  */
+  createSportActivityError: PropTypes.object,
+
+  /**
+   * Graphql error object
+  */
+  onSaveSportActivity: PropTypes.func,
+
+  /**
+   * Graphql error object
+  */
+  saveSportActivityLoading: PropTypes.bool,
+
+  /**
+   * Graphql error object
+  */
+  saveSportActivityError: PropTypes.object,
+
+  /**
+   * Graphql error object
+  */
+  onDeleteSportActivity: PropTypes.func,
+
+  /**
+   * Graphql error object
+  */
+  deleteSportActivityLoading: PropTypes.bool,
+
+  /**
+   * Graphql error object
+  */
+  deleteSportActivityError: PropTypes.object,
+
+  /**
+   * Graphql error object
+  */
+  onCreateGoal: PropTypes.func,
+
+  /**
+   * Graphql error object
+  */
+  createGoalLoading: PropTypes.bool,
+
+  /**
+   * Graphql error object
+  */
+  createGoalError: PropTypes.object,
+
+  /**
+   * Graphql error object
+  */
+  onSaveGoal: PropTypes.func,
+
+  /**
+   * Graphql error object
+  */
+  saveGoalLoading: PropTypes.bool,
+
+  /**
+   * Graphql error object
+  */
+  saveGoalError: PropTypes.object,
+
+  /**
+   * Graphql error object
+  */
+  onDeleteGoal: PropTypes.func,
+
+  /**
+   * Graphql error object
+  */
+  deleteGoalLoading: PropTypes.bool,
+
+  /**
+   * Graphql error object
+  */
+  deleteGoalError: PropTypes.object,
+
+  /**
+   * Graphql error object
+  */
+  onCreatePhysio: PropTypes.func,
+
+  /**
+   * Graphql error object
+  */
+  createPhysioLoading: PropTypes.bool,
+
+  /**
+   * Graphql error object
+  */
+  createPhysioError: PropTypes.object,
+
+  /**
+   * Graphql error object
+  */
+  onSavePhysio: PropTypes.func,
+
+  /**
+   * Graphql error object
+  */
+  savePhysioLoading: PropTypes.bool,
+
+  /**
+   * Graphql error object
+  */
+  savePhysioError: PropTypes.object,
+
+  /**
+   * Graphql error object
+  */
+  onDeletePhysio: PropTypes.func,
+
+  /**
+   * Graphql error object
+  */
+  deletePhysioLoading: PropTypes.bool,
+
+  /**
+   * Graphql error object
+  */
+  deletePhysioError: PropTypes.object,
+}
+
+
+export default Screen;

@@ -1,8 +1,9 @@
 import * as React from "react";
+import PropTypes from 'prop-types';
 import { Modal } from 'semantic-ui-react'
 import Feeds from '../../components/feeds'
 
-export default ({
+const Dashboard = ({
   feeds,
   t,
   type,
@@ -60,3 +61,122 @@ export default ({
     </>
   )
 };
+
+Dashboard.propTypes = {
+  /**
+   * Function to translate content
+  */
+  t: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  feeds: PropTypes.array,
+
+  /**
+   * Function to translate content
+  */
+  type: PropTypes.number,
+
+  /**
+   * Function to translate content
+  */
+  currentScrollPosition: PropTypes.number,
+
+  /**
+   * Function to translate content
+  */
+  jumpToNow: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  jumpToDay: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onRequestPage: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  loading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  error: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  hasMore: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  hasMoreUp: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  initialLoading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  setPageSize: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  congratulateMember: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  openMember: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  openPlan: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  showModal: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  modalPanel: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  eventsQuery: PropTypes.string,
+
+  /**
+   * Function to translate content
+  */
+  accesslevel: PropTypes.number,
+
+  /**
+   * Function to translate content
+  */
+  bu: PropTypes.number,
+
+  /**
+   * Function to translate content
+  */
+  hasInterface: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  setFilter: PropTypes.func,
+}
+
+export default Dashboard;

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   Button,
   Image,
@@ -17,7 +18,6 @@ import {
   StyledDialog,
 } from './styles'
 import InfiniteList from '../../components/InfiniteList';
-import { useTransition, animated } from 'react-spring';
 import EmptyListMessage from '../../components/EmptyListMessage';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {Button as DialogButton} from '@material-ui/core/Button';
@@ -157,6 +157,103 @@ const Customers = ({
       }
     </Stage>
   );
+};
+
+Customers.propTypes = {
+  /**
+   * Function to translate content
+  */
+  t: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  customers: PropTypes.array,
+
+  /**
+   * Function to translate content
+  */
+  filtering: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  isFilterOn: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  showCustomer: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onRequestPage: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  hasMore: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  initialLoading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  loading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  showLoading: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  setPageSize: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  filter: PropTypes.string,
+
+  /**
+   * Function to translate content
+  */
+  folderMode: PropTypes.number,
+
+  /**
+   * Function to translate content
+  */
+  onRemoveMemberFromFolder: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onAddMemberToFolder: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  createFolderDialogOpen: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  createFolderDialogHandleClose: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onCreateFolder: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  createFolderLoading: PropTypes.bool,
 };
 
 export default Customers;

@@ -1,4 +1,5 @@
 import * as React from "react";
+import PropTypes from 'prop-types';
 import moment from "moment";
 import {
   Form,
@@ -83,7 +84,7 @@ const countries = countryList.getData().map(country => ({
   flag: country.code.toLowerCase()
 }))
 
-export default ({
+const Profile = ({
   t,
   languages,
   member,
@@ -722,3 +723,147 @@ export default ({
   </Stage>
   );
 };
+
+Profile.propTypes = {
+  /**
+   * Function to translate content
+  */
+  t: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  languages: PropTypes.array,
+
+  /**
+   * Function to translate content
+  */
+  member: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  loading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  error: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  goBack: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onUpdateMember: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  updateMemberLoading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  updateMemberError: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  onUpdateMemberAddress: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  updateMemberAddressLoading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  updateMemberAddressError: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  onRequestDataPrivacySignature: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onRequestDataPrivacyDocument: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  dataPrivacyDocument: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  onSendActivationMail: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  sendActivationMailLoading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  sendActivationMailError: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  onUploadMemberImage: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  uploadMemberImageLoading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  uploadMemberImageError: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  previewImage: PropTypes.string,
+
+  /**
+   * Function to translate content
+  */
+  resetPreviewImage: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onCropImage: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onRotateImage: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  loadingImage: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  onDeleteMember: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  memberDeleted: PropTypes.bool,
+};
+
+export default Profile;

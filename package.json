@@ -14,7 +14,10 @@
     "start": "next start",
     "export": "next export",
     "start-web": "react-scripts start",
-    "build-web": "react-scripts build"
+    "build-web": "react-scripts build",
+    "docz:dev": "docz dev",
+    "docz:build": "docz build",
+    "docz:serve": "docz build && docz serve"
   },
   "keywords": [
     "lanista",
@@ -54,6 +57,7 @@
     "country-list": "^2.1.0",
     "cowsay-browser": "^1.1.8",
     "date-fns": "^2.14.0",
+    "docz": "^2.3.1",
     "framer-motion": "^1.11.1",
     "graphql": "^14.7.0",
     "isomorphic-unfetch": "^3.0.0",

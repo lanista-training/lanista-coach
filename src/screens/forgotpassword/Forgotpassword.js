@@ -1,5 +1,6 @@
 /* eslint import/no-webpack-loader-syntax: off */
 import * as React from "react";
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Input, Grid, Button, Checkbox, Icon, Modal, Header, Image } from 'semantic-ui-react';
 import { Menu, MainButton, ChildButton } from "react-mfb";
@@ -226,6 +227,59 @@ class Forgotpassword extends React.Component {
       </div>
     );
   }
+};
+
+Forgotpassword.propTypes = {
+  /**
+   * Function to translate content
+  */
+  t: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  customer: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  languages: PropTypes.array,
+
+  /**
+   * Function to translate content
+  */
+  currentLanguage: PropTypes.string,
+
+  /**
+   * Function to translate content
+  */
+  goBack: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onSendpasswordreset: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  errorMessage: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  emailIsValid: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  handleEmailChange: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  passwordresetsuccessfull: PropTypes.bool,
+
 };
 
 export default Forgotpassword;

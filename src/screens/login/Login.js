@@ -1,5 +1,6 @@
 /* eslint import/no-webpack-loader-syntax: off */
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import LogoImage from '-!react-svg-loader!../../images/LanistaLogo.svg';
 import {
   Root,
@@ -218,6 +219,108 @@ class Login extends React.Component {
       </Root>
     )
   }
+};
+
+Login.propTypes = {
+  /**
+   * Function to translate content
+  */
+  t: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  authenticated: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  authenticating: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  authenticateUser: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  goToRegistration: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  goToForgotpassword: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  languages: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  currentLanguage: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onChangeLanguage: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  email: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  emailIsValid: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  handleEmailChange: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  password: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  passwordIsValid: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  handlePasswordChange: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  validationEmailErrorMessage: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  validationPasswordErrorMessage: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  authenticationErrorMessage: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  tbt: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  goToRegistration: PropTypes.func,
 };
 
 export default Login;

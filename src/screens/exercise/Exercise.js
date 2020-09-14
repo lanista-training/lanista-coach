@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { Label, Tab, Menu, Modal, Input, Dimmer, Form } from 'semantic-ui-react';
 import moment from "moment";
@@ -13,7 +14,7 @@ import ProtocollsPane from './ProtocollsPane';
 import ChartPane from './ChartPane';
 import NotesPane from './NotesPane';
 
-export default ({
+const Exercise = ({
   exercise,
   refetch,
   groppedWorkouts,
@@ -70,8 +71,6 @@ export default ({
   toggleEditIndexesMode,
 
 } ) => {
-
-  console.log('editable', editable)
 
   React.useEffect(() => {
     if( !loading ) {
@@ -272,3 +271,193 @@ export default ({
     </Stage>
   )
 };
+
+Exercise.propTypes = {
+  /**
+   * Function to translate content
+  */
+  t: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  exercise: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  refetch: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  groppedWorkouts: PropTypes.array,
+
+  /**
+   * Function to translate content
+  */
+  settings: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  activeTab: PropTypes.number,
+
+  /**
+   * Function to translate content
+  */
+  onTabChange: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  isVideoOpen: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  onToggleVideo: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onSettingsChange: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onSyncSettings: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onCreateNote: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onDeleteNote: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  deleteNoteLoading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  message: PropTypes.string,
+
+  /**
+   * Function to translate content
+  */
+  onMessageChange: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onCreateProtocoll: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  createProtocollLoading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  onCreateChatMessage: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  createChatMessageLoading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  onDeleteChatMessage: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  deleteChatMessageLoading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  deleteProtocoll: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  deleteProtocollLoading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  activeChart: PropTypes.number,
+
+  /**
+   * Function to translate content
+  */
+  loading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  error: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  editable: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  owner: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  editNameMode: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  toggleEditNameMode: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  editImageMode: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  toggleEditImageMode: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  editVideoMode: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  toggleEditVideoMode: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  editIndexesMode: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  toggleEditIndexesMode: PropTypes.func,
+
+}
+
+export default Exercise;

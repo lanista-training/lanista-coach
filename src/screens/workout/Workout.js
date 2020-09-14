@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import _ from 'lodash';
 import { Tab, Icon, Placeholder } from 'semantic-ui-react';
 import moment from 'moment';
@@ -402,6 +403,98 @@ const Workout = ({
       }
     </>
   )
+};
+
+Workout.propTypes = {
+  /**
+   * Function to translate content
+  */
+  t: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  workout: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  onShowExercise: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onChangeExerciseOrder: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onDeleteExercise: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  loading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  error: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  defaultSettings: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  setDefaultSettings: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  editable: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  createSplit: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  activeSplitIndex: PropTypes.number,
+
+  /**
+   * Function to translate content
+  */
+  setActiveSplitIndex: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onDeleteSplit: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onCopySplit: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onShiftSplitRight: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onShiftSplitLeft: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  changePlan: PropTypes.func,
 };
 
 export default Workout;

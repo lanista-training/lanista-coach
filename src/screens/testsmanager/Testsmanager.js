@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import {Stage} from "./styles";
 import _ from 'lodash';
 import moment from "moment";
@@ -7,7 +8,7 @@ import TestsList from "./TestsList";
 import TestEditor from "./TestEditor";
 
 
-export default ({
+const Testsmanager = ({
 
   t,
 
@@ -60,3 +61,67 @@ export default ({
     />
   )
 }
+
+Testsmanager.propTypes = {
+  /**
+   * Function to translate content
+  */
+  t: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  testId: PropTypes.number,
+
+  /**
+   * Function to translate content
+  */
+  goToTest: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  tests: PropTypes.array,
+
+  /**
+   * Function to translate content
+  */
+  testsLoading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  testsError: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  onDefineTest: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  defineTestLoading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  defineTestError: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  onRemoveTest: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  removeTestLoading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  removeTestError: PropTypes.object,
+};
+
+export default Testsmanager;

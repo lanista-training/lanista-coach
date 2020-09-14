@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import _ from 'lodash';
 import moment from "moment";
 import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts'
@@ -14,7 +15,7 @@ import ExerciseTestItem from './ExerciseTestItem';
 
 import Button from '@material-ui/core/Button';
 
-export default ({
+const Test = ({
   t,
   testId,
   test,
@@ -139,3 +140,87 @@ export default ({
     </Stage>
   );
 };
+
+Test.propTypes = {
+  /**
+   * Function to translate content
+  */
+  t: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  testId: PropTypes.number,
+
+  /**
+   * Function to translate content
+  */
+  test: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  testType: PropTypes.string,
+
+  /**
+   * Function to translate content
+  */
+  editable: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  onSaveTestItem: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  saveTestResultsLoading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  saveTestResultsError: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  onDeleteTestRecord: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  deleteTestRecordLoading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  deleteTestRecordError: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  onSaveTestComments: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  saveTestCommentsLoading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  saveTestCommentsError: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  open: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  handleClose: PropTypes.func,
+};
+
+export default Test;

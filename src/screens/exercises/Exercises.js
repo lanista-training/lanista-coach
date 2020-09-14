@@ -1,4 +1,5 @@
 import * as React from "react";
+import PropTypes from 'prop-types';
 import _ from 'lodash';
 import moment from "moment";
 import InfiniteList from '../../components/InfiniteList';
@@ -57,7 +58,7 @@ const EmptyList = ({text}) => {
   )
 }
 
-export default ({
+const Exercises = ({
   exercises,
   showExercise,
   t,
@@ -181,3 +182,97 @@ export default ({
     </Stage>
   )
 };
+
+Exercises.propTypes = {
+  /**
+   * Function to translate content
+  */
+  t: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  exercises: PropTypes.array,
+
+  /**
+   * Function to translate content
+  */
+  showExercise: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onRequestPage: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  hasMore: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  initialLoading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  loading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  setPageSize: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onShowExercise: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  openSnackbar: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  handleCloseSnackbar: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  folderMode: PropTypes.number,
+
+  /**
+   * Function to translate content
+  */
+  onAddExerciseToFolder: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onRemoveExerciseFromFolder: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  createFolderDialogOpen: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  createFolderDialogHandleClose: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onCreateFolder: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  createFolderLoading: PropTypes.bool,
+};
+
+export default Exercises;

@@ -1,4 +1,5 @@
 import * as React from "react";
+import PropTypes from 'prop-types';
 import { PureComponent } from "react";
 import styled from 'styled-components';
 import _ from 'lodash';
@@ -43,7 +44,7 @@ function PrevArrow(props) {
   );
 }
 
-export default ({
+const Measures = ({
   customer,
   t,
   showDataAsChart,
@@ -152,3 +153,77 @@ export default ({
     </Stage>
   );
 };
+
+Measures.propTypes = {
+  /**
+   * Function to translate content
+  */
+  t: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  customer: PropTypes.object,
+
+  /**
+   * Function to translate content
+  */
+  showDataAsChart: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  goToTest: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  goCreateTest: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  activeIndex: PropTypes.number,
+
+  /**
+   * Function to translate content
+  */
+  handleTabChange: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  showCreateTestMenu: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  closeCreateTestmenu: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  testsTypes: PropTypes.number,
+
+  /**
+   * Function to translate content
+  */
+  setSelectedRecord: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  onCreateTest: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  createTestLoading: PropTypes.bool,
+
+  /**
+   * Function to translate content
+  */
+  createTestError: PropTypes.object,
+};
+
+export default Measures;

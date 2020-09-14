@@ -1,4 +1,5 @@
 import * as React from "react";
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import {Stage, ListWrapper, StyledWorkout} from './styles';
 import _ from 'lodash';
@@ -55,6 +56,28 @@ const Workouts = ({workouts, openWorkout, clonePlanLoading, loading}) => {
       </ListWrapper>
     </Stage>
   );
+};
+
+Workouts.propTypes = {
+  /**
+   * Function to translate content
+  */
+  t: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  workouts: PropTypes.array,
+
+  /**
+   * Function to translate content
+  */
+  openWorkout: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  clonePlanLoading: PropTypes.bool,
 };
 
 export default Workouts;
