@@ -1,4 +1,5 @@
 import React, { Component, useState, useEffect } from 'react';
+import { useTranslate } from '../../hooks/Translation';
 import _ from 'lodash';
 import arrayMove from 'array-move';
 import moment from "moment";
@@ -47,24 +48,7 @@ const Panel = ({
 
   goBack,
 }) => {
-  //
-  // Translations
-  //
-  const [translations, setTranslations] = React.useState([]);
-  const t = (text) => {
-    const textWithoutNamespace = text.split(":");
-    const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
-    return (translation ? translation : text);
-  }
-  const onChangeLanguage = ( language ) => {
-    const domainTranslations = require('../../../static/locales/' + language + '/profile');
-    const commonTranslations = require('../../../static/locales/' + language + '/common');
-    const originalLanguages = ['en', 'de', 'es', 'fr'];
-    setTranslations({...domainTranslations, ...commonTranslations});
-  }
-  React.useEffect(() => {
-    onChangeLanguage("de");
-  }, []);
+  const {t} = useTranslate("profile");
 
   //
   // Member data

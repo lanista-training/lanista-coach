@@ -1,4 +1,5 @@
 import React, { Component, useState, useEffect } from 'react';
+import { useTranslate } from '../../hooks/Translation';
 import Scene from "../../components/Scene";
 //import { useRouter } from 'next/router';
 import withData from "./DataProvider";
@@ -96,10 +97,9 @@ const Panel = ({
   goToCustomer,
 
 }) => {
-  //const router = useRouter()
+  const {t} = useTranslate("customers");
 
   const [hidden , setHidden] = useState(false);
-  const [translations, setTranslations] = useState([]);
   const [initialLoading, setInitialLoading] = useState(false);
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
 
@@ -148,10 +148,6 @@ const Panel = ({
     }
   }, [clonePlanLoading]);
 
-  useEffect(() => {
-    if( translations && translations.length == 0 ) onChangeLanguage("de")
-  }, [translations]);
-
 
   //
   // Search logic
@@ -183,18 +179,6 @@ const Panel = ({
     } else {
       setShowLastMembers(true)
     }
-  }
-
-  const t = (text) => {
-    const textWithoutNamespace = text.split(":");
-    const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
-    return (translation ? translation : text);
-  }
-
-  const onChangeLanguage = ( language ) => {
-    const translations = require('../../../static/locales/' + language + '/customers');
-    const commonTranslations = require('../../../static/locales/' + language + '/common');
-    setTranslations({...translations, ...commonTranslations})
   }
 
   const getCommandsRight = () => {

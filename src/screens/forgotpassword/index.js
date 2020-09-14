@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslate } from '../../hooks/Translation';
 import _ from 'lodash';
 import moment from "moment";
 import Router from 'next/router';
@@ -9,30 +10,7 @@ import Forgotpassword from './Forgotpassword';
 import { SENDPASSWORDRESET } from "../../mutations";
 
 const Panel = ({goBack}) => {
-
-  //
-  // Translation variables and routines
-  //
-  const [translations, setTranslations] = React.useState([]);
-  const [currentLanguage, setCurrentLanguage] = React.useState('de');
-  const [availableLanguages, setAvailableLanguages] = React.useState(['en', 'de', 'es', 'pt', 'ru', 'fr']);
-  useEffect(() => {
-    onChangeLanguage("de");
-  }, []);
-  const t = (text) => {
-    const textWithoutNamespace = text.split(":");
-    const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
-    return (translation ? translation : text);
-  }
-  const onChangeLanguage = ( language ) => {
-    const domainTranslations = require('../../../static/locales/' + language + '/login');
-    const commonTranslations = require('../../../static/locales/' + language + '/common');
-    const originalLanguages = ['en', 'de', 'es', 'fr', 'pt', 'ru'];
-    setTranslations({...domainTranslations, ...commonTranslations});
-    setCurrentLanguage(language);
-    setAvailableLanguages(originalLanguages.filter(word => word !== language));
-  }
-
+  const {t, locale, changeLanguage, languages} = useTranslate("login");
   //
   // Component variables
   //
@@ -151,8 +129,8 @@ const Panel = ({goBack}) => {
   return (
     <Forgotpassword
       customer={data && data.member ? data.member : {}}
-      languages={availableLanguages}
-      currentLanguage={currentLanguage}
+      languages={languages}
+      currentLanguage={locale}
       goBack={goBack}
       onSendpasswordreset={validateEmail}
       errorMessage={errorMessage || ( errorCode && t(errorCode))}
@@ -160,6 +138,7 @@ const Panel = ({goBack}) => {
       handleEmailChange={handleEmailChange}
       passwordresetsuccessfull={(data && data.sendpasswordreset && data.sendpasswordreset == "PASSWORDRESETSENT")}
       t={t}
+      onChangeLanguage={changeLanguage}
     />
   )
 

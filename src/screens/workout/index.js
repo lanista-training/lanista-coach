@@ -1,17 +1,17 @@
-import React, { Component } from 'react'
-import _ from 'lodash'
-import moment from "moment"
-import arrayMove from 'array-move'
-//import Router from 'next/router';
+import React, { Component } from 'react';
+import { useTranslate } from '../../hooks/Translation';
+import _ from 'lodash';
+import moment from "moment";
+import arrayMove from 'array-move';
 
-import { withApollo } from '../../lib/apollo'
-import { useMutation, useQuery } from '@apollo/react-hooks'
+import { withApollo } from '../../lib/apollo';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import gql from "graphql-tag";
 
-import Scene from "../../components/Scene"
-import Workout from './Workout'
-import WorkoutHeader from "../../components/WorkoutHeader"
-import { WORKOUT, MEMBER, WORKOUTS, ME } from "../../queries"
+import Scene from "../../components/Scene";
+import Workout from './Workout';
+import WorkoutHeader from "../../components/WorkoutHeader";
+import { WORKOUT, MEMBER, WORKOUTS, ME } from "../../queries";
 import {
   CHANGESPLITORDER,
   DELETEPLAN,
@@ -72,6 +72,8 @@ const CURRENTTAB = gql`
 `;
 
 const Panel = ({workoutId, goBack, goToExercises, goToRoot, goToWorkouts, goToExercise, goToCustomers}) => {
+
+  const {t} = useTranslate("workout");
 
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const [snackbarMessage, setSnackbarMessage] = React.useState('');
@@ -345,10 +347,6 @@ const Panel = ({workoutId, goBack, goToExercises, goToRoot, goToWorkouts, goToEx
   );
 
   React.useEffect(() => {
-    onChangeLanguage("de");
-  }, []);
-
-  React.useEffect(() => {
     const {workout} = data ? data : {}
     setWorkout(workout);
     if( workout && workout.splits && workout.splits.length == 1 && workout.splits[0].exercises.length == 0 ) {
@@ -432,12 +430,6 @@ const Panel = ({workoutId, goBack, goToExercises, goToRoot, goToWorkouts, goToEx
 
   }
 
-  const t = (text) => {
-    const textWithoutNamespace = text.split(":");
-    const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
-    return (translation ? translation : text);
-  }
-
   const revertChanges = () => {
     setWorkoutChanged(false)
     setWorkout(data.workout)
@@ -477,16 +469,6 @@ const Panel = ({workoutId, goBack, goToExercises, goToRoot, goToWorkouts, goToEx
       setWorkout({...workout});
       saveSplit(splitIndex);
     }
-  }
-
-  const onChangeLanguage = ( language ) => {
-    const domailTranslations = require('../../../static/locales/' + language + '/workout');
-    const commonTranslations = require('../../../static/locales/' + language + '/common');
-    const originalLanguages = ['en', 'de', 'es', 'fr'];
-
-    setTranslations({...domailTranslations, ...commonTranslations});
-    setCurrentLanguage(language);
-    setAvailableLanguages(originalLanguages.filter(word => word !== language));
   }
 
   const showExercise = (exerciseId, memberId, planexerciseId) => {

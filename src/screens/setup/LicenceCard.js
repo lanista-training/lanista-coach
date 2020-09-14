@@ -24,17 +24,17 @@ export default ({
 
   return (
     <div className="section profile-licence-section" id="section-3">
-      <div className="section-header">{t( "setup:licence_data" )}</div>
+      <div className="section-header">{t( "licence_data" )}</div>
       <StyledCard className="card-section">
         <div className="section-content">
           <div className={ (moment(expirationDate) >= new Date()) ? "licence-section valid" :  "licence-section invalid"  } >
             <CardIcon style={{height: '5em', width: '5em', padding: '1em'}}/>
             <div className="licence-info-section">
               <div className="licence-valid-state">
-                { (moment(expirationDate) > (new Date()) ? t( "setup:licence_valid" ) :  t( "setup:licence_invalid" ))  }
+                { (moment(expirationDate) > (new Date()) ? t( "licence_valid" ) :  t( "licence_invalid" ))  }
               </div>
               <div className="licence-valid-date">
-                { (new Date() ? t( "setup:invalid_since" ) :  t( "setup:valid_until" )) + " " + moment(expirationDate).format('Do MMMM YYYY') }
+                { (new Date() ? t( "invalid_since" ) :  t( "valid_until" )) + " " + moment(expirationDate).format('Do MMMM YYYY') }
               </div>
               <LanistaButton onClick={goToShop}>
                 {t( "common:buy_licence" )}

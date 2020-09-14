@@ -1,4 +1,5 @@
 import React, { Component, useState, useEffect, useRef } from 'react';
+import { useTranslate } from '../../hooks/Translation';
 import _ from 'lodash';
 import moment from "moment";
 import Scene from "../../components/Scene";
@@ -137,6 +138,8 @@ const Panel = ({
   goToExercise,
 }) => {
 
+  const {t} = useTranslate("exercises");
+
   //
   // Filter Tab handling
   //
@@ -211,26 +214,6 @@ const Panel = ({
   const [mutating, setMutating] = useState(false);
 
   //
-  // LANGUAGE MANAGER
-  //
-  const [translations, setTranslations] = useState([]);
-  const t = (text) => {
-    const textWithoutNamespace = text ? text.split(":") : '';
-    const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
-    return (translation ? translation : text);
-  }
-  const onChangeLanguage = ( language ) => {
-    const domainTranslations = require('../../../static/locales/' + language + '/exercises');
-    const commonTranslations = require('../../../static/locales/' + language + '/common');
-    const originalLanguages = ['en', 'de', 'es', 'fr'];
-    setTranslations({...domainTranslations, ...commonTranslations});
-  }
-  useEffect(() => {
-    onChangeLanguage("de");
-  }, []);
-
-
-  //
   // Selection Mamagement
   //
   const [selection, setSelection] = useState([]);
@@ -240,7 +223,6 @@ const Panel = ({
   }, [currentSelection]);
 
   const showExercise = (exerciseId, exercises) => {
-    console.log("showExercise", editmode)
     if(editmode) {
       const selectedExercise = exercises.find(exercise => exercise.id == exerciseId);
       setSelection([...selection, {...selectedExercise, selected: true}]);

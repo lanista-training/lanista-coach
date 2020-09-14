@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useTranslate } from '../../hooks/Translation';
 import Login from './Login';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { withApollo } from '../../lib/apollo';
@@ -11,6 +12,7 @@ const LoginPanel = ({
   goToRegistration,
   goToForgotPassword,
 }) => {
+  const {t} = useTranslate("login");
   //
   // Domain info
   //
@@ -29,9 +31,16 @@ const LoginPanel = ({
   );
 
   // translation variables
+  /*
   const [translations, setTranslations] = React.useState([]);
   const [currentLanguage, setCurrentLanguage] = React.useState('de');
   const [availableLanguages, setAvailableLanguages] = React.useState(['en', 'de', 'es', 'pt', 'ru', 'fr']);
+
+
+  React.useEffect(() => {
+    onChangeLanguage("de");
+  }, []);
+  */
 
   const [authenticated, setAuthenticated] = React.useState(false);
 
@@ -44,10 +53,6 @@ const LoginPanel = ({
   const [validationPasswordErrorMessage, setValidationPasswordErrorMessage] = React.useState(null);
 
   const [authenticationErrorMessage, setAuthenticationErrorMessage] = React.useState(null);
-
-  React.useEffect(() => {
-    onChangeLanguage("de");
-  }, []);
 
   React.useEffect(() => {
     if (authenticated) {
@@ -113,21 +118,6 @@ const LoginPanel = ({
     goToForgotPassword();
   }
 
-  const t = (text) => {
-    const textWithoutNamespace = text.split(":");
-    const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
-    return (translation ? translation : text);
-  }
-
-  const onChangeLanguage = ( language ) => {
-    const domainTranslations = require('../../../static/locales/' + language + '/login');
-    const commonTranslations = require('../../../static/locales/' + language + '/common');
-    const originalLanguages = ['en', 'de', 'es', 'fr', 'pt', 'ru'];
-    setTranslations({...domainTranslations, ...commonTranslations});
-    setCurrentLanguage(language);
-    setAvailableLanguages(originalLanguages.filter(word => word !== language));
-  }
-
   const errorCode = loginError && (loginError.message.indexOf(": ") > -1 ? loginError.message.split(': ')[1] : loginError.message);
 
   return (
@@ -137,12 +127,6 @@ const LoginPanel = ({
       authenticateUser={onAuthenticate}
       goToRegistration={goToRegistration}
       goToForgotpassword={goToForgotpassword}
-
-      t={t}
-      languages={availableLanguages}
-
-      currentLanguage={currentLanguage}
-      onChangeLanguage={onChangeLanguage}
 
       email={email}
       emailIsValid={emailIsValid}

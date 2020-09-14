@@ -1,6 +1,6 @@
 import * as React from "react";
+import { useTranslate } from '../../hooks/Translation';
 import Dashboard from './Dashboard';
-
 import { withApollo } from '../../lib/apollo';
 import { useQuery } from '@apollo/react-hooks';
 
@@ -23,6 +23,7 @@ const Panel = ({
   goBack,
   goToSetup,
 }) => {
+  const {t} = useTranslate("dashboard");
   // infinity list variables
   const [initialLoading, setInitialLoading] = React.useState(true);
   const [hasMore, setHasMore] = React.useState(true);
@@ -45,15 +46,10 @@ const Panel = ({
   const {data: meData} = useQuery(ME, { ssr: false, fetchPolicy: 'cache-first' });
   const me = meData ? meData : {};
 
-  // translation variables
-  const [translations, setTranslations] = React.useState([]);
-  const [currentLanguage, setCurrentLanguage] = React.useState('');
-  const [availableLanguages, setAvailableLanguages] = React.useState([]);
 
   const [targetDates, setTargetDates] = React.useState([]);
 
   React.useEffect(() => {
-    onChangeLanguage("de");
     const pendingUserId = window.localStorage.getItem('pending_user_id');
     window.localStorage.removeItem('pending_user_id');
     if( pendingUserId && pendingUserId > 0 ) {
@@ -102,21 +98,6 @@ const Panel = ({
 
   const openPlan = (memberId, planId) => {
     goToCustomer(memberId);
-  }
-
-  const t = (text) => {
-    const textWithoutNamespace = text.split(":");
-    const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
-    return (translation ? translation : text);
-  }
-
-  const onChangeLanguage = ( language ) => {
-    const domainTranslations = require('../../../static/locales/' + language + '/dashboard');
-    const commonTranslations = require('../../../static/locales/' + language + '/common');
-    const originalLanguages = ['en', 'de', 'es', 'fr'];
-    setTranslations({...domainTranslations, ...commonTranslations});
-    setCurrentLanguage(language);
-    setAvailableLanguages(originalLanguages.filter(word => word !== language));
   }
 
   const onFetchFeeds = (data) => {

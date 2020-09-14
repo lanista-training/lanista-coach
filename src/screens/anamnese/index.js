@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslate } from '../../hooks/Translation';
 import _ from 'lodash';
 import moment from "moment";
 import Router from 'next/router';
@@ -100,22 +101,7 @@ const Panel = ({
 
   goBack,
 }) => {
-  //
-  // Language management
-  //
-  const [translations, setTranslations] = useState([]);
-  const t = (text) => {
-    const textWithoutNamespace = text.split(":");
-    const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
-    return (translation ? translation : text);
-  }
-  const onChangeLanguage = ( language ) => {
-    const translations = require('../../../static/locales/' + language + '/anamnese');
-    setTranslations({...translations})
-  }
-  useEffect(() => {
-    if( translations && translations.length == 0 ) onChangeLanguage("de")
-  }, [translations]);
+  const {t} = useTranslate("anamnese");
 
 
   const handleTabChange = (e, { activeIndex }) => {

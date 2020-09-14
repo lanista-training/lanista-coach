@@ -296,7 +296,7 @@ const Setup = ({
                   <a href="#section-1" style={{display: 'flex'}}>
                     <ContactMailIcon/>
                     <div className="list-item-content">
-                      <div className="list-header">{t( "setup:personal_data" )}</div>
+                      <div className="list-header">{t( "personal_data" )}</div>
                     </div>
                   </a>
                 </div>
@@ -306,7 +306,7 @@ const Setup = ({
                       <a href="#section-2" style={{display: 'flex'}}>
                         <PhotoIcon/>
                         <div className="list-item-content">
-                          <div className="list-header">{t( "setup:profile_picture" )}</div>
+                          <div className="list-header">{t( "profile_picture" )}</div>
                         </div>
                       </a>
                     </div>
@@ -314,7 +314,7 @@ const Setup = ({
                       <a href="#section-3" style={{display: 'flex'}}>
                         <PaymentIcon/>
                         <div className="list-item-content">
-                          <div className="list-header">{t( "setup:licence_data" )}</div>
+                          <div className="list-header">{t( "licence_data" )}</div>
                         </div>
                       </a>
                     </div>
@@ -322,7 +322,7 @@ const Setup = ({
                       <a href="#section-4" style={{display: 'flex'}}>
                         <BusinessIcon/>
                         <div className="list-item-content">
-                          <div className="list-header">{t( "setup:my_address" )}</div>
+                          <div className="list-header">{t( "my_address" )}</div>
                         </div>
                       </a>
                     </div>
@@ -330,7 +330,7 @@ const Setup = ({
                       <a href="#section-5" style={{display: 'flex'}}>
                         <SecurityIcon/>
                         <div className="list-item-content">
-                          <div className="list-header">{t( "setup:data_protection" )}</div>
+                          <div className="list-header">{t( "data_protection" )}</div>
                         </div>
                       </a>
                     </div>
@@ -338,7 +338,7 @@ const Setup = ({
                       <a href="#section-6" style={{display: 'flex'}}>
                         <PhoneIphoneIcon/>
                         <div className="list-item-content">
-                          <div className="list-header">{t( "setup:app_banner" )}</div>
+                          <div className="list-header">{t( "app_banner" )}</div>
                         </div>
                       </a>
                     </div>
@@ -346,7 +346,7 @@ const Setup = ({
                       <a href="#section-7" style={{display: 'flex'}}>
                         <YouTubeIcon/>
                         <div className="list-item-content">
-                          <div className="list-header">{t( "setup:workout_channel" )}</div>
+                          <div className="list-header">{t( "workout_channel" )}</div>
                         </div>
                       </a>
                     </div>
@@ -356,7 +356,7 @@ const Setup = ({
                   <a href="#section-8" style={{display: 'flex'}}>
                     <VpnKeyIcon/>
                     <div className="list-item-content">
-                      <div className="list-header">{t( "setup:password_reset" )}</div>
+                      <div className="list-header">{t( "password_reset" )}</div>
                     </div>
                   </a>
                 </div>

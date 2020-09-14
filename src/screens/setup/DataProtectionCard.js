@@ -14,7 +14,7 @@ export default ({
 
   return (
     <div className="section profile-data-protection-section" id="section-5">
-      <div className="section-header">{t( "setup:data_protection" )}</div>
+      <div className="section-header">{t( "data_protection" )}</div>
       <StyledCard>
         <div className="section-content">
           <div className="data-protection-section">

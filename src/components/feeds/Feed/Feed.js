@@ -200,7 +200,7 @@ export default ({feed, key, t, congratulateMember, openPlan, accesslevel}) => {
             <Header>
               <FeedIcon color={color} className={"icon " + (feed.type ==  FeedTypes.birthday ? "icon-birthday-inactive" : "icon-calender-inactive")}/>
               <HeaderText>
-                <HeaderName>{feed.member.first_name} {feed.member.last_name}</HeaderName><HeaderDescription> {t("dashboard:" + feed.type + "_feed_text")}</HeaderDescription>
+                <HeaderName>{feed.member.first_name} {feed.member.last_name}</HeaderName><HeaderDescription> {t( feed.type + "_feed_text")}</HeaderDescription>
               </HeaderText>
             </Header>
             <CommandsBlock

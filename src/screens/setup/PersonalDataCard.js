@@ -29,7 +29,7 @@ export default ({
 
   return (
     <div className="section personal-data" id="section-1">
-      <div className="section-header">{t( "setup:personal_data" )}</div>
+      <div className="section-header">{t( "personal_data" )}</div>
       <StyledCard>
         <div className="section-content">
             <TextField
@@ -82,7 +82,7 @@ export default ({
           loading={updateUserPersonalDataLoading}
           inverted={readyToSavePersonalData}
         >
-          {t( "common:save" )}
+          {t( "save" )}
         </LanistaButton>
       </StyledCard>
     </div>

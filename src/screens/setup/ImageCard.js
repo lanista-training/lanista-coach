@@ -143,7 +143,7 @@ export default ({
 
   return (
     <div className="section profile-image-section" id="section-2">
-      <div className="section-header">{t( "setup:profile_picture" )}</div>
+      <div className="section-header">{t( "profile_picture" )}</div>
       <StyledCard>
         <div className="section-content">
           <ImageEditor

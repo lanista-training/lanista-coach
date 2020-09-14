@@ -159,7 +159,7 @@ export default ({
 
   return (
     <div className="section workout-channel-section" id="section-7">
-      <div className="section-header">{t( "setup:workout_channel" )}</div>
+      <div className="section-header">{t( "workout_channel" )}</div>
       <StyledCard>
         <div className="section-content workout-channel">
           <FormControlLabel

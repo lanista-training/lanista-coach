@@ -1,4 +1,5 @@
 import React, { Component, useState, useEffect } from 'react';
+import { useTranslate } from '../../hooks/Translation';
 import cookie from 'js-cookie';
 import _ from 'lodash';
 import moment from "moment";
@@ -62,6 +63,7 @@ const CustomerPane = ({
   goToWorkouts,
   goToProfile,
 }) =>  {
+  const {t} = useTranslate("customer");
   //
   // Data Protection Dialog
   //
@@ -119,7 +121,6 @@ const CustomerPane = ({
   }, [error]);
 
   React.useEffect(() => {
-    onChangeLanguage("de");
     const createdPlanId = localStorage.getItem('openplan');
     if( createdPlanId && createdPlanId > 0 ) {
       localStorage.removeItem('openplan');
@@ -453,10 +454,6 @@ const CustomerPane = ({
   const [snackbarMessage, setSnackbarMessage] = React.useState('');
   const handleCloseSnackbar = () => setOpenSnackbar(false);
 
-  const [translations, setTranslations] = React.useState([]);
-  const [currentLanguage, setCurrentLanguage] = React.useState('');
-  const [availableLanguages, setAvailableLanguages] = React.useState([]);
-
   const [selectedGoal, setSelectedGoal] = React.useState(null);
 
   const [modalOpen, setModalOpen] = React.useState(false);
@@ -656,23 +653,6 @@ const CustomerPane = ({
          fat: 0,
        }
      }
-  }
-
-  const t = (text) => {
-    const textWithoutNamespace = text.split(":");
-    const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
-    return (translation ? translation : text);
-  }
-
-  const onChangeLanguage = ( language ) => {
-    const translations = require('../../../static/locales/' + language + '/customer');
-    const commonTranslations = require('../../../static/locales/' + language + '/common');
-    const originalLanguages = ['en', 'de', 'es', 'fr'];
-
-    setTranslations({...translations, ...commonTranslations})
-    setCurrentLanguage(language)
-    setAvailableLanguages(originalLanguages.filter(word => word !== language))
-
   }
 
   const openWorkout = (workoutId) => {

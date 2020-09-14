@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { useTranslate } from '../../hooks/Translation';
 import _ from 'lodash';
 import styled from 'styled-components';
 import moment from "moment";
@@ -44,6 +45,7 @@ const Counter  = styled.div`
 `;
 
 const WorkoutsPanel = ({memberId, goBack, goToWorkout}) => {
+  const {t} = useTranslate("workouts");
   //
   // Create Plan dialog
   //
@@ -51,12 +53,8 @@ const WorkoutsPanel = ({memberId, goBack, goToWorkout}) => {
   const handleOpenDialogCreatePlan = () => {setDialogCreatePlanOpen(true)}
   const handleCloseDialogCreatePlan = () => {setDialogCreatePlanOpen(false)}
 
-  const [translations, setTranslations] = React.useState([]);
-  const [currentLanguage, setCurrentLanguage] = React.useState('');
-  const [availableLanguages, setAvailableLanguages] = React.useState([]);
-
   const [filter, setFilter] = React.useState('');
-  console.log("filter", filter)
+
   const { loading: workoutsLoading, error: workoutsError, data: workoutsData, networkStatus } = useQuery(WORKOUTS, {
     variables: {
       filter: filter,
@@ -96,7 +94,6 @@ const WorkoutsPanel = ({memberId, goBack, goToWorkout}) => {
   );
 
   React.useEffect(() => {
-    onChangeLanguage("de");
     const planId = localStorage.getItem('openplan');
     if( planId && planId > 0 ) {
       localStorage.removeItem('openplan');
@@ -168,22 +165,6 @@ const WorkoutsPanel = ({memberId, goBack, goToWorkout}) => {
           goBack();
         }
     }]);
-  }
-
-  const t = (text) => {
-    const textWithoutNamespace = text.split(":");
-    const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
-    return (translation ? translation : text);
-  }
-
-  const onChangeLanguage = ( language ) => {
-    const translations = require('../../../static/locales/' + language + '/workouts');
-    const commonTranslations = require('../../../static/locales/' + language + '/common');
-    const originalLanguages = ['en', 'de', 'es', 'fr'];
-
-    setTranslations({...translations, ...commonTranslations})
-    setCurrentLanguage(language)
-    setAvailableLanguages(originalLanguages.filter(word => word !== language))
   }
 
   return (

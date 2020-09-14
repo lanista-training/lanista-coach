@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from 'react';
-//import Router from 'next/router';
+import { useTranslate } from '../../hooks/Translation';
 import { withApollo } from '../../lib/apollo';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 
@@ -26,28 +26,7 @@ import Logout from '../../components/icons/Logout';
 
 const SetupWithData = ({goBack}) => {
 
-  //
-  // Translations
-  //
-  const [translations, setTranslations] = React.useState([]);
-  const t = (text) => {
-    const textWithoutNamespace = text.split(":");
-    const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
-    return (translation ? translation : text);
-  }
-  const onChangeLanguage = ( language ) => {
-    const domainTranslations = require('../../../static/locales/' + language + '/setup');
-    const commonTranslations = require('../../../static/locales/' + language + '/common');
-    const originalLanguages = ['en', 'de', 'es', 'fr', 'pt', 'ru'];
-    setTranslations({...domainTranslations, ...commonTranslations});
-  }
-  React.useEffect(() => {
-    onChangeLanguage("de");
-  }, []);
-
-  const saveData = () => {
-    console.log("saveData");
-  }
+  const {t, locale, changeLanguage} = useTranslate("setup");
 
   const getCommandsRight = (client) => {
     return [{
@@ -432,6 +411,10 @@ const SetupWithData = ({goBack}) => {
       setPromoVideo(promo_video);
       setPromoText(promo_text);
       setWorkoutImageUrl(workout_imageUrl);
+
+      if( locale != language ) {
+        changeLanguage(language.toLowerCase());
+      }
 
     }
   }, [data]);

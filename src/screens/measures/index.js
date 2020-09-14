@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslate } from '../../hooks/Translation';
 import _ from 'lodash';
 import moment from "moment";
 //import Router from 'next/router';
@@ -147,24 +148,7 @@ const Panel = ({
   goToTest,
 
 }) => {
-  //
-  // Language management
-  //
-  const [translations, setTranslations] = useState([]);
-  const t = (text) => {
-    const textWithoutNamespace = text.split(":");
-    const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
-    return (translation ? translation : text);
-  }
-  const onChangeLanguage = ( language ) => {
-    const translations = require('../../../static/locales/' + language + '/measures');
-    const commonTranslations = require('../../../static/locales/' + language + '/common');
-    setTranslations({...translations, ...commonTranslations})
-  }
-  useEffect(() => {
-    if( translations && translations.length == 0 ) onChangeLanguage("de")
-  }, [translations]);
-
+  const {t} = useTranslate("measures");
 
   //
   // Share Measure Drawler

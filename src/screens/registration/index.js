@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslate } from '../../hooks/Translation';
 import Registration from './Registration';
 import Router from 'next/router';
 import { useMutation } from '@apollo/react-hooks';
@@ -6,28 +7,8 @@ import { withApollo } from '../../lib/apollo';
 import { REGISTER } from "../../mutations";
 
 const Panel = ({goBack}) => {
-  //
-  // Translation variables and routines
-  //
-  const [translations, setTranslations] = React.useState([]);
-  const [currentLanguage, setCurrentLanguage] = React.useState('de');
-  const [availableLanguages, setAvailableLanguages] = React.useState(['en', 'de', 'es', 'pt', 'ru', 'fr']);
-  useEffect(() => {
-    onChangeLanguage("de");
-  }, []);
-  const t = (text) => {
-    const textWithoutNamespace = text.split(":");
-    const translation = translations[textWithoutNamespace[textWithoutNamespace.length-1]];
-    return (translation ? translation : text);
-  }
-  const onChangeLanguage = ( language ) => {
-    const domainTranslations = require('../../../static/locales/' + language + '/login');
-    const commonTranslations = require('../../../static/locales/' + language + '/common');
-    const originalLanguages = ['en', 'de', 'es', 'fr', 'pt', 'ru'];
-    setTranslations({...domainTranslations, ...commonTranslations});
-    setCurrentLanguage(language);
-    setAvailableLanguages(originalLanguages.filter(word => word !== language));
-  }
+
+  const {t, locale, changeLanguage, languages} = useTranslate("login");
 
   //
   // Component variables
@@ -137,9 +118,9 @@ const Panel = ({goBack}) => {
 
   return (<Registration
     t={t}
-    languages={availableLanguages}
-    currentLanguage={currentLanguage}
-    onChangeLanguage={onChangeLanguage}
+    languages={languages}
+    currentLanguage={locale}
+    onChangeLanguage={changeLanguage}
     goBack={goBack}
     registerUser={() => doRegister(register)}
     registering={loading}

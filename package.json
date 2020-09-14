@@ -16,7 +16,7 @@
     "start-web": "react-scripts start",
     "build-web": "react-scripts build",
     "docz:dev": "docz dev",
-    "docz:build": "docz build",
+    "docz:build": "docz build --dest docs",
     "docz:serve": "docz build && docz serve"
   },
   "keywords": [

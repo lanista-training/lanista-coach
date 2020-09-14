@@ -35,7 +35,7 @@ export default ({
 
   return (
     <div className="section profile-address-section" id="section-4">
-      <div className="section-header">{t( "setup:my_address" )}</div>
+      <div className="section-header">{t( "my_address" )}</div>
       <StyledCard>
         <div className="section-content">
             <TextField

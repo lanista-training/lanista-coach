@@ -272,7 +272,7 @@ class Registration extends React.Component {
                    lineHeight: "1.2em",
                    top: "1em",
                  }}
-                label={t("login:terms_and_conditions")}
+                label={t("terms_and_conditions")}
                 onClick={this.onShowLegalAgreements}
                 value={agreedToLA ? 1 : 0}
                 checked={agreedToLA}
@@ -300,7 +300,7 @@ class Registration extends React.Component {
                 });
                 goBack();
               }}>
-                {t("login:to_login")}
+                {t("to_login")}
               </StyledBackButton>
             </Grid>
           </Root>

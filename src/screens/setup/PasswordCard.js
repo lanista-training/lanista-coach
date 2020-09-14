@@ -344,7 +344,7 @@ export default ({
   }
   return (
     <div className="section password-section" id="section-8" style={{marginBottom: "6em"}}>
-      <div className="section-header">{t( "setup:change_password" )}</div>
+      <div className="section-header">{t( "change_password" )}</div>
       <StyledCard>
         <Stepper activeStep={activeStep} alternativeLabel>
           {steps.map((label, index) => {

@@ -150,7 +150,7 @@ export default ({
 
   return (
     <div className="section app-configuration" id="section-6">
-      <div className="section-header">{t( "setup:app_banner" )}</div>
+      <div className="section-header">{t( "app_banner" )}</div>
       <StyledCard>
         <div className="section-content">
           <ImageEditor

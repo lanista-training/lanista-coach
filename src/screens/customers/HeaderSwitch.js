@@ -6,7 +6,7 @@ export default ({t, onChange, checked}) => {
 
   return (
     <StyledHeaderSwitch>
-      <div className="lable">{checked ? t('RECENLTY') : t('SEARCH')}</div>
+      <div className="lable">{checked ? t('RECENTLY') : t('SEARCH')}</div>
       <Switch
         onChange={onChange}
         checked={checked}

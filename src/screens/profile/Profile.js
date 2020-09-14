@@ -278,7 +278,7 @@ const Profile = ({
   <Stage centered columns={2} padded name="stage">
     <div className="content-section">
       <CardSection id="section-personal">
-        <CardHeader as='h3'>{t( "profile:personal_data" )}</CardHeader>
+        <CardHeader as='h3'>{t( "personal_data" )}</CardHeader>
         <StyledCard>
           <Card.Content style={{paddingTop: 0, paddingBottom: '1.5em'}}>
             <Form>
@@ -300,8 +300,8 @@ const Profile = ({
                   </StyledLabel>
                 }
               </CardInput>
-              <CardInput placeholder={t( "profile:first_name" )} error={!firstNameValidation.valid}>
-                <FormHeader>{t( "profile:first_name" )}</FormHeader>
+              <CardInput placeholder={t( "first_name" )} error={!firstNameValidation.valid}>
+                <FormHeader>{t( "first_name" )}</FormHeader>
                 <FormInput
                   name='first_name'
                   value={firstName}
@@ -314,8 +314,8 @@ const Profile = ({
                   </StyledLabel>
                 }
               </CardInput>
-              <CardInput placeholder={t( "profile:last_name" )} error={!lastNameValidation.valid}>
-                <FormHeader>{t( "profile:last_name" )}</FormHeader>
+              <CardInput placeholder={t( "last_name" )} error={!lastNameValidation.valid}>
+                <FormHeader>{t( "last_name" )}</FormHeader>
                 <FormInput
                   name='last_name'
                   value={lastName}
@@ -329,10 +329,10 @@ const Profile = ({
                 }
               </CardInput>
               <CardDateInput
-                placeholder={t( "profile:birthday" )}
+                placeholder={t( "birthday" )}
                 error={!lastNameValidation.valid}
               >
-                <FormHeader>{t( "profile:birthday" )}</FormHeader>
+                <FormHeader>{t( "birthday" )}</FormHeader>
                 <MuiPickersUtilsProvider utils={DateFnsUtils} className="input-birthday">
                   <KeyboardDatePicker
                     variant="inline"
@@ -354,19 +354,19 @@ const Profile = ({
                 }
               </CardDateInput>
               <CardInput>
-                <FormHeader>{t( "profile:gender" )}</FormHeader>
+                <FormHeader>{t( "gender" )}</FormHeader>
                 <CardDropdown
-                  placeholder={t( "profile:gender" )}
+                  placeholder={t( "gender" )}
                   fluid
                   selection
                   options={[
                     {
                       key: 'male',
-                      text: t("profile:male"),
+                      text: t("male"),
                       value: 0,
                     }, {
                       key: 'female',
-                      text: t("profile:female"),
+                      text: t("female"),
                       value: 1,
                     },
                   ]}
@@ -374,16 +374,16 @@ const Profile = ({
                   onChange={ (event, {value}) => setGender(value)}
                 />
               </CardInput>
-              <CardInput placeholder={t( "profile:phone_nr" )} >
-                <FormHeader>{t( "profile:phone_nr" )}</FormHeader>
+              <CardInput placeholder={t( "phone_nr" )} >
+                <FormHeader>{t( "phone_nr" )}</FormHeader>
                 <FormInput
                   name='phone_nr'
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                 />
               </CardInput>
-              <CardInput placeholder={t( "profile:note" )} >
-                <FormHeader>{t( "profile:note" )}</FormHeader>
+              <CardInput placeholder={t( "note" )} >
+                <FormHeader>{t( "note" )}</FormHeader>
                 <FormInput
                   name='note'
                   value={note}
@@ -391,9 +391,9 @@ const Profile = ({
                 />
               </CardInput>
               <CardInput>
-                <FormHeader>{t( "profile:language" )}</FormHeader>
+                <FormHeader>{t( "language" )}</FormHeader>
                 <CardDropdown
-                  placeholder={t( "profile:language" )}
+                  placeholder={t( "language" )}
                   fluid
                   selection
                   options={languages}
@@ -402,7 +402,7 @@ const Profile = ({
                 />
               </CardInput>
               <ColloredCardInput className="no-text">
-                <FormHeader>{t( "profile:DATA_PRIVACY" )}</FormHeader>
+                <FormHeader>{t( "DATA_PRIVACY" )}</FormHeader>
                 <div onClick={onShowDataPrivaryStatus}>
                   <FormInput
                     className={member.dpSigned == 1 ? "green" : "yellow"}
@@ -415,7 +415,7 @@ const Profile = ({
                 </div>
               </ColloredCardInput>
               <ColloredCardInput className="no-text" >
-                <FormHeader>{t( "profile:ACCOUNT_STATUS" )}</FormHeader>
+                <FormHeader>{t( "ACCOUNT_STATUS" )}</FormHeader>
                 <div onClick={onShowMemberStatus}>
                   <FormInput
                     className={member.status == 1 ? "green" : member.status == 0 ? "yellow" : "red"}
@@ -448,50 +448,50 @@ const Profile = ({
       </CardSection>
 
       <CardSection id="section-address">
-        <CardHeader as='h3'>{t( "profile:address" )}</CardHeader>
+        <CardHeader as='h3'>{t( "address" )}</CardHeader>
         <StyledCard>
           <Card.Content style={{paddingTop: 0, paddingBottom: '1.5em'}}>
             <Form>
               <CardInput
-                placeholder={t( "profile:street" )}
+                placeholder={t( "street" )}
               >
-                <FormHeader>{t( "profile:street" )}</FormHeader>
+                <FormHeader>{t( "street" )}</FormHeader>
                   <FormInput
                     type='text'
                     name="street"
                     value={street}
                     onChange={(e) => setStreet(e.target.value)}
-                    placeholder={t( "setup:street" )}
+                    placeholder={t( "street" )}
                   />
               </CardInput>
               <CardInput
-                placeholder={t( "profile:zip_code" )}
+                placeholder={t( "zip_code" )}
               >
-                <FormHeader>{t( "profile:zip_code" )}</FormHeader>
+                <FormHeader>{t( "zip_code" )}</FormHeader>
                   <FormInput
                     type='text'
                     name="zip_code"
                     value={zipcode}
                     onChange={(e) => setZipcode(e.target.value)}
-                    placeholder={t( "setup:zip_code" )}
+                    placeholder={t( "zip_code" )}
                   />
               </CardInput>
               <CardInput
-                placeholder={t( "profile:city" )}
+                placeholder={t( "city" )}
               >
-                <FormHeader>{t( "profile:city" )}</FormHeader>
+                <FormHeader>{t( "city" )}</FormHeader>
                   <FormInput
                     type='text'
                     name="city"
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
-                    placeholder={t( "setup:city" )}
+                    placeholder={t( "city" )}
                   />
               </CardInput>
               <CardInput>
-                <FormHeader>{t( "profile:country" )}</FormHeader>
+                <FormHeader>{t( "country" )}</FormHeader>
                 <CardDropdown
-                  placeholder={t( "profile:country" )}
+                  placeholder={t( "country" )}
                   fluid
                   search
                   selection
@@ -510,7 +510,7 @@ const Profile = ({
                     city: city,
                   })
                 }
-                name={t( "common:save" )}
+                name={t( "save" )}
                 loading={updateMemberAddressLoading}
               />
 
@@ -520,7 +520,7 @@ const Profile = ({
       </CardSection>
 
       <CardSection id="section-photo">
-        <CardHeader as='h3'>{t( "profile:profile_picture" )}</CardHeader>
+        <CardHeader as='h3'>{t( "profile_picture" )}</CardHeader>
         <StyledCard>
           <Card.Content>
             <ImageEditor
@@ -548,25 +548,25 @@ const Profile = ({
           <ListItemIcon>
             <AccountBoxIcon />
           </ListItemIcon>
-          <ListItemText primary={t("profile:personal_data")} />
+          <ListItemText primary={t("personal_data")} />
         </ListItem>
         <ListItem button component="a" href="#section-address">
           <ListItemIcon>
             <HomeWorkIcon />
           </ListItemIcon>
-          <ListItemText primary={t("profile:address")} />
+          <ListItemText primary={t("address")} />
         </ListItem>
         <ListItem button component="a" href="#section-photo">
         <ListItemIcon>
           <PhotoCameraIcon />
         </ListItemIcon>
-          <ListItemText primary={t("profile:profile_picture")} />
+          <ListItemText primary={t("profile_picture")} />
         </ListItem>
         <ListItem button onClick={toggleDeleteDialog}>
           <ListItemIcon>
             <DeleteIcon />
           </ListItemIcon>
-          <ListItemText primary={t("profile:DELETE_CUSTOMER")} />
+          <ListItemText primary={t("DELETE_CUSTOMER")} />
         </ListItem>
       </Scrollspy>
     </div>

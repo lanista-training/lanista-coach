@@ -1,5 +1,6 @@
 /* eslint import/no-webpack-loader-syntax: off */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useTranslate } from '../../hooks/Translation';
 import PropTypes from 'prop-types';
 import LogoImage from '-!react-svg-loader!../../images/LanistaLogo.svg';
 import {
@@ -52,173 +53,149 @@ const MyFooter = ({currentLanguage, languageItems}) => {
 // ----------------------------------------------------------------------------
 
 // Say hello from GraphQL, along with a HackerNews feed fetched by GraphQL
-class Login extends React.Component {
+const Login = ({
+  authenticateUser,
+  authenticating,
+  goToRegistration,
+  goToForgotpassword,
+  error,
+  errorMessage,
 
-  constructor(props) {
-    super(props);
-    // Don't call this.setState() here!
-    this.state = { show: false };
-  }
+  email,
+  handleEmailChange,
+  emailIsValid,
 
-  componentDidMount() {
-    const _this = this
-    setTimeout(function(){
-      _this.setState({
-        show: true
-      });
-    }, 2000);
-  }
+  password,
+  handlePasswordChange,
+  passwordIsValid,
 
-  componentWillUnmount() {
-    this.setState({
-      show: false
-    });
-  }
+  validationEmailErrorMessage,
+  validationPasswordErrorMessage,
+  authenticationErrorMessage,
 
-  render() {
+  tbt
+}) => {
 
-    const {show} = this.state;
-    const {
-      authenticateUser,
-      authenticating,
-      goToRegistration,
-      goToForgotpassword,
-      error,
-      errorMessage,
-      t,
-      languages,
-      currentLanguage,
-      onChangeLanguage,
+  const [show, setShow] = useState(true);
+  const {t, locale, changeLanguage, languages} = useTranslate("login");
 
-      email,
-      handleEmailChange,
-      emailIsValid,
+  const languageItems = (languages ? languages.filter(l => l != locale).map((language) => <ChildButton
+    icon="ion-social-github"
+    label={language}
+    className={language + "-flag"}
+    key={language}
+    onClick={(e) => {
+      changeLanguage(language);
+    }} />)
+    : <ChildButton/>);
 
-      password,
-      handlePasswordChange,
-      passwordIsValid,
+  useEffect(()=>{
+    setShow(true);
+  }, []);
 
-      validationEmailErrorMessage,
-      validationPasswordErrorMessage,
-      authenticationErrorMessage,
+  return (
+    <Root className={"scene"}>
+      <div className="main-section">
+        {
+          tbt && (
+            <TrainerList
+              t={t}
+              tbt={tbt}
 
-      tbt,
-    } = this.props;
+              password= {password}
+              onPasswordChange={handlePasswordChange}
 
-    const languageItems = (languages ? languages.map((language) => <ChildButton
-      icon="ion-social-github"
-      label={language}
-      className={language + "-flag"}
-      key={language}
-      onClick={(e) => {
-        onChangeLanguage(language);
-      }} />)
-      : <ChildButton/>);
+              onEmaiChange={handleEmailChange}
+              disabled={authenticating}
+              error={passwordIsValid}
+              helperText={validationPasswordErrorMessage || authenticationErrorMessage}
 
-    return (
-      <Root className={"scene"}>
-        <div className="main-section">
-          {
-            tbt && (
-              <TrainerList
-                t={t}
-                tbt={tbt}
+              authenticateUser={authenticateUser}
+              loading={authenticating}
 
-                password= {password}
-                onPasswordChange={handlePasswordChange}
+              goToForgotpassword={goToForgotpassword}
+            />
+          )
+        }
+        { !tbt && (
+          <div className="form-section">
 
-                onEmaiChange={handleEmailChange}
+            <LanistaLogo  style={{}}>
+              <LogoImage width={60} height={60}/>
+              <div className="sub-header">
+                Lanista<span>Coach</span>
+              </div>
+            </LanistaLogo>
+
+            <div className="input-fields-section">
+              <LanistaTextField
+                className="email-field"
+                variant="outlined"
+                placeholder='Email'
                 disabled={authenticating}
-                error={passwordIsValid}
-                helperText={validationPasswordErrorMessage || authenticationErrorMessage}
-
-                authenticateUser={authenticateUser}
-                loading={authenticating}
-
-                goToForgotpassword={goToForgotpassword}
+                type={"email"}
+                error={emailIsValid}
+                value= {email}
+                onChange={handleEmailChange}
+                helperText="Incorrect entry."
+                helperText={validationEmailErrorMessage}
               />
-            )
-          }
-          { !tbt && (
-            <div className="form-section">
-
-              <LanistaLogo  style={{}}>
-                <LogoImage width={60} height={60}/>
-                <div className="sub-header">
-                  Lanista<span>Coach</span>
-                </div>
-              </LanistaLogo>
-
-              <div className="input-fields-section">
-                <LanistaTextField
-                  className="email-field"
-                  variant="outlined"
-                  placeholder='Email'
-                  disabled={authenticating}
-                  type={"email"}
-                  error={emailIsValid}
-                  value= {email}
-                  onChange={handleEmailChange}
-                  helperText="Incorrect entry."
-                  helperText={validationEmailErrorMessage}
-                />
-                <LanistaTextField
-                  className="password-field"
-                  variant="outlined"
-                  placeholder='Password'
-                  disabled={authenticating}
-                  type={"password"}
-                  error={passwordIsValid}
-                  value= {password}
-                  onChange= {handlePasswordChange}
-                  helperText={validationPasswordErrorMessage || authenticationErrorMessage}
-                />
-              </div>
-
-
-              <StyledLink onClick={goToForgotpassword}>
-                  <a >{t("login:forgot_password")}</a>
-              </StyledLink>
-
-              <div className="buttons-section">
-                <LanistaButton
-                  loading={authenticating}
-                  onClick={
-                    () => {
-                      authenticateUser();
-                    }
-                  }
-                  disabled={authenticating}
-                  inverted
-                >
-                  { authenticating ? ("...") : t("login") }
-                </LanistaButton>
-                <LanistaButton
-                  onClick={
-                    (e) => {
-                      const {x, y, height, width} = e.target.getBoundingClientRect();
-                      goToRegistration({
-                        x,
-                        y,
-                        height,
-                        width
-                      });
-                      //this.setState({show: false});
-                    }
-                  }
+              <LanistaTextField
+                className="password-field"
+                variant="outlined"
+                placeholder='Password'
                 disabled={authenticating}
-                >
-                  {authenticating ? ("...") : t("register")}
-                </LanistaButton>
-              </div>
+                type={"password"}
+                error={passwordIsValid}
+                value= {password}
+                onChange= {handlePasswordChange}
+                helperText={validationPasswordErrorMessage || authenticationErrorMessage}
+              />
             </div>
-          )}
 
-        </div>
-        <MyFooter currentLanguage={currentLanguage} languageItems={languageItems}/>
-      </Root>
-    )
-  }
+
+            <StyledLink onClick={goToForgotpassword}>
+                <a >{t("forgot_password")}</a>
+            </StyledLink>
+
+            <div className="buttons-section">
+              <LanistaButton
+                loading={authenticating}
+                onClick={
+                  () => {
+                    authenticateUser();
+                  }
+                }
+                disabled={authenticating}
+                inverted
+              >
+                { authenticating ? ("...") : t("login") }
+              </LanistaButton>
+              <LanistaButton
+                onClick={
+                  (e) => {
+                    const {x, y, height, width} = e.target.getBoundingClientRect();
+                    goToRegistration({
+                      x,
+                      y,
+                      height,
+                      width
+                    });
+                    //this.setState({show: false});
+                  }
+                }
+              disabled={authenticating}
+              >
+                {authenticating ? ("...") : t("register")}
+              </LanistaButton>
+            </div>
+          </div>
+        )}
+
+      </div>
+      <MyFooter currentLanguage={locale} languageItems={languageItems}/>
+    </Root>
+  )
 };
 
 Login.propTypes = {
