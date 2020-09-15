@@ -279,182 +279,183 @@ Exercise.propTypes = {
   t: PropTypes.func,
 
   /**
-   * Function to translate content
+   * The object with all relevant information about the exercise
   */
   exercise: PropTypes.object,
 
   /**
-   * Function to translate content
+   * Call this funcion to a fresh object from the server
   */
   refetch: PropTypes.func,
 
   /**
-   * Function to translate content
+   * A curated list of protocolls (groupped by day)
   */
   groppedWorkouts: PropTypes.array,
 
   /**
-   * Function to translate content
+   * If available (not null), the exercise configuration in a workout
   */
   settings: PropTypes.object,
 
   /**
-   * Function to translate content
+   * The current tab shown
   */
   activeTab: PropTypes.number,
 
   /**
-   * Function to translate content
+   * Is calle whhen the current tab change
   */
   onTabChange: PropTypes.func,
 
   /**
-   * Function to translate content
+   * A flag to show the video window
   */
   isVideoOpen: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * To change the value of the video flag
   */
   onToggleVideo: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Called to update the current value of all settings
   */
   onSettingsChange: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Call this fucntion to synchronize with the server
   */
   onSyncSettings: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Call to send a new exercise note to the server
   */
   onCreateNote: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Call to delete an exercise note from the server
   */
   onDeleteNote: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Graphql flag when deleting a note
   */
   deleteNoteLoading: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * The value of the new message to be used in the form
   */
   message: PropTypes.string,
 
   /**
-   * Function to translate content
+   * The function to be used in the form for new messages
   */
   onMessageChange: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Send a new protocoll entry to the server
   */
   onCreateProtocoll: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Graphql loading flag for the function onCreateProtocoll
   */
   createProtocollLoading: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * Send a new chat entry to the server
   */
   onCreateChatMessage: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Graphql loading flag for the function onCreateChatMessage
   */
   createChatMessageLoading: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * Remove a chat message from the server
   */
   onDeleteChatMessage: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Graphql loading flag for the function onDeleteChatMessage
   */
   deleteChatMessageLoading: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * Delete a protocoll entry from the server
   */
   deleteProtocoll: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Graphql loading flag for the function deleteProtocoll
   */
   deleteProtocollLoading: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * 0: for BMI
+   * 1. for Average
   */
   activeChart: PropTypes.number,
 
   /**
-   * Function to translate content
+   * Grahpql flag for loading new data
   */
   loading: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * Graphql error object for loading data
   */
   error: PropTypes.object,
 
   /**
-   * Function to translate content
+   * Flag to enable / disable the editing buttons in the panel
   */
   editable: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * Flag to show of the current trainer is the creator of the exercise
   */
   owner: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * If true, show the input field for the exercise name
   */
   editNameMode: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * Show / Hide input field for the exercise name
   */
   toggleEditNameMode: PropTypes.func,
 
   /**
-   * Function to translate content
+   * If true, show the image editor
   */
   editImageMode: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * Show / hide image editor
   */
   toggleEditImageMode: PropTypes.func,
 
   /**
-   * Function to translate content
+   * If true show the input field for the video url
   */
   editVideoMode: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * Show / hide the input field for the video url
   */
   toggleEditVideoMode: PropTypes.func,
 
   /**
-   * Function to translate content
+   * If true show the panel for editing the search attributes
   */
   editIndexesMode: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * Show / hide panel to edit the search attributes
   */
   toggleEditIndexesMode: PropTypes.func,
 

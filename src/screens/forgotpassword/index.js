@@ -128,7 +128,6 @@ const Panel = ({goBack}) => {
 
   return (
     <Forgotpassword
-      customer={data && data.member ? data.member : {}}
       languages={languages}
       currentLanguage={locale}
       goBack={goBack}

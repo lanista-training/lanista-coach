@@ -236,47 +236,43 @@ Forgotpassword.propTypes = {
   t: PropTypes.func,
 
   /**
-   * Function to translate content
-  */
-  customer: PropTypes.object,
-
-  /**
-   * Function to translate content
+   * A list with avaliable languages. Values: [de, en, es, pt, fr, ru]
   */
   languages: PropTypes.array,
 
   /**
-   * Function to translate content
+   * The current language of the application
+   * One of the following options: [de, en, es, pt, fr, ru]
   */
   currentLanguage: PropTypes.string,
 
   /**
-   * Function to translate content
+   * Navigate to the login screen
   */
   goBack: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Send the password reset mail
   */
   onSendpasswordreset: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Graphql error object for the function onSendpasswordreset
   */
   errorMessage: PropTypes.object,
 
   /**
-   * Function to translate content
+   * Enail validation result
   */
   emailIsValid: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * Function to be used in the form
   */
   handleEmailChange: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Is true if the password reset mail was send successfully
   */
   passwordresetsuccessfull: PropTypes.bool,
 

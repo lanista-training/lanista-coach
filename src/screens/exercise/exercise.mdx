@@ -12,4 +12,17 @@ import Exercise from './Exercise'
 
 ## Beschreibung
 
-View component to visualize an exercise
+There are 3 different scenarios that influence the layout of this conponent:
+<ul>
+  <li>Exercise in a workout in a customer context</li>
+  <li>Exercise to protocoll (in a customer context)</li>
+  <li>Exercise without customer conttext</li>
+  <li>Exercise in a workout without a customer context</li>
+  <li>Exercise is in edit mode</li>
+</ul>
+To identify the context two parameters are necessary:
+<ul>
+  <li>customer_id</li>
+  <li>workout_id</li>
+  <li>editable</li>
+</ul>

@@ -260,27 +260,27 @@ const Screen = ({
 
 Screen.propTypes = {
   /**
-   * Function to translate content
+   * Function to translate content.
   */
   t: PropTypes.func,
 
   /**
-   * Object wiht the trainer logged in
+   * Object wiht the trainer logged in.
   */
   me: PropTypes.object,
 
   /**
-   * The fist tab to be shown after mounting
+   * The fist tab to be shown after mounting.
   */
   tab: PropTypes.number,
 
   /**
-   * Open the entry with this id after render
+   * Open the entry with this id after mounting. The type of the item to be shown must correspond with the tab.
   */
   id: PropTypes.number,
 
   /**
-   * The customer object
+   * Object with all customer information
   */
   customer: PropTypes.object,
 
@@ -295,57 +295,57 @@ Screen.propTypes = {
   error: PropTypes.object,
 
   /**
-   * Graphql error object
+   * Index of the current tab oppen
   */
   activeIndex: PropTypes.number,
 
   /**
-   * Graphql error object
+   * This function is called when the current tab change
   */
   handleTabChange: PropTypes.func,
 
   /**
-   * Graphql error object
+   * Send a finding object to the graphql server
   */
   onSaveFinding: PropTypes.func,
 
   /**
-   * Graphql error object
+   * Graphql lodading flag for the function onSaveFinding
   */
   saveFindingLoading: PropTypes.bool,
 
   /**
-   * Graphql error object
+   * Graphql error object for the function onSaveFinding
   */
   saveFindingError: PropTypes.object,
 
   /**
-   * Graphql error object
+   * Create a new finding object on the graphql server
   */
   onCreateFinding: PropTypes.func,
 
   /**
-   * Graphql error object
+   * Graphql lodading flag for the function onCreateFinding
   */
   createFindingLoading: PropTypes.bool,
 
   /**
-   * Graphql error object
+   * Graphql error object for the function onCreateFinding
   */
   createFindingError: PropTypes.object,
 
   /**
-   * Graphql error object
+   * Delete a finding object on the graphql server
   */
   onDeleteFinding: PropTypes.func,
 
   /**
-   * Graphql error object
+   * Graphql lodading flag for the function onDeleteFinding
   */
   deleteFindingLoading: PropTypes.bool,
 
   /**
-   * Graphql error object
+   * Graphql error object for the function onDeleteFinding
   */
   deleteFindingError: PropTypes.object,
 
@@ -355,12 +355,12 @@ Screen.propTypes = {
   onCreateLifestyle: PropTypes.func,
 
   /**
-   * Graphql error object
+   *  Graphql lodading flag for the function onCreateLifestyle
   */
   createLifestyleLoading: PropTypes.bool,
 
   /**
-   * Graphql error object
+   * Graphql error object for the function onCreateLifestyle
   */
   createLifestyleError: PropTypes.object,
 
@@ -370,12 +370,12 @@ Screen.propTypes = {
   onSaveLifestyle: PropTypes.func,
 
   /**
-   * Graphql error object
+   *  Graphql lodading flag for the function onSaveLifestyle
   */
   saveLifestyleLoading: PropTypes.bool,
 
   /**
-   * Graphql error object
+   * Graphql error object for the function onSaveLifestyle
   */
   saveLifestyleError: PropTypes.object,
 
@@ -385,12 +385,12 @@ Screen.propTypes = {
   onDeleteLifestyle: PropTypes.func,
 
   /**
-   * Graphql error object
+   *  Graphql lodading flag for the function onDeleteLifestyle
   */
   deleteLifestyleLoading: PropTypes.bool,
 
   /**
-   * Graphql error object
+   * Graphql error object for the function onDeleteLifestyle
   */
   deleteLifestyleError: PropTypes.object,
 
@@ -400,12 +400,12 @@ Screen.propTypes = {
   onCreateDrug: PropTypes.func,
 
   /**
-   * Graphql error object
+   *  Graphql lodading flag for the function onCreateDrug
   */
   createDrugLoading: PropTypes.bool,
 
   /**
-   * Graphql error object
+   * Graphql error object for the function onCreateDrug
   */
   createDrugError: PropTypes.object,
 
@@ -415,12 +415,12 @@ Screen.propTypes = {
   onSaveDrug: PropTypes.func,
 
   /**
-   * Graphql error object
+   * Graphql lodading flag for the function onSaveDrug
   */
   saveDrugLoading: PropTypes.bool,
 
   /**
-   * Graphql error object
+   * Graphql error object for the function onSaveDrug
   */
   saveDrugError: PropTypes.object,
 
@@ -430,12 +430,12 @@ Screen.propTypes = {
   onDeleteDrug: PropTypes.func,
 
   /**
-   * Graphql error object
+   *  Graphql lodading flag for the function onDeleteDrug
   */
   deleteDrugLoading: PropTypes.bool,
 
   /**
-   * Graphql error object
+   * Graphql error object for the function onDeleteDrug
   */
   deleteDrugError: PropTypes.object,
 
@@ -445,12 +445,12 @@ Screen.propTypes = {
   onCreateSportActivity: PropTypes.func,
 
   /**
-   * Graphql error object
+   *  Graphql lodading flag for the function onCreateSportActivity
   */
   createSportActivityLoading: PropTypes.bool,
 
   /**
-   * Graphql error object
+   * Graphql error object for the function onCreateSportActivity
   */
   createSportActivityError: PropTypes.object,
 
@@ -460,12 +460,12 @@ Screen.propTypes = {
   onSaveSportActivity: PropTypes.func,
 
   /**
-   * Graphql error object
+   *  Graphql lodading flag for the function onSaveSportActivity
   */
   saveSportActivityLoading: PropTypes.bool,
 
   /**
-   * Graphql error object
+   * Graphql error object for the function onSaveSportActivity
   */
   saveSportActivityError: PropTypes.object,
 
@@ -475,12 +475,12 @@ Screen.propTypes = {
   onDeleteSportActivity: PropTypes.func,
 
   /**
-   * Graphql error object
+   *  Graphql lodading flag for the function onDeleteSportActivity
   */
   deleteSportActivityLoading: PropTypes.bool,
 
   /**
-   * Graphql error object
+   * Graphql error object for the function onDeleteSportActivity
   */
   deleteSportActivityError: PropTypes.object,
 
@@ -490,12 +490,12 @@ Screen.propTypes = {
   onCreateGoal: PropTypes.func,
 
   /**
-   * Graphql error object
+   *  Graphql lodading flag for the function onCreateGoal
   */
   createGoalLoading: PropTypes.bool,
 
   /**
-   * Graphql error object
+   * Graphql error object for the function onCreateGoal
   */
   createGoalError: PropTypes.object,
 
@@ -505,12 +505,12 @@ Screen.propTypes = {
   onSaveGoal: PropTypes.func,
 
   /**
-   * Graphql error object
+   *  Graphql lodading flag for the function onSaveGoal
   */
   saveGoalLoading: PropTypes.bool,
 
   /**
-   * Graphql error object
+   * Graphql error object for the function onSaveGoal
   */
   saveGoalError: PropTypes.object,
 
@@ -520,12 +520,12 @@ Screen.propTypes = {
   onDeleteGoal: PropTypes.func,
 
   /**
-   * Graphql error object
+   *  Graphql lodading flag for the function onDeleteGoal
   */
   deleteGoalLoading: PropTypes.bool,
 
   /**
-   * Graphql error object
+   * Graphql error object for the function onDeleteGoal
   */
   deleteGoalError: PropTypes.object,
 
@@ -535,12 +535,12 @@ Screen.propTypes = {
   onCreatePhysio: PropTypes.func,
 
   /**
-   * Graphql error object
+   *  Graphql lodading flag for the function onCreatePhysio
   */
   createPhysioLoading: PropTypes.bool,
 
   /**
-   * Graphql error object
+   * Graphql error object for the function onCreatePhysio
   */
   createPhysioError: PropTypes.object,
 
@@ -550,12 +550,12 @@ Screen.propTypes = {
   onSavePhysio: PropTypes.func,
 
   /**
-   * Graphql error object
+   *  Graphql lodading flag for the function onSavePhysio
   */
   savePhysioLoading: PropTypes.bool,
 
   /**
-   * Graphql error object
+   * Graphql error object for the function onSavePhysio
   */
   savePhysioError: PropTypes.object,
 
@@ -565,12 +565,12 @@ Screen.propTypes = {
   onDeletePhysio: PropTypes.func,
 
   /**
-   * Graphql error object
+   *  Graphql lodading flag for the function onDeletePhysio
   */
   deletePhysioLoading: PropTypes.bool,
 
   /**
-   * Graphql error object
+   * Graphql error object for the function onDeletePhysio
   */
   deletePhysioError: PropTypes.object,
 }

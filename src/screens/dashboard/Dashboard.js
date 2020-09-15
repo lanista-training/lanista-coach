@@ -69,112 +69,114 @@ Dashboard.propTypes = {
   t: PropTypes.func,
 
   /**
-   * Function to translate content
+   * An array with feeds in chronological order (DESC)
   */
   feeds: PropTypes.array,
 
   /**
-   * Function to translate content
+   * Current ilter value
   */
   type: PropTypes.number,
 
   /**
-   * Function to translate content
+   * The current position of the scroll feeds list. When the threashold is reached, the next page request must be triggered
   */
   currentScrollPosition: PropTypes.number,
 
   /**
-   * Function to translate content
+   * This fucntion is at the moment not implmemented
   */
   jumpToNow: PropTypes.func,
 
   /**
-   * Function to translate content
+   * This function is at the moment not implemented
   */
   jumpToDay: PropTypes.func,
 
   /**
-   * Function to translate content
+   * This function is called the the end of the list is reached
   */
   onRequestPage: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Graphql flag when loading feeds
   */
   loading: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * Graphql error object for loaading feeds
   */
   error: PropTypes.object,
 
   /**
-   * Function to translate content
+   * True: when there are more fedds on the server
+   * False: when the end of the list is reached
   */
   hasMore: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * True: when there are more fedds on the server
+   * False: when the end of the list is reached
   */
   hasMoreUp: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * Is true when the first page is beeng loaded
   */
   initialLoading: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * The number of feeds to be laoded for each page request
   */
   setPageSize: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Navigates to the customer screen
   */
   congratulateMember: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Navigates to the customer screen
   */
   openMember: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Navigates to the workout screen
   */
   openPlan: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Set the flag to mondal panel to true
   */
   showModal: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Flag to show or hide a modal panel
   */
   modalPanel: PropTypes.object,
 
   /**
-   * Function to translate content
+   * The current filger value
   */
   eventsQuery: PropTypes.string,
 
   /**
-   * Function to translate content
+   * This attribute is not used at the moment
   */
   accesslevel: PropTypes.number,
 
   /**
-   * Function to translate content
+   * Customer attribute to know if the trainer is an gym or is a personal trainer
   */
   bu: PropTypes.number,
 
   /**
-   * Function to translate content
+   * If the trainer is an gym using an interface to the master system
   */
   hasInterface: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * Function to change the current filter value
   */
   setFilter: PropTypes.func,
 }

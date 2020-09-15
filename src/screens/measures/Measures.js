@@ -161,67 +161,67 @@ Measures.propTypes = {
   t: PropTypes.func,
 
   /**
-   * Function to translate content
+   * The current loaded customer
   */
   customer: PropTypes.object,
 
   /**
-   * Function to translate content
+   * A flag to switch between the chart and table view of data
   */
   showDataAsChart: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Navigate to the test screen
   */
   goToTest: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Navigate to the an empty test screen
   */
   goCreateTest: PropTypes.func,
 
   /**
-   * Function to translate content
+   * The current tab
   */
   activeIndex: PropTypes.number,
 
   /**
-   * Function to translate content
+   * Called when the tab has change
   */
   handleTabChange: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Show the right menu panel with the test creaton options
   */
   showCreateTestMenu: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Close the right menu panel
   */
   closeCreateTestmenu: PropTypes.func,
 
   /**
-   * Function to translate content
+   * An array with the valid test types for the trainer
   */
-  testsTypes: PropTypes.number,
+  testsTypes: PropTypes.array,
 
   /**
-   * Function to translate content
+   * Store the current entry selected from the list and show the entry
   */
   setSelectedRecord: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Navigate to the test screen
   */
   onCreateTest: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Graphql loading flag for a test creation
   */
   createTestLoading: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * Graphql error object for the creation of a test
   */
   createTestError: PropTypes.object,
 };

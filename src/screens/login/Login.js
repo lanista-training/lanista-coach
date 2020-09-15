@@ -205,97 +205,97 @@ Login.propTypes = {
   t: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Flag to signalize that the user has valid token.
   */
   authenticated: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Graphql loading flag for the authentication process
   */
   authenticating: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Function to request an authentication token
   */
   authenticateUser: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Navigate to the regisgration screen
   */
   goToRegistration: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Navigate to the forgotpassword screen
   */
   goToForgotpassword: PropTypes.func,
 
   /**
-   * Function to translate content
+   * An array with all available languages. Values: [de, en, es, pt, fr, ru]
   */
   languages: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Current language. One of: [de, en, es, pt, fr, ru]
   */
   currentLanguage: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Function to change the current vallue of the language. Valid values: [de, en, es, pt, fr, ru]
   */
   onChangeLanguage: PropTypes.func,
 
   /**
-   * Function to translate content
+   * value string for the form
   */
   email: PropTypes.func,
 
   /**
-   * Function to translate content
+   * To be used in the form in case of validation error
   */
-  emailIsValid: PropTypes.func,
+  emailIsValid: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * Function to be used in the form for the email field
   */
   handleEmailChange: PropTypes.func,
 
   /**
-   * Function to translate content
+   * value string for the form
   */
   password: PropTypes.func,
 
   /**
-   * Function to translate content
+   * To be used in the form in case of validation error
   */
   passwordIsValid: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Function to be used in the form for the email field
   */
   handlePasswordChange: PropTypes.func,
 
   /**
-   * Function to translate content
+   * A string with an error text to be used in the form
   */
-  validationEmailErrorMessage: PropTypes.func,
+  validationEmailErrorMessage: PropTypes.string,
 
   /**
-   * Function to translate content
+   * A string with an error text to be used in the form
   */
   validationPasswordErrorMessage: PropTypes.func,
 
   /**
-   * Function to translate content
+   * A string with an error text to be used in the form
   */
   authenticationErrorMessage: PropTypes.func,
 
   /**
-   * Function to translate content
+   * If this value is set, show the trainer list for the bu
   */
   tbt: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Navigate to the registration screen
   */
   goToRegistration: PropTypes.func,
 };

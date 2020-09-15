@@ -190,87 +190,87 @@ Exercises.propTypes = {
   t: PropTypes.func,
 
   /**
-   * Function to translate content
+   * An array containing all exercises depending on the filter settings
   */
   exercises: PropTypes.array,
 
   /**
-   * Function to translate content
+   * Navigate to the exercise screen
   */
   showExercise: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Load a new page from the server
   */
   onRequestPage: PropTypes.func,
 
   /**
-   * Function to translate content
+   * If more exercises are available to been shown on the hit list
   */
   hasMore: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * If loading the first page
   */
   initialLoading: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * If laoding data from the server
   */
   loading: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * The amount of exercises to be shown on one screen size
   */
   setPageSize: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Navigate to the exercise screen
   */
   onShowExercise: PropTypes.func,
 
   /**
-   * Function to translate content
+   * To show messages to the user
   */
   openSnackbar: PropTypes.func,
 
   /**
-   * Function to translate content
+   * To close the message window
   */
   handleCloseSnackbar: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Show customers in a specific folder
   */
   folderMode: PropTypes.number,
 
   /**
-   * Function to translate content
+   * To add one exercise to the selected folder
   */
   onAddExerciseToFolder: PropTypes.func,
 
   /**
-   * Function to translate content
+   * To remove one exercise from the selected folder
   */
   onRemoveExerciseFromFolder: PropTypes.func,
 
   /**
-   * Function to translate content
+   * If this flag is true open the panel to create a new folder
   */
   createFolderDialogOpen: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Call this function set the flag to false
   */
   createFolderDialogHandleClose: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Create a new folder on the server. Afterwards a refresh is performed
   */
   onCreateFolder: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Graphql loading flag during the creation of a folder.
   */
   createFolderLoading: PropTypes.bool,
 };

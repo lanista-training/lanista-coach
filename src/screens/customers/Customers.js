@@ -166,92 +166,94 @@ Customers.propTypes = {
   t: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Array with the current hit list
   */
   customers: PropTypes.array,
 
   /**
-   * Function to translate content
+   * Graphql flag for list loading
   */
   filtering: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * Flag to show the switch in the upper right cornder
   */
   isFilterOn: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * Navigate to the customer screen
   */
   showCustomer: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Function load the next page on the list
   */
   onRequestPage: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Flag to show that end of the results list is sitll not reached
   */
   hasMore: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * Graphql flag to signalize that the first page is been loaded
   */
   initialLoading: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * Graphql loading flag for the customers list
   */
   loading: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * A flag to show or hide the loading component
   */
   showLoading: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Configuraiton of the list, this number need to be calculated and passed to the infinity list
   */
   setPageSize: PropTypes.func,
 
   /**
-   * Function to translate content
+   * The value of the search field on the header
   */
   filter: PropTypes.string,
 
   /**
-   * Function to translate content
+   * If null = no folder selected
+   * If 1 = Show list to add customers to a folder
+  * If 0 = Show list to remove customers form a folder
   */
   folderMode: PropTypes.number,
 
   /**
-   * Function to translate content
+   * Call to remove one customer from the selected folder
   */
   onRemoveMemberFromFolder: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Call to add a customer to the selected folder
   */
   onAddMemberToFolder: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Flag to show or hide the create folder panel
   */
   createFolderDialogOpen: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Call to close the create folder panel
   */
   createFolderDialogHandleClose: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Create a folder on the graphql server
   */
   onCreateFolder: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Graphql flag when creating a folder on the server
   */
   createFolderLoading: PropTypes.bool,
 };

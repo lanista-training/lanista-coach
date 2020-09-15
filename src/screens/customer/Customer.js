@@ -675,133 +675,133 @@ Customer.propTypes = {
   me: PropTypes.object,
 
   /**
-   * Object wiht the trainer logged in
+   * Delete files from the server
   */
   removeMemberFile: PropTypes.func,
 
   /**
-   * Object wiht the trainer logged in
+   * Object wiht the customer information
   */
   customer: PropTypes.object,
 
   /**
-   * Object wiht the trainer logged in
+   * This a a calculated array containing the entries with the youngest timestamp
   */
   lastMeasures: PropTypes.array,
 
   /**
-   * Object wiht the trainer logged in
+   * This function trigger the navigatoin to the exercise screen
   */
   onProtocollClick: PropTypes.func,
 
   /**
-   * Object wiht the trainer logged in
+   * This function trigger the navitation to the workout screen
   */
   openWorkout: PropTypes.func,
 
   /**
-   * Object wiht the trainer logged in
+   * Upload a list of files to the lambda server
   */
   addFiles: PropTypes.func,
 
   /**
-   * Object wiht the trainer logged in
+   * A list with all workouts of the customer groupped by date (DD-MM-YYYY)
   */
   protocolls: PropTypes.array,
 
   /**
-   * Object wiht the trainer logged in
+   * Graphql flag by loading customer protocolls
   */
   protocollsLoading: PropTypes.bool,
 
   /**
-   * Object wiht the trainer logged in
+   * A list wiht all customer files
   */
   memberFiles: PropTypes.array,
 
   /**
-   * Object wiht the trainer logged in
+   * Graphql flag for the function memberFiles
   */
   loadingMemberFiles: PropTypes.bool,
 
   /**
-   * Object wiht the trainer logged in
+   * Trigger an update of the files array
   */
   updateMemberFiles: PropTypes.func,
 
   /**
-   * Object wiht the trainer logged in
+   * Navigates to the ananmese screen / goals-Tab
   */
   showGoal: PropTypes.func,
 
   /**
-   * Object wiht the trainer logged in
+   *  Navigates to the ananmese screen / goals-Tab
   */
   createGoal: PropTypes.func,
 
   /**
-   * Object wiht the trainer logged in
+   * Graphql flag for all loading and processing functions
   */
   loading: PropTypes.bool,
 
   /**
-   * Object wiht the trainer logged in
+   * To be used to show a message
   */
   openSnackbar: PropTypes.func,
 
   /**
-   * Object wiht the trainer logged in
+   * This fucntion is called to close the message window
   */
   handleCloseSnackbar: PropTypes.func,
 
   /**
-   * Object wiht the trainer logged in
+   * Set the message
   */
   snackbarMessage: PropTypes.string,
 
   /**
-   * Object wiht the trainer logged in
+   * Open the create workout right menu options
   */
   createWorkout: PropTypes.func,
 
   /**
-   * Object wiht the trainer logged in
+   * Send a new note entroy to the graphql server
   */
 
   onCreateNote: PropTypes.func,
 
   /**
-   * Object wiht the trainer logged in
+   * Graphql flag for the function onCreateNote
   */
   createNoteLoading: PropTypes.bool,
 
   /**
-   * Object wiht the trainer logged in
+   * Graphql error object for the function onCreateNote
   */
   createNoteError: PropTypes.object,
 
   /**
-   * Object wiht the trainer logged in
+   * Delete a note entry on the graphql server
   */
   onDeleteNote: PropTypes.func,
 
   /**
-   * Object wiht the trainer logged in
+   * Graphl loading flag for the function onDeleteNote
   */
   deleteNoteLoading: PropTypes.bool,
 
   /**
-   * Object wiht the trainer logged in
+   * Graphql error object for the function onDeleteNote
   */
   deleteNoteError: PropTypes.object,
 
   /**
-   * Object wiht the trainer logged in
+   * Update a note entry on the graphql server
   */
   onUpdateNote: PropTypes.func,
 
   /**
-   * Object wiht the trainer logged in
+   * Graphl loading flag for the function onUpdateNote
   */
   updateNoteLoading: PropTypes.bool,
 
@@ -811,32 +811,32 @@ Customer.propTypes = {
   updateNoteError: PropTypes.object,
 
   /**
-   * Object wiht the trainer logged in
+   * By sending a date, this function create new workout. After the workout creation the graphql cache is refreshed. Afterwards a navitation jump is triggered to open the new workout
   */
   onCreatePlanFromWorkout: PropTypes.func,
 
   /**
-   * Object wiht the trainer logged in
+   * This function add  a new split to an existing workout. After the workout is updated, the graphql cache is refreshed. Afterwards a navitation jump is triggered to open the new workout
   */
   onAddWorkoutsToPlan: PropTypes.func,
 
   /**
-   * Object wiht the trainer logged in
+   * Graphl loading flag for all split  functions
   */
   createPlanFromWorkoutLoading: PropTypes.bool,
 
   /**
-   * Object wiht the trainer logged in
+   * Graphl error object for all split  functions
   */
   createPlanFromWorkoutError: PropTypes.object,
 
   /**
-   * Object wiht the trainer logged in
+   * Navigates to the measure screen
   */
   onGoToMeasures: PropTypes.func,
 
   /**
-   * Object wiht the trainer logged in
+   * Navigates to the ananmese screen with two paraameters: the tab to be presented and the object to be shown after rendering
   */
   onWarningClick: PropTypes.func,
 }

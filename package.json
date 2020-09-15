@@ -57,7 +57,6 @@
     "country-list": "^2.1.0",
     "cowsay-browser": "^1.1.8",
     "date-fns": "^2.14.0",
-    "docz": "^2.3.1",
     "framer-motion": "^1.11.1",
     "graphql": "^14.7.0",
     "isomorphic-unfetch": "^3.0.0",
@@ -113,6 +112,7 @@
   "devDependencies": {
     "@babel/runtime-corejs2": "^7.10.5",
     "babel-plugin-styled-components": "^1.10.7",
+    "docz": "^2.3.1",
     "eslint-plugin-react": "^7.20.3",
     "serverless": "^1.74.1",
     "serverless-nextjs-plugin": "^2.5.1",
