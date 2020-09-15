@@ -731,137 +731,137 @@ Profile.propTypes = {
   t: PropTypes.func,
 
   /**
-   * Function to translate content
+   * All available lenguages in lanista
   */
   languages: PropTypes.array,
 
   /**
-   * Function to translate content
+   * All avilable member information
   */
   member: PropTypes.object,
 
   /**
-   * Function to translate content
+   * Graphql loading flag for data loading
   */
   loading: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * Graphql error object
   */
   error: PropTypes.object,
 
   /**
-   * Function to translate content
+   * Navigate back in the browser history
   */
   goBack: PropTypes.func,
 
   /**
-   * Function to translate content
+   * This function synchronize the member data with the server
   */
   onUpdateMember: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Graphql loading flag for the function onUpdateMember
   */
   updateMemberLoading: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * Grahql error object for the function onUpdateMember
   */
   updateMemberError: PropTypes.object,
 
   /**
-   * Function to translate content
+   * This function synchronize the address data with the server
   */
   onUpdateMemberAddress: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Graphql loading flag for the function onUpdateMemberAddress
   */
   updateMemberAddressLoading: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * Grahql error object for the function onUpdateMemberAddress
   */
   updateMemberAddressError: PropTypes.object,
 
   /**
-   * Function to translate content
+   * This function sends the customer signature to the server and generates a pdf document
   */
   onRequestDataPrivacySignature: PropTypes.func,
 
   /**
-   * Function to translate content
+   * This function returns an url with the current pdf document with the customer signature
   */
   onRequestDataPrivacyDocument: PropTypes.func,
 
   /**
-   * Function to translate content
+   * This variable contains the current url for the data privacy document
   */
-  dataPrivacyDocument: PropTypes.bool,
+  dataPrivacyDocument: PropTypes.string,
 
   /**
-   * Function to translate content
+   * Send an activation mail to the customer
   */
   onSendActivationMail: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Graphql loading flag for the function onSendActivationMail
   */
   sendActivationMailLoading: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * Graphql error object for the function onSendActivationMail
   */
   sendActivationMailError: PropTypes.object,
 
   /**
-   * Function to translate content
+   * Function to update the member image on the s3 buckent on aws
   */
   onUploadMemberImage: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Loading flag for the function onUploadMemberImage
   */
   uploadMemberImageLoading: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * Error object for the function onUploadMemberImage
   */
   uploadMemberImageError: PropTypes.object,
 
   /**
-   * Function to translate content
+   * URL to the modified current member  image
   */
   previewImage: PropTypes.string,
 
   /**
-   * Function to translate content
+   * This function restore to the original image size and rotation
   */
   resetPreviewImage: PropTypes.func,
 
   /**
-   * Function to translate content
+   * This function crop the member image
   */
   onCropImage: PropTypes.func,
 
   /**
-   * Function to translate content
+   * This function rotates the member image
   */
   onRotateImage: PropTypes.func,
 
   /**
-   * Function to translate content
+   * Graphql loading app when the customer images is reloaded
   */
   loadingImage: PropTypes.bool,
 
   /**
-   * Function to translate content
+   * This function disconect a member from the gym
   */
   onDeleteMember: PropTypes.func,
 
   /**
-   * Function to translate content
+   * This flag signalizes when the customer have been disconected from the gym
   */
   memberDeleted: PropTypes.bool,
 };

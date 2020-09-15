@@ -347,4 +347,131 @@ class Registration extends React.Component {
   }
 };
 
+Registration.propTypes = {
+  /**
+   * Function to translate content
+  */
+  t: PropTypes.func,
+
+  /**
+   * Current language. One of: [de, en, es, pt, fr, ru]
+  */
+  currentLanguage: PropTypes.func,
+
+  /**
+   * An array with all available languages. Values: [de, en, es, pt, fr, ru]
+  */
+  languages: PropTypes.func,
+
+  /**
+   * Function to translate content
+  */
+  goBack: PropTypes.func,
+
+  /**
+   * Back function on the browser history
+  */
+  targetButton: PropTypes.func,
+
+  /**
+   * Function to change the current vallue of the language. Valid values: [de, en, es, pt, fr, ru]
+  */
+  onChangeLanguage: PropTypes.func,
+
+  /**
+   * Create a new trainer on the server
+  */
+  registerUser: PropTypes.func,
+
+  /**
+   * Graphql loading flag for the function registerUser
+  */
+  registering: PropTypes.func,
+
+  /**
+   * To be used in the form in case of validation error
+  */
+  emailIsValid: PropTypes.func,
+
+  /**
+   * To be used in the form in case of validation error
+  */
+  passwordIsValid: PropTypes.func,
+
+  /**
+   * To be used in the form in case of validation error
+  */
+  passwordConfirmationIsValid: PropTypes.func,
+
+  /**
+   * To be used in the form in case of validation error
+  */
+  agreedToLAIsValid: PropTypes.func,
+
+  /**
+   * value string for the form
+  */
+  email: PropTypes.func,
+
+  /**
+   * value string for the form
+  */
+  password: PropTypes.func,
+
+  /**
+   * value string for the form
+  */
+  passwordConfirmation: PropTypes.func,
+
+  /**
+   * value string for the form
+  */
+  agreedToLA: PropTypes.func,
+
+  /**
+   * Function to be used in the form for the email field
+  */
+  handleEmailChange: PropTypes.func,
+
+  /**
+   * Function to be used in the form for the password field
+  */
+  handlePasswordChange: PropTypes.func,
+
+  /**
+   * Function to be used in the form for the pasword confirmation field
+  */
+  handlePasswordConfirmationChange: PropTypes.func,
+
+  /**
+   * Function to be used in the form for the check box field
+  */
+  handleAgreedToLAChange: PropTypes.func,
+
+  /**
+   * A string with an error text to be used in the form
+  */
+  validationEmailErrorMessage: PropTypes.func,
+
+  /**
+   * A string with an error text to be used in the form
+  */
+  validationPasswordErrorMessage: PropTypes.func,
+
+  /**
+   * A string with an error text to be used in the form
+  */
+  validationAgreedToLAErrorMessage: PropTypes.func,
+
+  /**
+   * A string with an error text to be used in the form
+  */
+  registrationErrorMessage: PropTypes.func,
+
+  /**
+   * Flag to be used to know when the registration process is finished
+  */
+  registrationSuccessfully: PropTypes.func,
+}
+
 export default Registration;
