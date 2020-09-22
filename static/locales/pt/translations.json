@@ -433,7 +433,14 @@
     "set": "Satz",
     "graph-1-title": "Total Volumen (kg)",
     "graph-2-title": "One Repetition Maximum(1RM) / Maximalkraft",
-    "no-graphic": "keine Grafik"
+    "no-graphic": "keine Grafik",
+    "remove-exercise": "remove exercise",
+    "profile_picture_size": "Foto hochladen",
+    "UPLOAD_PHOTO": "Foto hochladen",
+    "BACK": "Zurück",
+    "IS_DRAG_IMAGE_INACTIVE": "Hier cliken oder Foto ziehen",
+    "EDIT_PHOTO": "Foto bearbeiten",
+    "CROP_IMAGE": "Foto zuschneiden"
   },
   "exercises": {
     "exercises": "Übungen",
@@ -496,7 +503,11 @@
     "exit edit mode": "Bearbeitung verlassen",
     "add exercise": "Übung hinzufügen",
     "remove exercise": "Übung entfernen",
-    "delete folder": "Ordner löschen"
+    "delete folder": "Ordner löschen",
+    "search": "Search",
+    "create exercise": "create exercise",
+    "recently used": "zuletzt verwendet",
+    "exit edit mode": "Bearbeitung beenden"
   },
   "login": {
     "forgot_password": "Passwort vergessen?",

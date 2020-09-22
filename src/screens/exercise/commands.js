@@ -64,7 +64,7 @@ export const getCommandsRight = (
       if( editMode ) {
         commands.push({
             icon: <Remove/>,
-            text: 'remove-exercise',
+            text: t("remove-exercise"),
             type: 'type-1',
             typex: 'Ionicons',
             name: 'remove-exercise',

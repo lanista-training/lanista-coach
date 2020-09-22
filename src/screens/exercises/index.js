@@ -136,6 +136,7 @@ const Panel = ({
 
   goBack,
   goToExercise,
+  goToSetup,
 }) => {
 
   const {t} = useTranslate("exercises");
@@ -492,7 +493,7 @@ const Panel = ({
         if( !filter.private ) {
           result.push({
             icon: <Recently/>,
-            text: 'recently used',
+            text: t('recently used'),
             type: 'type-1',
             typex: 'Ionicons',
             name: 'refresh',
@@ -505,12 +506,11 @@ const Panel = ({
         if( filter.private ) {
           result.push({
             icon: <AddCircleOutlineIcon/>,
-            text: 'create exercise',
+            text: t("create exercise"),
             type: 'type-1',
             typex: 'Ionicons',
             name: 'create-exercise',
             onTap: () => {
-              console.log("Create exercise");
               toggleCreateExerciseDialogOpen();
             }
           });
@@ -519,7 +519,7 @@ const Panel = ({
         if( folderMode > 0 ) {
           result.push({
             icon: <CheckCircleOutlineIcon/>,
-            text: 'exit edit mode',
+            text: t('exit edit mode'),
             type: 'type-1',
             name: 'add-user',
             style: {color: '#34acfb'},
@@ -734,6 +734,7 @@ const Panel = ({
       mode={folder ? 'folder' : null}
       t={t}
       networkStatus={networkStatus}
+      goToSetup={goToSetup}
     >
       {
         //!filterVisible &&

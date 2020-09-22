@@ -71,7 +71,7 @@ const CURRENTTAB = gql`
   }
 `;
 
-const Panel = ({workoutId, goBack, goToExercises, goToRoot, goToWorkouts, goToExercise, goToCustomers}) => {
+const Panel = ({workoutId, goBack, goToExercises, goToRoot, goToWorkouts, goToExercise, goToCustomers, goToSetup}) => {
 
   const {t} = useTranslate("workout");
 
@@ -617,6 +617,7 @@ const Panel = ({workoutId, goBack, goToExercises, goToRoot, goToWorkouts, goToEx
       }
       t={t}
       networkStatus={networkStatus}
+      goToSetup={goToSetup}
     >
       <Workout
         workout={workout}

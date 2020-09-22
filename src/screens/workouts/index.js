@@ -44,7 +44,7 @@ const Counter  = styled.div`
   }
 `;
 
-const WorkoutsPanel = ({memberId, goBack, goToWorkout}) => {
+const WorkoutsPanel = ({memberId, goBack, goToWorkout, goToSetup}) => {
   const {t} = useTranslate("workouts");
   //
   // Create Plan dialog
@@ -185,6 +185,7 @@ const WorkoutsPanel = ({memberId, goBack, goToWorkout}) => {
        </>
       }
       networkStatus={networkStatus}
+      goToSetup={goToSetup}
     >
     <Workouts
       workouts={workouts ? workouts : []}

@@ -84,6 +84,7 @@ export default ({
   onCloseLicenceExpiredWarning,
 
 }) => {
+  console.log("Scene", goToSetup)
   const [showChronometer, setShowChronometer] = React.useState(false);
   const toggleChronometer = () => setShowChronometer(!showChronometer);
 

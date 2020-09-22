@@ -6,7 +6,7 @@ import moment from "moment";
 import { EXERCISE, PLANEXERCISE, ME, PLANEXERCISESETTINGS } from '../../queries';
 import { CREATENOTE, DELETENOTE, CREATECHATMESSAGE, DELETECHATMESSAGE, SAVEEXERCISESETTINGS, CREATEPROTOCOLL, DELETEPROTOCOLL, DELETEEXERCISE } from '../../mutations';
 
-const withData = (WrappedComponent, {exerciseId, planexerciseId, memberId, tab, editmode, goBack, goToExercise}) => {
+const withData = (WrappedComponent, {exerciseId, planexerciseId, memberId, tab, editmode, goBack, goToExercise, goToSetup}) => {
 
   const DataProvider = () => {
 
@@ -164,6 +164,7 @@ const withData = (WrappedComponent, {exerciseId, planexerciseId, memberId, tab, 
 
         goBack={goBack}
         goToExercise={goToExercise}
+        goToSetup={goToSetup}
       />
     )
   }

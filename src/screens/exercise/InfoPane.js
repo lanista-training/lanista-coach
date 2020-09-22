@@ -24,13 +24,14 @@ import Input from '@material-ui/core/Input';
 //
 const EditSection = withApollo(({t, exerciseId, toggleEditMode, editNameMode, lang}) => {
 
-  const { loading, error, data:{exercise}, refetch } = useQuery(EXERCISE_EDIT, {
+  const { loading, error, data:exerciseData, refetch } = useQuery(EXERCISE_EDIT, {
     variables: {
       exerciseId: exerciseId,
     },
     fetchPolicy: 'no-cache',
     errorPolicy: 'ignore',
   });
+  const {exercise} = exerciseData ? exerciseData : {};
 
   const [updateExercise, { loading: updateExerciseLoading, error: updateExerciseError }] = useMutation(
     UPDATEEXERCISE,

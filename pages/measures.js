@@ -19,11 +19,18 @@ function Measures({memberId}) {
     });
   };
 
+  const goToSetup = () => {
+    Router.push({
+      pathname: '/configuration',
+    });
+  }
+
   return (
     <MeasuresScreen
       memberId={memberId}
       goBack={goBack}
       goToTest={goToTest}
+      goToSetup={goToSetup}
     />
 
   );

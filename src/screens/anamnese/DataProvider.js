@@ -32,7 +32,7 @@ const TABINDEX = gql`
   }
 `;
 
-const withData = (WrappedComponent, {memberId, tab, id, goBack}) => {
+const withData = (WrappedComponent, {memberId, tab, id, goBack, goToSetup}) => {
 
   const DataProvider = () => {
     //
@@ -417,7 +417,7 @@ const withData = (WrappedComponent, {memberId, tab, id, goBack}) => {
         deletePhysioError={deletePhysioError}
 
         goBack={goBack}
-
+        goToSetup={goToSetup}
       />
     )
   }

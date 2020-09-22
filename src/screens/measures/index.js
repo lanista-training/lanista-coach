@@ -146,6 +146,7 @@ const Panel = ({
 
   goBack,
   goToTest,
+  goToSetup,
 
 }) => {
   const {t} = useTranslate("measures");
@@ -386,6 +387,7 @@ const Panel = ({
         />
       }
       t={t}
+      goToSetup={goToSetup}
     >
       <Measures
         customer={member ? member : {}}
@@ -465,8 +467,8 @@ const Panel = ({
   )
 }
 
-const PanelWithData = ({memberId, goBack, goToTest}) => {
-  const MeasuresData = withData(Panel, {memberId, goBack, goToTest});
+const PanelWithData = ({memberId, goBack, goToTest, goToSetup}) => {
+  const MeasuresData = withData(Panel, {memberId, goBack, goToTest, goToSetup});
   return <MeasuresData/>
 }
 

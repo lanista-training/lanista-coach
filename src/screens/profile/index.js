@@ -47,6 +47,7 @@ const Panel = ({
   memberDeleted,
 
   goBack,
+  goToSetup,
 }) => {
   const {t} = useTranslate("profile");
 
@@ -261,6 +262,7 @@ const Panel = ({
       }
       commandsRight={getCommandsRight()}
       t={t}
+      goToSetup={goToSetup}
     >
       {
         member && <Profile
@@ -306,8 +308,8 @@ const Panel = ({
   )
 }
 
-const PanelWithData = ({memberId, goBack}) => {
-  const ProfileData = withDataToShow(Panel, {memberId, goBack});
+const PanelWithData = ({memberId, goBack, goToSetup}) => {
+  const ProfileData = withDataToShow(Panel, {memberId, goBack, goToSetup});
   return <ProfileData/>
 }
 

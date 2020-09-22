@@ -37,6 +37,12 @@ function Excercises({editmode, workout, split, member, test}) {
 
   const goBack = () => Router.back()
 
+  const goToSetup = () => {
+    Router.push({
+      pathname: '/configuration',
+    });
+  }
+
   return (
     <ExcercisesScreen
       editmode={editmode}
@@ -47,6 +53,7 @@ function Excercises({editmode, workout, split, member, test}) {
 
       goToExercise={goToExercise}
       goBack={goBack}
+      goToSetup={goToSetup}
 
     ></ExcercisesScreen>
   );

@@ -12,7 +12,7 @@ import {
   SENDACTIVATIONMAIL,
 } from '../../mutations';
 
-export const withData = (WrappedComponent, {memberId, goBack}) => {
+export const withData = (WrappedComponent, {memberId, goBack, goToSetup}) => {
 
   const DataProvider = () => {
     const { data: meData } = useQuery(ME);
@@ -134,6 +134,7 @@ export const withData = (WrappedComponent, {memberId, goBack}) => {
         memberDeleted={memberDeleted}
 
         goBack={goBack}
+        goToSetup={goToSetup}
       />
     )
   }

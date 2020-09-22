@@ -48,6 +48,12 @@ function Workout({workoutId}) {
     });
   }
 
+  const goToSetup = () => {
+    Router.push({
+      pathname: '/configuration',
+    });
+  }
+
   return (
     <WorkoutScreen
       workoutId={workoutId}
@@ -58,6 +64,7 @@ function Workout({workoutId}) {
       goToCustomers={goToCustomers}
       goToRoot={goToRoot}
       goToWorkouts={goToWorkouts}
+      goToSetup={goToSetup}
     />
   );
 }

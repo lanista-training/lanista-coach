@@ -16,11 +16,18 @@ function Template({testId}) {
     });
   }
 
+  const goToSetup = () => {
+    Router.push({
+      pathname: '/configuration',
+    });
+  }
+
   return (
     <TemplateScreen
       testId={testId}
       goBack={goBack}
       goToTest={goToTest}
+      goToSetup={goToSetup}
     />
   );
 }

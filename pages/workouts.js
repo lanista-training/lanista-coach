@@ -14,12 +14,19 @@ function Workouts({memberId}) {
     });
   }
 
+  const goToSetup = () => {
+    Router.push({
+      pathname: '/configuration',
+    });
+  }
+
   return (
     <WorkoutsScreen
       memberId={memberId}
 
       goBack={goBack}
       goToWorkout={goToWorkout}
+      goToSetup={goToSetup}
     />
   );
 }

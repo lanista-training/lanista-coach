@@ -6,7 +6,7 @@ export const ImageBlock  = styled.div`
   border-radius: 50%;
   border-style: ${props => props.editable ? 'solid!important' : 'initial'};
   border-width: 2px!important;
-  border-color: rgb(155, 201, 61);
+  border-color: ${props => props.status == 1 ? 'rgb(155, 201, 61)' : '#fe9500'};
   margin-top: 4px;
   margin-left: 10px;
   background-color: rgb(155, 201, 61);

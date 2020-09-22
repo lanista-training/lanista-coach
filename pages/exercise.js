@@ -19,6 +19,13 @@ function Exercise(props) {
     });
   }
 
+  const goToSetup = () => {
+    console.log("goToSetup")
+    Router.push({
+      pathname: '/configuration',
+    });
+  }
+
   return (
     <ExerciseScreen
       exerciseId={exerciseId}
@@ -28,6 +35,7 @@ function Exercise(props) {
       editmode={editmode}
       goBack={goBack}
       goToExercise={goToExercise}
+      goToSetup={goToSetup}
     />
   );
 }

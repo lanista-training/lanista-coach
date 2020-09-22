@@ -62,6 +62,13 @@ function Customer({memberId}) {
     });
   }
 
+  const goToSetup = () => {
+    console.log("goToSetup")
+    Router.push({
+      pathname: '/configuration',
+    });
+  }
+
   return (
     <CustomerScreen
       memberId={memberId}
@@ -74,6 +81,7 @@ function Customer({memberId}) {
       goToWorkout={goToWorkout}
       goToWorkouts={goToWorkouts}
       goToProfile={goToProfile}
+      goToSetup={goToSetup}
     />
   );
 }

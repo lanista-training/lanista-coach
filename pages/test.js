@@ -6,6 +6,11 @@ import TestScreen from "../src/screens/test"
 function Test({memberId, testType, testId}) {
 
   const goBack = () => Router.back()
+  const goToSetup = () => {
+    Router.push({
+      pathname: '/configuration',
+    });
+  }
 
   return (
     <TestScreen
@@ -13,6 +18,7 @@ function Test({memberId, testType, testId}) {
       testType={testType}
       testId={testId}
       goBack={goBack}
+      goToSetup={goToSetup}
     />
   );
 }

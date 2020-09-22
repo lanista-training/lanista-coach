@@ -65,6 +65,7 @@ const Panel = ({
 
   goBack,
   goToExercise,
+  goToSetup,
 }) => {
   const {t} = useTranslate("exercise");
   //
@@ -336,6 +337,7 @@ const Panel = ({
 
       showLicenceExpiredWarning={showLicenceExpiredWarning}
       onCloseLicenceExpiredWarning={toggleLicenceExpiredWarning}
+      goToSetup={goToSetup}
     >
       <Exercise
         exercise={exercise ? exercise : {}}
@@ -429,8 +431,8 @@ const Panel = ({
   )
 }
 
-const PanelWithData = ({exerciseId, planexerciseId, memberId, tab, editmode, goBack, goToExercise}) => {
-  const ExerciseData = withData(Panel, {exerciseId, planexerciseId, memberId, tab, editmode, goBack, goToExercise});
+const PanelWithData = ({exerciseId, planexerciseId, memberId, tab, editmode, goBack, goToExercise, goToSetup}) => {
+  const ExerciseData = withData(Panel, {exerciseId, planexerciseId, memberId, tab, editmode, goBack, goToExercise, goToSetup});
   return <ExerciseData/>
 }
 

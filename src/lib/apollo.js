@@ -38,8 +38,8 @@ export function withApollo (PageComponent, { ssr = true } = {}) {
 
       //var graphqlServer = 'http://localhost:4000/graphql';
       //var graphqlServer = env.server + 'graphql';
-     var graphqlServer = 'https://preview.lanista-training.com/graphql';
-     //var graphqlServer = document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/graphql';
+     //var graphqlServer = 'https://preview.lanista-training.com/graphql';
+     var graphqlServer = document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/graphql';
 
 
 

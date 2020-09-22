@@ -14,11 +14,19 @@ function Customers({workoutId}) {
     });
   }
 
+  const goToSetup = () => {
+    console.log("goToSetup")
+    Router.push({
+      pathname: '/configuration',
+    });
+  }
+
   return (
     <CustomersScreen
       workoutId={workoutId}
       goBack={goBack}
       goToCustomer={goToCustomer}
+      goToSetup={goToSetup}
     />
   );
 }

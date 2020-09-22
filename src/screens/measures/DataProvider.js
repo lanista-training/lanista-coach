@@ -13,7 +13,7 @@ const TABINDEX = gql`
   }
 `;
 
-const withData = (WrappedComponent, {memberId, goBack, goToTest}) => {
+const withData = (WrappedComponent, {memberId, goBack, goToTest, goToSetup}) => {
 
   const DataProvider = () => {
     //
@@ -44,7 +44,7 @@ const withData = (WrappedComponent, {memberId, goBack, goToTest}) => {
       loading: testsLoading,
       error: testsError,
     } = useQuery(TESTS);
-    const {tests} = testsData ? testsData : undefined;
+    const {tests} = testsData ? testsData.tests : { tests: undefined };
 
     //
     // Measures data
@@ -150,6 +150,7 @@ const withData = (WrappedComponent, {memberId, goBack, goToTest}) => {
 
         goBack={goBack}
         goToTest={goToTest}
+        goToSetup={goToSetup}
       />
     )
   }

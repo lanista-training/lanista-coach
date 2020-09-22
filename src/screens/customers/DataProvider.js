@@ -25,7 +25,7 @@ const SHOW_LAST_MEMBERS = gql`
   }
 `;
 
-const WithData = (WrappedComponent, {workoutId, goBack, goToCustomer}) => {
+const WithData = (WrappedComponent, {workoutId, goBack, goToCustomer, goToSetup}) => {
 
   const [pageSize, setPageSize] = useState(20);
 
@@ -236,6 +236,7 @@ const WithData = (WrappedComponent, {workoutId, goBack, goToCustomer}) => {
 
         goBack={goBack}
         goToCustomer={goToCustomer}
+        goToSetup={goToSetup}
       />
     )
   }

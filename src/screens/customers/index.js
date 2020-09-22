@@ -95,10 +95,11 @@ const Panel = ({
 
   goBack,
   goToCustomer,
+  goToSetup,
 
 }) => {
   const {t} = useTranslate("customers");
-
+console.log("goToSetup", goToSetup)
   const [hidden , setHidden] = useState(false);
   const [initialLoading, setInitialLoading] = useState(false);
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
@@ -452,6 +453,7 @@ const Panel = ({
       networkStatus={networkStatus}
       showLicenceExpiredWarning={showLicenceExpiredWarning}
       onCloseLicenceExpiredWarning={toggleLicenceExpiredWarning}
+      goToSetup={goToSetup}
     >
       { (initialLoading || membersLoading ) &&
         <Loading>
@@ -580,8 +582,9 @@ const Panel = ({
   )
 }
 
-const PanelWithData = ({workoutId, goBack, goToCustomer}) => {
-  const CustomersData = withData(Panel, {workoutId, goBack, goToCustomer});
+const PanelWithData = ({workoutId, goBack, goToCustomer, goToSetup}) => {
+  console.log("PanelWithData", goToSetup)
+  const CustomersData = withData(Panel, {workoutId, goBack, goToCustomer, goToSetup});
   return <CustomersData/>
 }
 

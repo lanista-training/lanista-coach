@@ -62,6 +62,7 @@ const CustomerPane = ({
   goToWorkout,
   goToWorkouts,
   goToProfile,
+  goToSetup,
 }) =>  {
   const {t} = useTranslate("customer");
   //
@@ -82,7 +83,8 @@ const CustomerPane = ({
   const handleCloseDialogCreatePlan = () => {setDialogCreatePlanOpen(false)}
 
 
-  const { data: {me} } = useQuery(ME);
+  const { data: meData } = useQuery(ME);
+  const {me} = meData ? meData : {};
   const { loading, error, data, refetch, networkStatus } = useQuery(MEMBER, {
     variables: {
       memberId: memberId,
@@ -819,6 +821,7 @@ const CustomerPane = ({
           firstName={data && data.member ? data.member.first_name : ''}
           lastName={data && data.member ? data.member.last_name : ''}
           photoUrl={data && data.member ? (data.member.photoUrl) : ''}
+          status={data && data.member && data.member.status}
           onClick={openMemberProfile}
           editable={true}
         />
@@ -829,6 +832,7 @@ const CustomerPane = ({
 
       showLicenceExpiredWarning={showLicenceExpiredWarning}
       onCloseLicenceExpiredWarning={toggleLicenceExpiredWarning}
+      goToSetup={goToSetup}
     >
 
 

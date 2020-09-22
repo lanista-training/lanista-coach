@@ -189,6 +189,7 @@ const Panel = ({
   sendTestError,
 
   goBack,
+  goToSetup,
 }) => {
   const {t} = useTranslate("testsmanager");
   const testData = extractTestData(member, testType, testId);
@@ -389,6 +390,7 @@ const Panel = ({
         />
       }
       t={t}
+      goToSetup={goToSetup}
     >
       <Test
         t={t}
@@ -434,8 +436,8 @@ const Panel = ({
   )
 }
 
-const PanelWithData = ({memberId, testId, testType, goBack}) => {
-  const TestData = withData(Panel, {memberId, testId, testType, goBack});
+const PanelWithData = ({memberId, testId, testType, goBack, goToSetup}) => {
+  const TestData = withData(Panel, {memberId, testId, testType, goBack, goToSetup});
   return <TestData/>
 }
 

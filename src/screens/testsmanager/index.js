@@ -31,6 +31,7 @@ const Panel = ({
 
   goBack,
   goToTest,
+  goToSetup,
 }) => {
 
   const {t} = useTranslate("testsmanager");
@@ -82,6 +83,7 @@ const Panel = ({
       commandsLeft={getCommandsLeft()}
       commandsRight={getCommandsRight()}
       t={t}
+      goToSetup={goToSetup}
     >
       <Template
 
@@ -110,8 +112,8 @@ const Panel = ({
 
 }
 
-const PanelWithData = ({testId, goBack, goToTest}) => {
-  const MeasuresData = withData(Panel, {testId, goBack, goToTest});
+const PanelWithData = ({testId, goBack, goToTest, goToSetup}) => {
+  const MeasuresData = withData(Panel, {testId, goBack, goToTest, goToSetup});
   return <MeasuresData/>
 }
 

@@ -1,5 +1,6 @@
 /* eslint import/no-webpack-loader-syntax: off */
 import * as React from "react";
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Input, Grid, Button, Checkbox, Icon, Modal, Header, Image } from 'semantic-ui-react';
 import LogoImage from '-!react-svg-loader!../../images/LanistaLogo.svg';

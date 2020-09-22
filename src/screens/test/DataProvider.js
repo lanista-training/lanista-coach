@@ -7,7 +7,7 @@ import moment from "moment";
 import { MEMBER_MEASURES, TESTS } from "../../queries";
 import { SAVETEST, SAVEOWNTEST, SAVECOMMENTS, SAVEOWNCOMMENTS, DELETETESTRECORD, DELETEOWNTESTRECORD, GENERATETESTPDF, SENDTEST } from "../../mutations";
 
-const withData = (WrappedComponent, {memberId, testType, testId, goBack}) => {
+const withData = (WrappedComponent, {memberId, testType, testId, goBack, goToSetup}) => {
 
   const DataProvider = () => {
     //
@@ -198,6 +198,7 @@ const withData = (WrappedComponent, {memberId, testType, testId, goBack}) => {
         sendTestError={sendTestError}
 
         goBack={goBack}
+        goToSetup={goToSetup}
       />
     )
   }

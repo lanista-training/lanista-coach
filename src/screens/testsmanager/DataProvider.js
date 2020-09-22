@@ -4,7 +4,7 @@ import { useMutation, useQuery } from '@apollo/react-hooks';
 import { OWNTESTS, TESTS } from "../../queries";
 import { DEFINETEST, REMOVETEST } from "../../mutations";
 
-const withData = (WrappedComponent, {testId, goBack, goToTest}) => {
+const withData = (WrappedComponent, {testId, goBack, goToTest, goToSetup}) => {
 
   const DataProvider = () => {
 
@@ -71,6 +71,7 @@ const withData = (WrappedComponent, {testId, goBack, goToTest}) => {
 
         goBack={goBack}
         goToTest={goToTest}
+        goToSetup={goToSetup}
 
       />
     )

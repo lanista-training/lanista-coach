@@ -100,6 +100,7 @@ const Panel = ({
   deletePhysioError,
 
   goBack,
+  goToSetup,
 }) => {
   const {t} = useTranslate("anamnese");
 
@@ -334,6 +335,7 @@ const Panel = ({
         />
       }
       t={t}
+      goToSetup={goToSetup}
     >
       <Anamnese
         me={me}
@@ -430,8 +432,8 @@ const Panel = ({
   )
 }
 
-const PanelWithData = ({memberId, tab, id, goBack}) => {
-  const AnamneseData = withData(Panel, {memberId, tab, id, goBack});
+const PanelWithData = ({memberId, tab, id, goBack, goToSetup}) => {
+  const AnamneseData = withData(Panel, {memberId, tab, id, goBack, goToSetup});
   return <AnamneseData/>
 }
 
