@@ -9,6 +9,7 @@ import LicenceCard from './LicenceCard';
 import DataProtectionCard from './DataProtectionCard';
 import AppConfigurationCard from './AppConfigurationCard';
 import WorkoutChannelCard from './WorkoutChannelCard';
+import Shop from './Shop';
 
 import ContactMailIcon from '@material-ui/icons/ContactMail';
 import PhotoIcon from '@material-ui/icons/Photo';
@@ -18,6 +19,8 @@ import SecurityIcon from '@material-ui/icons/Security';
 import PhoneIphoneIcon from '@material-ui/icons/PhoneIphone';
 import YouTubeIcon from '@material-ui/icons/YouTube';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
+
+import Drawer from '@material-ui/core/Drawer';
 
 import {
   Stage,
@@ -60,7 +63,7 @@ const Setup = ({
   t,
   bu,
   id,
-  userData,
+
   refetch,
 
   readyToSavePersonalData,
@@ -148,7 +151,15 @@ const Setup = ({
 
   goToShop,
   onRefreshLicenceStatus,
+
+  tariffData,
+  getTariff,
+  getTariffLoading,
+  getTariffError,
 }) => {
+
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const toggleDrawer = () => setDrawerOpen(!drawerOpen);
 
   return(
     <Stage centered columns={2} padded>
@@ -186,7 +197,7 @@ const Setup = ({
             t={t}
             expirationDate={expirationDate}
 
-            goToShop={goToShop}
+            goToShop={toggleDrawer}
             onRefreshLicenceStatus={onRefreshLicenceStatus}
           />
 
@@ -365,6 +376,28 @@ const Setup = ({
           </StyledNavigationCard>
         </FixedSection>
       </div>
+      <Drawer anchor="bottom" open={drawerOpen} onClose={toggleDrawer}>
+        <Shop
+          toggleDrawer={toggleDrawer}
+
+          id={id}
+          email={email}
+          firstName={firstName}
+          lastName={lastName}
+          language={language}
+          companyName={companyName}
+          phoneNumber={phoneNumber}
+          country={country}
+          city={city}
+          zipcode={zipcode}
+          street={street}
+
+          tariffData={tariffData}
+          getTariff={getTariff}
+          getTariffLoading={getTariffLoading}
+          getTariffError={getTariffError}
+        />
+      </Drawer>
     </Stage>
   )
 };
@@ -384,11 +417,6 @@ Setup.propTypes = {
    * Function to translate content
   */
   id: PropTypes.number,
-
-  /**
-   * Function to translate content
-  */
-  userData: PropTypes.object,
 
   /**
    * Function to translate content

@@ -191,7 +191,7 @@ export default ({feed, key, t, congratulateMember, openPlan, accesslevel}) => {
             overflow: 'hidden',
             position: 'relative',
             backgroundImage: 'url("' + feed.member.photoUrl + '")',
-            backgroundSize: "contain",
+            backgroundSize: "cover",
             float: "left"
           }}>
           </div>

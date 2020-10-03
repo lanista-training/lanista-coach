@@ -74,6 +74,17 @@ query myMembers {
 }
 `
 
+export const MYMEMBERSLIST = gql`
+query myMembersList {
+  myMembersList {
+    id
+    first_name
+    last_name
+    photoUrl
+  }
+}
+`
+
 export const EXPIREDPLANS = gql`
 query expiredPlans {
   expiredPlans {
@@ -335,6 +346,7 @@ export const WORKOUT = gql`
       template
       member {
         id
+        status
       }
       splits {
         id

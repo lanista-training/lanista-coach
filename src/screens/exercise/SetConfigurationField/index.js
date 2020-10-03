@@ -163,7 +163,7 @@ export default ({
       activeField === null && selectedItem === null && setSelectedItem( setOrder );
   }}>
     <div className={editingMode ? "set-configuration editing" : "set-configuration"} >
-      <div className="label">Satz {setOrder + 1}</div>
+      <div className="label">{t("set")} {setOrder + 1}</div>
       <div className="values-section">
 
         <div
@@ -185,7 +185,7 @@ export default ({
             }}
             open={activeField == 0}
           />
-          <div className="unit">{unit == 0 ? 'Wdh ' : unit == 1 ? 'Sek' : 'Min'}</div>
+        <div className="unit">{unit == 0 ? t('rep') : unit == 1 ? t('sec') : t('min')}</div>
         </div>
 
         <div
@@ -219,14 +219,14 @@ export default ({
               setActiveField(null)
             }}
           >
-            Satz löschen
+            {t("delete set")}
           </Button>
 
           <Button className="delete-button" disabled={setOrder !== selectedItem} inverted onClick={() => {
               setSelectedItem( null );
             }}
           >
-            Zurück
+            {t("back")}
           </Button>
 
         </div>

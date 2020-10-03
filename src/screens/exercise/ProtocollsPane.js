@@ -27,7 +27,7 @@ const Workout = ({t, workouts, date, onDeleteProtocoll, loading, selected, setS
                       setSelected(selected == id ? (null) : id)
                     }}
                   >
-                    <div className="workout-number">Satz {index+1}</div>
+                    <div className="workout-number">{t("set")} {index+1}</div>
                     <div className="workout-content">
                       <div className="workout-repetitions">{repetitions} {training_unit == 0 ? t("rep") : training_unit == 2 ? t("min") : t("sec")}</div>
                       <div className="workout-weight">{formatNumber(weight)} Kg</div>

@@ -71,7 +71,7 @@ function Workout({workoutId}) {
 
 Workout.getInitialProps = context => {
   return ({
-    workoutId: context.query.workout
+    workoutId: context.query.workout,
   })
 };
 

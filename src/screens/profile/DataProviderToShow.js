@@ -25,7 +25,6 @@ export const withData = (WrappedComponent, {memberId, goBack, goToSetup}) => {
     });
     const {member} = memberData ? memberData : {member: {}};
 
-    console.log('DataProvider', memberId, memberData, member, me)
 
     const [updateMember, {
       loading: updateMemberLoading,
@@ -110,6 +109,7 @@ export const withData = (WrappedComponent, {memberId, goBack, goToSetup}) => {
       <WrappedComponent
         me={me}
         member={member}
+        memberId={memberId}
         loading={loading}
         error={error}
         refetch={refetch}

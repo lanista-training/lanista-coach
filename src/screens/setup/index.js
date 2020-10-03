@@ -15,6 +15,7 @@ import {
   UPDATEUSERBANNERURL,
   UPDATEUSERWORKOUTCHANNELDATA,
   GETNEWTOKEN,
+  GETTARIFF,
 } from "../../mutations";
 
 import { refreshToken } from '../../lib/auth';
@@ -143,6 +144,8 @@ const SetupWithData = ({goBack}) => {
     setPasswordConfirmationErrorMessage(null);
   }, [passwordConfirmation]);
 
+  const [tariffData, setTariffData] = useState(null);
+
   //
   // Remote actions
   //
@@ -222,6 +225,21 @@ const SetupWithData = ({goBack}) => {
       }
     }
   );
+  const [getTariff, {
+    loading: getTariffLoading,
+    error: getTariffError
+  }] = useMutation(
+    GETTARIFF,
+    {
+      update(cache,  { data: { getTariff } }) {
+        const {token} = getTariff;
+        console.log("getTariff")
+        console.log(getTariff)
+        setTariffData(getTariff);
+      }
+    }
+  );
+
 
 
   const onUpdatePersonalData = () => {
@@ -595,6 +613,11 @@ const SetupWithData = ({goBack}) => {
 
         goToShop={goToShop}
         onRefreshLicenceStatus={onRefreshLicenceStatus}
+
+        tariffData={tariffData}
+        getTariff={getTariff}
+        getTariffLoading={getTariffLoading}
+        getTariffError={getTariffError}
       />
     </Scene>
   );

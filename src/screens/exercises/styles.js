@@ -76,6 +76,8 @@ export const ListItem = styled.div`
   box-shadow: 0 0 27px 0 #0000001f;
   .exercise-item {
     margin: 9px;
+    max-height: 164px;
+    overflow: hidden;
     .exercise-list-img-right {
       height: 90px;
       width: 90px;

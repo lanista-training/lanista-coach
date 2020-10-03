@@ -23,7 +23,7 @@ import TrainerList from './TrainerList';
 
 const effect = 'zoomin', pos = 'br', method = 'hover';
 
-const MyFooter = ({currentLanguage, languageItems}) => {
+const MyFooter = ({t, currentLanguage, languageItems}) => {
   //const [visible, toggle] = useState(true)
   const props = useSpring({opacity: 1, from:{opacity: 0}})
   return (
@@ -31,14 +31,14 @@ const MyFooter = ({currentLanguage, languageItems}) => {
       <Footer>
         <Nav style={{color: 'black'}}>
           © Lanista Trainingssoftware 2012
-          <a>
-            Impresum
+          <a href="https://studio.lanista-training.com/impressum/" target="_blank">
+            {t("imprint")}
           </a>
-          <a>
-            Datenschutz
+          <a href="https://studio.lanista-training.com/datenschutz/" target="_blank">
+            {t("privacy")}
           </a>
-          <a>
-            Info
+          <a href="https://desk.zoho.eu/portal/lanista/de/home" target="_blank">
+            {t("support")}
           </a>
         </Nav>
         <Menu effect={effect} method={method} position={pos}>
@@ -193,7 +193,7 @@ const Login = ({
         )}
 
       </div>
-      <MyFooter currentLanguage={locale} languageItems={languageItems}/>
+      <MyFooter t={t} currentLanguage={locale} languageItems={languageItems}/>
     </Root>
   )
 };

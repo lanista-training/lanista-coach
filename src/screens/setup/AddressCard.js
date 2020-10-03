@@ -110,7 +110,7 @@ export default ({
           loading={updateUserAddressLoading}
           inverted={readyToSaveAddress}
         >
-          {t( "common:save" )}
+          {t( "save" )}
         </LanistaButton>
       </StyledCard>
     </div>

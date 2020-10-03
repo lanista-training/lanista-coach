@@ -102,7 +102,10 @@ const Exercise = ({execution, t, onSelectExercise, workout, selected, exercisePa
       }
 
       <div className="exercise-footer">
-        <div className="exercise-sets">{t('sets')} <span>{execution.rounds}</span></div>
+        <div className="exercise-sets"><span>{execution.rounds}</span> {t('sets')}</div>
+        { execution.weight > 0 && (
+          <div className="exercise-weight"><span>{execution.weight}</span> Kg</div>
+        )}
         <div className="exercise-repetitions"><span>{execution.repetitions}</span> {getTrainingUnitText(execution.training_unit, t)}</div>
       </div>
     </StyledExercise>

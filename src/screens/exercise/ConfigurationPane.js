@@ -95,6 +95,7 @@ export default ({t, settings, onSettingsChange, onSyncSettings, editable}) => {
             isActive={isBasicConfigurationActive}
             toggleIsActive={toggleIsBasicConfigurationsActive}
             editable={editable}
+            t={t}
           />
           <div className="sets-list">
             {setRows}

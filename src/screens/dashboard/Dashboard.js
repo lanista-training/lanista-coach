@@ -27,6 +27,10 @@ const Dashboard = ({
   bu,
   hasInterface,
   setFilter,
+
+  getMembersList,
+  membersListLoading,
+  membersListData,
 }) => {
   return (
     <>
@@ -51,6 +55,10 @@ const Dashboard = ({
         bu={bu}
         hasInterface={hasInterface}
         setFilter={setFilter}
+
+        getMembersList={getMembersList}
+        membersListLoading={membersListLoading}
+        membersListData={membersListData}
       />
       <Modal
         open={showModal}

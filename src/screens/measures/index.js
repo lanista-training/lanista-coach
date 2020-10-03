@@ -150,7 +150,6 @@ const Panel = ({
 
 }) => {
   const {t} = useTranslate("measures");
-
   //
   // Share Measure Drawler
   //

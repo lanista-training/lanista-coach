@@ -84,7 +84,6 @@ export default ({
   onCloseLicenceExpiredWarning,
 
 }) => {
-  console.log("Scene", goToSetup)
   const [showChronometer, setShowChronometer] = React.useState(false);
   const toggleChronometer = () => setShowChronometer(!showChronometer);
 
@@ -270,7 +269,10 @@ export default ({
         </DialogContent>
         <DialogActions>
           {bu == 0 && (
-            <LanistaButton onClick={onCloseLicenceExpiredWarning} color="primary">
+            <LanistaButton onClick={() => {
+              onCloseLicenceExpiredWarning();
+              goToSetup();
+            }} color="primary">
               {t("licence_dialog_go_to_store")}
             </LanistaButton>
           )}

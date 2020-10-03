@@ -161,7 +161,7 @@ const Panel = ({
         startDate: startDate + '',
         endDate: endDate + '',
       }
-    })
+    });
   }
 
   const onDeleteFinding = ({id}) => {

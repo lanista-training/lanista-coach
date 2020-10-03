@@ -79,7 +79,7 @@ export default ({
         <div style={{lineHeight: "1em"}} className="label" onClick={(e) => {
             setShowPickyDateTime(!showPickyDateTime)
           }}>
-          {isToday(selectedDate) ? 'Heute' : moment(selectedDate).format("DD.MM.YYYY")}  <DateRangeIcon fontSize="large"/>
+          {isToday(selectedDate) ? t("today") : moment(selectedDate).format("DD.MM.YYYY")}  <DateRangeIcon fontSize="large"/>
         </div>
         {
           showPickyDateTime &&

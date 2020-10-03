@@ -1,5 +1,5 @@
 const ENV = 'prod';
-const version = '0.17';
+const version = '0.21';
 export const env = (ENV == 'prod') ? {
   env: ENV,
   server: 'https://' + (typeof window !== 'undefined' ? window.document.location.host : '') + '/',

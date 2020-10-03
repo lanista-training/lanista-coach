@@ -183,7 +183,7 @@ export default ({
           loading={updateUserBannerLinkLoading}
           inverted={readyToSaveBannerLink}
         >
-          {t( "common:save" )}
+          {t( "save" )}
         </LanistaButton>
       </StyledCard>
     </div>

@@ -35,7 +35,7 @@ const StyledWidget = styled.div`
         display: flex;
       }
       .member-image{
-        background-size: contain;
+        background-size: cover;
         width: 40px;
         height: 40px;
         background-color: #fafafa;

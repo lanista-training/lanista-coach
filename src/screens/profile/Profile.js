@@ -178,7 +178,7 @@ const Profile = ({
   const [saveButtonDisabled, setSaveButtonDisabled] = React.useState(true);
   const [saveAddressButtonDisabled, setSaveAddressButtonDisabled] = React.useState(true);
 
-  const emailValidation = validateEmail();
+  const [emailValidation, setEmailValidation] = React.useState(validateEmail());
   const firstNameValidation = validateName();
   const lastNameValidation = validateName();
   const birthdayValidation = validateBirthday();
@@ -274,6 +274,21 @@ const Profile = ({
 
   const {id, dpSigned, dpSignatureType} = member;
 
+  React.useEffect(() => {
+    if( updateMemberError ) {
+      if( updateMemberError.message.indexOf("Validation error") > -1 ) {
+        setEmail('');
+        setEmailValidation({
+          valid: false,
+          error: t("duplicate error")
+        });
+      }
+    }
+  }, [updateMemberError])
+  React.useEffect(() => {
+    email && email.length > 0 && setEmailValidation(validateEmail());
+  }, [email]);
+
   return(
   <Stage centered columns={2} padded name="stage">
     <div className="content-section">
@@ -340,7 +355,7 @@ const Profile = ({
                     margin="normal"
                     id="date-picker-birthday"
                     value={birthday}
-                    onChange={setBirthday}
+                    onChange={(value) => {setBirthday(moment(value).toDate())}}
                     KeyboardButtonProps={{
                       'aria-label': 'change birthday',
                     }}
@@ -439,7 +454,7 @@ const Profile = ({
                     note: note,
                   })
                 }
-                name={t( "common:save" )}
+                name={t( "save" )}
                 loading={updateMemberLoading}
               />
             </Form>

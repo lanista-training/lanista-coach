@@ -239,6 +239,10 @@ export const SyledTab = styled(Tab)`
         flex: 1;
       }
     }
+    .description-warnings  {
+      font-size: 14px;
+      text-align: right;
+    }
   }
   .buttons-section {
     display: flex;

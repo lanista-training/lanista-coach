@@ -44,7 +44,7 @@ const withData = (WrappedComponent, {memberId, goBack, goToTest, goToSetup}) => 
       loading: testsLoading,
       error: testsError,
     } = useQuery(TESTS);
-    const {tests} = testsData ? testsData.tests : { tests: undefined };
+    const {tests} = testsData ? testsData : { tests: undefined };
 
     //
     // Measures data

@@ -48,8 +48,6 @@ export default ({t, loading, isActive, toggleIsActive, settings, onSettingsChang
   // Settings change logic
   //
   React.useEffect(() => {
-    console.log("NEW SETTINGS ARRIVED");
-    console.log(settings)
     const {weight, training, unit, setsConfiguration}  = settings;
     setWeight(weight);
     setTraining(training);
@@ -119,11 +117,10 @@ export default ({t, loading, isActive, toggleIsActive, settings, onSettingsChang
     },
   }
 
-  console.log("weight", weight)
-
+  console.log("Basic configuraiton", t)
 
   return <Panel>
-    <div className="label">Grundkonfiguration</div>
+    <div className="label">{t("basic-configuration")}</div>
     <div className="set-configuration">
       <div
         className={ activeField == 0 ? "set-training active" : "set-training" }
@@ -193,7 +190,7 @@ export default ({t, loading, isActive, toggleIsActive, settings, onSettingsChang
         onClick={() => {
           onAddSet();
         }}
-        content="Satz hinzufügen"
+        content={t("add set")}
       />
     }
   </Panel>

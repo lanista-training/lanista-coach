@@ -37,7 +37,7 @@ export default ({
                 { (new Date() ? t( "invalid_since" ) :  t( "valid_until" )) + " " + moment(expirationDate).format('Do MMMM YYYY') }
               </div>
               <LanistaButton onClick={goToShop}>
-                {t( "common:buy_licence" )}
+                {t( "buy_licence" )}
               </LanistaButton>
               <LanistaButton onClick={onRefreshLicenceStatus}>
                 {t( "refresh_licence_status" )}

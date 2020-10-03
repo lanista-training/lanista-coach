@@ -95,7 +95,7 @@ export default ({
         helperText={helperText}
       />
       <StyledLink onClick={goToForgotpassword}>
-          <a >{t("login:forgot_password")}</a>
+          <a >{t("forgot_password")}</a>
       </StyledLink>
       <div className="buttons-section">
         <LanistaButton

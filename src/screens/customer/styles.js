@@ -178,6 +178,9 @@ export const StyledTab = styled(Tab)`
         display: flex;
         align-items: center;
         justify-content: center;
+        svg {
+          color: black;
+        }
       }
     }
   }

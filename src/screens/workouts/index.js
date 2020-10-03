@@ -9,7 +9,7 @@ import { useMutation, useQuery } from '@apollo/react-hooks'
 import Scene from "../../components/Scene";
 import Workouts from './Workouts';
 import WorkoutsHeader from "../../components/WorkoutsHeader";
-import { MEMBER, WORKOUTS, PLUGINS } from "../../queries";
+import { MEMBER, WORKOUTS, PLUGINS, ME } from "../../queries";
 import { CLONEPLAN, CREATEPLAN } from "../../mutations";
 import { Search } from 'semantic-ui-react';
 
@@ -66,6 +66,9 @@ const WorkoutsPanel = ({memberId, goBack, goToWorkout, goToSetup}) => {
 
   const { loading: pluginsLoading, error: pluginsError, data: pluginsData } = useQuery(PLUGINS);
   const {plugins} = pluginsData ? pluginsData: {plugins:[]};
+
+  const { data:meData } = useQuery(ME);
+  const {me} = meData ? meData : {me: {}}
 
   const [clonePlan, { loading: clonePlanLoading, error: clonePlanError }] = useMutation(
     CLONEPLAN,
@@ -176,6 +179,7 @@ const WorkoutsPanel = ({memberId, goBack, goToWorkout, goToSetup}) => {
         <>
           <WorkoutsHeader
             t={t}
+            bu={me.bu}
             setFilter={setFilter}
             onTextSearchChange={(event) => onTextSearch(event.target.value)}
             filter={filter}

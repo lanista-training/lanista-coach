@@ -2,14 +2,14 @@ import * as React from "react";
 import { useTranslate } from '../../hooks/Translation';
 import Dashboard from './Dashboard';
 import { withApollo } from '../../lib/apollo';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useLazyQuery } from '@apollo/react-hooks';
 
 import _ from 'lodash';
 import moment from 'moment';
 import Scene from "../../components/Scene";
 import Filter from "../../components/feeds/Filter"
 
-import { FEEDS, INCOMINGEVENTS, ME } from "../../queries";
+import { FEEDS, INCOMINGEVENTS, ME, MYMEMBERSLIST } from "../../queries";
 import BirthdayPanel from '../../components/BirthdayPanel'
 
 import {getCommandsLeft, getCommandsRight} from "./commands";
@@ -42,6 +42,8 @@ const Panel = ({
       setInitialLoading(false)
     }
   });
+
+  const [getMembersList, { error: membersListError, loading: membersListLoading, data: membersListData } ] = useLazyQuery(MYMEMBERSLIST);
 
   const {data: meData} = useQuery(ME, { ssr: false, fetchPolicy: 'cache-first' });
   const me = meData ? meData : {};
@@ -195,6 +197,10 @@ const Panel = ({
         hasInterface={hasInterface}
 
         setFilter={setFilter}
+
+        getMembersList={getMembersList}
+        membersListLoading={membersListLoading}
+        membersListData={membersListData}
       />
     </Scene>
   )

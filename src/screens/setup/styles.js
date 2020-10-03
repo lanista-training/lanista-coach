@@ -46,6 +46,7 @@ export const Stage = styled.div`
       flex: 3;
     }
     button {
+      min-width: 190px!important;
       margin-top: 2em;
     }
   }
@@ -356,4 +357,32 @@ export const StyledLabel = styled(Label)`
 export const LicenceField = styled(Form.Field)`
   color: black!important;
   opacity: 1!important;
+`;
+
+export const Shop = styled(Form.Field)`
+  min-height: 33vh;
+  .loading {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .close-button {
+    float: right;
+  }
+  .shop-header {
+    min-height: 4em;
+    font-weight: 900;
+    font-size: 18px;
+    padding: 2em;
+  }
+  .products form {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    button {
+      width: 200px;
+      margin: 10px 0;
+    }
+  }
 `;

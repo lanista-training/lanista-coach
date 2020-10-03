@@ -74,7 +74,7 @@ const SearchField = styled(TextField)`
   }
 `;
 
-export default ({t, filter, setFilter, onTextSearchChange, plugins}) => {
+export default ({t, filter, setFilter, onTextSearchChange, plugins, bu}) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const handleClickOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -88,7 +88,7 @@ export default ({t, filter, setFilter, onTextSearchChange, plugins}) => {
   React.useEffect(() => {
     handleClose();
   }, [filter])
-
+console.log("bu", bu)
   return (
     <WorkoutsHeader>
       <ButtonGroup aria-label="plans" className="buttons">
@@ -104,12 +104,14 @@ export default ({t, filter, setFilter, onTextSearchChange, plugins}) => {
         >
           Lanista
         </Button>
-        <Button
-          onClick={() => filter == "studio" ? setFilter("") : setFilter("studio")}
-          className={filter == 'studio' ? "active" : ""}
-        >
-            {t("gym")}
-        </Button>
+        {bu > 0 && (
+          <Button
+            onClick={() => filter == "studio" ? setFilter("") : setFilter("studio")}
+            className={filter == 'studio' ? "active" : ""}
+          >
+              {t("gym")}
+          </Button>
+        )}
         <Button
           aria-describedby={id}
           onClick={handleClickOpen}

@@ -69,9 +69,34 @@ export function withApollo (PageComponent, { ssr = true } = {}) {
             )
             if(message.indexOf('invalid token') > -1) {
               console.log("LOGOUT");
+              cookie.remove('token');
+              cookie.remove('tbt');
+              cookie.remove('refresh_token');
+              window.localStorage.clear();
               logout();
             }
             if(message.indexOf('invalid signature') > -1) {
+              console.log("LOGOUT");
+              cookie.remove('token');
+              cookie.remove('tbt');
+              cookie.remove('refresh_token');
+              window.localStorage.clear();
+              logout();
+            }
+            if(message.indexOf('jwt expired') > -1) {
+              console.log("LOGOUT");
+              cookie.remove('token');
+              cookie.remove('tbt');
+              cookie.remove('refresh_token');
+              window.localStorage.clear();
+              logout();
+            }
+            if(message.indexOf('jwt malformed') > -1) {
+              console.log("jwt malformed");
+              cookie.remove('token');
+              cookie.remove('tbt');
+              cookie.remove('refresh_token');
+              window.localStorage.clear();
               console.log("LOGOUT");
               logout();
             }
@@ -131,7 +156,7 @@ export function withApollo (PageComponent, { ssr = true } = {}) {
       // Apollo Client
       //
       const client = new ApolloClient({
-        link: authLink.concat(SubscriptionHttpLink),
+        link: errorLink.concat(SubscriptionHttpLink),
         cache: cache,
       });
 

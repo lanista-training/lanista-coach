@@ -229,38 +229,11 @@ const Panel = ({
       setSelection([...selection, {...selectedExercise, selected: true}]);
     } else {
       goToExercise(exerciseId);
-      /*
-      if( member && member > 0 ) {
-        Router.push({
-          pathname: '/exercise',
-          query: {
-            exercise: exerciseId,
-            member: member,
-          }
-        });
-      } else {
-        Router.push({
-          pathname: '/exercise',
-          query: {
-            exercise: exerciseId,
-          }
-        });
-      }
-      */
     }
   }
 
   const showExerciseToEdit = (exerciseId) => {
     goToExercise(exerciseId, true);
-    /*
-    Router.push({
-      pathname: '/exercise',
-      query: {
-        exercise: exerciseId,
-        editmode: true,
-      }
-    });
-    */
   }
 
   const removeItem = (exerciseId) => {
@@ -517,6 +490,20 @@ const Panel = ({
         }
       } else {
         if( folderMode > 0 ) {
+          if( folderMode == 1 ) {
+            result.push({
+              icon: <UserExercise/>,
+              text: t(bu > 0 ? 'gym_exercises' : 'my_exercises'),
+              type: 'type-1',
+              typex: 'Ionicons',
+              name: 'user exercise',
+              style: filter.private ? {color: '#34acfb'} : {},
+              className: filter.private ? 'synchronize-icon' : '',
+              onTap: () => {
+                onTogglePrivateFilter();
+              }
+            });
+          }
           result.push({
             icon: <CheckCircleOutlineIcon/>,
             text: t('exit edit mode'),

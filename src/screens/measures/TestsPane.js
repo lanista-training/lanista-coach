@@ -21,8 +21,6 @@ const curateGraphData = ( testResults ) => {
       }
     })
     test.testCompleted = Math.ceil(testCompleted / rawData.length * 100);
-    console.log(test)
-    console.log(test.testCompleted)
     //if( test.testCompleted == 100 ) {
 
     if( test.testCompleted > 1 ) {
@@ -43,8 +41,6 @@ const CustomizedLabel = ({x, y, stroke, value}) => {
 }
 
 const renderGraphSection = (testResults, t, withScore) => {
-  console.log("renderGraphSection")
-  console.log(testResults)
   const {available, graphData, testtype} = testResults;
   return(
     <GraphSection>

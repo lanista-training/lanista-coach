@@ -24,8 +24,9 @@ import {
   SHIFTPLITRIGHT,
   SHIFTPLITLEFT,
   DUPLICATESPLIT,
+  SENDACTIVATIONMAIL,
 } from "../../mutations";
-import {StyledDrawer} from './styles';
+import {StyledDrawer, StyledSnackbar } from './styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -37,7 +38,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
-import Snackbar from '@material-ui/core/Snackbar';
+
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import MuiAlert from '@material-ui/lab/Alert';
@@ -46,6 +47,7 @@ import DefaultSettingsPanel from '../../components/DefaultSettingsPanel';
 import WorkoutEditPanel from '../../components/WorkoutEditPanel';
 import PrintPlanPanel from '../../components/PrintPlanPanel';
 import SendPlanPanel from '../../components/SendPlanPanel';
+import LanistaButton from '../../components/LanistaButton';
 
 import Help from '../../components/icons/Help';
 import Tools from '../../components/icons/Tools';
@@ -65,19 +67,38 @@ const GET_DEFAULTSETTINGS = gql`
   }
 `;
 
-const CURRENTTAB = gql`
-  {
-    currentTab @client
-  }
-`;
+const Panel = ({
+  workoutId,
 
-const Panel = ({workoutId, goBack, goToExercises, goToRoot, goToWorkouts, goToExercise, goToCustomers, goToSetup}) => {
+  goBack,
+  goToExercises,
+  goToRoot,
+  goToWorkouts,
+  goToExercise,
+  goToCustomers,
+  goToSetup
+}) => {
 
   const {t} = useTranslate("workout");
 
+  //
+  // Snackbar
+  //
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
-  const [snackbarMessage, setSnackbarMessage] = React.useState('');
+  const [snackbarData, setSnackbarData] = React.useState({
+    message: '',
+    action: null,
+  });
   const toggleSnackbar = () => setOpenSnackbar(!openSnackbar);
+  React.useEffect(() => {
+    !openSnackbar && setSnackbarData({
+      message: '',
+      action: null,
+    });
+  }, [openSnackbar]);
+  React.useEffect(() => {
+    if( snackbarData.message !== '' ) toggleSnackbar();
+  }, [snackbarData.message]);
 
   const [defaultSettingsDrawerOpen, setDefaultSettingsDrawerOpen] = React.useState(false);
   const toggleDefaultSettingsDrawer = () => setDefaultSettingsDrawerOpen(!defaultSettingsDrawerOpen);
@@ -119,6 +140,7 @@ const Panel = ({workoutId, goBack, goToExercises, goToRoot, goToWorkouts, goToEx
   });
   const { data:meData } = useQuery(ME);
   const {me} = meData ? meData : {me: {}}
+
   //
   // Local state
   //
@@ -147,9 +169,11 @@ const Panel = ({workoutId, goBack, goToExercises, goToRoot, goToWorkouts, goToEx
   const [availableLanguages, setAvailableLanguages] = React.useState([]);
   const [workoutChanged, setWorkoutChanged] = React.useState(false);
 
-  const { data: currentTab } = useQuery(CURRENTTAB);
-  const activeSplitIndex = (currentTab && currentTab.currentTab) ? currentTab.currentTab : 0;
-  const setActiveSplitIndex = (tabIndex) => client.writeData({ data: { currentTab: tabIndex } });
+  const currentTab = parseInt(window.localStorage.getItem('currentTab'));
+  const [activeSplitIndex, setActiveSplitIndex] = React.useState(currentTab ? currentTab : 0);
+  React.useEffect(() => {
+    window.localStorage.setItem('currentTab', parseInt(activeSplitIndex));
+  }, [activeSplitIndex])
 
   const [changeSplitOder, { loading: mutationLoading, error: mutationError }] = useMutation(
     CHANGESPLITORDER,
@@ -291,8 +315,9 @@ const Panel = ({workoutId, goBack, goToExercises, goToRoot, goToWorkouts, goToEx
     SENDPLAN,
     {
       update(cache,  { data: { sendPlan } }) {
+        console.log("sendPlan")
         toggleSendPanelOpen();
-        setSnackbarMessage("Plan erfolgreich gesendet !")
+        setSnackbarData({message: "Plan erfolgreich gesendet !", action: null})
         toggleSnackbar();
       }
     }
@@ -331,20 +356,43 @@ const Panel = ({workoutId, goBack, goToExercises, goToRoot, goToWorkouts, goToEx
           localStorage.setItem('openplan', id);
           goToRoot();
           goToWorkouts();
-          /*
-          Router.push({
-            pathname: '/'
-          }).then(() => {
-            Router.push({
-              pathname: '/workouts'
-            });
-          });
-          */
         }
 
       }
     }
   );
+
+  const [sendActivationMail, {
+    loading: sendActivationMailLoading,
+    error: sendActivationMailError
+  }] = useMutation(
+    SENDACTIVATIONMAIL,
+    {
+      update(cache,  { data: { sendActivationMail } }) {
+        const {id} = sendActivationMail;
+        if(id > 0) {
+          window.localStorage.setItem('hideActivationWarning', 1);
+          toggleSnackbar();
+        }
+      }
+    }
+  );
+
+
+  React.useEffect(() => {
+    if( data && data.workout && data.workout.member && data.workout.member.status === 0) {
+      setSnackbarData({
+        message: t("customer inactive"),
+        action: <LanistaButton loading={sendActivationMailLoading} onClick={() => {
+          sendActivationMail({
+            variables: {
+              memberId: data.workout.member.id,
+            }
+          });
+        }}>{t("send activation")}</LanistaButton>
+      });
+    }
+  }, []);
 
   React.useEffect(() => {
     const {workout} = data ? data : {}
@@ -364,16 +412,6 @@ const Panel = ({workoutId, goBack, goToExercises, goToRoot, goToWorkouts, goToEx
           text: t('add exercise'),
           onTap: () => {
             goToExercises(workout.id, activeSplitIndex+1, true);
-            /*
-            Router.push({
-              pathname: '/exercises',
-              query: {
-                editmode: true,
-                workout: workout.id,
-                split: activeSplitIndex+1,
-              }
-            });
-            */
           }
         },
       );
@@ -423,6 +461,7 @@ const Panel = ({workoutId, goBack, goToExercises, goToRoot, goToWorkouts, goToEx
         name: 'back',
         style: {color: '#34acfb'},
         onTap: () => {
+          localStorage.removeItem("hideActivationWarning");
           setActiveSplitIndex(0);
           goBack();
         }
@@ -472,18 +511,7 @@ const Panel = ({workoutId, goBack, goToExercises, goToRoot, goToWorkouts, goToEx
   }
 
   const showExercise = (exerciseId, memberId, planexerciseId) => {
-    console.log("showExercise", exerciseId, memberId, planexerciseId)
     goToExercise(exerciseId, memberId, planexerciseId);
-    /*
-    Router.push({
-      pathname: '/exercise',
-      query: {
-        exercise: exerciseId,
-        member: memberId,
-        planexercise: planexerciseId
-      }
-    });
-    */
   }
 
   const saveWorkout = ({name, description, duration}) => {
@@ -604,6 +632,8 @@ const Panel = ({workoutId, goBack, goToExercises, goToRoot, goToWorkouts, goToEx
       }
     })
   }
+
+  console.log("activeSplitIndex", activeSplitIndex)
 
   return (
     <Scene
@@ -849,19 +879,20 @@ const Panel = ({workoutId, goBack, goToExercises, goToRoot, goToWorkouts, goToEx
 
 
 
-    <Snackbar
+    <StyledSnackbar 
       anchorOrigin={{
         vertical: 'bottom',
         horizontal: 'center',
       }}
-      open={openSnackbar}
-      autoHideDuration={6000}
+      open={openSnackbar && window.localStorage.getItem('hideActivationWarning') != 1}
+      autoHideDuration={null}
       onClose={toggleSnackbar}
     >
-      <MuiAlert onClose={toggleSnackbar} severity="warning" variant="filled">
-        {snackbarMessage}
+      <MuiAlert onClose={toggleSnackbar} severity="warning" variant="filled" >
+        {snackbarData.message}
+        {snackbarData.action}
       </MuiAlert>
-    </Snackbar>
+    </StyledSnackbar >
 
 
     </Scene>

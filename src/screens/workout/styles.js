@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Tab } from 'semantic-ui-react';
 import Drawer from '@material-ui/core/Drawer';
 import MenuItem from '@material-ui/core/MenuItem';
+import Snackbar from '@material-ui/core/Snackbar';
 import { motion } from "framer-motion";
 
 export const Stage = styled.div`
@@ -59,6 +60,7 @@ export const StyledWorkout = styled.div`
       display: flex;
       align-self: center;
       justify-content: center;
+      flex-flow: column;
       .description-content {
         max-width: 465px;
       }
@@ -184,6 +186,9 @@ export const StyledExercise = styled.div`
     line-height: 22px;
     display: block;
     font-weight: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     .exercise-sets {
       float: left;
       font-size: 12px;
@@ -193,6 +198,14 @@ export const StyledExercise = styled.div`
       }
     }
     .exercise-repetitions {
+      float: right;
+      font-size: 12px;
+      span {
+        font-weight: 700;
+        font-size: 17px;
+      }
+    }
+    .exercise-weight {
       float: right;
       font-size: 12px;
       span {
@@ -253,4 +266,19 @@ export const DefaultValuesSelector = styled.div`
   background: black;
   border-radius: 15px;
   color: white;
+`;
+
+export const StyledSnackbar = styled(Snackbar)`
+  .MuiPaper-root  {
+    width: 500px;
+    display: flex;
+    align-items: center;
+    button {
+      margin-left: 2em;
+      border-color: white;
+      .MuiButton-label {
+        color: white;
+      }
+    }
+  }
 `;

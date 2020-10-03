@@ -167,6 +167,7 @@ const EditSection = withApollo(({t, exerciseId, toggleEditMode, editNameMode, la
           value={execution}
           onChange={onExecutionChange}
         />
+      <div className="description-warnings">{t("print-information-notes")}</div>
       </div>
       <div className="info-text editing">
         <div className="info-title">
@@ -181,6 +182,7 @@ const EditSection = withApollo(({t, exerciseId, toggleEditMode, editNameMode, la
           value={mistakes}
           onChange={onMistakesChange}
         />
+      <div className="description-warnings">{t("print-information-mistakes")}</div>
       </div>
       <div className="buttons-section">
         <Button variant="outlined" onClick={toggleEditMode}>{t("CANCEL")}</Button>
@@ -299,12 +301,9 @@ const EditImageSection = ({t, exercise, refetch, editImageMode, toggleEditImageM
           },
         })
         .then((response) => {
-          console.log("UPLOAD COMPLETED")
           if (response.ok) {
-            console.log("UPLOAD OK")
             refetch();
           } else {
-            console.log("UPLOAD ERROR")
             alert('Error uploading [' + file.name + ']. Max upload size is ~4MB.');
           }
           setLoadingImage(false);
@@ -444,13 +443,14 @@ const EditVideoSection = withApollo(({t, exercise, refetch, editVideoMode, toggl
 //
 const EditIndexesSection = withApollo(({t, exerciseId, refetch, editIndexesMode, toggleEditIndexesMode}) => {
 
-  const { loading, error, data:{exercise}, refetch: refetchEdit } = useQuery(EXERCISE_EDIT, {
+  const { loading, error, data:exerciseData, refetch: refetchEdit } = useQuery(EXERCISE_EDIT, {
     variables: {
       exerciseId: exerciseId,
     },
     fetchPolicy: 'no-cache',
     errorPolicy: 'ignore',
   });
+  const {exercise} = exerciseData ? exerciseData : {};
 
   const [updateExerciseIndexes, { loading: updateExerciseIndexesLoading, error: updateExerciseIndexesError }] = useMutation(
     UPDATEEXERCISEINDEXES,
@@ -483,9 +483,7 @@ const EditIndexesSection = withApollo(({t, exerciseId, refetch, editIndexesMode,
   }
 
   React.useEffect(() => {
-    console.log("EXERCISE CHANGED")
     if( exercise ) {
-      console.log("UPDATING...")
       const {exercise_type, muscle, addition} = exercise;
       setExerciseTypeValue(exercise_type > 0 ? parseInt(exercise_type) : 0);
       setMuscleValue(muscle > 0 ? parseInt(muscle) : 0);
@@ -495,20 +493,6 @@ const EditIndexesSection = withApollo(({t, exerciseId, refetch, editIndexesMode,
   }, [exercise]);
 
   React.useEffect(() => {
-    console.log("INPUT VALUES CHANGED")
-
-    console.log("exerciseTypeValue")
-    console.log(exerciseTypeValue)
-    console.log(exercise_type)
-
-    console.log("muscleValue")
-    console.log(muscleValue)
-    console.log(muscle)
-
-    console.log("additionValue")
-    console.log(additionValue)
-    console.log(addition)
-
     if( exercise ) {
       const {exercise_type, muscle, addition} = exercise;
       setChange( exerciseTypeValue !== parseInt(exercise_type) || muscleValue != parseInt(muscle) || additionValue != parseInt(addition) );
@@ -646,7 +630,7 @@ const InfoSection = ({t, exercise, owner, toggleEditMode, toggleEditIndexesMode}
     </div>
     <div className="info-text">
       <div className="info-title">
-        Mögliche Fehler
+        {t("MISTAKES")}
         {owner &&
           <IconButton
             aria-label="edit"

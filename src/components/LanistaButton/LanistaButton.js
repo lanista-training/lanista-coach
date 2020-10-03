@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyledButton } from './styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-export default ({children, disabled, onClick, onBlur, inverted, loading, style, startIcon, endIcon, className}) => {
+export default ({children, disabled, onClick, onBlur, inverted, loading, style, startIcon, endIcon, className, type}) => {
   return (
     <StyledButton
       variant="outlined"
@@ -14,6 +14,7 @@ export default ({children, disabled, onClick, onBlur, inverted, loading, style, 
       endIcon={endIcon}
       startIcon={startIcon}
       className={className}
+      type={type}
     >
       {!loading && children}
       {loading && <CircularProgress size={24} />}

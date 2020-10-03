@@ -104,13 +104,14 @@ const StyledRating = withStyles({
   },
 })(Rating);
 
-const FileDropZone = ({memberId, updateMemberFiles, closeFileUploadPanel, loading}) => {
+const FileDropZone = ({memberId, updateMemberFiles, closeFileUploadPanel, setLoading, loading}) => {
 
   const {acceptedFiles, getRootProps, getInputProps} = useDropzone({
     accept: 'image/jpeg, image/png, application/pdf'
   });
 
   const files = acceptedFiles.map((file, index) => {
+      setLoading(true);
       let reader = new FileReader();
       let uploadBaseUrl = document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/' + 'file/user/';
       const token = cookie.get('token');
@@ -125,17 +126,19 @@ const FileDropZone = ({memberId, updateMemberFiles, closeFileUploadPanel, loadin
         .then((response) => {
           if (response.ok) {
             if(index == acceptedFiles.length-1) {
-              closeFileUploadPanel()
-              updateMemberFiles()
-              //startLoading(false);
+              closeFileUploadPanel();
+              updateMemberFiles();
+              setLoading(false);
             }
           } else {
+            setLoading(false);
             alert('Error uploading [' + file.name + ']');
           }
         })
         .catch((error) => {
-          console.log("ERROR UPLOADING FILE")
-          console.log(error)
+          console.log("ERROR UPLOADING FILE");
+          console.log(error);
+          setLoading(false);
           updateMemberFiles()
           closeFileUploadPanel()
         });
@@ -147,6 +150,8 @@ const FileDropZone = ({memberId, updateMemberFiles, closeFileUploadPanel, loadin
       </li>
     )
   });
+
+  console.log("DropZone", loading)
 
   return ( (!loading ) ?
       <StyledDropZone>
@@ -304,6 +309,8 @@ const Customer = ({
   const [selectedFile, setSelectedFile] = React.useState(null);
   const loadingFiles = uploadingFiles || loadingMemberFiles;
 
+  console.log("loadingFiles", loadingFiles)
+
   const handleOpen = (file) => {
     setModalOpen(true);
     setSelectedFile(file);
@@ -440,19 +447,20 @@ const Customer = ({
       <Tab.Pane>
         <div className="files-list-viewport">
           <div className="files-list-content">
-            {!fileDownloadMode &&
+            {!loadingFiles && !fileDownloadMode &&
               <Button basic icon='upload' onClick={() => {
                 setFileDownloadMode(true)
               }}/>
             }
-            {fileDownloadMode && <FileDropZone
+            {!loadingFiles && fileDownloadMode && <FileDropZone
                 memberId={customer.id}
                 closeFileUploadPanel={ () => setFileDownloadMode(false) }
                 updateMemberFiles={updateMemberFiles}
-                loading={loadingFiles}
+                setLoading={setUploadingFiles}
+                loading={uploadingFiles}
               />
             }
-            {!fileDownloadMode && memberFiles && memberFiles.map(file => (
+            {!loadingFiles && !fileDownloadMode && memberFiles && memberFiles.map(file => (
               <Card key={file.flinename}>
                 <div className="workout-wrapper member-file" >
                   <div className="workoutname">{decodeURI(file.filename)}</div>
@@ -469,6 +477,13 @@ const Customer = ({
                 </div>
               </Card>
             ))}
+            {
+              loadingFiles && (
+                <div className="loading">
+                  <CircularProgress size={60} />
+                </div>
+              )
+            }
           </div>
         </div>
       </Tab.Pane>

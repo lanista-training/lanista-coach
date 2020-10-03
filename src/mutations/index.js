@@ -977,3 +977,18 @@ export const GETNEWTOKEN = gql`
     }
   }
 `;
+
+export const GETTARIFF = gql`
+  mutation GetTariff($tariff: Int!) {
+    getTariff(tariff: $tariff) {
+      amount
+      uniqid
+      hash
+      authCode
+      product
+      tariff
+      testMode
+      tariffPeriod
+    }
+  }
+`;

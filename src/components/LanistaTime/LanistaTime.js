@@ -117,7 +117,7 @@ export default ({t, startValue, endValue, onStartChange, onEndChange, editable})
         >
           <NestedMenuItem
             parentMenuOpen={!!menuStartPosition}
-            label={t("vor") + '...'}
+            label={t("for") + '...'}
           >
             <TimeBlockSection>
               <div className="select-section">

@@ -58,7 +58,7 @@ export default ({t, notes, loading, onCreateNote, onDeleteNote, editable}) => {
           </div>
         {
           !loading && notes && notes.length === 0 && (
-            <div className="empty-list">Keine Notitzen</div>
+            <div className="empty-list">{t("notes empty list")}</div>
           )
         }
         { loading && (

@@ -13,7 +13,6 @@ const CssTextField = withStyles({
 })(StyledTextField);
 
 export default ({id, name, value, editing, disabled, label, onChange, onBlur, onKeyDown, autoFocus, multiline, rows}) => {
-  console.log("LANISTA TEXT FIELD")
   return !editing ? value : (
     <CssTextField
       id={id}

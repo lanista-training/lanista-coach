@@ -23,6 +23,7 @@ const languages = [
 
 const Panel = ({
   member,
+  memberId,
   loading,
   error,
   refetch,
@@ -127,7 +128,9 @@ const Panel = ({
       setPreviewImage("https://dn2ppfvx6tfpw.cloudfront.net/" + encRequest + '?DC=!' + (new Date()).getTime() );
     }
   };
+
   const {id} = member ? member : {};
+
   React.useEffect(() => {
     if( id > 0 ) {
       resetPreviewImage();
@@ -175,7 +178,7 @@ const Panel = ({
 
   React.useEffect(() => {
     setLoadingImage(false);
-  }, [previewImage])
+  }, [previewImage]);
 
 
   //
@@ -183,14 +186,18 @@ const Panel = ({
   //
   const [uploadMemberImageLoading, setUploadMemberImageLoading] = React.useState(false);
   const [uploadMemberImageError, setUploadMemberImageError] = React.useState(null);
+
+
   const onUploadMemberImage = (file) => {
+
     setLoadingImage(true);
     let reader = new FileReader();
+
     let uploadBaseUrl = document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/' + 'file/user/';
     if(file instanceof File) {
       reader.addEventListener('loadend', function(e){
         const token = cookie.get('token');
-        fetch(uploadBaseUrl + member.id + '/photo', {
+        fetch(uploadBaseUrl + memberId + '/photo', {
           method: "POST",
           body: new Blob([reader.result], {type: file.type}),
           headers: {
@@ -212,7 +219,7 @@ const Panel = ({
       reader.readAsArrayBuffer(file);
     } else {
       const token = cookie.get('token');
-      fetch(uploadBaseUrl + member.id + '/photo' + '/' + file.substring(file.lastIndexOf("/") + 1), {
+      fetch(uploadBaseUrl + memberId + '/photo' + '/' + file.substring(file.lastIndexOf("/") + 1), {
         method: "POST",
         headers: {
           authorization: token ? `Bearer ${token}` : ''

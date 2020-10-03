@@ -23,7 +23,6 @@ export function TranslatorProvider({ children, client }) {
   const { data, error, loading } = useQuery(ME);
   if( isBrowser ) {
     if( data && data.me ) {
-      console.log("SETTING DEFAULT LANGUAGE TO " + data.me.language.toLowerCase())
       defaultLanguage = data.me.language.toLowerCase();
 
     }
@@ -46,8 +45,6 @@ export function TranslatorProvider({ children, client }) {
   let translations = require('../../../static/locales/' + language + '/translations.json');
 
   React.useEffect(() => {
-    console.log("New language loading...");
-    console.log(language)
     translations = require('../../../static/locales/' + language + '/translations.json');
   }, [language]);
 

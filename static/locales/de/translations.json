@@ -8,8 +8,8 @@
     "finding_rating_5": "stark",
     "finding_rating_6": "sehr stark",
 
-    "drug_rating_1": "sehr leicht",
-    "drug_rating_2": "leicht",
+    "drug_rating_1": "sehr niedrig",
+    "drug_rating_2": "niedrig",
     "drug_rating_3": "mittel",
     "drug_rating_4": "erhöht",
     "drug_rating_5": "hoch",
@@ -111,7 +111,8 @@
     "date": "Datum",
     "dosification": "Dosierung",
     "frequency": "Häufigkeit",
-    "priority": "Priorität"
+    "priority": "Priorität",
+    "for": "vor"
   },
   "common": {
     "title": "Lanista Trainer",
@@ -125,7 +126,7 @@
     "save": "Änderungen speichern",
     "processing": "wird bearbeitet...",
     "tools": "Werkzeuge",
-    "help": "Hilfe",
+    "help": "Support",
     "body": "Ganzkörper",
     "heart": "Herz",
     "shoulder": "Schulter",
@@ -139,7 +140,7 @@
     "stopwatch": "Stoppuhr",
 
     "licence_expired_title": "Lizenz ist abgelaufen",
-    "licence_expired_text_trainer": "Du musst deine Lizenez verlängern, um Daten speichern zu können",
+    "licence_expired_text_trainer": "Du musst deine Lizenz verlängern um Daten speichern zu können",
     "licence_expired_text_gym": "Bitte wende dich an deinen Administrator",
     "licence_dialog_ok": "OK",
     "licence_dialog_go_to_store": "Lizenz verlängern"
@@ -206,7 +207,7 @@
     "NOTE_CHANGE": "ändern",
     "NOTE_SAVE": "speichern",
     "NOTE_CANCEL": "abbrechen",
-    "GENERAL_ERROR": "Es ist ein Problem aufgetreten.",
+    "GENERAL_ERROR": "Es ist ein Problem aufgetreten. Bitte Anwendung neu starten",
     "MEMBER_NOT_FOUND": "Der Kunde ist nicht mehr verfügbar.",
     "NEW_PLAN": "NEUER PLAN",
     "USE_TEMPLATE": "AUS MEINEN VORLAGEN",
@@ -231,8 +232,8 @@
     "finding_rating_5": "stark",
     "finding_rating_6": "sehr stark",
 
-    "drug_rating_1": "sehr leicht",
-    "drug_rating_2": "leicht",
+    "drug_rating_1": "sehr niedrig",
+    "drug_rating_2": "niedrig",
     "drug_rating_3": "mittel",
     "drug_rating_4": "erhöht",
     "drug_rating_5": "hoch",
@@ -365,7 +366,8 @@
     "RESPOND": "antworten",
     "EXTEND_PLAN": "Kunde öffnen",
     "DATA_NOT_AVAILABLE": "Daten derzeit nicht verfügbar",
-    "YOUR_CUSTOMERS": "Deine Kundenanzahl"
+    "YOUR_CUSTOMERS": "Deine Kundenanzahl",
+    "widget-empty-list": "Keine Daten vorhanden"
   },
   "exercise": {
     "EXECUTION": "Ausführung",
@@ -428,18 +430,25 @@
     "create-chat-placeholder": "Chat-Nachricht hier eingeben",
     "set": "Satz",
     "protocolls": "Protokolle",
-    "print-information": "Im druckbaren PDF sind 2 Zeilen mit je 75 Zeichen verfügbar.",
+    "print-information-notes": "Im druckbaren PDF sind 5 Zeilen mit je 60 Zeichen verfügbar.",
+    "print-information-mistakes": "Im druckbaren PDF sind 2 Zeilen mit je 60 Zeichen verfügbar.",
     "set": "Satz",
-    "graph-1-title": "Total Volumen (kg)",
+    "graph-1-title": "Gesamtvolumen (Sätze in kg)",
     "graph-2-title": "One Repetition Maximum(1RM) / Maximalkraft",
     "no-graphic": "keine Grafik",
     "remove-exercise": "Übung löschen",
     "profile_picture_size": "Foto hochladen",
     "UPLOAD_PHOTO": "Foto hochladen",
     "BACK": "Zurück",
-    "IS_DRAG_IMAGE_INACTIVE": "Hier cliken oder Foto ziehen",
+    "IS_DRAG_IMAGE_INACTIVE": "per Drag 'n' Drop Bild herziehen, oder hier klicken",
     "EDIT_PHOTO": "Foto bearbeiten",
-    "CROP_IMAGE": "Foto zuschneiden"
+    "CROP_IMAGE": "Foto zuschneiden",
+    "basic-configuration": "Grundkonfiguration",
+    "add set": "Satz hinzufügen",
+    "delete set": "Satz löschen",
+    "back": "Zurück",
+    "notes empty list": "Keine Notizen vorhanden",
+    "today": "Heute"
   },
   "exercises": {
     "exercises": "Übungen",
@@ -503,10 +512,11 @@
     "add exercise": "Übung hinzufügen",
     "remove exercise": "Übung entfernen",
     "delete folder": "Ordner löschen",
-    "search": "Übungssuche",
+    "search": "Übung suchen",
     "create exercise": "Übung anlegen",
     "recently used": "zuletzt verwendet",
-    "exit edit mode": "Bearbeitung beenden"
+    "exit edit mode": "Bearbeitung beenden",
+    "forearm": "Unterarm"
   },
   "login": {
     "forgot_password": "Passwort vergessen?",
@@ -532,7 +542,12 @@
     "Response not successful": "Keine Verbindung zum Server möglich. Bitte versuche es später noch ein Mal",
     "check your mailbox": "Bitte überprüfe deinen Email-Eingang",
     "legal title": "Allgemeine Geschäftsbedingungen für die Nutzung der Lanista-App",
-    "registration successfull": "Trainer erfolgreich registriert"
+    "registration successfull": "Trainer erfolgreich registriert",
+    "back": "Zurück",
+    "imprint": "Impressum",
+    "privacy": "Datenschutz",
+    "info": "Info",
+    "support": "Support"
   },
   "measures": {
     "injuries": "Bewegungsapparat",
@@ -620,7 +635,7 @@
     "no_score": "kein Score",
     "create_pdf": "PDF ERSTELLEN",
     "email_measures": "EMAILEN",
-    "generating-email": "Email wird geneniert",
+    "generating-email": "Email wird generiert",
     "email-sent": "Email wurde gesendet",
     "create_measure": "Messung durchführen",
     "create_test": "Testung durchführen",
@@ -631,7 +646,14 @@
     "show_as_chart": "als Grafik",
     "export_document": "Dokument exportieren",
     "no_score_available": "für diesen Test steht kein Score zur Verfügung",
-    "date": "Datum"
+    "date": "Datum",
+    "DELETE": "löschen",
+    "armRight": "rechter Arm",
+    "armLeft": "linker Arm",
+    "spinaIlicaAnt": "Beckenkamm",
+    "wideHips": "Hüfte",
+    "quadsRight": "rechter Oberschenkel",
+    "quadsLeft": "linker Oberschenkel"
   },
   "profile": {
     "personal_data": "Persönliche Daten",
@@ -646,7 +668,7 @@
     "zip_code": "PLZ",
     "street": "Straße",
     "city": "Ort",
-    "data_protection": "Datenschutzbestimmungen",
+    "data_protection": "Einwilligung zur Datenspeicherung",
     "profile_picture": "Kundenfoto",
     "profile_picture_size": "500px X 500px",
     "male": "Männlich",
@@ -658,7 +680,7 @@
     "FORM_CUSTOMER_DATA_ZIP": "PLZ",
     "FORM_CUSTOMER_DATA_CITY": "Ort",
     "FORM_CUSTOMER_DATA_CONTRY": "Land",
-    "DATA_PRIVACY": "Datenschutzbestimmungen",
+    "DATA_PRIVACY": "Einwilligung zur Datenspeicherung",
     "DATA_PRIVACY_NO": "Nicht unterschrieben",
     "DATA_PRIVACY_YES": "Unterschrieben",
     "ACCOUNT_STATUS": "Account-Status",
@@ -680,7 +702,7 @@
     "UPLOAD_PHOTO": "Foto hochladen",
     "CROP_PHOTO": "Foto zuschneiden",
     "IS_DRAG_IMAGE_ACTIVE": "Bilder hier herziehen",
-    "IS_DRAG_IMAGE_INACTIVE": "per Drag 'n' Drop Bild hier herziehen, oder klicken zur Dateiasuwahl",
+    "IS_DRAG_IMAGE_INACTIVE": "per Drag 'n' Drop Bild herziehen, oder klicken zur Dateiauswahl",
     "CROP_IMAGE": "zuschneiden",
     "FLIP_IMAGE": "drehen",
     "RIGHT": "rechts",
@@ -763,7 +785,8 @@
     "change_password_step_1_text": "Gebe dein altes Passwort ein.",
     "change_password_step_2_text": "Ok. Gebe jetzt dein neues Passwort ein.",
     "change_password_step_3_text": "Bestätige dein neues Passwort.",
-    "next": "weiter"
+    "next": "weiter",
+    "refresh_licence_status": "Lizenzstatus updaten"
   },
   "testsmanager": {
     "test-name": "Name des Tests",
@@ -877,7 +900,9 @@
     "open": "Öffnen",
     "characters": "Zeichen",
     "lines": "Zeilen",
-    "print-information": "Für druckbare PDFs sind 3 Zeilen mit je 65 Zeichen verfügbar."
+    "print-information": "Für druckbare PDFs sind 3 Zeilen mit je 65 Zeichen verfügbar.",
+    "customer inactive": "Kunden-Account nicht aktiviert",
+    "send activation": "Aktivierungsmail versenden"
   },
   "workouts": {
     "split": "Split",
@@ -894,6 +919,13 @@
     "show results": "Liste anzeigen",
     "my": "Meine",
     "gym": "Studio",
-    "plans": "Pläne"
+    "plans": "Pläne",
+    "PLAN NAME": "Name für den Plan eingeben",
+    "DURATION": "Plandauer"
+  },
+  "shop": {
+    "week-licence": "Wochenlizenz",
+    "month-licence": "Monatslizenz",
+    "year-licence": "Jahreslizenz"
   }
 }

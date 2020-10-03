@@ -37,6 +37,12 @@ export const Stage = styled.div`
   .dashboard-widget {
     margin-top: 1em;
   }
+  .widget-empty-list {
+    min-height: 12em;
+    display: flex;
+    align-items: center;
+    padding: 1em;
+  }
 `;
 
 export const Timeline = styled.div`

@@ -51,7 +51,8 @@ const withData = (WrappedComponent, {memberId, tab, id, goBack, goToSetup}) => {
     //
     // ME data
     //
-    const { data: {me} } = useQuery(ME);
+    const { data: meData } = useQuery(ME);
+    const {me} = meData ? meData : {};
 
     //
     // Anamnese data
@@ -77,8 +78,6 @@ const withData = (WrappedComponent, {memberId, tab, id, goBack, goToSetup}) => {
       SAVEFINDING,
       {
         update(cache,  { data: { saveFinding } }) {
-          console.log("saveFinding")
-          console.log(saveFinding)
           if( saveFinding.success ) {
             refetch();
           }
@@ -93,8 +92,6 @@ const withData = (WrappedComponent, {memberId, tab, id, goBack, goToSetup}) => {
       CREATEFINDING,
       {
         update(cache,  { data: { createFinding } }) {
-          console.log("createFinding")
-          console.log(createFinding)
           if( createFinding.success ) {
             refetch();
           }
@@ -109,8 +106,6 @@ const withData = (WrappedComponent, {memberId, tab, id, goBack, goToSetup}) => {
       DELETEFINDING,
       {
         update(cache,  { data: { deleteFinding } }) {
-          console.log("deleteFinding")
-          console.log(deleteFinding)
           if( deleteFinding.success ) {
             refetch();
           }
