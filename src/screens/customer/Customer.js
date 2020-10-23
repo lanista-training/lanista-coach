@@ -42,6 +42,7 @@ import SentimentDissatisfiedIcon from '@material-ui/icons/SentimentDissatisfied'
 import SentimentSatisfiedIcon from '@material-ui/icons/SentimentSatisfied';
 import SentimentSatisfiedAltIcon from '@material-ui/icons/SentimentSatisfiedAltOutlined';
 import SentimentVerySatisfiedIcon from '@material-ui/icons/SentimentVerySatisfied';
+import AdjustIcon from '@material-ui/icons/Adjust';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -350,7 +351,7 @@ const Customer = ({
   const token = cookie.get('token');
 
   const panes = [
-    { menuItem: { key: 'data',  icon: 'chevron right', content: 'Kundeninfo' }, render: () =>
+    { menuItem: { key: 'data',  icon: 'chevron right', content: t("costomer info") }, render: () =>
       <Tab.Pane>
         <div className="info-list-viewport">
           <div className="info-list-content">
@@ -396,7 +397,7 @@ const Customer = ({
             </Card>
             <Card key={"create-goal-button"} onClick={createGoal}>
               <div className="workout-wrapper member-goal create-button">
-                <div className="workoutname">{"Neue Kundenziel eingeben"}</div>
+                <div className="workoutname">{t("new customer goal")}</div>
                 <div className="target-section">
                   <Icon name='target' className="card-decoration"/>
                   <div className="no-date-section">
@@ -433,7 +434,7 @@ const Customer = ({
         </div>
       </Tab.Pane>
     },
-    { menuItem: { key: 'workouts',  icon: 'chevron right', content: <div>Pläne<div className="counter">{plans ? plans.length : 0}</div></div> }, render: () =>
+    { menuItem: { key: 'workouts',  icon: 'chevron right', content: <div>{t("plans")}<div className="counter">{plans ? plans.length : 0}</div></div> }, render: () =>
       <Tab.Pane>
         <WorkoutsList
           t={t}
@@ -504,8 +505,8 @@ const Customer = ({
                           <StyledRating
                             name="customized-icons"
                             defaultValue={item.rating+1}
-                            IconContainerComponent={IconContainer}
                             readOnly
+                            icon={<AdjustIcon fontSize="inherit" />}
                           />
                         }
                         {
@@ -513,7 +514,7 @@ const Customer = ({
                           <Rating
                             name="customized-icons"
                             defaultValue={item.rating+1}
-                            IconContainerComponent={IconContainer}
+                            icon={<AdjustIcon fontSize="inherit" />}
                             readOnly
                           />
                         }

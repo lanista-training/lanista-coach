@@ -5,13 +5,14 @@ import { Icon } from 'semantic-ui-react';
 
 import Button from '@material-ui/core/Button';
 
-const renderSelectField = (data, top, selection, baseline, line, onSaveTestItem, editable) => {
+const renderSelectField = (data, top, selection, baseline, line, onSaveTestItem, editable, itemType) => {
   return (
     <div className="test-selection" style={{borderTop: (top ? '1px solid black' : '')}}>
+    {itemType == 2 && <div className="test-side">{line == 1 ? "L" : "R"}</div>}
     {
       data.map((selectItem, index) => {
         return (
-          <div className="test-select-item" style={{width: ( (100 / data.length) + '%'), borderRight: index == data.length - 1 ? '' : '1px solid black', backgroundColor: (index + 1 == selection  ? 'grey' : ''), color: (index + 1 == selection  ? 'white' : '')}}>
+          <div className="test-select-item" style={{width: 'calc((100% - ' + (itemType == 2 ? '30px' : '0px') + ') / ' + data.length + ')', borderRight: index == data.length - 1 ? '' : '1px solid black', backgroundColor: (index + 1 == selection  ? 'grey' : ''), color: (index + 1 == selection  ? 'white' : '')}}>
             <Button disabled={!editable} onClick={() => onSaveTestItem(baseline + line, index + 1)} className={index + 1 == selection  ? 'selected' : ''}>{selectItem}</Button>
           </div>
         )
@@ -49,8 +50,8 @@ export default ({
 
 
       <div className="test-selection-wrapper">
-        {renderSelectField(selectionItems, false, score[0], baseline, 0, onSaveTestItem, editable)}
-        {testItem.type == 2 && renderSelectField(selectionItems, true, score[1], baseline, 1, onSaveTestItem, editable)}
+        {renderSelectField(selectionItems, false, score[0], baseline, 0, onSaveTestItem, editable, testItem.type)}
+        {testItem.type == 2 && renderSelectField(selectionItems, true, score[1], baseline, 1, onSaveTestItem, editable, testItem.type)}
       </div>
 
       <div className="comment-section">

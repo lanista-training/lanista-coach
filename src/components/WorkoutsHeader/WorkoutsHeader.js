@@ -74,7 +74,10 @@ const SearchField = styled(TextField)`
   }
 `;
 
-export default ({t, filter, setFilter, onTextSearchChange, plugins, bu}) => {
+export default ({t, filter, setFilter, onTextSearchChange, plugins, bu, member}) => {
+
+  console.log("WorkoutsHeader", member)
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const handleClickOpen = (event) => {
     setAnchorEl(event.currentTarget);

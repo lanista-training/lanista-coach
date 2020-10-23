@@ -251,7 +251,10 @@
     "goal_rating_3": "mittel",
     "goal_rating_4": "erhöht",
     "goal_rating_5": "hoch",
-    "goal_rating_6": "sehr hoch"
+    "goal_rating_6": "sehr hoch",
+    "new customer goal": "Neue Kundenziel eingeben",
+    "costomer info": "Kundeninfo",
+    "plans": "Pläne"
   },
   "customers": {
     "customers_found": "Trefferliste",
@@ -291,7 +294,11 @@
     "EXIT_EDIT_MODE": "Bearbeitungsmodus verlassen",
     "FOLDER": "Ordner",
     "RECENTLY": "ZULETZT",
-    "SEARCH": "SUCHEN"
+    "SEARCH": "SUCHEN",
+    "change_folder_name": "Folder name ändern",
+    "back": "Zurück",
+    "change_folder_name_text": "Neue name eingeben",
+    "folder_name_changed": "Folder Name geändert"
   },
   "dashboard": {
     "MSG_feed_text": "hat eine Nachricht gesendet",
@@ -448,7 +455,15 @@
     "delete set": "Satz löschen",
     "back": "Zurück",
     "notes empty list": "Keine Notizen vorhanden",
-    "today": "Heute"
+    "today": "Heute",
+    "apply to all sets": "Für alle anwenden",
+    "info": "Info",
+    "settings": "Einstellungen",
+    "notes": "Notizen",
+    "chats": "Chats",
+    "charts": "Graphiken",
+    "no protocolls": "Keine Protokolle",
+    "apply": "Übernehmen"
   },
   "exercises": {
     "exercises": "Übungen",
@@ -516,7 +531,12 @@
     "create exercise": "Übung anlegen",
     "recently used": "zuletzt verwendet",
     "exit edit mode": "Bearbeitung beenden",
-    "forearm": "Unterarm"
+    "forearm": "Unterarm",
+    "folder deleted": "Folder wurde gelöscht",
+    "change_folder_name": "Folder name ändern",
+    "back": "Zurück",
+    "change_folder_name_text": "Neue name eingeben",
+    "folder_name_changed": "Folder Name geändert"
   },
   "login": {
     "forgot_password": "Passwort vergessen?",
@@ -902,7 +922,23 @@
     "lines": "Zeilen",
     "print-information": "Für druckbare PDFs sind 3 Zeilen mit je 65 Zeichen verfügbar.",
     "customer inactive": "Kunden-Account nicht aktiviert",
-    "send activation": "Aktivierungsmail versenden"
+    "send activation": "Aktivierungsmail versenden",
+    "duration": "Plandauer",
+    "change default values": "VOREINSTELLUNGEN ÄNDERN",
+    "apply default values": "VOREINSTELLUNGEN FÜR ALLE ÜBUNGEN IM PLAN ANWENDEN",
+    "create pdf": "PDF ERSTELLEN",
+    "send email": "EMAILEN",
+    "assign to another customer": "ANDEREM KUNDEN ZUORDNEN",
+    "save as my template": "ALS MEINE VORLAGE SPEICHERN",
+    "change plan": "TRAININGSPLAN ÄNDERN",
+    "delete plan": "TRAININGSPLAN LÖSCHEN",
+    "delete plan title": "Plan löschen",
+    "delete plan question": "Trainingsplan sicher löschen?",
+    "delete": "Löschen",
+    "back": "Zurück",
+    "apply": "Anwenden",
+    "apply configuration question": "Folgende Konfiguration wird auf alle Übungen angewendet:",
+    "assign-to-user": "Kunde zuordnen"
   },
   "workouts": {
     "split": "Split",

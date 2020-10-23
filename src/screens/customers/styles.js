@@ -49,10 +49,12 @@ export const StageHeader = styled.div`
   display: flex;
   .folder-name {
     font-size: 2em;
-    line-height: 2em;
+    display: flex;
+    align-items: center;
     padding-left: 0.5em;
     font-weight: bold;
     color: #34acfb;
+    cursor: pointer;
   }
 `;
 
@@ -214,6 +216,20 @@ export const StyledCreateCustomerDialog = styled(Dialog)`
         }
       }
     }
+  }
+`;
+
+export const ChangeFolderNameDialog = styled(Dialog)`
+  .MuiDialog-paper {
+    width: 40%;
+  }
+  .MuiDialogContentText-root, .MuiTextField-root {
+    width: 100%;
+  }
+  .MuiCircularProgress-root {
+    position: absolute;
+    right: 25%;
+    margin-top: 6px;
   }
 `;
 

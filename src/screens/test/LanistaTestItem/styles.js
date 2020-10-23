@@ -411,6 +411,14 @@ export const TestItem = styled.div`
       height: 42px;
     }
   }
+  .test-side {
+    background: black;
+    color: white;
+    height: 100%;
+    width: 30px;
+    text-align: center;
+    line-height: 43px;
+  }
   .selected {
     color: white;
   }

@@ -72,6 +72,7 @@ export const StyledAnamneseList = styled.div`
     background-color: #efefef;
     border-radius: 5px;
     overflow: scroll;
+    padding-bottom: 4em;
     .empty-list {
       padding-top: 24%;
       text-align: center;

@@ -376,6 +376,14 @@ export const DELETEFOLDER = gql`
   }
 `;
 
+export const CHANGEFOLDERNAME = gql`
+  mutation ChangeFolderName( $folderId: ID!, $newName: String! ) {
+     changeFolderName(folderId: $folderId, newName: $newName) {
+       id
+     }
+  }
+`;
+
 export const ADDMEMBERTOFOLDER = gql`
   mutation AddMemberToFolder( $folderId: ID!, $memberId: ID! ) {
      addMemberToFolder(folderId: $folderId, memberId: $memberId) {

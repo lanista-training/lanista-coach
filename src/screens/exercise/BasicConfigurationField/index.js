@@ -8,7 +8,16 @@ import TextField from '@material-ui/core/TextField';
 import WeightField from '../WeightField';
 import TrainingField from '../TrainingField';
 
-export default ({t, loading, isActive, toggleIsActive, settings, onSettingsChange, editable}) => {
+export default ({
+  t,
+  loading,
+  isActive,
+  toggleIsActive,
+  settings,
+  onSettingsChange,
+  onSyncSettings,
+  editable,
+}) => {
 
   const [editingMode, setEditingMode] = useState(false);
   const [activeField, setActiveField] = useState(null);
@@ -56,13 +65,6 @@ export default ({t, loading, isActive, toggleIsActive, settings, onSettingsChang
   }, [settings]);
 
 
-
-
-
-
-
-
-
   const onAddSet = () => {
     let tmp = [...setsConfiguration];
     tmp.push({
@@ -80,44 +82,24 @@ export default ({t, loading, isActive, toggleIsActive, settings, onSettingsChang
 
   }
 
+  const onApplyToAllSets = () => {
+    let tmp = [...setsConfiguration];
 
-  //
-  // Animation functions
-  //
-  const fieldVariants = {
-    open: {
-      background: 'rgb(0, 0, 0)',
-      color: 'rgb(255, 255, 255)',
-      width: '70%',
-      height: '9em',
-    },
-    close: {
-      background: 'rgb(255, 255, 255)',
-      color: 'rgb(0, 0, 0)',
-      width: '100%',
-      height: '7em',
-    },
-  };
-  const buttonVariants = {
-    open: {
-      display: 'none',
-    },
-    close: {
-      display: 'initial',
-    },
-  };
-  const valueFielsdVariants = {
-    active: {
-      fontSize: 40,
-      paddingBottom: '0.2em',
-    },
-    inactive: {
-      fontSize: 30,
-      paddingBottom: '0em',
-    },
+    onSettingsChange({
+      ...settings,
+      training,
+      weight,
+      unit,
+      setsConfiguration: tmp.map(set => {
+        set.weight = weight;
+        set.training = training;
+        set.unit = unit;
+        return set;
+      }),
+    });
+    onSyncSettings();
+
   }
-
-  console.log("Basic configuraiton", t)
 
   return <Panel>
     <div className="label">{t("basic-configuration")}</div>
@@ -181,17 +163,31 @@ export default ({t, loading, isActive, toggleIsActive, settings, onSettingsChang
       </div>
     </div>
     {editable &&
-      <Button
-        size='large'
-        className="plus-button"
-        circular
-        color='black'
-        icon='plus'
-        onClick={() => {
-          onAddSet();
-        }}
-        content={t("add set")}
-      />
+      <>
+        <Button
+          size='large'
+          className="plus-button"
+          circular
+          color='black'
+          icon='plus'
+          onClick={() => {
+            onAddSet();
+          }}
+          content={t("add set")}
+        />
+        <Button
+          size='large'
+          className="plus-button"
+          circular
+          color='black'
+          onClick={() => {
+            console.log("APPLY TO ALL SETS");
+            onApplyToAllSets();
+          }}
+          content={t("apply to all sets")}
+          style={{marginLeft: "5px"}}
+        />
+      </>
     }
   </Panel>
 }

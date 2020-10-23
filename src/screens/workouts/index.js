@@ -10,7 +10,7 @@ import Scene from "../../components/Scene";
 import Workouts from './Workouts';
 import WorkoutsHeader from "../../components/WorkoutsHeader";
 import { MEMBER, WORKOUTS, PLUGINS, ME } from "../../queries";
-import { CLONEPLAN, CREATEPLAN } from "../../mutations";
+import { CREATEPLAN } from "../../mutations";
 import { Search } from 'semantic-ui-react';
 
 import Help from '../../components/icons/Help';
@@ -21,6 +21,8 @@ import SearchIcon from '../../components/icons/Search';
 import List from '../../components/icons/List';
 
 import CreatePlanDialogPanel from '../customer/CreatePlanDialogPanel';
+
+import {ImageBlock, Foto, CustomerHeader, TextBlock, FirstName, LastName, CustomerSection} from './styles';
 
 const Centered  = styled.div`
   padding-top: 26vh;
@@ -55,9 +57,19 @@ const WorkoutsPanel = ({memberId, goBack, goToWorkout, goToSetup}) => {
 
   const [filter, setFilter] = React.useState('');
 
+  const { data:meData } = useQuery(ME);
+  const {me} = meData ? meData : {me: {}};
+
+  const { loading: memberDataLoading, data:memberData } = useQuery(MEMBER, {
+    variables: {
+      memberId: localStorage.getItem('assignToUser'),
+    }
+  });
+
   const { loading: workoutsLoading, error: workoutsError, data: workoutsData, networkStatus } = useQuery(WORKOUTS, {
     variables: {
       filter: filter,
+      language: me.language,
     },
     fetchPolicy: "network-only",
     notifyOnNetworkStatusChange: true,
@@ -66,18 +78,6 @@ const WorkoutsPanel = ({memberId, goBack, goToWorkout, goToSetup}) => {
 
   const { loading: pluginsLoading, error: pluginsError, data: pluginsData } = useQuery(PLUGINS);
   const {plugins} = pluginsData ? pluginsData: {plugins:[]};
-
-  const { data:meData } = useQuery(ME);
-  const {me} = meData ? meData : {me: {}}
-
-  const [clonePlan, { loading: clonePlanLoading, error: clonePlanError }] = useMutation(
-    CLONEPLAN,
-    {
-      update(cache,  { data: {clonePlan} }) {
-        goBack();
-      }
-    }
-  );
 
   const [createPlan, { loading: createPlanLoading, error: createPlanError }] = useMutation(
     CREATEPLAN,
@@ -115,6 +115,8 @@ const WorkoutsPanel = ({memberId, goBack, goToWorkout, goToSetup}) => {
   }
 
   const openWorkout = (workoutId) => {
+    goToWorkout(workoutId);
+    /*
     if( memberId && memberId > 0 ) {
       clonePlan({
         variables: {
@@ -124,14 +126,8 @@ const WorkoutsPanel = ({memberId, goBack, goToWorkout, goToSetup}) => {
       });
     } else {
       goToWorkout(workoutId);
-      /*
-      Router.push({
-        pathname: '/workout',
-        query: { workout: workoutId }
-      });
-      */
     }
-
+    */
   }
 
   const curateTextSearchResults = (results) => {
@@ -165,10 +161,13 @@ const WorkoutsPanel = ({memberId, goBack, goToWorkout, goToSetup}) => {
         name: 'back',
         style: {color: '#34acfb'},
         onTap: () => {
+          window.localStorage.removeItem('assignToUser');
           goBack();
         }
     }]);
   }
+
+  const {first_name, last_name, photoUrl} = memberData ? memberData.member : {};
 
   return (
     <Scene
@@ -186,6 +185,17 @@ const WorkoutsPanel = ({memberId, goBack, goToWorkout, goToSetup}) => {
             plugins={(plugins) ? plugins : [] }
           />
           <Counter className="counter"><span>{t("plans")}</span> {workouts && workouts.length}</Counter>
+          { localStorage.getItem('assignToUser') && (
+            <CustomerSection>
+              <TextBlock >
+                <LastName >{last_name}</LastName>
+                <FirstName >{first_name}</FirstName>
+              </TextBlock>
+              <ImageBlock editable={false} status={0}>
+                <Foto style={{ backgroundImage: 'url(' + photoUrl }} editable={false}/>
+              </ImageBlock>
+            </CustomerSection>
+          )}
        </>
       }
       networkStatus={networkStatus}
@@ -195,7 +205,6 @@ const WorkoutsPanel = ({memberId, goBack, goToWorkout, goToSetup}) => {
       workouts={workouts ? workouts : []}
       t={t}
       openWorkout={openWorkout}
-      clonePlanLoading={clonePlanLoading}
     />
 
     <CreatePlanDialogPanel

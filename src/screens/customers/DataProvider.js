@@ -5,7 +5,7 @@ import gql from "graphql-tag";
 import moment from "moment";
 import { useRouter } from 'next/router';
 import { MEMBERS, ME, MEMBER, MEMBERFOLDERS } from "../../queries";
-import { CLONEPLAN, ADDMEMBERTOFOLDER, DELETEMEMBERFROMFOLDER, CREATEFOLDER, DELETEFOLDER } from "../../mutations";
+import { CLONEPLAN, ADDMEMBERTOFOLDER, DELETEMEMBERFROMFOLDER, CREATEFOLDER, DELETEFOLDER, CHANGEFOLDERNAME } from "../../mutations";
 
 const SELECTED_FOLDER_ID = gql`
   {
@@ -177,6 +177,25 @@ const WithData = (WrappedComponent, {workoutId, goBack, goToCustomer, goToSetup}
       }
     );
 
+    const [folderNameChanged, setFolderNameChanged] = React.useState(false);
+    const [changeFolderName, {
+      loading: changeFolderNameLoading,
+      error: changeFolderNameError
+    }] = useMutation(
+      CHANGEFOLDERNAME,
+      {
+        update(cache,  { data: {changeFolderName} }) {
+          if(changeFolderName.id > 0) {
+            setFolderNameChanged(true);
+            refetchFolders();
+          }
+        }
+      }
+    );
+    const onCloseFolderNameChangeDialog = () => {
+      setFolderNameChanged(false);
+    }
+
     const {
       loading: meLoading,
       error: meError,
@@ -222,6 +241,12 @@ const WithData = (WrappedComponent, {workoutId, goBack, goToCustomer, goToSetup}
         createFolderError={createFolderError}
         createdFolder={createdFolder}
         setCreatedFolder={setCreatedFolder}
+
+        changeFolderName={changeFolderName}
+        changeFolderNameLoading={changeFolderNameLoading}
+        changeFolderNameError={changeFolderNameError}
+        folderNameChanged={folderNameChanged}
+        onCloseFolderNameChangeDialog={onCloseFolderNameChangeDialog}
 
         deleteFolder={deleteFolder}
         deleteFolderLoading={deleteFolderLoading}

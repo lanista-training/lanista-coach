@@ -160,7 +160,7 @@ export const StyledTab = styled(Tab)`
     float: right;
     width: 25px;
     height: 25px;
-    font-size: 0.7em;
+    font-size: 10px;
     background: grey;
     color: white;
     border-radius: 50%;

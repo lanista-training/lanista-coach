@@ -15,7 +15,6 @@ const withData = (WrappedComponent, {exerciseId, planexerciseId, memberId, tab, 
 
     const { loading, error, data, refetch, networkStatus } = useQuery(EXERCISE, {
       variables: {
-        notifyOnNetworkStatusChange: true,
         exerciseId: exerciseId,
         memberId: memberId,
         planexerciseId: planexerciseId ? planexerciseId : 0,
@@ -23,6 +22,7 @@ const withData = (WrappedComponent, {exerciseId, planexerciseId, memberId, tab, 
       },
       fetchPolicy: 'no-cache',
       errorPolicy: 'ignore',
+      notifyOnNetworkStatusChange: true,
     });
 
     const {exercise} = data ? data : {};

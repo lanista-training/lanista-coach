@@ -13,6 +13,7 @@ import {
   FolderName,
   StyledDialog,
   CreateExerciseDialog,
+  ChangeFolderNameDialog,
   SearchFilter,
 } from "./styles";
 import List from '@material-ui/core/List';
@@ -27,7 +28,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import Button from '@material-ui/core/Button';
+import Button from '../../components/LanistaButton';
 import { AnimatePresence,  motion } from "framer-motion";
 
 import Help from '../../components/icons/Help';
@@ -41,6 +42,8 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
 const extractSuggestions = ( word, exercises ) => {
   const result = [];
@@ -119,6 +122,12 @@ const Panel = ({
   deletedFolder,
   setDeletedFolder,
 
+  changeFolderName,
+  changeFolderNameLoading,
+  changeFolderNameError,
+  folderNameChanged,
+  onCloseFolderNameChangeDialog,
+
   onCreateExercise,
   createExerciseLoading,
   createExerciseError,
@@ -140,6 +149,12 @@ const Panel = ({
 }) => {
 
   const {t} = useTranslate("exercises");
+
+  //
+  // Folder deleted alert
+  //
+  const[folderDeletedAlert, setFolderDeletedAlert] = React.useState(false);
+  const toggleFolderDeletedAlert = () => setFolderDeletedAlert(!folderDeletedAlert);
 
   //
   // Filter Tab handling
@@ -567,7 +582,7 @@ const Panel = ({
   }
 
   const getCommandsLeft = () => {
-    return (filterVisible ? [] : [{
+    return (filterVisible ? [] : folderMode === null ? [{
           //icon: CustomerIcon,
           icon: <Back/>,
           text: '',
@@ -629,7 +644,7 @@ const Panel = ({
               }
             }
           }
-      }]);
+      }] : []);
   }
 
   const onRemoveExerciseFromFolder = (exerciseId) => {
@@ -688,11 +703,36 @@ const Panel = ({
     } else if( !exerciseFoldersLoading && deletedFolder > 0 ) {
       setDeletedFolder(null);
       toggleDeleteFolderDialogOpen();
-      toggleFilter();
+      setFilter({
+        ...filter,
+        folder: null,
+        folderId: 0,
+      });
+      toggleFolderDeletedAlert();
     }
   }, [exerciseFolders]);
 
-  console.log("selection", editmode, selection, currentSelection);
+  //
+  // Change folder name
+  //
+  const [ newFolderName, setNewFolderName ] = React.useState('');
+  const [ changeFolderNameDialog, setChangeFolderNameDialog ] = React.useState(false);
+  const toggleChangeFolderNameDialog = () => setChangeFolderNameDialog(!changeFolderNameDialog);
+  const onFolderNameClick = () => {
+    setNewFolderName(folder.name);
+    toggleChangeFolderNameDialog();
+  }
+  const onChangeFolderName = () => {
+    changeFolderName({
+      variables: {
+        folderId: folder.id,
+        newName: newFolderName,
+      }
+    })
+  };
+  useEffect(() => {
+    !changeFolderNameDialog && onCloseFolderNameChangeDialog();
+  }, [changeFolderNameDialog])
 
   return(
     <Scene
@@ -701,7 +741,7 @@ const Panel = ({
       headerChildren={
         <>
           {folder &&
-            <FolderName className="folder-name">
+            <FolderName className="folder-name" onClick={onFolderNameClick}>
               {folder && folder.name}
             </FolderName>
           }
@@ -717,7 +757,7 @@ const Panel = ({
           />
         </>
       }
-      renderLogo={folder ? () => <FolderIcon className="folder-logo"/> : null}
+      renderLogo={folder ? () => <FolderIcon className="folder-logo" onClick={onFolderNameClick}/> : null}
       mode={folder ? 'folder' : null}
       t={t}
       networkStatus={networkStatus}
@@ -914,6 +954,71 @@ const Panel = ({
           </DialogActions>
         </CreateExerciseDialog>
       }
+
+      <ChangeFolderNameDialog
+        open={changeFolderNameDialog}
+        onClose={toggleChangeFolderNameDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="change-folder-dialog-title">{t("change_folder_name")}</DialogTitle>
+        <DialogContent>
+          {
+            !folderNameChanged &&
+            <>
+              <DialogContentText id="change-folder-dialog-description-1">
+                {t("change_folder_name_text")}
+              </DialogContentText>
+              <DialogContentText id="change-folder-dialog-description-2">
+                <TextField
+                  id="folder-name"
+                  variant="outlined"
+                  value={newFolderName}
+                  onChange={e => setNewFolderName(e.target.value)}
+                  autoFocus={true}
+                />
+              </DialogContentText>
+            </>
+          }
+          {
+            folderNameChanged &&
+            <>
+              <DialogContentText id="change-folder-dialog-description-1">
+                {t("folder_name_changed")}
+              </DialogContentText>
+            </>
+          }
+        </DialogContent>
+        <DialogActions>
+          <div className="dialog-button">
+            <Button
+              onClick={toggleChangeFolderNameDialog}
+              inverted={folderNameChanged}
+            >
+              {t("back")}
+            </Button>
+          </div>
+          {!folderNameChanged &&
+            <div className="dialog-button">
+              <Button
+                onClick={onChangeFolderName}
+                inverted
+                autoFocus
+              >
+                {t("change_folder_name")}
+              </Button>
+              {changeFolderNameLoading && <CircularProgress size={24} />}
+            </div>
+          }
+        </DialogActions>
+      </ChangeFolderNameDialog>
+
+      <Snackbar open={folderDeletedAlert} autoHideDuration={6000} onClose={toggleFolderDeletedAlert}>
+        <MuiAlert severity="success" elevation={6} variant="filled">
+          {t("folder deleted")}
+        </MuiAlert>
+      </Snackbar>
+
     </Scene>
   )
 }

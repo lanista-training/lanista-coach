@@ -172,7 +172,7 @@ const Exercises = ({
                 }}
                 disabled={folderName.length === 0}
                 color="primary" autoFocus>
-                {t("create_folder_ok")}
+                {t("create_folder")}
               </Button>
               {createFolderLoading && <CircularProgress size={24} />}
             </div>

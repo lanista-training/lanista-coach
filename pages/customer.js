@@ -52,7 +52,7 @@ function Customer({memberId}) {
   const goToWorkouts = () => {
     Router.push({
       pathname: '/workouts',
-      query: { customer: memberId }
+      //query: { customer: memberId }
     });
   }
   const goToProfile = () => {

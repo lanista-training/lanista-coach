@@ -26,7 +26,7 @@ import {
   DUPLICATESPLIT,
   SENDACTIVATIONMAIL,
 } from "../../mutations";
-import {StyledDrawer, StyledSnackbar } from './styles';
+import {StyledDrawer, StyledSnackbar, ImageBlock, Foto, CustomerHeader, TextBlock, FirstName, LastName, CustomerSection } from './styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -38,10 +38,13 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import MuiAlert from '@material-ui/lab/Alert';
+
+import Avatar from '@material-ui/core/Avatar';
 
 import DefaultSettingsPanel from '../../components/DefaultSettingsPanel';
 import WorkoutEditPanel from '../../components/WorkoutEditPanel';
@@ -56,6 +59,7 @@ import Plus from '../../components/icons/Plus';
 import Settings from '../../components/icons/Settings';
 import Export from '../../components/icons/Export';
 import Edit from '../../components/icons/Edit';
+import CreateUser from '../../components/icons/CreateUser';
 
 const GET_DEFAULTSETTINGS = gql`
   {
@@ -140,6 +144,12 @@ const Panel = ({
   });
   const { data:meData } = useQuery(ME);
   const {me} = meData ? meData : {me: {}}
+
+  const { loading: memberDataLoading, data:memberData } = useQuery(MEMBER, {
+    variables: {
+      memberId: localStorage.getItem('assignToUser'),
+    }
+  });
 
   //
   // Local state
@@ -315,7 +325,6 @@ const Panel = ({
     SENDPLAN,
     {
       update(cache,  { data: { sendPlan } }) {
-        console.log("sendPlan")
         toggleSendPanelOpen();
         setSnackbarData({message: "Plan erfolgreich gesendet !", action: null})
         toggleSnackbar();
@@ -351,11 +360,19 @@ const Panel = ({
     CLONEPLAN,
     {
       update(cache,  { data: {clonePlan} }) {
+        console.log("clonePlan update")
         const {id} = clonePlan;
         if( id > 0 ) {
-          localStorage.setItem('openplan', id);
-          goToRoot();
-          goToWorkouts();
+          if( localStorage.getItem('assignToUser') ) {
+            localStorage.removeItem('assignToUser');
+            localStorage.setItem('openplan', id);
+            goBack();
+            goBack();
+          } else {
+            localStorage.setItem('openplan', id);
+            goToRoot();
+            goToWorkouts();
+          }
         }
 
       }
@@ -404,7 +421,9 @@ const Panel = ({
 
   const getCommandsRight = () =>  {
     let rightCommand = [];
-    if( (workout && !workout.template) || (workout && me.id == workout.creator_id) ) {
+    const assignToCustomerMode = localStorage.getItem('assignToUser') ? true : false;
+    console.log("assignToCustomerMode", assignToCustomerMode)
+    if( !assignToCustomerMode && ((workout && !workout.template) || (workout && me.id == workout.creator_id) )) {
       rightCommand.push(
         {
           icon: <Plus/>,
@@ -426,7 +445,7 @@ const Panel = ({
         }
       );
     }
-    rightCommand.push(
+    !assignToCustomerMode && rightCommand.push(
       {
         icon: <Export/>,
         name: 'export-plan',
@@ -436,7 +455,7 @@ const Panel = ({
         }
       }
     );
-    if( (workout && !workout.template )|| (workout && me.id == workout.creator_id)) {
+    if( !assignToCustomerMode &&  ((workout && !workout.template )|| (workout && me.id == workout.creator_id))) {
       rightCommand.push(
         {
           icon: <Edit/>,
@@ -444,6 +463,29 @@ const Panel = ({
           name: 'change-plan',
           onTap: () => {
             toggleOptionsDrawer();
+          }
+        }
+      );
+    }
+    if( assignToCustomerMode ) {
+      const {first_name, last_name, photoUrl} = memberData ? memberData.member : {};
+      const icon = clonePlanLoading ? <CircularProgress style={{color: "black"}}/> : <Avatar alt={first_name + ' ' + last_name} src={photoUrl}/>;
+      rightCommand.push(
+        {
+          icon: icon,
+          text: t('assign-to-user'),
+          name: 'assign-to-user',
+          onTap: () => {
+            console.log("assignToUser")
+            console.log(localStorage.getItem('assignToUser'))
+            if( localStorage.getItem('assignToUser') ) {
+              clonePlan({
+                variables: {
+                  memberId: localStorage.getItem('assignToUser'),
+                  planId: workoutId,
+                }
+              });
+            }
           }
         }
       );
@@ -633,17 +675,30 @@ const Panel = ({
     })
   }
 
-  console.log("activeSplitIndex", activeSplitIndex)
+  console.log("workout", workout)
 
   return (
     <Scene
       commandsLeft={getCommandsLeft()}
       commandsRight={getCommandsRight()}
       headerChildren={
-        <WorkoutHeader
-          title={workout ? workout.name : ''}
-          subtitle={workout ? ('Plandauer: ' + workout.duration + ' Wochen') : ''}
-        />
+        <>
+          <WorkoutHeader
+            title={workout ? workout.name : ''}
+            subtitle={workout ? (t("duration") + workout.duration + ' Wochen') : ''}
+          />
+        { workout && workout.member && (
+            <CustomerSection>
+              <TextBlock >
+                <LastName >{workout.member.last_name}</LastName>
+                <FirstName >{workout.member.first_name}</FirstName>
+              </TextBlock>
+              <ImageBlock editable={false} status={0}>
+                <Foto style={{ backgroundImage: 'url(' + workout.member.photoUrl }} editable={false}/>
+              </ImageBlock>
+            </CustomerSection>
+          )}
+        </>
       }
       t={t}
       networkStatus={networkStatus}
@@ -659,7 +714,7 @@ const Panel = ({
         onDeleteExercise={onDeleteExercise}
         defaultSettings={defaultSettings}
         setDefaultSettings={setDefaultSettings}
-        editable={(workout && !workout.template) || (workout && me.id == workout.creator_id)}
+        editable={(!window.localStorage.getItem('assignToUser') && workout && !workout.template) || (!window.localStorage.getItem('assignToUser') && workout && me.id == workout.creator_id)}
         createSplit={createSplit}
         activeSplitIndex={activeSplitIndex}
         setActiveSplitIndex={setActiveSplitIndex}
@@ -684,12 +739,12 @@ const Panel = ({
         <List>
           <div className="list-item-wrapper">
             <ListItem button key="new-plan" onClick={changeDefaultSettings}>
-              <ListItemText primary={"VOREINSTELLUNGEN ÄNDERN"} />
+              <ListItemText primary={t("change default values")} />
             </ListItem>
           </div>
           <div className="list-item-wrapper">
             <ListItem button key="new-plan-from-templates" onClick={applyDefaultSettings}>
-              <ListItemText primary={"VOREINSTELLUNGEN FÜR ALLE ÜBUNGEN IM PLAN ANWENDEN"} />
+              <ListItemText primary={t("apply default values")} />
             </ListItem>
           </div>
         </List>
@@ -711,22 +766,22 @@ const Panel = ({
         <List>
           <div className="list-item-wrapper">
             <ListItem button key="new-plan" onClick={onPrintPlan}>
-              <ListItemText primary={"PDF ERSTELLEN"} />
+              <ListItemText primary={t("create pdf")} />
             </ListItem>
           </div>
           <div className="list-item-wrapper">
             <ListItem button key="new-plan-from-templates" onClick={emailPlan}>
-              <ListItemText primary={"EMAILEN"} />
+              <ListItemText primary={t("send email")} />
             </ListItem>
           </div>
           <div className="list-item-wrapper">
             <ListItem button key="new-plan-from-templates" onClick={assignPlan}>
-              <ListItemText primary={"ANDEREM KUNDEN ZUORDNEN"} />
+              <ListItemText primary={t("assign to another customer")} />
             </ListItem>
           </div>
           <div className="list-item-wrapper">
             <ListItem button key="new-plan-from-templates" onClick={createTemplate}>
-              <ListItemText primary={"ALS MEINE VORLAGE SPEICHERN"} />
+              <ListItemText primary={t("save as my template")} />
             </ListItem>
           </div>
         </List>
@@ -748,12 +803,12 @@ const Panel = ({
         <List>
           <div className="list-item-wrapper">
             <ListItem button key="new-plan" onClick={changePlan}>
-              <ListItemText primary={"TRAININGSPLAN ÄNDERN"} />
+              <ListItemText primary={t("change plan")} />
             </ListItem>
           </div>
           <div className="list-item-wrapper">
             <ListItem button key="new-plan-from-templates" onClick={onDeletePlan}>
-              <ListItemText primary={"TRAININGSPLAN LÖSCHEN"} />
+              <ListItemText primary={t("delete plan")} />
             </ListItem>
           </div>
         </List>
@@ -769,15 +824,15 @@ const Panel = ({
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">{"Trainingsplan löschen?"}</DialogTitle>
+      <DialogTitle id="alert-dialog-title">{t("delete plan title")}</DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          Trainingsplan sicher löschen?
+          {t("delete plan question")}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={toggleDialogOpen} color="primary">
-          Zurück
+          {t("back")}
         </Button>
         <Button onClick={() => {
           deletePlan({
@@ -786,7 +841,7 @@ const Panel = ({
             }
           })
         }} color="primary" autoFocus>
-          Löschen
+          {t("delete")}
         </Button>
       </DialogActions>
     </Dialog>
@@ -799,18 +854,18 @@ const Panel = ({
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Trainingsplan ändern?"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{t("change plan")}</DialogTitle>
         <DialogContent>
           <DialogContentText id="settings-dialog-description">
-            Folgende Konfiguration wird auf alle Übungen angewendet:
+            {t("apply configuration question")}
           </DialogContentText>
           <DialogContentText id="settings-dialog">
-            {defaultSettings.sets} Sätze. Je {defaultSettings.execution} {defaultSettings.unit == 0 ? 'Wdh.' : defaultSettings.unit == 1 ? 'Sek.' : 'Min.'}
+            {defaultSettings.sets} {t("sets")} / {defaultSettings.execution} {defaultSettings.unit == 0 ? t("rep") : defaultSettings.unit == 1 ? t("sec") : t("min")}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={toggleApplySettingsDialogOpen} color="primary">
-            Zurück
+            {t("back")}
           </Button>
           <Button onClick={() => {
             console.log("Button click");
@@ -824,7 +879,7 @@ const Panel = ({
             })
             toggleApplySettingsDialogOpen();
           }} color="primary" autoFocus>
-            Anwenden
+            {t("apply")}
           </Button>
         </DialogActions>
       </Dialog>

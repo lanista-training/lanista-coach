@@ -37,7 +37,7 @@ export default ({
       workoutDay.map( (workout) => {
         orm += (workout.weight * workout.repetitions * 0.033) + workout.weight;
       });
-      tmp["orm"] = orm / _.size(workouts);
+      tmp["orm"] = orm / _.size(workoutDay);
     }
 
     return tmp;

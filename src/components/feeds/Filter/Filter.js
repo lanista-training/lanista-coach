@@ -29,6 +29,7 @@ const StyledFilter = styled.div`
   margin-right: 25%;
   background-color: transparent!important;
   .MuiToggleButtonGroup-root {
+    backgroun: white;
     box-shadow: 0 0 27px 0 #0000001f!important;
   }
   button {

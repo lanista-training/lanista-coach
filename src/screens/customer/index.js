@@ -658,7 +658,6 @@ const CustomerPane = ({
   }
 
   const openWorkout = (workoutId) => {
-    console.log("openWorkout", workoutId)
     goToWorkout(workoutId);
     /*
     Router.push({
@@ -753,6 +752,7 @@ const CustomerPane = ({
   }
 
   const onCreatePlanFromTemplate = () => {
+    window.localStorage.setItem('assignToUser', memberId);
     goToWorkouts();
     /*
     Router.push({

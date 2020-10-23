@@ -128,7 +128,7 @@ export default ({
           />)
         }
         {
-          _.size(workouts) === 0 && <div className="empty-list">Keine protokolle</div>
+          _.size(workouts) === 0 && <div className="empty-list">{t("no protocolls")}</div>
         }
       </div>
     </Tab.Pane>

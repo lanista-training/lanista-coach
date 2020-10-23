@@ -4,7 +4,7 @@ import { withApollo } from '../../lib/apollo';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import gql from "graphql-tag";
 import moment from "moment";
-import { ADDEXERCISESTOPLAN, ADDEXERCISESTOTEST, ADDEXERCISETOFOLDER, DELETEEXERCISEFROMFOLDER, CREATEFOLDER, DELETEFOLDER, CREATEEXERCISE} from "../../mutations";
+import { ADDEXERCISESTOPLAN, ADDEXERCISESTOTEST, ADDEXERCISETOFOLDER, DELETEEXERCISEFROMFOLDER, CREATEFOLDER, DELETEFOLDER, CREATEEXERCISE, CHANGEFOLDERNAME} from "../../mutations";
 import { EXERCISES, WORKOUT, EXERCISEFOLDERS, OWNTEST, ME } from "../../queries";
 
 // Hook
@@ -116,6 +116,7 @@ const withData = (WrappedComponent, {editmode, workout: workoutId, split, member
         substractFolderExercises: folderMode == 1,
         private: filter.private,
         recentlyUsed: filter.recentlyUsed,
+        language: me.language,
       },
       fetchPolicy: 'cache-and-network',
       notifyOnNetworkStatusChange: true,
@@ -143,6 +144,7 @@ const withData = (WrappedComponent, {editmode, workout: workoutId, split, member
           folderId: filter.folderId,
           substractFolderExercises: folderMode == 1,
           private: filter.private,
+          language: me.language,
         },
         updateQuery: (prev, { fetchMoreResult, ...rest }) => {
           if( initialLoading ) {
@@ -236,6 +238,25 @@ const withData = (WrappedComponent, {editmode, workout: workoutId, split, member
         }
       }
     );
+
+    const [folderNameChanged, setFolderNameChanged] = React.useState(false);
+    const [changeFolderName, {
+      loading: changeFolderNameLoading,
+      error: changeFolderNameError
+    }] = useMutation(
+      CHANGEFOLDERNAME,
+      {
+        update(cache,  { data: {changeFolderName} }) {
+          if(changeFolderName.id > 0) {
+            setFolderNameChanged(true);
+            refetchFolders();
+          }
+        }
+      }
+    );
+    const onCloseFolderNameChangeDialog = () => {
+      setFolderNameChanged(false);
+    }
 
     const [addExerciseToFolder, {
       loading: addExerciseToFolderLoading,
@@ -357,6 +378,12 @@ const withData = (WrappedComponent, {editmode, workout: workoutId, split, member
         deleteFolderError={deleteFolderError}
         deletedFolder={deletedFolder}
         setDeletedFolder={setDeletedFolder}
+
+        changeFolderName={changeFolderName}
+        changeFolderNameLoading={changeFolderNameLoading}
+        changeFolderNameError={changeFolderNameError}
+        folderNameChanged={folderNameChanged}
+        onCloseFolderNameChangeDialog={onCloseFolderNameChangeDialog}
 
         onCreateExercise={onCreateExercise}
         createExerciseLoading={createExerciseLoading}

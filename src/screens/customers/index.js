@@ -14,6 +14,7 @@ import {
   StyledDrawer,
   StageHeader,
   StyledDialog,
+  ChangeFolderNameDialog,
   Loading,
 } from "./styles";
 import List from '@material-ui/core/List';
@@ -88,6 +89,12 @@ const Panel = ({
   deletedFolder,
   setDeletedFolder,
 
+  changeFolderName,
+  changeFolderNameLoading,
+  changeFolderNameError,
+  folderNameChanged,
+  onCloseFolderNameChangeDialog,
+
   filter,
   setFilter,
 
@@ -99,7 +106,6 @@ const Panel = ({
 
 }) => {
   const {t} = useTranslate("customers");
-console.log("goToSetup", goToSetup)
   const [hidden , setHidden] = useState(false);
   const [initialLoading, setInitialLoading] = useState(false);
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
@@ -427,6 +433,29 @@ console.log("goToSetup", goToSetup)
     }
   }, [clonePlanError, createFolderError]);
 
+  //
+  // Change folder name
+  //
+  const [ newFolderName, setNewFolderName ] = React.useState('');
+  const [ changeFolderNameDialog, setChangeFolderNameDialog ] = React.useState(false);
+  const toggleChangeFolderNameDialog = () => setChangeFolderNameDialog(!changeFolderNameDialog);
+  const onFolderNameClick = () => {
+    console.log("onFolderNameClick")
+    setNewFolderName(folder.name);
+    toggleChangeFolderNameDialog();
+  }
+  const onChangeFolderName = () => {
+    changeFolderName({
+      variables: {
+        folderId: folder.id,
+        newName: newFolderName,
+      }
+    })
+  };
+  useEffect(() => {
+    !changeFolderNameDialog && onCloseFolderNameChangeDialog();
+  }, [changeFolderNameDialog])
+
   return (
     <Scene
       commandsLeft={getCommandsLeft()}
@@ -434,7 +463,9 @@ console.log("goToSetup", goToSetup)
       processing={membersLoading}
       headerChildren={
         <StageHeader>
-          <div className="folder-name">{folder && folder.name}</div>
+          <div className="folder-name" onClick={onFolderNameClick}>
+            {folder && folder.name}
+          </div>
           <CustomerSearchField value={filter} onChange={(text) => {
             setFilter(text)
           }}/>
@@ -447,7 +478,7 @@ console.log("goToSetup", goToSetup)
           }
         </StageHeader>
       }
-      renderLogo={selectedFolderId > 0 ? () => <FolderIcon className="folder-logo"/> : null}
+      renderLogo={selectedFolderId > 0 ? () => <FolderIcon onClick={onFolderNameClick} className="folder-logo"/> : null}
       mode={selectedFolderId > 0 ? 'folder' : null}
       t={t}
       networkStatus={networkStatus}
@@ -578,6 +609,63 @@ console.log("goToSetup", goToSetup)
           toggleLicenceExpiredWarning={toggleLicenceExpiredWarning}
         />
       }
+      <ChangeFolderNameDialog
+        open={changeFolderNameDialog}
+        onClose={toggleChangeFolderNameDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="change-folder-dialog-title">{t("change_folder_name")}</DialogTitle>
+        <DialogContent>
+          {
+            !folderNameChanged &&
+            <>
+              <DialogContentText id="change-folder-dialog-description-1">
+                {t("change_folder_name_text")}
+              </DialogContentText>
+              <DialogContentText id="change-folder-dialog-description-2">
+                <TextField
+                  id="folder-name"
+                  variant="outlined"
+                  value={newFolderName}
+                  onChange={e => setNewFolderName(e.target.value)}
+                  autoFocus={true}
+                />
+              </DialogContentText>
+            </>
+          }
+          {
+            folderNameChanged &&
+            <>
+              <DialogContentText id="change-folder-dialog-description-1">
+                {t("folder_name_changed")}
+              </DialogContentText>
+            </>
+          }
+        </DialogContent>
+        <DialogActions>
+          <div className="dialog-button">
+            <Button
+              onClick={toggleChangeFolderNameDialog}
+              inverted={folderNameChanged}
+            >
+              {t("back")}
+            </Button>
+          </div>
+          {!folderNameChanged &&
+            <div className="dialog-button">
+              <Button
+                onClick={onChangeFolderName}
+                inverted
+                autoFocus
+              >
+                {t("change_folder_name")}
+              </Button>
+              {changeFolderNameLoading && <CircularProgress size={24} />}
+            </div>
+          }
+        </DialogActions>
+      </ChangeFolderNameDialog>
     </Scene>
   )
 }

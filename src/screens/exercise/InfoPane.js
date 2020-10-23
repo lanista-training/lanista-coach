@@ -22,7 +22,7 @@ import Input from '@material-ui/core/Input';
 //
 //  EDIT EXERCISE CONTENT
 //
-const EditSection = withApollo(({t, exerciseId, toggleEditMode, editNameMode, lang}) => {
+const EditSection = withApollo(({t, refetchExercise, exerciseId, toggleEditMode, editNameMode, lang}) => {
 
   const { loading, error, data:exerciseData, refetch } = useQuery(EXERCISE_EDIT, {
     variables: {
@@ -37,7 +37,11 @@ const EditSection = withApollo(({t, exerciseId, toggleEditMode, editNameMode, la
     UPDATEEXERCISE,
     {
       update(cache,  { data: { updateExercise } }) {
-        updateExercise.id !== 0 && refetch();
+        if( updateExercise.id !== 0 ){
+          console.log("updateExercise")
+          refetch();
+          refetchExercise();
+        }
       }
     }
   );
@@ -744,6 +748,7 @@ export default ({
         editMode &&
         <EditSection
           t={t}
+          refetchExercise={refetch}
           exerciseId={exercise.id}
           toggleEditMode={toggleEditMode}
           editNameMode={editNameMode}

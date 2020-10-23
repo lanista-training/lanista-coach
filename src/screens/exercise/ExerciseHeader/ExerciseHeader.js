@@ -39,7 +39,7 @@ const ExerciseName  = styled.div`
   margin-left: 0.5em;
   display: flex;
   font-size: 1.7em;
-  line-height: 2.5em;
+  align-items: center;
   font-weight: 100;
   svg {
     color: rgb(155,201,61);

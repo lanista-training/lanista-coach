@@ -304,8 +304,8 @@ export const EXERCISE_EDIT = gql`
 `
 
 export const EXERCISES = gql`
-  query Exercises($pageSize:Int, $after:String, $bodyFilters:[String] = [], $typeFilters:[String] = [], $toolFilters:[String] = [], $textFilter:String, $pluginFilters:[String] = [], $folderId: ID, $substractFolderExercises: Boolean, $private: Boolean, $recentlyUsed: Boolean) {
-    exercises(pageSize: $pageSize, after: $after, bodyFilters: $bodyFilters, typeFilters: $typeFilters, toolFilters: $toolFilters, textFilter: $textFilter, pluginFilters: $pluginFilters, folderId: $folderId, substractFolderExercises: $substractFolderExercises, private: $private, recentlyUsed: $recentlyUsed) {
+  query Exercises($pageSize:Int, $after:String, $bodyFilters:[String] = [], $typeFilters:[String] = [], $toolFilters:[String] = [], $textFilter:String, $pluginFilters:[String] = [], $folderId: ID, $substractFolderExercises: Boolean, $private: Boolean, $recentlyUsed: Boolean, $language: String) {
+    exercises(pageSize: $pageSize, after: $after, bodyFilters: $bodyFilters, typeFilters: $typeFilters, toolFilters: $toolFilters, textFilter: $textFilter, pluginFilters: $pluginFilters, folderId: $folderId, substractFolderExercises: $substractFolderExercises, private: $private, recentlyUsed: $recentlyUsed, language: $language) {
       cursor
       hasMore
       total
@@ -320,8 +320,8 @@ export const EXERCISES = gql`
 `
 
 export const WORKOUTS = gql`
-  query Workouts($filter:String) {
-    workouts(filter: $filter) {
+  query Workouts($filter:String, $language: String) {
+    workouts(filter: $filter, language: $language) {
       id
       name
       description
@@ -346,6 +346,9 @@ export const WORKOUT = gql`
       template
       member {
         id
+        first_name
+        last_name
+        photoUrl
         status
       }
       splits {

@@ -251,7 +251,10 @@
     "goal_rating_3": "medium",
     "goal_rating_4": "increased",
     "goal_rating_5": "high",
-    "goal_rating_6": "very high"
+    "goal_rating_6": "very high",
+    "new customer goal": "New goal",
+    "costomer info": "Info",
+    "plans": "Plans"
   },
   "customers": {
     "customers_found": "Results",
@@ -291,7 +294,11 @@
     "EXIT_EDIT_MODE": "Exit edit mode",
     "FOLDER": "Folder",
     "SEARCH": "Search",
-    "RECENTLY": "Recently"
+    "RECENTLY": "Recently",
+    "change_folder_name": "Change folder name",
+    "back": "Back",
+    "change_folder_name_text": "Enter the new name",
+    "folder_name_changed": "Folder name changed"
   },
   "dashboard": {
     "MSG_feed_text": "sent a message",
@@ -448,7 +455,15 @@
     "add set": "Add new set",
     "delete set": "Delete set",
     "back": "back",
-    "today": "Today"
+    "today": "Today",
+    "apply to all sets": "Apply to all sets",
+    "info": "Info",
+    "settings": "Settings",
+    "notes": "Notes",
+    "chats": "Chats",
+    "charts": "Statistics",
+    "no protocolls": "No protocolls",
+    "apply": "Apply changes"
   },
   "exercises": {
     "exercises": "Exercises",
@@ -516,7 +531,12 @@
     "create exercise": "create exercise",
     "recently used": "Recently used",
     "exit edit mode": "Exit edit mode",
-    "forearm": "Forearm"
+    "forearm": "Forearm",
+    "folder deleted": "Folder deleted",
+    "change_folder_name": "Change folder name",
+    "back": "Back",
+    "change_folder_name_text": "Enter the new name",
+    "folder_name_changed": "Folder name changed"
   },
   "login": {
     "forgot_password": "Forgot password?",
@@ -902,7 +922,23 @@
     "lines": "Lines",
     "print-information": "3 lines with 65 characters each are available for printable PDFs.",
     "customer inactive": "Customer account not activated",
-    "send activation": "Send activation mail"
+    "send activation": "Send activation mail",
+    "duration": "Duration",
+    "change default values": "CHANGE DEFAULT VALUES",
+    "apply default values": "APPLY DEFAULT VALUES TO ALL EXERCISES",
+    "create pdf": "CREATE PDF",
+    "send email": "SEND EMAIL",
+    "assign to another customer": "ASSIGN TO ANOTHER CUSTOMER",
+    "save as my template": "SAVE AS TEMPLATE",
+    "change plan": "CHANGE PLAN",
+    "delete plan": "DELETE PLAN",
+    "delete plan title": "Delete plan",
+    "delete plan question": "Delete the plan?",
+    "delete": "Delete",
+    "back": "Back",
+    "apply": "Apply",
+    "apply configuration question": "The following configuration will apply to all exercises:",
+    "assign-to-user": "Assign to user"
   },
   "workouts": {
     "split": "Split",

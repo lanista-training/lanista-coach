@@ -89,7 +89,7 @@ const Exercise = ({
   }
 
   const panes = [
-    { menuItem: 'Info', id: 'info', render: () =>
+    { menuItem: t("info"), id: 'info', render: () =>
       <InfoPane
         t={t}
         key="pane-info"
@@ -115,7 +115,7 @@ const Exercise = ({
   ]
 
   if( exercise && exercise.settings && editable ) {
-    panes.push({ menuItem: 'Einstellungen', id: 'settings', render: () =>
+    panes.push({ menuItem: t("settings"), id: 'settings', render: () =>
       <ConfigurationPane
         t={t}
         settings={settings}
@@ -129,7 +129,7 @@ const Exercise = ({
   if( notes ) {
     panes.push({ menuItem: (
       <Menu.Item key='notes'>
-        Notizen<Label>{notes.length}</Label>
+        {t("notes")}<Label>{notes.length}</Label>
       </Menu.Item>
     ), id: 'notes', render: () =>
       <NotesPane
@@ -149,7 +149,7 @@ const Exercise = ({
   if( chats && editable ) {
     panes.push({ menuItem: (
       <Menu.Item key='notes'>
-        Chats<Label>{chats.length}</Label>
+        {t("chats")}<Label>{chats.length}</Label>
       </Menu.Item>
     ), id: 'chats', render: () =>
       <Tab.Pane>
@@ -183,7 +183,7 @@ const Exercise = ({
   }
 
   if( groppedWorkouts && editable && exercise.member) {
-    panes.push({ menuItem: 'Graphiken', id: 'chart', render: () =>
+    panes.push({ menuItem: t("charts"), id: 'chart', render: () =>
       <ChartPane
         t={t}
         settings={settings}

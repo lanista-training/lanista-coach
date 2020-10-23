@@ -266,7 +266,6 @@ const Panel = ({
   // Delete exercise
   //
   const onDeleteExercise = () => {
-    console.log("onDeleteExercise");
     deleteExercise({
       variables: {
         exerciseId: exercise.id,

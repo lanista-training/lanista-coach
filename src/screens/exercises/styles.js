@@ -40,6 +40,7 @@ export const FolderName = styled.div`
   color: rgb(52,172,251);
   font-weight: 900;
   font-size: 18px;
+  cursor: pointer;
 `;
 export const ListSection = styled.div`
   overflow: auto;
@@ -172,6 +173,20 @@ export const StyledDialog = styled(Dialog)`
 `;
 
 export const CreateExerciseDialog = styled(Dialog)`
+  .MuiDialog-paper {
+    width: 40%;
+  }
+  .MuiDialogContentText-root, .MuiTextField-root {
+    width: 100%;
+  }
+  .MuiCircularProgress-root {
+    position: absolute;
+    right: 25%;
+    margin-top: 6px;
+  }
+`;
+
+export const ChangeFolderNameDialog = styled(Dialog)`
   .MuiDialog-paper {
     width: 40%;
   }

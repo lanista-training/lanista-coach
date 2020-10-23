@@ -92,6 +92,7 @@ export default ({t, settings, onSettingsChange, onSyncSettings, editable}) => {
           <BasicConfigurationField
             settings={settings}
             onSettingsChange={onSettingsChange}
+            onSyncSettings={onSyncSettings}
             isActive={isBasicConfigurationActive}
             toggleIsActive={toggleIsBasicConfigurationsActive}
             editable={editable}

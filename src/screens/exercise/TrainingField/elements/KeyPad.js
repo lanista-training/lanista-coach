@@ -21,6 +21,8 @@ import UnitButton from '@material-ui/core/Button';
 
 import LanistButton from '../../../../components/LanistaButton';
 
+import { useTranslate } from '../../../../hooks/Translation';
+
 const Content = styled(Paper)`
   border-radius: 15px;
   background: black!important;
@@ -250,6 +252,9 @@ const KeyPad = forwardRef(function KeyPad(
     clickedKey => keyboard.virtualInteraction('<', 10),
     []
   );
+
+  const {t} = useTranslate("exercise");
+
   return (
     <Content position={position} ref={ref} square>
       <div className="quick-access-section">
@@ -321,7 +326,7 @@ const KeyPad = forwardRef(function KeyPad(
         <LanistButton onClick={() => {
             confirm(inputValue);
           }} disabled={!validation(inputValue)}>
-          ÜBERNEHMEN
+          {t("apply")}
         </LanistButton>
       </div>
     </Content>

@@ -273,7 +273,7 @@ const Workout = ({
                       workout.description &&
                       workout.description.length > 0
                       ?
-                      workout.description.split('||').map((item, index) => <div className="description-content" key={"description-" + index}>{item}</div>)
+                      workout.description.split(/\|\||\n/).map((item, index) => <div className="description-content" key={"description-" + index}>{item}</div>)
                       :
                       t('no description available')
                     )
@@ -344,7 +344,7 @@ const Workout = ({
           <MenuItem onClick={() => {
               onDeleteExercise(selectedExecution.id);
               handleClose();
-            }}>Löschen</MenuItem>
+            }}>{t("delete")}</MenuItem>
         </Menu>
 
         <Menu

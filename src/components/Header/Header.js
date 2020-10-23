@@ -14,9 +14,10 @@ const Header = styled.div`
   z-index: 1;
   .folder-logo {
     margin-left: 0.5em;
-    margin-top: 0.15em;
     font-size: 3em;
     color: rgb(52, 172, 251);
+    height: 100%;
+    cursor: pointer;
   }
 `;
 
