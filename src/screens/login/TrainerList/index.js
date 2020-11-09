@@ -34,10 +34,12 @@ const Panel = ({
       },
       fetchPolicy: 'network-only'
     });
-  const {getTrainersList} = getTrainersListData ? getTrainersListData : [];
-  if( getTrainersList && getTrainersList.length === 0 ) {
-    //cookie.remove("tbt");
-    //location.reload();
+  const {getTrainersList} = getTrainersListData ? getTrainersListData : {getTrainersList: []};
+  console.log("getTrainersList", getTrainersListData, getTrainersList, getTrainersListData && getTrainersList && getTrainersList.length == 0);
+  if( getTrainersListData && getTrainersList && getTrainersList.length == 0 ) {
+    console.log("REMOVE THE COOKIE")
+    cookie.remove("tbt");
+    window.location.reload();
   }
 
   return (

@@ -38,7 +38,6 @@ const EditSection = withApollo(({t, refetchExercise, exerciseId, toggleEditMode,
     {
       update(cache,  { data: { updateExercise } }) {
         if( updateExercise.id !== 0 ){
-          console.log("updateExercise")
           refetch();
           refetchExercise();
         }
@@ -71,7 +70,6 @@ const EditSection = withApollo(({t, refetchExercise, exerciseId, toggleEditMode,
       const originalMismakes = exercise['mistakes_' + language].map(note => note.split('||').join('\n')).join('\n');
       const originalName = exercise['name_' + language];
       if( execution !== originalExecution || mistakes !== originalMismakes || name !== originalName) {
-        console.log("CN Have changed");
         setChange(true);
       } else {
         setChange(false);
@@ -294,6 +292,9 @@ const EditImageSection = ({t, exercise, refetch, editImageMode, toggleEditImageM
     const exercisePosition = editImageMode == 1 ? 'start' : 'end';
     let reader = new FileReader();
     let uploadBaseUrl = document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/' + 'file/exercise/';
+    if( window.cordova ) {
+      uploadBaseUrl = 'https://preview.lanista-training.com/file/exercise/';
+    }
     if(file instanceof File) {
       reader.addEventListener('loadend', function(e){
         const token = cookie.get('token');
@@ -308,7 +309,7 @@ const EditImageSection = ({t, exercise, refetch, editImageMode, toggleEditImageM
           if (response.ok) {
             refetch();
           } else {
-            alert('Error uploading [' + file.name + ']. Max upload size is ~4MB.');
+            alert(t("photo_upload_error"));
           }
           setLoadingImage(false);
         })
@@ -332,7 +333,7 @@ const EditImageSection = ({t, exercise, refetch, editImageMode, toggleEditImageM
         if (response.ok) {
           refetch();
         } else {
-          alert('Error uploading [' + file.name + ']. Max upload size is ~4MB.');
+          alert(t("photo_upload_error"));
         }
       })
       .catch((error) => {

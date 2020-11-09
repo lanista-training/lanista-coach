@@ -439,6 +439,7 @@
     "protocolls": "Protokolle",
     "print-information-notes": "Im druckbaren PDF sind 5 Zeilen mit je 60 Zeichen verfügbar.",
     "print-information-mistakes": "Im druckbaren PDF sind 2 Zeilen mit je 60 Zeichen verfügbar.",
+    "print-information": "Im druckbaren PDF sind 2 Zeilen mit je 60 Zeichen verfügbar.",
     "set": "Satz",
     "graph-1-title": "Gesamtvolumen (Sätze in kg)",
     "graph-2-title": "One Repetition Maximum(1RM) / Maximalkraft",
@@ -463,7 +464,8 @@
     "chats": "Chats",
     "charts": "Graphiken",
     "no protocolls": "Keine Protokolle",
-    "apply": "Übernehmen"
+    "apply": "Übernehmen",
+    "photo_upload_error": "Fehler beim Upload. Bitte versuche es noch einmal"
   },
   "exercises": {
     "exercises": "Übungen",
@@ -560,14 +562,17 @@
     "Failed to fetch": "Verbindungsproblem. Bitte prüfe deine Internetverbindung.",
     "reset password": "Passwort zurücksetzen",
     "Response not successful": "Keine Verbindung zum Server möglich. Bitte versuche es später noch ein Mal",
-    "check your mailbox": "Bitte überprüfe deinen Email-Eingang",
+    "check your mailbox": "Bitte überprüfe deinen Mailbox",
     "legal title": "Allgemeine Geschäftsbedingungen für die Nutzung der Lanista-App",
-    "registration successfull": "Trainer erfolgreich registriert",
+    "registration successfull": "Trainer erfolgreich registriert. Bestätigungsmail wurde an dich versendet.",
     "back": "Zurück",
     "imprint": "Impressum",
     "privacy": "Datenschutz",
     "info": "Info",
-    "support": "Support"
+    "support": "Support",
+    "duplication error": "Diese Email-Adresse ist bereits im System",
+    "email": "Email",
+    "password": "Passwort"
   },
   "measures": {
     "injuries": "Bewegungsapparat",
@@ -806,7 +811,10 @@
     "change_password_step_2_text": "Ok. Gebe jetzt dein neues Passwort ein.",
     "change_password_step_3_text": "Bestätige dein neues Passwort.",
     "next": "weiter",
-    "refresh_licence_status": "Lizenzstatus updaten"
+    "refresh_licence_status": "Lizenzstatus updaten",
+    "purchase_note": "Zur Lizenzverlängerung bitte über den Web-Browser anmelden unter app.lanista-training.com",
+    "MY_BUSINESS_LOGO": "Business Logo",
+    "SAVE": "speichern"
   },
   "testsmanager": {
     "test-name": "Name des Tests",

@@ -40,11 +40,22 @@ const Panel = ({goBack}) => {
   // Mutation
   //
   const [register, { loading, data, error, networkStatus }] = useMutation(REGISTER);
+  useEffect(() => {
+    if( error ) {
+      if (error.message.indexOf("DUPLICATE") > -1) {
+        setRegistrationErrorMessage(t("duplication error"));
+      } else {
+        setRegistrationErrorMessage(t("UNEXPECTEDERROR"));
+      }
+    }
+  }, [error]);
+
 
 
   const handleEmailChange = (event) => {
     setEmail(typeof event === 'string' ? event : event.target.value);
     setEmailIsValid(null);
+    setRegistrationErrorMessage(null);
     setValidationEmailErrorMessage(null);
   }
 
@@ -78,26 +89,27 @@ const Panel = ({goBack}) => {
     setValidationPasswordConfirmationErrorMessage(null);
     setAgreedToLAIsValid(null);
     setValidationAgreedToLAErrorMessage(null);
+    setRegistrationErrorMessage(null);
 
     // data validation
     if( email === undefined || email.length == 0 ) {
       setEmailIsValid(false);
-      setValidationEmailErrorMessage(t("login:email_empty"));
+      setValidationEmailErrorMessage(t("email_empty"));
     } else if( !re.test(email) ) {
       setEmailIsValid(false);
-      setValidationEmailErrorMessage(t("login::"));
+      setValidationEmailErrorMessage(t("email_invalid"));
     } else if (password === undefined || password.length == 0 ) {
       setPasswordIsValid(false);
-      setValidationPasswordErrorMessage(t("login:password_empty"));
+      setValidationPasswordErrorMessage(t("password_empty"));
     } else if ( password.length < 6 ) {
       setPasswordIsValid(false);
-      setValidationPasswordErrorMessage(t("login:password_to_short"));
+      setValidationPasswordErrorMessage(t("password_to_short"));
     } else if ( password != passwordConfirmation ) {
       setPasswordIsValid(false);
-      setValidationPasswordErrorMessage(t("login:password_confirmation_error"));
+      setValidationPasswordErrorMessage(t("password_confirmation_error"));
     }  else if ( agreedToLA === undefined || !agreedToLA ) {
       setAgreedToLAIsValid(false);
-      setValidationAgreedToLAErrorMessage(t("login:agreed_to_la_error"));
+      setValidationAgreedToLAErrorMessage(t("agreed_to_la_error"));
     } else {
         setEmailIsValid(null);
         setValidationEmailErrorMessage(null);
@@ -111,6 +123,7 @@ const Panel = ({goBack}) => {
           variables: {
             email,
             password,
+            language: locale.toUpperCase(),
           }
         });
     }

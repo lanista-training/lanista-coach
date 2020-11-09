@@ -11,7 +11,6 @@ export default ({
   onChange,
   onUnitChange,
 
-  position,
 
   open,
   onClose,
@@ -26,7 +25,7 @@ export default ({
       onChange={onChange}
       onUnitChange={onUnitChange}
 
-      position={position ? position : "startBottomLeft"}
+      position={"flex-start"}
       sync={true}
 
       open={open}

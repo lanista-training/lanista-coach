@@ -1023,8 +1023,8 @@ const Panel = ({
   )
 }
 
-const PanelWithData = ({editmode, workout, split, member, test, goBack, goToExercise}) => {
-  const ExerciseData = withData(Panel, {editmode, workout, split, member, test, goBack, goToExercise});
+const PanelWithData = ({editmode, workout, split, member, test, goBack, goToExercise, goToSetup}) => {
+  const ExerciseData = withData(Panel, {editmode, workout, split, member, test, goBack, goToExercise, goToSetup});
   return <ExerciseData/>
 }
 

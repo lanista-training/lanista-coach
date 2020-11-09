@@ -463,7 +463,8 @@
     "chats": "Chats",
     "charts": "Statistics",
     "no protocolls": "No protocolls",
-    "apply": "Apply changes"
+    "apply": "Apply changes",
+    "photo_upload_error": "Photo upload error"
   },
   "exercises": {
     "exercises": "Exercises",
@@ -567,7 +568,10 @@
     "imprint": "Imprint",
     "privacy": "Data Privacy",
     "info": "Info",
-    "support": "Support"
+    "support": "Support",
+    "duplication error": "Please use another email address",
+    "email": "Email",
+    "password": "Password"
   },
   "measures": {
     "injuries": "Injuries",
@@ -806,7 +810,10 @@
     "change_password_step_2_text": "OK. Now enter your new password.",
     "change_password_step_3_text": "Confirm your new password.",
     "next": "next",
-    "refresh_licence_status": "Refresh licence data"
+    "refresh_licence_status": "Refresh licence data",
+    "purchase_note": "To renew your license, please log into your web browser at app.lanista-training.com",
+    "MY_BUSINESS_LOGO": "Business Logo",
+    "SAVE": "save"
   },
   "testsmanager": {
     "test-name": "Test name",

@@ -98,7 +98,7 @@ export default ({t, settings, onSettingsChange, onSyncSettings, editable}) => {
             editable={editable}
             t={t}
           />
-          <div className="sets-list">
+          <div className="sets-list hide-scrollbar">
             {setRows}
           </div>
         </div>

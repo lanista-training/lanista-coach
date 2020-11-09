@@ -25,7 +25,7 @@ import Tools from '../../components/icons/Tools';
 import Back from '../../components/icons/Back';
 import Logout from '../../components/icons/Logout';
 
-const SetupWithData = ({goBack}) => {
+const SetupWithData = ({goBack, doLogout}) => {
 
   const {t, locale, changeLanguage} = useTranslate("setup");
 
@@ -41,7 +41,10 @@ const SetupWithData = ({goBack}) => {
         className: 'logout-button',
         onTap: () => {
           console.log("Logout and reset store...");
+          /*
           logout();
+          */
+          doLogout();
           client.resetStore();
           console.log("done !");
         }
@@ -89,6 +92,10 @@ const SetupWithData = ({goBack}) => {
   // User photo
   const [photoUrl, setPhotoUrl] = useState('');
   const [photoUrlFullSize, setPhotoUrlFullSize] = useState('');
+
+  // User logo
+  const [logoUrl, setLogoUrl] = useState('');
+  const [logoUrlFullSize, setLogoUrlFullSize] = useState('');
 
   // Licence data
   const [expirationDate, setExpirationDate] = useState(new Date());
@@ -372,8 +379,12 @@ const SetupWithData = ({goBack}) => {
         last_name,
         email,
         language,
+        // Photo
         photoUrl,
         photoUrlFullSize,
+        // Logo,
+        logo_imageUrl,
+        logoUrlFullSize,
         // Lizence data
         expiration_date,
         // Business data
@@ -416,6 +427,9 @@ const SetupWithData = ({goBack}) => {
 
       setPhotoUrl(photoUrl);
       setPhotoUrlFullSize(photoUrlFullSize);
+
+      setLogoUrl(logo_imageUrl);
+      setLogoUrlFullSize(logo_imageUrl);
 
       setExpirationDate(expiration_date);
 
@@ -507,7 +521,7 @@ const SetupWithData = ({goBack}) => {
       email,
       language,
     } = data.me;
-    window.open( 'https://lanista-training.com/tpmanager/shop/selectproduct/lang/' + language.toUpperCase() + '/email/' + email + '/rr/' + ll + '/lk/' + id,'_blank');
+    window.cordova && window.cordova.InAppBrowser ? window.cordova.InAppBrowser.open('https://lanista-training.com/tpmanager/shop/selectproduct/lang/' + language.toUpperCase() + '/email/' + email + '/rr/' + ll + '/lk/' + id, '_system') : window.open('https://lanista-training.com/tpmanager/shop/selectproduct/lang/' + language.toUpperCase() + '/email/' + email + '/rr/' + ll + '/lk/' + id, '_blank');
   }
 
   return (
@@ -541,6 +555,9 @@ const SetupWithData = ({goBack}) => {
 
         photoUrl={photoUrl}
         photoUrlFullSize={photoUrlFullSize}
+
+        logoUrl={logoUrl}
+        logolFullSize={logoUrlFullSize}
 
         expirationDate={expirationDate}
 

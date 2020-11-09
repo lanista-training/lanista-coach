@@ -119,8 +119,7 @@ const Login = ({
         }
         { !tbt && (
           <div className="form-section">
-
-            <LanistaLogo  style={{}}>
+            <LanistaLogo>
               <LogoImage width={60} height={60}/>
               <div className="sub-header">
                 Lanista<span>Coach</span>
@@ -131,7 +130,7 @@ const Login = ({
               <LanistaTextField
                 className="email-field"
                 variant="outlined"
-                placeholder='Email'
+                placeholder={t("email")}
                 disabled={authenticating}
                 type={"email"}
                 error={emailIsValid}
@@ -143,7 +142,7 @@ const Login = ({
               <LanistaTextField
                 className="password-field"
                 variant="outlined"
-                placeholder='Password'
+                placeholder={t("password")}
                 disabled={authenticating}
                 type={"password"}
                 error={passwordIsValid}

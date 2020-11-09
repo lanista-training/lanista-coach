@@ -115,7 +115,7 @@ export default ({
       typex: 'Ionicons',
       name: 'help-circle',
       onTap: () => {
-        window.open("https://desk.zoho.eu/portal/lanista/de/home",'_blank');
+        window.cordova && window.cordova.InAppBrowser ? window.cordova.InAppBrowser.open("https://desk.zoho.eu/portal/lanista/de/home", '_system') : window.open("https://desk.zoho.eu/portal/lanista/de/home", '_blank');
       }
   });
 

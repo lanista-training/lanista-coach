@@ -316,7 +316,7 @@ const Panel = ({
       commandsRight={ getCommandsRight(
         t,
         activeTabName,
-        exercise && exercise.owner,
+        exercise && exercise.owner && !(planexerciseId > 0) && !(memberId > 0),
         editMode,
         toggleEditMode,
         onToggleVideo,

@@ -11,7 +11,7 @@ const StyledWidget = styled.div`
   min-width: 270px;
   display: flex;
   flex-flow: column;
-  margin-top: 1.5em;
+  margin-top: 1.3em;
   .widget-title {
     flex: 1;
     padding: 15px 0px 15px 0px;

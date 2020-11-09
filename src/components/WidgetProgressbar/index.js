@@ -9,9 +9,11 @@ const Widget = ({query, title, onClick}) => {
   const absoluteValue = (data && data[Object.getOwnPropertyNames(data)[0]] ? data[Object.getOwnPropertyNames(data)[0]].data : 0);
   const total = (data && data[Object.getOwnPropertyNames(data)[0]] ? data[Object.getOwnPropertyNames(data)[0]].total : 0);
 
+  const average = Math.floor( absoluteValue /total*100);
+
   return (
     <WidgetProgressbar
-      data={Math.floor( absoluteValue /total*100)}
+      data={isNaN(average) ? 0 : average}
       title={title}
       absoluteValue={absoluteValue}
       onClick={onClick}

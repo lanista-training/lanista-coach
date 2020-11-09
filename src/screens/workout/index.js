@@ -315,7 +315,7 @@ const Panel = ({
     GENERATEPLANPDF,
     {
       update(cache,  { data: { generatePlanPdf } }) {
-        window.open(generatePlanPdf.filename,'_blank');
+        window.cordova.InAppBrowser ? window.cordova.InAppBrowser.open(generatePlanPdf.filename, '_system') : window.open(generatePlanPdf.filename, '_blank');
         togglePrintPanelOpen();
       }
     }
@@ -553,6 +553,7 @@ const Panel = ({
   }
 
   const showExercise = (exerciseId, memberId, planexerciseId) => {
+    console.log("showExercise", exerciseId, memberId, planexerciseId);
     goToExercise(exerciseId, memberId, planexerciseId);
   }
 

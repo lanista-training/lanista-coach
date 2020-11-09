@@ -1,7 +1,8 @@
 import React from "react";
 import Router from 'next/router';
-import { withAuthSync } from '../lib/auth'
-import ConfigurationScreen from "../src/screens/setup"
+import { withAuthSync } from '../lib/auth';
+import ConfigurationScreen from "../src/screens/setup";
+ import { logout } from '../lib/auth';
 
 function Configuration() {
 
@@ -10,6 +11,7 @@ function Configuration() {
   return (
     <ConfigurationScreen
       goBack={goBack}
+      doLogout={logout}
     />
   );
 }

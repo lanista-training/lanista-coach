@@ -102,7 +102,7 @@ const withData = (WrappedComponent, {memberId, goBack, goToTest, goToSetup}) => 
       GENERATEMEASURESPDF,
       {
         update(cache,  { data: { generateMeasuresPdf } }) {
-          window.open(generateMeasuresPdf.filename,'_blank');
+          window.cordova.InAppBrowser ? window.cordova.InAppBrowser.open(generateMeasuresPdf.filename, '_system') : window.open(generateMeasuresPdf.filename, '_blank');
         }
       }
     );

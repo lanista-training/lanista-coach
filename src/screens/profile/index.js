@@ -194,6 +194,9 @@ const Panel = ({
     let reader = new FileReader();
 
     let uploadBaseUrl = document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/' + 'file/user/';
+    if( window.cordova ) {
+      uploadBaseUrl = 'https://preview.lanista-training.com/file/user/';
+    }
     if(file instanceof File) {
       reader.addEventListener('loadend', function(e){
         const token = cookie.get('token');

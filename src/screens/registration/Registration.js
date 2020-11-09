@@ -2,7 +2,9 @@
 import * as React from "react";
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Input, Grid, Button, Checkbox, Icon, Modal, Header, Image } from 'semantic-ui-react';
+import { Input, Grid, Checkbox, Icon, Modal, Header, Image } from 'semantic-ui-react';
+import LanistaTextField from '../../components/LanistaTextField';
+import Button from '../../components/LanistaButton';
 import LogoImage from '-!react-svg-loader!../../images/LanistaLogo.svg';
 import {Menu, MainButton, ChildButton} from "react-mfb";
 import {LegalContent} from "./legalContent";
@@ -25,35 +27,131 @@ const StyledBackButton = styled(Button)`
 `;
 
 const Root = styled.div`
-  background-image: url(https://lanistacoach.s3.amazonaws.com/static/img/registration-background.png);
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
+width: 100%;
+height: 100%;
+background-size: cover;
+background-position: center center;
+background-repeat: no-repeat;
+display: flex;
+flex-flow: column;
+.main-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .form-section {
+    width: 370px;
+    padding: 3em;
+    margin-top: -50px;
+    background: white;
+    box-shadow: 0 0 27px 0 #0000001f;
+    border-radius: 15px;
+    .MuiFormHelperText-root {
+      color: white;
+      background: #d20027;
+      margin: 0;
+      text-align: center;
+      line-height: 21px;
+    }
+    .email-field {
+      fieldset {
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+        border-bottom: 0;
+        border-top-right-radius: 15px;
+        border-top-left-radius: 15px;
+      }
+      input {
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+        border-top-right-radius: 15px;
+        border-top-left-radius: 15px;
+      }
+    }
+    .password-field {
+      fieldset {
+        border-top-right-radius: 0;
+        border-top-left-radius: 0;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+        border-bottom: 0;
+      }
+      input {
+        border-top-right-radius: 0;
+        border-top-left-radius: 0;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+    }
+    .password-confirmation-field {
+      fieldset {
+        border-top-right-radius: 0;
+        border-top-left-radius: 0;
+        border-bottom-right-radius: 15px;
+        border-bottom-left-radius: 15px;
+      }
+      input {
+        border-top-right-radius: 0;
+        border-top-left-radius: 0;
+        border-bottom-right-radius: 15px;
+        border-bottom-left-radius: 15px;
+      }
+    }
+    .input-fields-section {
+      .MuiTextField-root {
+        input {
+          ::selection {
+            background-color: initial!important;
+          }
+        }
+      }
+    }
+    .input-fields-section {
+      display: flex;
+      flex-flow: column;
+    }
+    .buttons-section {
+      margin-top: 3em;
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+      button {
+        height: 50px;
+        width: 200px;
+        border-radius: 35px!important;
+        margin-bottom: 1em;
+      }
+    }
+  }
+}
 `;
 
 const LanistaLogo = styled.div`
-  font-size: 16px;
   text-align: center;
+  margin-bottom: 3em;
+  svg {
+    width: 45px;
+  }
+  .sub-header {
+   font-size: 18px;
+   font-weight: 900;
+   letter-spacing: -1px;
+   margin-top: -10px;
+   span {
+     font-weight: 100;
+   }
+  }
   a:hover {
     /* shows an example of how we can use themes */
     color: #FFA500;
   }
 `;
 
-const EmailValidationMessage = styled.div`
-  position: absolute;
-  text-align: center;
-  width: 100%;
-  top: -5px;
-  color: #d20027;
-`;
-
 const PasswordValidationMessage = styled.div`
-  position: absolute;
   text-align: center;
   width: 100%;
-  top: 150px;
   color: #d20027;
+  margin-top: 2em;
 `;
 
 const Footer = styled.footer`
@@ -95,6 +193,9 @@ const SuccessfullMessage  = styled.div`
   width: 100%;
   font-size: 2em;
   font-weight: 700;
+  padding: 0 0 2em 0;
+  line-height: 1em;
+  text-align: center;
 `;
 class Registration extends React.Component {
 
@@ -191,120 +292,101 @@ class Registration extends React.Component {
       }} />)
       : <ChildButton/>);
 
+    console.log("validationEmailErrorMessage", emailIsValid, registrationErrorMessage)
+
     return(
-      <div key="content" style={{height: "100vh", width: "100vw"}}>
-        <div style={{
-          display: "table-cell",
-          verticalAlign: "middle",
-        }}>
-          <Root className={"scene"} style={{height: "100vh", width: "100vw", verticalAlign: "middle"}}>
-            <Grid centered columns={1} style={{height:"60vh", marginTop: "15vh"}}>
-              <Grid.Row centered columns={1}>
-                <LanistaLogo  style={{}}>
-                  <LogoImage width={60} height={60}/>
-                  <div style={{
-                    fontFamily: "Roboto",
-                    fontSize: "1.75em",
-                    marginTop: "1em",
-                  }}>
-                    Lanista Coach
-                  </div>
-                </LanistaLogo>
-              </Grid.Row>
-              {!registrationSuccessfully && (<Grid.Row centered columns={1} style={{
-                paddingBottom: 0,
-                paddingTop: 15,
-                height: 220,
-                display: "grid"
-              }}>
-                <EmailValidationMessage>{validationEmailErrorMessage}</EmailValidationMessage>
-                <Input placeholder='Email' disabled={registering} type={"email"}>
-                  <input
-                    className={emailIsValid == false ? 'text-input-invalid': ''}
-                    style={{
-                      borderBottomRightRadius: 0,
-                      borderBottomLeftRadius: 0,
-                      width: 345,
-                      boxShadow: "rgba(0, 0, 0, 0.075) 0px 3.6px 4.5px 0px",
-                    }}
-                    value= {email}
-                    onChange= {handleEmailChange}
-                  />
-                </Input>
-                <Input placeholder='Password' disabled={registering} type={"password"}>
-                  <input
-                    className={passwordIsValid == false ? 'text-input-invalid': ''}
-                    style={{
-                      borderTop: "none",
-                      borderTopRightRadius: 0,
-                      borderTopLeftRadius: 0,
-                      borderBottomRightRadius: 0,
-                      borderBottomLeftRadius: 0,
-                      width: 345,
-                      boxShadow: "rgba(0, 0, 0, 0.075) 0px 3.6px 4.5px 0px",
-                    }}
-                    value= {password}
-                    onChange= {handlePasswordChange}
-                  />
-                </Input>
-                <Input placeholder='Password Confirmation' disabled={registering} type={"password"}>
-                  <input
-                    className={passwordConfirmationIsValid == false ? 'text-input-invalid': ''}
-                    style={{
-                      borderTop: "none",
-                      borderTopRightRadius: 0,
-                      borderTopLeftRadius: 0,
-                      width: 345,
-                      boxShadow: "rgba(0, 0, 0, 0.075) 0px 3.6px 4.5px 0px",
-                    }}
-                    value= {passwordConfirmation}
-                    onChange= {handlePasswordConfirmationChange}
-                  />
-                </Input>
-                <PasswordValidationMessage style={{top: "12em"}}>{validationPasswordErrorMessage}</PasswordValidationMessage>
-                <PasswordValidationMessage style={{top: "12em"}}>{registrationErrorMessage}</PasswordValidationMessage>
-               <Checkbox
-                className={agreedToLAIsValid == false ? 'text-input-invalid': ''}
-                style={{
-                   paddingTop: "1em",
-                   width: 345,
-                   textAlign: "left",
-                   fontSize: "1.2em",
-                   lineHeight: "1.2em",
-                   top: "1em",
-                 }}
-                label={t("terms_and_conditions")}
-                onClick={this.onShowLegalAgreements}
-                value={agreedToLA ? 1 : 0}
-                checked={agreedToLA}
-               />
-               <PasswordValidationMessage style={{top: "16em"}}>{validationAgreedToLAErrorMessage}</PasswordValidationMessage>
-              </Grid.Row>)}
+      <Root className={"scene"} style={{height: "100vh", width: "100vw", verticalAlign: "middle"}}>
+        <div className="main-section">
+          <div className="form-section">
+          <LanistaLogo>
+            <LogoImage width={60} height={60}/>
+              <div className="sub-header">
+                Lanista<span>Coach</span>
+              </div>
+            </LanistaLogo>
+            {!registrationSuccessfully && (
+              <div className="input-fields-section">
+                <LanistaTextField
+                  className="email-field"
+                  variant="outlined"
+                  placeholder='Email'
+                  disabled={registering}
+                  type={"email"}
+                  error={emailIsValid}
+                  value= {email}
+                  onChange={handleEmailChange}
+                  helperText="Incorrect entry."
+                  helperText={validationEmailErrorMessage}
+                />
+                <LanistaTextField
+                  className="password-field"
+                  variant="outlined"
+                  placeholder='Password'
+                  disabled={registering}
+                  type={"password"}
+                  error={passwordIsValid}
+                  value= {password}
+                  onChange= {handlePasswordChange}
+                  helperText={validationPasswordErrorMessage}
+                />
+                <LanistaTextField
+                  className="password-confirmation-field"
+                  variant="outlined"
+                  placeholder='Password Confirmation'
+                  disabled={registering}
+                  type={"password"}
+                  error={passwordIsValid}
+                  value= {passwordConfirmation}
+                  onChange= {handlePasswordConfirmationChange}
+                  helperText={registrationErrorMessage}
+                />
+                 <Checkbox
+                  className={agreedToLAIsValid == false ? 'text-input-invalid': ''}
+                  style={{
+                     paddingTop: "1em",
+                     textAlign: "left",
+                     fontSize: "1.2em",
+                     lineHeight: "1.2em",
+                     top: "1em",
+                   }}
+                  label={t("terms_and_conditions")}
+                  onClick={this.onShowLegalAgreements}
+                  value={agreedToLA ? 1 : 0}
+                  checked={agreedToLA}
+                 />
+                 <PasswordValidationMessage >{validationAgreedToLAErrorMessage}</PasswordValidationMessage>
+              </div>
+            )}
 
-              {!registrationSuccessfully && (<Grid.Row centered columns={1} style={{paddingTop: 0, paddingBottom: 0, height: 30, display: "grid"}}>
-                <StyledRegisterButton style={{marginTop: "2em"}} loading={registering} onClick={
-                  () => {
-                    registerUser();
-                  }
-                } disabled={registering}>
+            <div className="buttons-section">
+              {!registrationSuccessfully && (
+                <Button
+                  inverted
+                  style={{marginTop: "2em"}}
+                  loading={registering}
+                  onClick={ () => { registerUser() }}
+                  disabled={registering}
+                >
                   { registering ? ("...") : t("register") }
-                </StyledRegisterButton>
-              </Grid.Row>)}
+                </Button>
+              )}
 
-              {registrationSuccessfully && (<SuccessfullMessage>
-                {t('registration successfull')}
-              </SuccessfullMessage>)}
+              {registrationSuccessfully && (
+                <SuccessfullMessage>
+                  {t('registration successfull')}
+                </SuccessfullMessage>
+              )}
 
-              <StyledBackButton key="button"  onClick={() => {
+              <Button key="button"  onClick={() => {
                 this.setState({
                   show: false
                 });
                 goBack();
               }}>
                 {t("to_login")}
-              </StyledBackButton>
-            </Grid>
-          </Root>
+              </Button>
+            </div>
+          </div>
           <Footer style={{}}>
             <Nav style={{color: 'black', fontFamily: 'Roboto'}}>
               © Lanista Trainingssoftware 2012
@@ -324,7 +406,6 @@ class Registration extends React.Component {
             </Menu>
           </Footer>
         </div>
-
         <Modal open={showLegalAgreements}>
           <Modal.Header>{t("legal title")}</Modal.Header>
           <Modal.Content image>
@@ -334,16 +415,16 @@ class Registration extends React.Component {
             <Button secondary onClick={()=>{
               this.onNotAgreedToLA();
             }}>
-              Cancel <Icon name='left chevron' />
+              <Icon name='left chevron' style={{marginTop: "-10px"}}/> Cancel
             </Button>
-            <Button color="red" onClick={()=>{
+            <Button color="red" style={{marginLeft: "10px"}} onClick={()=>{
               this.onAgreedToLA();
             }}>
-              Agree <Icon name='right chevron' />
+              Agree <Icon name='right chevron' style={{marginTop: "-10px"}}/>
             </Button>
           </Modal.Actions>
         </Modal>
-      </div>
+      </Root>
     );
   }
 };

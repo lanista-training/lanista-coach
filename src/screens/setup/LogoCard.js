@@ -1,12 +1,12 @@
 import React, { Component, useState, useEffect } from 'react';
 import cookie from 'js-cookie';
+import TextField from '@material-ui/core/TextField';
+import Select from '@material-ui/core/Select';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
 import ImageEditor from '../../components/ImageEditor';
 import LanistaButton from '../../components/LanistaButton';
-
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-
 import {
   StyledCard,
 } from './styles';;
@@ -16,23 +16,8 @@ export default ({
   id,
   refetch,
 
-  workoutEnable,
-  setWorkoutEnable,
-  facebook,
-  setFacebook,
-  googleplus,
-  setGoogleplus,
-  twitter,
-  setTwitter,
-  promoVideo,
-  setPromoVideo,
-  promoText,
-  setPromoText,
-  workoutImageUrl,
-
-  onUpdateUserWorkoutChannelData,
-  updateUserWorkoutChannelDataLoading,
-  readyToSaveWorkout,
+  photoUrl,
+  photoUrlFullSize,
 
 }) => {
   //
@@ -44,7 +29,7 @@ export default ({
     if( id > 0 ) {
       const cropRequest = {
         bucket: 'lanista-data',
-        key: id + '/workout/background.jpg',
+        key: id + '/logo.jpg',
       }
       const strRequest = JSON.stringify(cropRequest);
       const encRequest = btoa(strRequest);
@@ -64,7 +49,7 @@ export default ({
       setLoadingImage(true);
       const cropRequest = {
         bucket: 'lanista-data',
-        key: id + '/workout/background.jpg',
+        key: id + '/logo.jpg',
         edits: {
           extract: {
             height: Math.ceil(crop.height),
@@ -87,7 +72,7 @@ export default ({
     setLoadingImage(true);
     const rotateRequest = {
       bucket: 'lanista-data',
-      key: id + '/workout/background.jpg',
+      key: id + '/logo.jpg',
       edits: {
         rotate: angle,
       }
@@ -110,23 +95,23 @@ export default ({
   const onUploadMemberImage = (file) => {
     setLoadingImage(true);
     let reader = new FileReader();
-    let uploadBaseUrl = document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/file/user/';
+    //let uploadBaseUrl = document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/' + 'file/user/';
+    let uploadBaseUrl = 'https://preview.lanista-training.com/file/user/';
     if( window.cordova ) {
-      uploadBaseUrl = 'https://preview.lanista-training.com/file/exercise/';
+      uploadBaseUrl = 'https://preview.lanista-training.com/file/user/';
     }
     if(file instanceof File) {
       reader.addEventListener('loadend', function(e){
         const token = cookie.get('token');
-        fetch(uploadBaseUrl + id + '/workout', {
+        fetch(uploadBaseUrl + id + '/logo', {
           method: "POST",
           body: new Blob([reader.result], {type: file.type}),
           headers: {
             authorization: token ? `Bearer ${token}` : ''
           },
         })
-        .then(response => response.json())
-        .then(data => {
-          if (data.message == 'OK') {
+        .then((response) => {
+          if (response.ok) {
             refetch();
           } else {
             alert('Error uploading [' + file.name + ']. Max upload size is ~4MB.');
@@ -140,7 +125,7 @@ export default ({
       reader.readAsArrayBuffer(file);
     } else {
       const token = cookie.get('token');
-      fetch(uploadBaseUrl + id + '/workout/' + file.substring(file.lastIndexOf("/") + 1), {
+      fetch(uploadBaseUrl + id + '/logo' + '/' + file.substring(file.lastIndexOf("/") + 1), {
         method: "POST",
         headers: {
           authorization: token ? `Bearer ${token}` : ''
@@ -160,75 +145,16 @@ export default ({
     }
   }
 
+  console.log("photoUrl", photoUrl)
+
   return (
-    <div className="section workout-channel-section" id="section-7">
-      <div className="section-header">{t( "workout_channel" )}</div>
+    <div className="section profile-image-section" id="section-2">
+      <div className="section-header">{t( "MY_BUSINESS_LOGO" )}</div>
       <StyledCard>
-        <div className="section-content workout-channel">
-          <FormControlLabel
-            label={t("channel_status")}
-            labelPlacement="start"
-            control={
-              <Switch
-                checked={workoutEnable}
-                onChange={(event) => setWorkoutEnable(event.target.checked)}
-                name="workout-enable"
-                color="primary"
-              />
-            }
-          />
-          <TextField
-            id="facebook"
-            label={t('facebook_profile')}
-            type={'url'}
-            disabled={false}
-            value={facebook}
-            onChange={(e) => setFacebook(e.target.value)}
-          />
-          <TextField
-            id="googleplus"
-            label={t('googleplus')}
-            type={'url'}
-            disabled={false}
-            value={googleplus}
-            onChange={(e) => setGoogleplus(e.target.value)}
-          />
-          <TextField
-            id="twitter"
-            label={t('twitter')}
-            type={'url'}
-            disabled={false}
-            value={twitter}
-            onChange={(e) => setTwitter(e.target.value)}
-          />
-          <TextField
-            id="promo-video"
-            label={t('promo_video')}
-            type={'url'}
-            disabled={false}
-            value={promoVideo}
-            onChange={(e) => setPromoVideo(e.target.value)}
-          />
-          <TextField
-            id="promo-text"
-            label={t('short_description')}
-            type={'url'}
-            disabled={false}
-            value={promoText}
-            onChange={(e) => setPromoText(e.target.value)}
-          />
-          <LanistaButton
-            className="save-workout-channel-data"
-            onClick={onUpdateUserWorkoutChannelData}
-            loading={updateUserWorkoutChannelDataLoading}
-            disabled={!readyToSaveWorkout}
-            inverted={readyToSaveWorkout}
-          >
-            {t( "save" )}
-          </LanistaButton>
+        <div className="section-content">
           <ImageEditor
             t={t}
-            imageSrc={workoutImageUrl}
+            imageSrc={photoUrl}
             previewImage={previewImage}
             resetPreviewImage={resetPreviewImage}
 
@@ -241,12 +167,6 @@ export default ({
             loading={loadingImage}
           />
         </div>
-        <LanistaButton
-          className="preview-workout-channel-button"
-          onClick={() => console.log("SHOW PREVIEW")}
-        >
-          {t( "workout_preview" )}
-        </LanistaButton>
       </StyledCard>
     </div>
   )

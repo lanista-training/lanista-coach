@@ -60,7 +60,7 @@ export const Stage = styled.div`
 export const SyledExercise = styled.div`
   display: flex;
   flex-direction: row;
-  width: 70vw;
+  width: 100%;
   max-width: 900px;
   margin: 0;
   padding: 0;
@@ -121,7 +121,7 @@ export const SyledExercise = styled.div`
   }
   .content-section {
     flex: 1;
-    margin-left: 2em;
+    margin-left: 1em;
   }
   .body-image-section {
     div {
@@ -331,16 +331,17 @@ export const SyledTab = styled(Tab)`
     padding-left: 2em;
   }
   .workouts {
-    height: calc(23vw*2 - 170px);
-    min-height: 247px;
-    max-height: 457px;
+    height: calc(23vw*2 - 65px);
+    width: calc(100% + 10px);
+    min-height: 230px;
+    max-height: 500px;
+    position: absolute;
+    overflow: scroll;
+    top: 170px;
+    right: -5px;
+    padding: 20px 30px 80px 20px;
     display: flex;
     flex-flow: column;
-    overflow: scroll;
-    padding: 2em;
-    padding-bottom: 80px;
-    padding-bottom: 80px;
-    padding-top: 1em;
     ::-webkit-scrollbar {
       display: none!important;
     }
@@ -438,8 +439,7 @@ export const SettingsPanel = styled.div`
   height: 100%;
   display: flex;
   flex-flow: column;
-  overflow: scroll;
-  padding: 0 2em;
+  padding: 0 1em;
   ::-webkit-scrollbar {
     width: 0px!important;
     height: 0px!important;
@@ -452,17 +452,17 @@ export const SettingsPanel = styled.div`
   }
   .exercise-indications {
     display: flex;
-    margin-top: 20px;
+    margin-top: 10px;
     .input-fields{
       flex: 1;
     }
     .description-warnings {
       text-align: right;
       font-size: 12px;
-      margin-top: 5px;
       display: flex;
       justify-content: flex-end;
       color: #b3b3b3;
+      margin-top: -5px;
       svg {
         font-size: 20px;
         margin-left: 6px;
@@ -510,10 +510,15 @@ export const SettingsPanel = styled.div`
     }
   }
   .sets-list {
-    padding-top: 2em;
-    height: calc(23vw*2 - 232px);
-    min-height: 247px;
+    height: calc(23vw*2 - 90px);
+    width: calc(100% + 10px);
+    min-height: 230px;
     max-height: 457px;
+    position: absolute;
+    overflow: scroll;
+    top: 190px;
+    right: -5px;
+    padding: 20px;
   }
   .exercise-set {
     display: flex;

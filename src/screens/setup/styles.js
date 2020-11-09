@@ -49,6 +49,17 @@ export const Stage = styled.div`
       min-width: 190px!important;
       margin-top: 2em;
     }
+    .purchase-note {
+      width: 70%;
+      border-style: solid;
+      border-width: 1px;
+      border-radius: 15px;
+      border-color: #abaaaa;
+      padding: 1em;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 1em;
+    }
   }
   .app-configuration {
     .MuiFormControl-root {

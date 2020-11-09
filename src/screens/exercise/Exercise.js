@@ -112,7 +112,7 @@ const Exercise = ({
         toggleEditIndexesMode={toggleEditIndexesMode}
       />
     }
-  ]
+  ];
 
   if( exercise && exercise.settings && editable ) {
     panes.push({ menuItem: t("settings"), id: 'settings', render: () =>

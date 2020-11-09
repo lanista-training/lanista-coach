@@ -63,12 +63,12 @@ export default ({
               onChange={(e) => setWebsite(e.target.value)}
             />
             <TextField
-              id="country"
-              label={t('country')}
+              id="street"
+              label={t('street')}
               type={'text'}
               disabled={updateUserAddressLoading || bu > 0}
-              value={country}
-              onChange={(e) => setCountry(e.target.value)}
+              value={street}
+              onChange={(e) => setStreet(e.target.value)}
             />
             <TextField
               id="zipcode"
@@ -79,28 +79,20 @@ export default ({
               onChange={(e) => setZipcode(e.target.value)}
             />
             <TextField
-              id="zipcode"
-              label={t('zipcode')}
-              type={'text'}
-              disabled={updateUserAddressLoading || bu > 0}
-              value={zipcode}
-              onChange={(e) => setZipcode(e.target.value)}
-            />
-            <TextField
-              id="street"
-              label={t('street')}
-              type={'text'}
-              disabled={updateUserAddressLoading || bu > 0}
-              value={street}
-              onChange={(e) => setStreet(e.target.value)}
-            />
-            <TextField
               id="city"
               label={t('city')}
               type={'text'}
               disabled={updateUserAddressLoading || bu > 0}
               value={city}
               onChange={(e) => setCity(e.target.value)}
+            />
+            <TextField
+              id="country"
+              label={t('country')}
+              type={'text'}
+              disabled={updateUserAddressLoading || bu > 0}
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
             />
         </div>
         <LanistaButton

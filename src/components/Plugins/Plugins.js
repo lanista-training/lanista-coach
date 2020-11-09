@@ -8,10 +8,9 @@ const PluginsList = styled.div`
   justify-content: flex-end;
   align-items: center;
   .cards {
-    display: flex;
-    -webkit-box-pack: center;
-    justify-content: center;
     flex-flow: wrap;
+    padding-top: 30px;
+    padding-bottom: 20px;
     ::-webkit-scrollbar {
       display: none!important;
     }
@@ -19,13 +18,11 @@ const PluginsList = styled.div`
     width: 100%;
     height: 95%;
     border-radius: 20px;
-    overflow: hidden;
+    overflow: scroll;
     box-shadow: 0 0 27px 0 #0000001f;
     z-index: 1;
     display: flex;
     justify-content: center;
-    flex-wrap: wrap;
-    align-content: center;
   }
   .selected-plugin {
     border: 1px solid rgb(155,201,61);
@@ -58,6 +55,10 @@ const PluginsList = styled.div`
 const Plugin = styled.div`
   padding: 1em;
   width: 20em;
+  .image {
+    background-size: cover!important;
+    background-position: center!important;
+  }
 `;
 const StyledNoPluginMessage =  styled.div`
   font-size: 1.5em;
@@ -96,13 +97,12 @@ const NoPluginMessage = ({text}) =>
 export default ({data, text, onPluginSelection, pluginFiltersState}) => {
   const plugins = data.map(plugin => (
     <Plugin onClick={() => onPluginSelection(plugin)} className={pluginFiltersState.indexOf(plugin.id) > -1 ? 'selected-plugin' : ''}>
-      <div class="ui card">
-        <div class="image" style={{ height: "210px", overflow: "hidden"}}>
-          <img src={plugin.imageUrl} style={{objectFit: "contain", height: "100%", width: "auto"}}/>
+      <div className="ui card">
+        <div className="image" style={{ height: "210px", overflow: "hidden", backgroundImage: 'url(' + plugin.imageUrl + ')' }} >
         </div>
-        <div class="content">
-          <div class="header">{plugin.name}</div>
-          <div class="description">
+        <div className="content">
+          <div className="header">{plugin.name}</div>
+          <div className="description">
             {plugin.description}
           </div>
         </div>

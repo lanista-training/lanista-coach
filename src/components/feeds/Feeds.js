@@ -68,7 +68,6 @@ const Feeds = ({
 }) => {
 
   const [selectedDay, setSelectedDay] = React.useState(new Date());
-
   React.useEffect(() => {
     setTimeout(function () {
         jumpToDay(new Date());
@@ -145,7 +144,6 @@ const Feeds = ({
     setWidget1AnchorEl(null);
   };
 
-  console.log("membersListData", membersListData)
   const {myMembersList} = membersListData ? membersListData : {myMembersList: []};
 
   return (

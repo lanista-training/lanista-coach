@@ -5,14 +5,14 @@ import nextCookie from 'next-cookies';
 import cookie from 'js-cookie';
 
 export const login = async ({ token, tbt }) => {
-  cookie.set('token', token, { expires: 1 });
+  cookie.set('token', token, { expires: window.cordova ? 360 : 1 });
   if( tbt ) {
     cookie.set('tbt', tbt);
   }
 }
 
 export const signup = async ({ token }) => {
-  cookie.set('token', token, { expires: 1 });
+  cookie.set('token', token, { expires: window.cordova ? 360 : 1 });
   Router.push('/')
 }
 
@@ -25,7 +25,7 @@ export const logout = () => {
 }
 
 export const refreshToken = async ({ token }) => {
-  cookie.set('token', token, { expires: 1 });
+  cookie.set('token', token, { expires: window.cordova ? 360 : 1 });
 }
 
 // Gets the display name of a JSX component for dev tools

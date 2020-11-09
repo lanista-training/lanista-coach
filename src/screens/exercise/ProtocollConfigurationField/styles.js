@@ -5,7 +5,7 @@ import Fab from '@material-ui/core/Fab';
 export const ConfigurationPanel = styled.div`
   display: flex;
   align-items: center;
-  padding: 0 2em;
+  padding: 0 2em 0 1em;
   .panel {
     display: flex;
     flex: 1;

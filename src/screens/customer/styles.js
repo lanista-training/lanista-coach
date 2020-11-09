@@ -28,6 +28,7 @@ export const Stage = styled.div`
       -webkit-transform: scaleX(-1);
       transform: scaleX(-1);
       margin-top: 30vh;
+      background: black;
     }
   }
 `;
@@ -200,7 +201,7 @@ export const DailyList = styled.div`
   }
   .content {
     overflow-y: scroll;
-    height: 78vh;
+    height: calc(100vh - 286px);
   }
 `;
 export const Exercise = styled(List.Item)`

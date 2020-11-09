@@ -17,7 +17,7 @@ export default ({
   return (
     <Number
       onChange={onChange}
-      position={"startBottomLeft"}
+      position={"flex-start"}
       sync={true}
       value={value}
 

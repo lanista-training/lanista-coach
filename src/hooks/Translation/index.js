@@ -17,8 +17,10 @@ export function useTranslate(namespace) {
 }
 
 export function TranslatorProvider({ children, client }) {
-  const isBrowser = typeof window !== 'undefined'
-  let defaultLanguage = 'de';
+  const isBrowser = typeof window !== 'undefined';
+
+  const localLanguage = window.localStorage.getItem("language");
+  let defaultLanguage = localLanguage ? localLanguage : 'de';
 
   const { data, error, loading } = useQuery(ME);
   if( isBrowser ) {
@@ -39,14 +41,13 @@ export function TranslatorProvider({ children, client }) {
   },[error]);
 
 
-
-
   let [language, setLanguage] = useState(defaultLanguage);
   let translations = require('../../../static/locales/' + language + '/translations.json');
 
   React.useEffect(() => {
     translations = require('../../../static/locales/' + language + '/translations.json');
   }, [language]);
+
 
   return (
     <Context.Provider

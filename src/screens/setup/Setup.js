@@ -5,6 +5,7 @@ import PasswordCard from './PasswordCard';
 import PersonalDataCard from './PersonalDataCard';
 import AddressCard from './AddressCard';
 import ImageCard from './ImageCard';
+import LogoCard from './LogoCard';
 import LicenceCard from './LicenceCard';
 import DataProtectionCard from './DataProtectionCard';
 import AppConfigurationCard from './AppConfigurationCard';
@@ -81,6 +82,9 @@ const Setup = ({
 
   photoUrl,
   photoUrlFullSize,
+
+  logoUrl,
+  logoUrlFullSize,
 
   expirationDate,
 
@@ -185,6 +189,15 @@ const Setup = ({
 
         {bu == 0 &&
         <>
+
+          <LogoCard
+            t={t}
+            id={id}
+            photoUrl={logoUrl}
+            photoUrlFullSize={logoUrl}
+            refetch={refetch}
+          />
+
           <ImageCard
             t={t}
             id={id}

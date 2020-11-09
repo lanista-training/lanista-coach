@@ -183,6 +183,7 @@ export default ({
   const [scrollBooster, setScrollBooster]  = useState(null);
 
   useEffect(() => {
+    /*
     const viewport = document.querySelector('.viewport');
     const content = document.querySelector('.list-content');
     const sb = new ScrollBooster({
@@ -192,6 +193,7 @@ export default ({
       direction: 'horizontal',
     });
     setScrollBooster(sb);
+    */
   }, [loading]);
 
   useEffect(() => {

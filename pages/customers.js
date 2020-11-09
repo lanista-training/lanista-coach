@@ -15,7 +15,6 @@ function Customers({workoutId}) {
   }
 
   const goToSetup = () => {
-    console.log("goToSetup")
     Router.push({
       pathname: '/configuration',
     });

@@ -1,75 +1,67 @@
 import * as React from "react";
-import { Button } from 'semantic-ui-react';
 import styled from 'styled-components';
 import FeedTypes from "../FeedTypes";
 
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-import ToggleButton from '@material-ui/lab/ToggleButton';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Button from '@material-ui/core/Button';
 
 const StyledButton = styled(Button)`
-  font-family: Roboto!important;
-  font-weight: 400!important;
-  background: none!important;
-  margin-right: 2.5em!important;
-  padding: 0em!important;
-  font-size: 1em!important;
-  color: rgb(179, 176, 176)!important;
-  .active-filter.underlined-filter  {
-    border-bottom: ${props => props.activeColor}!important;
-    border-bottom-style: solid!important;
-  }
+    background: white;
 `;
 const StyledFilter = styled.div`
   display: inline-flex;
-  border-radius: 4px;
   background-color: transparent;
   align-self: center;
   width: 100%;
   justify-content: center;
   margin-right: 25%;
   background-color: transparent!important;
-  .MuiToggleButtonGroup-root {
-    backgroun: white;
-    box-shadow: 0 0 27px 0 #0000001f!important;
+  .MuiButtonGroup-root {
+    box-shadow: rgba(0, 0, 0, 0.33) 0px 0px 27px 0px;
+    border-radius: 15px;
+    margin-left: auto;
+    margin-right: auto;
   }
   button {
-    height: 35px;
+    border-radius: 15px;
+    background: white!important;
     .MuiToggleButton-label {
       line-height: initial;
     }
   }
   button.selected {
-    color: black;
+    background: black!important;
+    color: white;
   }
 `;
 
 export default ({onFilterByType, filter, t}) => (
   <StyledFilter>
-    <ToggleButtonGroup>
-      <ToggleButton
+    <ButtonGroup>
+      <Button
         value={FeedTypes.birthday}
         aria-label={FeedTypes.birthday}
         onClick={() => onFilterByType(FeedTypes.birthday)}
         className={filter == FeedTypes.birthday ? 'selected' : ''}
       >
         {t('BIRTHDAYS')}
-      </ToggleButton>
-      <ToggleButton
+      </Button>
+      <Button
         value={FeedTypes.customer_activity}
         aria-label={FeedTypes.customer_activity}
         onClick={() => onFilterByType(FeedTypes.customer_activity)}
         className={filter == FeedTypes.customer_activity ? 'selected' : ''}
       >
         {t('ACTIVITIES')}
-      </ToggleButton>
-      <ToggleButton
+      </Button>
+      <Button
         value={FeedTypes.workout_expired}
         aria-label={FeedTypes.workout_expired}
         onClick={() => onFilterByType(FeedTypes.workout_expired)}
         className={filter == FeedTypes.workout_expired ? 'selected' : ''}
       >
         {t('PLANS')}
-      </ToggleButton>
-    </ToggleButtonGroup>
+      </Button>
+    </ButtonGroup>
   </StyledFilter>
 );

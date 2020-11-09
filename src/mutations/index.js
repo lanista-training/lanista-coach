@@ -7,8 +7,8 @@ export const SENDPASSWORDRESET = gql`
 `;
 
 export const REGISTER = gql`
-  mutation Register( $email: String!,  $password: String!) {
-     register(email: $email, password: $password) {
+  mutation Register( $email: String!,  $password: String!, $language: String) {
+     register(email: $email, password: $password, language: $language) {
          message
          user {
           id

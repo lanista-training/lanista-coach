@@ -40,7 +40,6 @@ export default ({
 
 
   useEffect(() => {
-    console.log("NEW IMAGE ARRIVED");
     setCurrentSrc(imageSrc);
     setCropMode(false);
     setEditingMode(false);

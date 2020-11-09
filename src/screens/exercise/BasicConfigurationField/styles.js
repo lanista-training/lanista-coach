@@ -3,22 +3,22 @@ import { motion } from "framer-motion";
 
 export const Panel = styled(motion.div)`
   font-weight: 700;
-  margin-top: 2em;
+  margin-top: 1em;
   background: white;
   padding: 1em;
   border-radius: 10px;
   box-shadow: 0 0 27px 0 #0000001f;
-  height: 8em;
+  height: 100px;
   fieldset {
     border: none;
   }
   .label {
-    font-size: 2em;
-  }
-  .label {
     float: left;
-    font-size: 1.5em;
+    font-size: 1.2em;
     padding-bottom: 0.5em;
+  }
+  button {
+    font-size: 13px!important;
   }
   .set-configuration {
     font-size: 2em;
@@ -35,8 +35,11 @@ export const Panel = styled(motion.div)`
       border-width: 2px;
       border-radius: 50px;
       width: 6em;
-      padding: 3px 10px 2px 6px;
+      padding: 0px 10px 0px 6px;
       align-items: center;
+      .training-unit, .unit {
+        font-size: 18px;
+      }
       span {
         width: 100%;
         .MuiFormControl-root {
@@ -62,7 +65,7 @@ export const Panel = styled(motion.div)`
     input {
       width: 2em;
       padding: 0;
-      font-size: 1.7em;
+      font-size: 1.5em;
     }
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
@@ -91,11 +94,9 @@ export const Panel = styled(motion.div)`
     }
   }
   .plus-button {
-    margin-left: 2em;
-  }
-  .plus-button {
     position: relative;
-    top: -40px;
-    left: -7%;
+    margin-left: 2em;
+    top: -33px;
+    left: -5%;
   }
 `;

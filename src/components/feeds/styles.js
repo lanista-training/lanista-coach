@@ -48,7 +48,7 @@ export const Stage = styled.div`
 export const Timeline = styled.div`
   overflow: scroll;
   padding-right: 1em;
-  padding-top: 60px;
+  padding-top: 45px;
   float: left;
   max-width: 410px;
   width: 100%;
@@ -82,7 +82,7 @@ export const ToolsSection = styled.div`
   -ms-flex-negative: 0;
   flex-shrink: 0;
   align-items: flex-end;
-  padding-top: 60px;
+  padding-top: 45px;
 `;
 export const StatisticsSection = styled.div`
   width: 100px;

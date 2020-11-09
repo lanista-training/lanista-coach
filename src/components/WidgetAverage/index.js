@@ -9,9 +9,11 @@ const Widget = ({query, title, onClick}) => {
   const absoluteValue = (data && data[Object.getOwnPropertyNames(data)[0]] ? data[Object.getOwnPropertyNames(data)[0]].data : 0)
   const total = (data && data[Object.getOwnPropertyNames(data)[0]] ? data[Object.getOwnPropertyNames(data)[0]].total : 0)
 
+  const average = (absoluteValue/total).toFixed(2);
+
   return (
     <WidgetAverage
-      data={(absoluteValue/total).toFixed(2)}
+      data={isNaN(average) ? 0 : average}
       title={title}
       absoluteValue={total}
       onClick={onClick}

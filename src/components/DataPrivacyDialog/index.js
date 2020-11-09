@@ -115,7 +115,7 @@ export default ({
   // State mamagement
   React.useEffect(() => {
     if(dpPreviewGenerated && dataPrivacyDocument) {
-      window.open(dataPrivacyDocument,'_blank');
+      window.cordova && window.cordova.InAppBrowser ? window.cordova.InAppBrowser.open(dataPrivacyDocument, '_system') : window.open(dataPrivacyDocument, '_blank');
     }
   }, [dpPreviewGenerated, dataPrivacyDocument]);
 

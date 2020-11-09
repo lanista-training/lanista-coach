@@ -23,7 +23,7 @@ const Panel = ({
   goBack,
   goToSetup,
 }) => {
-  const {t} = useTranslate("dashboard");
+  const {t, locale} = useTranslate("dashboard");
   // infinity list variables
   const [initialLoading, setInitialLoading] = React.useState(true);
   const [hasMore, setHasMore] = React.useState(true);
@@ -144,6 +144,8 @@ const Panel = ({
   const result = (data && data.feeds) ? data.feeds : {feeds: []}
   const {bu, hasInterface, role} = me && me.me ? me.me : {};
 
+  console.log("hasMore", hasMore, data)
+
   return (
     <Scene
       commandsLeft={getCommandsLeft(t)}
@@ -185,7 +187,7 @@ const Panel = ({
         setPageSize={ (newPageSize) => setPageSize(newPageSize) }
         loading={loading}
         error={error || (data && !data.feeds)}
-        hasMore={hasMore}
+        hasMore={data && data.feeds ? data.feeds.hasMore : hasMore}
         initialLoading={initialLoading}
         congratulateMember={congratulateMember}
         openMember={openMember}

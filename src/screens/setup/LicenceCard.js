@@ -36,12 +36,23 @@ export default ({
               <div className="licence-valid-date">
                 { (new Date() ? t( "invalid_since" ) :  t( "valid_until" )) + " " + moment(expirationDate).format('Do MMMM YYYY') }
               </div>
-              <LanistaButton onClick={goToShop}>
-                {t( "buy_licence" )}
-              </LanistaButton>
-              <LanistaButton onClick={onRefreshLicenceStatus}>
-                {t( "refresh_licence_status" )}
-              </LanistaButton>
+              { window.cordova &&
+                (
+                  <div className="purchase-note">{t("purchase_note")}</div>
+                )
+              }
+              { !window.cordova &&
+                (
+                  <>
+                    <LanistaButton onClick={goToShop}>
+                      {t( "buy_licence" )}
+                    </LanistaButton>
+                    <LanistaButton onClick={onRefreshLicenceStatus}>
+                      {t( "refresh_licence_status" )}
+                    </LanistaButton>
+                  </>
+                )
+              }
             </div>
           </div>
         </div>

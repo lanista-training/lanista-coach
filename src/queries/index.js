@@ -452,6 +452,7 @@ export const ME_SETTINGS = gql`
       promo_video
       promo_text
       workout_imageUrl
+      logo_imageUrl
       ll
     }
   }

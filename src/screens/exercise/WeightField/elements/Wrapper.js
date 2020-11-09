@@ -47,7 +47,7 @@ const Backdrop = styled.div`
     `
       : `height: ${props.position === 'center' ? '100vh' : '300px'}
       background-color: ${Color('#000')
-        .alpha(0.4)
+        .alpha(0)
         .string()};
       `}
 `;
