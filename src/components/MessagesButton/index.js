@@ -2,11 +2,10 @@ import * as React from 'react';
 import MessagesButton from './MessagesButton';
 import { withApollo } from '../../lib/apollo';
 import { useQuery, useMutation } from '@apollo/react-hooks';
-import { Query } from "react-apollo"
 import { MESSAGES } from "../../queries";
 import { UPDATECHATMESSAGESTATUS } from "../../mutations";
 
-const Panel = ({t, filter, title}) => {
+const Panel = ({filter, title}) => {
 
   const {data, loading, error, refetch} = useQuery(MESSAGES, {
     fetchPolicy: 'network-only'
@@ -38,6 +37,7 @@ const Panel = ({t, filter, title}) => {
       loading={loading}
       error={error}
       onUpdateChatMessageStatus={onUpdateChatMessageStatus}
+      refetch={refetch}
     />)
 };
 

@@ -24,6 +24,8 @@ import {
   CREATEPHYSIO,
   SAVEPHYSIO,
   DELETEPHYSIO,
+  SAVEANAMNESENOTE,
+  DELETEANAMNESENOTE,
 } from "../../mutations";
 
 const TABINDEX = gql`
@@ -324,6 +326,34 @@ const withData = (WrappedComponent, {memberId, tab, id, goBack, goToSetup}) => {
       }
     );
 
+    //
+    // Save anamnese entry
+    //
+    const [saveAnamneseNote, { loading: saveAnamneseNoteLoading, error: saveAnamneseNoteError }] = useMutation(
+      SAVEANAMNESENOTE,
+      {
+        update(cache,  { data: { saveAnamneseNote } }) {
+          if( saveAnamneseNote.success ) {
+            refetch();
+          }
+        }
+      }
+    );
+
+    //
+    // Delete anamnese entry
+    //
+    const [deleteAnamneseNote, { loading: deleteAnamneseNoteLoading, error: deleteAnamneseNoteError }] = useMutation(
+      DELETEANAMNESENOTE,
+      {
+        update(cache,  { data: { deleteAnamneseNote } }) {
+          if( deleteAnamneseNote.success ) {
+            refetch();
+          }
+        }
+      }
+    );
+
     return(
       <WrappedComponent
         me={me}
@@ -410,6 +440,14 @@ const withData = (WrappedComponent, {memberId, tab, id, goBack, goToSetup}) => {
         deletePhysio={deletePhysio}
         deletePhysioLoading={deletePhysioLoading}
         deletePhysioError={deletePhysioError}
+
+        saveAnamneseNote={saveAnamneseNote}
+        saveAnamneseNoteLoading={saveAnamneseNoteLoading}
+        saveAnamneseNoteError={saveAnamneseNoteError}
+
+        deleteAnamneseNote={deleteAnamneseNote}
+        deleteAnamneseNoteLoading={deleteAnamneseNoteLoading}
+        deleteAnamneseNoteError={deleteAnamneseNoteError}
 
         goBack={goBack}
         goToSetup={goToSetup}

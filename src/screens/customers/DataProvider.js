@@ -262,6 +262,8 @@ const WithData = (WrappedComponent, {workoutId, goBack, goToCustomer, goToSetup}
         goBack={goBack}
         goToCustomer={goToCustomer}
         goToSetup={goToSetup}
+
+        resetFilter={() => setInitialFilter('')}
       />
     )
   }

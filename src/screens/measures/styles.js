@@ -18,6 +18,8 @@ export const Stage = styled.div`
     border-radius: 15px;
     padding: 2em;
     text-align: center;
+    width: 250px;
+    box-shadow: 0 0 10px 0 #0000006b;
     .tootip-title {
       font-weight: 900;
       margin-bottom: 1em;

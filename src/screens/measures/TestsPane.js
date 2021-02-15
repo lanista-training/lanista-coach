@@ -66,10 +66,16 @@ export default ({
   t,
   tests,
   goToTest,
+  memberId,
 }) => {
 
   const handleTestClick = (testData, event) => {
-    goToTest(testData)
+    const {id, testtype} = testData;
+    goToTest({
+      memberId: memberId,
+      testType: testtype,
+      id: id,
+    })
   }
 
   return <TestPane>

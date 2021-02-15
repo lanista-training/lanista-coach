@@ -153,16 +153,27 @@ export default ({
         />
       </MuiPickersUtilsProvider>
       <TextField
-        label={t("abs")}
-        id="abs-field"
+        label={t("trizeps")}
+        id="trizeps-field"
         InputProps={{
           endAdornment: <InputAdornment position="start">mm</InputAdornment>,
         }}
-        value={abs}
-        onChange={(e) => setAbs(e.target.value)}
+        value={trizeps}
+        onChange={(e) => setTrizeps(e.target.value)}
         variant="outlined"
         type="number"
-        autocomplete="off"
+        disabled={loading}
+      />
+      <TextField
+        label={t("scapula")}
+        id="scapula-field"
+        InputProps={{
+          endAdornment: <InputAdornment position="start">mm</InputAdornment>,
+        }}
+        value={scapula}
+        onChange={(e) => setScapula(e.target.value)}
+        variant="outlined"
+        type="number"
         disabled={loading}
       />
       <TextField
@@ -190,30 +201,6 @@ export default ({
         disabled={loading}
       />
       <TextField
-        label={t("quads")}
-        id="quads-field"
-        InputProps={{
-          endAdornment: <InputAdornment position="start">mm</InputAdornment>,
-        }}
-        value={quads}
-        onChange={(e) => setQuads(e.target.value)}
-        variant="outlined"
-        type="number"
-        disabled={loading}
-      />
-      <TextField
-        label={t("scapula")}
-        id="scapula-field"
-        InputProps={{
-          endAdornment: <InputAdornment position="start">mm</InputAdornment>,
-        }}
-        value={scapula}
-        onChange={(e) => setScapula(e.target.value)}
-        variant="outlined"
-        type="number"
-        disabled={loading}
-      />
-      <TextField
         label={t("sprailium")}
         id="sprailium-field"
         InputProps={{
@@ -226,17 +213,31 @@ export default ({
         disabled={loading}
       />
       <TextField
-        label={t("trizeps")}
-        id="trizeps-field"
+        label={t("abs")}
+        id="abs-field"
         InputProps={{
           endAdornment: <InputAdornment position="start">mm</InputAdornment>,
         }}
-        value={trizeps}
-        onChange={(e) => setTrizeps(e.target.value)}
+        value={abs}
+        onChange={(e) => setAbs(e.target.value)}
+        variant="outlined"
+        type="number"
+        autocomplete="off"
+        disabled={loading}
+      />
+      <TextField
+        label={t("quads")}
+        id="quads-field"
+        InputProps={{
+          endAdornment: <InputAdornment position="start">mm</InputAdornment>,
+        }}
+        value={quads}
+        onChange={(e) => setQuads(e.target.value)}
         variant="outlined"
         type="number"
         disabled={loading}
       />
+
 
       <TextField
         label={t("notes")}

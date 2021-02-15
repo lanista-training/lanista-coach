@@ -46,6 +46,19 @@ flex-flow: column;
     background: white;
     box-shadow: 0 0 27px 0 #0000001f;
     border-radius: 15px;
+    .logo-section {
+      display: flex;
+      justify-content: center;
+      .partner-logo {
+        width: 60px;
+        height: 60px;
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+        margin-left: 5px;
+        margin-right: 5px;
+      }
+    }
     .MuiFormHelperText-root {
       color: white;
       background: #d20027;
@@ -273,6 +286,8 @@ class Registration extends React.Component {
       validationAgreedToLAErrorMessage,
       registrationErrorMessage,
       registrationSuccessfully,
+
+      domainLogoUrl,
     } = this.props;
 
     const {
@@ -299,11 +314,17 @@ class Registration extends React.Component {
         <div className="main-section">
           <div className="form-section">
           <LanistaLogo>
-            <LogoImage width={60} height={60}/>
-              <div className="sub-header">
-                Lanista<span>Coach</span>
-              </div>
-            </LanistaLogo>
+            <div className="logo-section">
+              <LogoImage width={60} height={60}/>
+              { domainLogoUrl && domainLogoUrl.length > 0 &&
+                <div className="partner-logo" style={{backgroundImage: 'url(' + domainLogoUrl + ')'}}>
+                </div>
+              }
+            </div>
+            <div className="sub-header">
+              Lanista<span>Coach</span>
+            </div>
+          </LanistaLogo>
             {!registrationSuccessfully && (
               <div className="input-fields-section">
                 <LanistaTextField

@@ -9,6 +9,8 @@ import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchIcon from '@material-ui/icons/Search';
 
+import HeaderSwitch from "./HeaderSwitch";
+
 const WorkoutsHeader = styled.div`
   width: 100%;
   display: flex;
@@ -74,9 +76,17 @@ const SearchField = styled(TextField)`
   }
 `;
 
-export default ({t, filter, setFilter, onTextSearchChange, plugins, bu, member}) => {
-
-  console.log("WorkoutsHeader", member)
+export default ({
+  t,
+  filter,
+  setFilter,
+  onTextSearchChange,
+  plugins,
+  bu,
+  member,
+  publicPlan,
+  togglePublicPlan,
+}) => {
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const handleClickOpen = (event) => {
@@ -91,7 +101,7 @@ export default ({t, filter, setFilter, onTextSearchChange, plugins, bu, member})
   React.useEffect(() => {
     handleClose();
   }, [filter])
-console.log("bu", bu)
+
   return (
     <WorkoutsHeader>
       <ButtonGroup aria-label="plans" className="buttons">
@@ -151,6 +161,15 @@ console.log("bu", bu)
           }
         </div>
       </PluginsList>
+      { bu == 0 && filter == 'my' &&
+        <HeaderSwitch
+          onChange={() => {}}
+          checked={false}
+          t={t}
+          checked={publicPlan}
+          onChange={togglePublicPlan}
+        />
+      }
       <SearchField
         id="outlined-basic"
         variant="outlined"

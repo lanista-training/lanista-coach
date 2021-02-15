@@ -324,8 +324,8 @@ export const SENDPLAN = gql`
 `;
 
 export const CLONEPLAN = gql`
-  mutation ClonePlan( $planId: ID!, $memberId: ID ) {
-     clonePlan(planId: $planId, memberId: $memberId) {
+  mutation ClonePlan( $planId: ID!, $memberId: ID, $publicPlan: Boolean ) {
+     clonePlan(planId: $planId, memberId: $memberId, publicPlan: $publicPlan) {
        id
        name
        description
@@ -336,6 +336,7 @@ export const CLONEPLAN = gql`
        creator_id
        creator_image
        expiration_date
+       public
        splits{
          id
          name
@@ -453,8 +454,8 @@ export const UPDATEMEMBER = gql`
 `;
 
 export const UPDATEMEMBERADDRESS = gql`
-  mutation UpdateMemberAddress( $memberId: ID!, $country: String, $city: String, $zipcode: String, $street: String ) {
-     updateMemberAddress(memberId: $memberId, country: $country, city: $city, zipcode: $zipcode, street: $street) {
+  mutation UpdateMemberAddress( $memberId: ID!, $country: String, $city: String, $zipcode: String, $street: String, $phoneNumber: String ) {
+     updateMemberAddress(memberId: $memberId, country: $country, city: $city, zipcode: $zipcode, street: $street, phoneNumber: $phoneNumber) {
        id
      }
   }
@@ -542,6 +543,16 @@ export const DELETEMEMBER = gql`
 export const SENDINVITATION = gql`
   mutation SendInvitation ( $to: String! ) {
     sendInvitation( to: $to ) {
+      success
+      error
+      errorMessage
+    }
+  }
+`;
+
+export const ACCEPTINVITATION = gql`
+  mutation AcceptInvitation ( $invitationId: ID! ) {
+    acceptInvitation( invitationId: $invitationId ) {
       success
       error
       errorMessage
@@ -997,6 +1008,24 @@ export const GETTARIFF = gql`
       tariff
       testMode
       tariffPeriod
+    }
+  }
+`;
+
+export const SAVEANAMNESENOTE = gql`
+  mutation SaveAnamneseNote( $anamneseId: ID!, $text: String!, $noteDate: String! ) {
+    saveAnamneseNote( anamneseId: $anamneseId,  text: $text, noteDate: $noteDate) {
+      success
+      error
+    }
+  }
+`;
+
+export const DELETEANAMNESENOTE = gql`
+  mutation DeleteAnamneseNote( $noteId: ID! ) {
+    deleteAnamneseNote( noteId: $noteId ) {
+      success
+      error
     }
   }
 `;

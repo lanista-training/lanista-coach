@@ -1,34 +1,6 @@
 {
   "locale": "de",
   "anamnese": {
-    "finding_rating_1": "sehr leicht",
-    "finding_rating_2": "leicht",
-    "finding_rating_3": "mittel",
-    "finding_rating_4": "erhöht",
-    "finding_rating_5": "stark",
-    "finding_rating_6": "sehr stark",
-
-    "drug_rating_1": "sehr niedrig",
-    "drug_rating_2": "niedrig",
-    "drug_rating_3": "mittel",
-    "drug_rating_4": "erhöht",
-    "drug_rating_5": "hoch",
-    "drug_rating_6": "sehr hoch",
-
-    "sport_rating_1": "sehr selten",
-    "sport_rating_2": "selten",
-    "sport_rating_3": "mittel",
-    "sport_rating_4": "häufig",
-    "sport_rating_5": "oft",
-    "sport_rating_6": "sehr oft",
-
-    "goal_rating_1": "sehr niedrig",
-    "goal_rating_2": "niedrig",
-    "goal_rating_3": "mittel",
-    "goal_rating_4": "erhöht",
-    "goal_rating_5": "hoch",
-    "goal_rating_6": "sehr hoch",
-
     "injuries": "Bewegungsapparat",
     "ailment": "Beschwerden/Lebensstil",
     "drugs": "Medikamente",
@@ -77,7 +49,7 @@
     "quads_left": "linker Oberschenkel",
     "no_data_for_graph": "Noch nicht genügend Daten für eine Grafik vorhanden.",
     "importance_rating_yes": "Als Warnung anzeigen",
-    "importance_rating_no": "Nicht als Warnung angezeigt",
+    "importance_rating_no": "Nicht als Warnung anzeigen",
     "member_visibility_yes": "Eintrag ist in der Kunden-App sichtbar und editiertbar",
     "member_visibility_no": "Eintrag ist nicht sichtbar und editierbar",
     "no_description": "Keine Beschreibung eingegeben",
@@ -112,7 +84,22 @@
     "dosification": "Dosierung",
     "frequency": "Häufigkeit",
     "priority": "Priorität",
-    "for": "vor"
+    "for": "vor",
+    "EMPTY_LIST": "Noch keine Therapie-Inhalte zu diesem Eintrag vorhanden",
+    "CREATE_NOTE": "Neue interne Notiz",
+    "SAVE_NOTE": "Interne Notiz speichern",
+    "ENTER_NOTE_HERE": "Therapie hier eintragen",
+    "REFFERENCE_DATE": "Behandlungstag",
+    "DELETE_QUESTION": "Eintrag löschen",
+    "CANCEL": "Abbrechen",
+    "PHYSIO_TREATMENT": "Neuer Therapie-Inhalt",
+    "SAVE_PHYSIO_TREATMENT": "Speichern",
+    "score": "Intensität",
+    "TREATMENT_DATE": "Behandlungstag",
+    "NO_VALUE": "Kein Eintrag",
+    "NEW_VALUE": "Neuer Eintrag",
+    "from": "von",
+    "title is mandatory": "Bitte, Name eingeben"
   },
   "common": {
     "title": "Lanista Trainer",
@@ -138,7 +125,6 @@
     "food": "Fuss",
     "anatomy": "Anatomie",
     "stopwatch": "Stoppuhr",
-
     "licence_expired_title": "Lizenz ist abgelaufen",
     "licence_expired_text_trainer": "Du musst deine Lizenz verlängern um Daten speichern zu können",
     "licence_expired_text_gym": "Bitte wende dich an deinen Administrator",
@@ -146,13 +132,6 @@
     "licence_dialog_go_to_store": "Lizenz verlängern"
   },
   "customer": {
-    "INJURY_RATING_0": "sehr niedrig",
-    "INJURY_RATING_1": "niedrig",
-    "INJURY_RATING_2": "leicht",
-    "INJURY_RATING_3": "mittel",
-    "INJURY_RATING_4": "erhöht",
-    "INJURY_RATING_5": "stark",
-    "INJURY_RATING_6": "sehr stark",
     "BIRTHDAY": "Geburtstag",
     "KG": "kg",
     "WEIGHT": "Gewicht",
@@ -224,37 +203,12 @@
     "SEC": "Sek",
     "COPY_PROTOCOLLS": "Workout kopieren",
     "CREATE_PLAN_FROM_WORKOUTS_ERROR": "Die Erstellung eines Plans anhand von Protokoll-Einträgen konnte nicht abgeschlossen werden.",
-
-    "finding_rating_1": "sehr leicht",
-    "finding_rating_2": "leicht",
-    "finding_rating_3": "mittel",
-    "finding_rating_4": "erhöht",
-    "finding_rating_5": "stark",
-    "finding_rating_6": "sehr stark",
-
-    "drug_rating_1": "sehr niedrig",
-    "drug_rating_2": "niedrig",
-    "drug_rating_3": "mittel",
-    "drug_rating_4": "erhöht",
-    "drug_rating_5": "hoch",
-    "drug_rating_6": "sehr hoch",
-
-    "sport_rating_1": "sehr selten",
-    "sport_rating_2": "selten",
-    "sport_rating_3": "mittel",
-    "sport_rating_4": "häufig",
-    "sport_rating_5": "oft",
-    "sport_rating_6": "sehr oft",
-
-    "goal_rating_1": "sehr niedrig",
-    "goal_rating_2": "niedrig",
-    "goal_rating_3": "mittel",
-    "goal_rating_4": "erhöht",
-    "goal_rating_5": "hoch",
-    "goal_rating_6": "sehr hoch",
-    "new customer goal": "Neue Kundenziel eingeben",
+    "new customer goal": "Neues Kundenziel eingeben",
     "costomer info": "Kundeninfo",
-    "plans": "Pläne"
+    "plans": "Pläne",
+    "from": "von",
+    "to": "bis",
+    "NO_VALUE": "Kein Eintrag"
   },
   "customers": {
     "customers_found": "Trefferliste",
@@ -281,7 +235,9 @@
     "EMAIL_INVALID": "Bitte eine gültige Email eingeben",
     "DUPLICATE_CREATE_ERROR": "Email bereits vorhanden",
     "DUPLICATE_CREATE_ERROR_TITLE": "Diese Email-Adresse wird bereits verwendet",
-    "DUPLICATE_CREATE_ERROR_MESSAGE": "Eine Person ist bereits mit dieser Email registriert. Bitte verwende eine andere Email oder lege ihn vorerst ohne email-adresse an. Der Kunden selbst kann sich über die Handy-App mit dir verbinden.",
+    "DUPLICATE_CREATE_ERROR_MESSAGE": "Eine Person ist bereits mit dieser Email registriert.<br>A. verwende eine andere Email <br> B. lege ihn vorerst ohne Email an <br> C. versende eine Einladung (muss über die Handy-App bestätigt werden)",
+    "USERNOTELEGIBLE_CREATE_ERROR": "Diese Email-Adresse wird bereits verwendet",
+    "USERNOTELEGIBLE_CREATE_ERROR_MESSAGE": "Eine Person ist bereits mit dieser Email-Adresse registriert. Verwende ein andere Email oder lege den Kunden vorerst ohne an. Der Kunde kann sich selbst über die Kunden-App mit dir verbinden, sobald er seinen Account aktiviert hat.",
     "CHANGE_EMAIL": "Email ändern",
     "SEND_INVITATION_TITLE": "Einladung versenden",
     "SEND_INVITATION_CONTENT": "Evtl. muss der Kunde seinen Spamfolder checken.",
@@ -295,10 +251,12 @@
     "FOLDER": "Ordner",
     "RECENTLY": "ZULETZT",
     "SEARCH": "SUCHEN",
-    "change_folder_name": "Folder name ändern",
+    "change_folder_name": "Ordnername ändern",
     "back": "Zurück",
-    "change_folder_name_text": "Neue name eingeben",
-    "folder_name_changed": "Folder Name geändert"
+    "change_folder_name_text": "Neuen Ordnername eingeben",
+    "folder_name_changed": "Ordnername geändert",
+    "SEND_INVITATION": "Einladung versenden",
+    "textsearch": "Textsuche..."
   },
   "dashboard": {
     "MSG_feed_text": "hat eine Nachricht gesendet",
@@ -312,7 +270,6 @@
     "Overview": "Überblick",
     "COMMING_BIRTHDAYS": "Kommende Geburtstage",
     "SOON_EXPIRED_PLANS": "Bald ablaufende Trainingspläne",
-
     "STATISTC_1_GYM_TRAINER": "Kunden anwesend",
     "STATISTC_1_GYM_PHYSIO": "Kunden anwesend diesen Monat",
     "STATISTC_1_GYM_DOCTOR": "Kunden anwesend diesen Monat",
@@ -322,7 +279,6 @@
     "STATISTC_1_PERSONAL_TRAINER": "Angelegte Kunden",
     "STATISTC_1_PERSONAL_PHYSIO": "Angelegte Kunden",
     "STATISTC_1_PERSONAL_DOCTOR": "Angelegte Kunden",
-
     "STATISTC_2_GYM_TRAINER": "Kunden ohne Plan",
     "STATISTC_2_GYM_PHYSIO": "Kunden ohne Plan",
     "STATISTC_2_GYM_DOCTOR": "Kunden ohne Plan",
@@ -332,7 +288,6 @@
     "STATISTC_2_PERSONAL_TRAINER": "davon mit aktivem Account",
     "STATISTC_2_PERSONAL_PHYSIO": "davon mit aktivem Account",
     "STATISTC_2_PERSONAL_DOCTOR": "davon mit aktivem Account",
-
     "STATISTC_3_GYM_TRAINER": "von mir betreute Kunden",
     "STATISTC_3_GYM_PHYSIO": "von mir betreute Kunden",
     "STATISTC_3_GYM_DOCTOR": "von mir betreute Kunden",
@@ -342,7 +297,6 @@
     "STATISTC_3_PERSONAL_TRAINER": "TEs/ Monat zum Vormonat",
     "STATISTC_3_PERSONAL_PHYSIO": "TEs/ Monat zum Vormonat",
     "STATISTC_3_PERSONAL_DOCTOR": "TEs/ Monat zum Vormonat",
-
     "STATISTC_4_GYM_TRAINER": "Pläne von mir/Monat zum Team Ø",
     "STATISTC_4_GYM_PHYSIO": "Pläne von mir/Monat zum Team Ø",
     "STATISTC_4_GYM_DOCTOR": "Pläne von mir/Monat zum Team Ø",
@@ -352,7 +306,6 @@
     "STATISTC_4_PERSONAL_TRAINER": "Pläne diesen Monat zum Vormonat",
     "STATISTC_4_PERSONAL_PHYSIO": "Pläne diesen Monat zum Vormonat",
     "STATISTC_4_PERSONAL_DOCTOR": "Pläne diesen Monat zum Vormonat",
-
     "MEMBERS_IN_THE_GYM": "Mitglieder anwesend",
     "MEMBERS_WITH_PLANS_FROM_TRAINER": "Kunden ohne Plan",
     "CUSTOMERS_WITHOUT_PLAN_IN_GYM": "Kunden ohne Plan",
@@ -374,7 +327,18 @@
     "EXTEND_PLAN": "Kunde öffnen",
     "DATA_NOT_AVAILABLE": "Daten derzeit nicht verfügbar",
     "YOUR_CUSTOMERS": "Deine Kundenanzahl",
-    "widget-empty-list": "Keine Daten vorhanden"
+    "widget-empty-list": "Keine Daten vorhanden",
+    "empty-feeds-list": "Keine Aktivitäten registriert",
+    "create-customer": "Neuen Kunden anlegen",
+    "create-customer-text": "Danach kannst du Trainingspläne erstellen und Messungen oder Tests dokumentieren.",
+    "create-plan": "Trainingsplan-Vorlagen erstellen",
+    "create-plan-text": "Diese Vorlagen kannst du danach innerhalb von Sekunden deinen Kunden zuweisen.",
+    "invitation-text": "möchte sich mit dir verbinden",
+    "back": "Zurück",
+    "accept invitation": "Einladung annehmen",
+    "invitation-info-text": "Der Kunde erlaubt dir den Zugriff auf seine Daten. Du kannst Pläne erstellen und versenden und alle sonstigen relevanten Inhalte eingeben.",
+    "invitation-accpeted": "Du bist nun mit dem Kunden verbunden.",
+    "open customer": "Kunde öffnen"
   },
   "exercise": {
     "EXECUTION": "Ausführung",
@@ -389,6 +353,7 @@
     "CANCEL": "zurück",
     "MUSCLE": "Muskelgruppe",
     "ALL_MUSCLES": "Alle Muskelgruppen",
+    "forearm": "Unterarm",
     "shoulder": "Schulter",
     "biceps": "Bizeps",
     "triceps": "Trizeps",
@@ -462,10 +427,16 @@
     "settings": "Einstellungen",
     "notes": "Notizen",
     "chats": "Chats",
-    "charts": "Graphiken",
+    "charts": "Grafiken",
     "no protocolls": "Keine Protokolle",
     "apply": "Übernehmen",
-    "photo_upload_error": "Fehler beim Upload. Bitte versuche es noch einmal"
+    "photo_upload_error": "Fehler beim Upload. Bitte versuche es noch einmal",
+    "square image format": "Quadratisches Bildformat",
+    "created_from": "Erstellt:",
+    "created_at": "am:",
+    "changed_from": "von",
+    "changed_at": "Zuletzt geändert:",
+    "no instructions": "Keine Anweisungen für den Kunde eingetragen."
   },
   "exercises": {
     "exercises": "Übungen",
@@ -534,11 +505,11 @@
     "recently used": "zuletzt verwendet",
     "exit edit mode": "Bearbeitung beenden",
     "forearm": "Unterarm",
-    "folder deleted": "Folder wurde gelöscht",
-    "change_folder_name": "Folder name ändern",
+    "folder deleted": "Ordner wurde gelöscht",
+    "change_folder_name": "Ordnername ändern",
     "back": "Zurück",
-    "change_folder_name_text": "Neue name eingeben",
-    "folder_name_changed": "Folder Name geändert"
+    "change_folder_name_text": "Neuen Ordnernamen eingeben",
+    "folder_name_changed": "Ordnername geändert"
   },
   "login": {
     "forgot_password": "Passwort vergessen?",
@@ -572,7 +543,9 @@
     "support": "Support",
     "duplication error": "Diese Email-Adresse ist bereits im System",
     "email": "Email",
-    "password": "Passwort"
+    "password": "Passwort",
+    "password-reset-successful": "Du bekommst in Kürze eine Email um dein Passwort zurückzusetzen.",
+    "ACCOUNTBLOKEDERROR": "Zu viele Fehlversuche. Der Account ist blockiert. Klicke auf den Link unten um ein neues Passwort zu setzen."
   },
   "measures": {
     "injuries": "Bewegungsapparat",
@@ -602,7 +575,7 @@
     "weight": "Gewicht",
     "weight_in_kg": "Gewicht in kg",
 
-    "height": "Körpergöße",
+    "height": "Körpergröße",
 
     "body fat": "Körperfett",
     "fat_share_in_percentage": "Fettanteil in %",
@@ -634,20 +607,20 @@
     "chest": "Brust",
     "iliac_creat": "Beckenkamm",
     "sprailium": "Beckenkamm",
-    "ab" : "Bauch",
-    "abs" : "Bauch",
+    "ab" : "Bauchnabel",
+    "abs" : "Bauchnabel",
     "quads": "Oberschenkel",
     "sum": "Summe",
     "calipermetrie": "Kaliper in %",
-    "arm_right": "rechter Arm",
-    "arm_left": "linker Arm",
+    "arm_right": "Rechter Arm",
+    "arm_left": "Linker Arm",
     "waist": "Taille",
     "umbilical": "Bauchnabel",
     "chest": "Brust",
     "spina_ilica_ant": "Beckenkamm",
     "wide_hips": "Hüfte",
-    "quads_right": "rechter Oberschenkel",
-    "quads_left": "linker Oberschenkel",
+    "quads_right": "Rechter Oberschenkel",
+    "quads_left": "Linker Oberschenkel",
     "no_data_for_graph": "Noch nicht genügend Daten für eine Grafik vorhanden",
     "SAVE": "speichern",
     "CANCEL": "abbrechen",
@@ -677,8 +650,8 @@
     "armLeft": "linker Arm",
     "spinaIlicaAnt": "Beckenkamm",
     "wideHips": "Hüfte",
-    "quadsRight": "rechter Oberschenkel",
-    "quadsLeft": "linker Oberschenkel"
+    "quadsRight": "Rechter Oberschenkel",
+    "quadsLeft": "Linker Oberschenkel"
   },
   "profile": {
     "personal_data": "Persönliche Daten",
@@ -713,8 +686,8 @@
     "ACCOUNT_INACTIVE": "Account ist nicht aktiviert",
     "ACCOUNT_ACTIVE_INFO": "Dein Kunde kann deine Trainingspläne per email und Trainings-App empfangen.",
     "ACCOUNT_INACTIVE_INFO": "Dein Kunde kann derzeit Trainingspläne weder per mail, noch über die Trainings-App empfangen. Möchtest du ihm eine Aktivierungsmail senden?",
-    "EMAIL_INVALID": "Email-Adresse fehlerhaft",
-    "EMAIL_INVALID_MESSAGE": "Die Email-Adresse ist fehlerhaft. Bitte in Absprache mit dem Kunden die Email-Adresse korrigieren.",
+    "EMAIL_INVALID": "Email nicht zustellbar ",
+    "EMAIL_INVALID_MESSAGE": "Der Email-Versand ist fehlgeschlagen. Bitte in Absprache mit dem Kunden die Email-Adresse korrigieren bzw. die Zustellbarkeit überprüfen.",
     "DATA_PRIVACY_ON_CONTRACT": "Der Kunde hat die Einwilligung zur Datenspeicherung bereits auf Papier unterschrieben. Es ist kein digitales Dokument gespeichert.",
     "DATA_PRIVACY_ON_DIGITAL": "Der Kunde hat die Einwilligung zur Datenspeicherung bereits unterschrieben.",
     "SHOW_DOCUMENT": "Dokument anzeigen",
@@ -737,7 +710,14 @@
     "DELETE_CUSTOMER_TEXT": "Willst du den Kunden wirklich löschen?",
     "DELETE_SUCCESSFULL": "Kunde erfolgreich gelöscht",
     "GO_BACK": "Zurück",
-    "CUSTOMER_ID": "Kunden-ID"
+    "CUSTOMER_ID": "Kunden-ID",
+    "square image format": "Quadratisches Bildformat",
+    "duplicate error": "Diese Email-Adresse wird bereits verwendet",
+    "USERNOTELEGIBLE_CREATE_ERROR": "Eine Person ist bereits mit dieser Email registriert. Bitte verwende eine andere Email oder lege ihn vorerst ohne email-adresse an. Der Kunden selbst kann sich über die Handy-App mit dir verbinden",
+    "FIRST_NAME_ERROR": "Bitte, Vorname eingeben",
+    "LAST_NAME_ERROR": "Bitte, Nachname eingeben",
+    "CUSTOMER_STATUS": "Kundenstatus",
+    "CUSTOMER_NEED_TO_ACTIVATE_ACCOUNT": ", sobald er seinen Account aktiviert hat"
   },
   "setup": {
     "personal_data": "Persönliche Daten",
@@ -776,7 +756,7 @@
     "licence_valid": "GÜLTIG",
     "licence_invalid": "UNGÜLTIG",
     "valid_until": "Gültig bis",
-    "invalid_since": "Abgelaufen seit",
+    "invalid_since": "Ablaufdatum:",
     "change_password": "Passwort ändern",
     "old_passwort": "Altes Passwort",
     "new_passwort": "Neues Passwort",
@@ -801,6 +781,7 @@
     "download": "herunterladen",
     "UPLOAD_PHOTO": "Foto hochladen",
     "EDIT_PHOTO": "Foto bearbeiten",
+    "CROP_IMAGE": "Foto zuschneiden",
     "BACK": "zurück",
     "IS_DRAG_IMAGE_INACTIVE": "per Drag 'n' Drop Bild hier herziehen, oder klicken zur Dateiasuwahl",
     "profile_picture_size": "80 x 80 px",
@@ -814,7 +795,11 @@
     "refresh_licence_status": "Lizenzstatus updaten",
     "purchase_note": "Zur Lizenzverlängerung bitte über den Web-Browser anmelden unter app.lanista-training.com",
     "MY_BUSINESS_LOGO": "Business Logo",
-    "SAVE": "speichern"
+    "SAVE": "speichern",
+    "square image format": "Quadratisches Bildformat",
+    "free image format": "Freies Bildformat",
+    "app image format": "860x600 px",
+    "back": "zurück"
   },
   "testsmanager": {
     "test-name": "Name des Tests",
@@ -946,7 +931,14 @@
     "back": "Zurück",
     "apply": "Anwenden",
     "apply configuration question": "Folgende Konfiguration wird auf alle Übungen angewendet:",
-    "assign-to-user": "Kunde zuordnen"
+    "assign-to-user": "Kunde zuordnen",
+    "publish": "VERÖFFENTLICHEN",
+    "copy link": "Link kopieren",
+    "download qr code": "QR-Code herunterladen",
+    "visit website": "zum Channel",
+    "link coppied": "Link kopiert",
+    "publish plan": "Plan veröffentlichen",
+    "publish plan info": "Eine Kopie dieses Plans wird auf deinem Workout-Channel veröffentlicht."
   },
   "workouts": {
     "split": "Split",
@@ -965,11 +957,22 @@
     "gym": "Studio",
     "plans": "Pläne",
     "PLAN NAME": "Name für den Plan eingeben",
-    "DURATION": "Plandauer"
+    "DURATION": "Plandauer",
+    "ALL": "Alle",
+    "PUBLIC": "Öffentlich"
   },
   "shop": {
     "week-licence": "Wochenlizenz",
     "month-licence": "Monatslizenz",
-    "year-licence": "Jahreslizenz"
+    "year-licence": "Jahreslizenz",
+    "NOVALNET_LEGAL_TITLE": "Novalnet Zahlungs- und Datenschutzbestimmungen"
+  },
+  "deviceerror": {
+    "device not compatible": "Die Trainer-Anwendung ist nur über den PC-Browser oder über die iPad App 'Lanista Coach' verfügbar.",
+    "go to website": "Besuche unsere Website",
+    "imprint": "Impressum",
+    "privacy": "Datenschutz",
+    "info": "Info",
+    "support": "Support"
   }
 }

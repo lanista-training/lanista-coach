@@ -9,8 +9,6 @@ import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsiv
 const prepareCaliperData = (rawData, gender = 0, birthday) => {
   const chartData = [];
   const age = (birthday === null || isNaN(birthday)) ? 32 : moment().diff(parseInt(birthday), 'years');
-  console.log("AGE")
-  console.log(rawData, birthday, age)
   if( rawData ) {
     rawData.map( function (measure, index) {
       const sum = measure.abs + measure.auxiliar + measure.chest + measure.quads + measure.scapula + measure.sprailium + measure.trizeps;
@@ -68,13 +66,13 @@ export default ({
           <YAxis yAxisId="right" orientation="right" stroke="#8884d8" label={{ value: t("measure_in_%"), angle: 90, position: 'insideRight', stroke:'#8884d8' }}/>
           <Tooltip content={<CustomTooltip t={t}/>} />
           <Legend wrapperStyle={{paddingTop: "30px"}}/>
-          <Line yAxisId="left" type="monotone" dataKey="abs" name={t('ab')} stroke="#00A0DC" connectNulls  activeDot={{ r: 8 }} unit=" mm"/>
+          <Line yAxisId="left" type="monotone" dataKey="trizeps" name={t('triceps')} stroke="#DC4B88" connectNulls  activeDot={{ r: 8 }} unit=" mm"/>
+          <Line yAxisId="left" type="monotone" dataKey="scapula" name={t('scapula')} stroke="#00AEB3" connectNulls  activeDot={{ r: 8 }} unit=" mm"/>
           <Line yAxisId="left" type="monotone" dataKey="auxiliar" name={t('armpitt')} stroke="#8D6CAA" connectNulls  activeDot={{ r: 8 }} unit=" mm"/>
           <Line yAxisId="left" type="monotone" dataKey="chest" name={t('chest')} stroke="#DC5142" connectNulls  activeDot={{ r: 8 }} unit=" mm"/>
-          <Line yAxisId="left" type="monotone" dataKey="quads" name={t('quads')} stroke="#E68523" connectNulls  activeDot={{ r: 8 }} unit=" mm"/>
-          <Line yAxisId="left" type="monotone" dataKey="scapula" name={t('scapula')} stroke="#00AEB3" connectNulls  activeDot={{ r: 8 }} unit=" mm"/>
           <Line yAxisId="left" type="monotone" dataKey="sprailium" name={t('iliac_creat')} stroke="#ECB220" connectNulls  activeDot={{ r: 8 }} unit=" mm"/>
-          <Line yAxisId="left" type="monotone" dataKey="trizeps" name={t('triceps')} stroke="#DC4B88" connectNulls  activeDot={{ r: 8 }} unit=" mm"/>
+          <Line yAxisId="left" type="monotone" dataKey="abs" name={t('ab')} stroke="#00A0DC" connectNulls  activeDot={{ r: 8 }} unit=" mm"/>
+          <Line yAxisId="left" type="monotone" dataKey="quads" name={t('quads')} stroke="#E68523" connectNulls  activeDot={{ r: 8 }} unit=" mm"/>
           <Line yAxisId="right" type="monotone" dataKey="fatShare" name={t('calipermetrie')} stroke="#8884d8" strokeWidth={4} connectNulls activeDot={{ r: 8 }} unit=" %"/>
           <Line yAxisId="left" type="monotone" dataKey="sum" name={t('sum')} stroke="#91bd09" strokeWidth={4} connectNulls activeDot={{ r: 8 }} unit=" mm"/>
         </LineChart>
@@ -89,13 +87,13 @@ export default ({
               <tbody>
                 <tr>
                   <th className="firstColumn" style={{paddingBottom: "0", paddingTop: "2em"}}>{t("date")}</th>
-                  <th style={{ transform: "rotate(-50deg)", height: "6em", fontSize: "0.8em" }}>{t('ab')}</th>
+                  <th style={{ transform: "rotate(-50deg)", height: "6em", fontSize: "0.8em"  }}>{t('triceps')}</th>
+                  <th style={{ transform: "rotate(-50deg)", height: "6em", fontSize: "0.8em"  }}>{t('scapula')}</th>
                   <th style={{ transform: "rotate(-50deg)", height: "6em", fontSize: "0.8em"  }}>{t('armpitt')}</th>
                   <th style={{ transform: "rotate(-50deg)", height: "6em", fontSize: "0.8em"  }}>{t('chest')}</th>
-                  <th style={{ transform: "rotate(-50deg)", height: "6em", fontSize: "0.8em"  }}>{t('quads')}</th>
-                  <th style={{ transform: "rotate(-50deg)", height: "6em", fontSize: "0.8em"  }}>{t('scapula')}</th>
                   <th style={{ transform: "rotate(-50deg)", height: "6em", fontSize: "0.8em"  }}>{t('iliac_creat')}</th>
-                  <th style={{ transform: "rotate(-50deg)", height: "6em", fontSize: "0.8em"  }}>{t('triceps')}</th>
+                  <th style={{ transform: "rotate(-50deg)", height: "6em", fontSize: "0.8em" }}>{t('ab')}</th>
+                  <th style={{ transform: "rotate(-50deg)", height: "6em", fontSize: "0.8em"  }}>{t('quads')}</th>
                   <th style={{paddingBottom: "0", paddingTop: "2em"}}>{t('sum')}</th>
                   <th style={{paddingBottom: "0", paddingTop: "1em", lineHeight: "1em"}}>{t('calipermetrie')}</th>
                 </tr>
@@ -110,13 +108,13 @@ export default ({
                     return (
                       <tr onClick={() => setSelectedRecord(item.index)}>
                         <td className="firstColumn" style={{width: "12%!important"}}>{moment(item.date, 'DD-MM-YYYY').format('DD MMM YYYY')}</td>
-                        <td>{item.abs > 0 ? item.abs : ''} <span>{item.abs > 0 && "mm"}</span></td>
+                        <td>{item.trizeps > 0 ? item.trizeps : ''} <span>{item.trizeps > 0 && "mm"}</span></td>
+                        <td>{item.scapula > 0 ? item.scapula : ''} <span>{item.scapula > 0 && "mm"}</span></td>
                         <td>{item.auxiliar > 0 ? item.auxiliar : ''} <span>{item.auxiliar > 0 && "mm"}</span></td>
                         <td>{item.chest > 0 ? item.chest : ''} <span>{item.chest > 0 && "mm"}</span></td>
-                        <td>{item.quads > 0 ? item.quads : ''} <span>{item.quads > 0 && "mm"}</span></td>
-                        <td>{item.scapula > 0 ? item.scapula : ''} <span>{item.scapula > 0 && "mm"}</span></td>
                         <td>{item.sprailium > 0 ? item.sprailium : ''} <span>{item.sprailium > 0 && "mm"}</span></td>
-                        <td>{item.trizeps > 0 ? item.trizeps : ''} <span>{item.trizeps > 0 && "mm"}</span></td>
+                        <td>{item.abs > 0 ? item.abs : ''} <span>{item.abs > 0 && "mm"}</span></td>
+                        <td>{item.quads > 0 ? item.quads : ''} <span>{item.quads > 0 && "mm"}</span></td>
                         <td>{item.sum > 0 ? item.sum : ''} <span>{item.sum > 0 && "mm"}</span></td>
                         <td>{item.fatShare > 0 ? item.fatShare : ''} <span>{item.fatShare > 0 && "%"}</span></td>
                       </tr>

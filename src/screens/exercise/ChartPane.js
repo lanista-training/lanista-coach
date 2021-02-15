@@ -35,13 +35,12 @@ export default ({
       })
     } else {
       workoutDay.map( (workout) => {
-        orm += (workout.weight * workout.repetitions * 0.033) + workout.weight;
+        const dayValue = (workout.weight * workout.repetitions * 0.033) + workout.weight;
+        orm = (dayValue > orm) ? dayValue : orm;
       });
-      tmp["orm"] = orm / _.size(workoutDay);
+      tmp["orm"] = orm;
     }
-
     return tmp;
-
   }));
 
   const CustomTooltip = ({ active, payload, label }) => {

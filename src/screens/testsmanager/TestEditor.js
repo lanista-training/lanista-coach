@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import Router from 'next/router';
 
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { withApollo } from '../../lib/apollo';
@@ -198,6 +197,7 @@ const Panel = ({
   t,
 
   testId,
+  goToExercises,
 
 }) =>  {
 
@@ -292,13 +292,7 @@ const Panel = ({
   const testExercises = ownTest ? ownTest.testExercises : [];
 
   const onAddExerciseButtonClick = () => {
-    Router.push({
-      pathname: '/exercises',
-      query: {
-        editmode: true,
-        test: ownTest.id
-      }
-    });
+    goToExercises(ownTest.id);
   }
 
   const onAddValueToTestExercise = (testExercise, newValueObject) => {

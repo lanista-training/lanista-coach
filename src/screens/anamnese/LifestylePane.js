@@ -23,7 +23,6 @@ export default ({
   deleteLifestyleLoading,
   deleteLifestyleError,
 }) => {
-
   const [selection, setSelection] = useState(-1);
 
   const [openFirst, setOpenFirst] = useState(id);

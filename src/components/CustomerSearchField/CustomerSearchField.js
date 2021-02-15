@@ -1,25 +1,34 @@
 import * as React from "react";
-import styled from 'styled-components';
-import moment from "moment";
-import { Input } from 'semantic-ui-react';
 
-const Centered  = styled.div`
-  margin-right: auto;
-  margin-left: auto;
-  padding-top: 0.8em;
-  padding-right: 155px;
-`;
+import ClearIcon from '@material-ui/icons/Clear';
+import Divider from '@material-ui/core/Divider';
+import SearchIcon from '@material-ui/icons/Search';
+
+import { SearchField } from './styles.js';
+import { useTranslate } from '../../hooks/Translation';
 
 export default ({onChange, value}) => {
+
+  const {t} = useTranslate("customers");
+
   return(
-    <Centered>
-      <Input
-        icon='search'
-        placeholder='Search...'
-        onChange={(e) => onChange(e.target.value)}
-        autoFocus
-        value={value}
-      />
-    </Centered>
+    <SearchField>
+      <div className="text-search-wrapper">
+        <div className="text-search">
+          <div className="input-area">
+            <input
+              placeholder={t("textsearch")}
+              inputProps={{ 'aria-label': 'search exercises lanista' }}
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
+              autoFocus={true}
+            />
+            <ClearIcon onClick={() => onChange('')}/>
+          </div>
+          <Divider orientation="vertical" />
+          <SearchIcon className="search-button"/>
+        </div>
+      </div>
+    </SearchField>
   )
 };

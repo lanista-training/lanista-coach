@@ -18,13 +18,21 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 
 import Chat from '../MemberChat';
+import InvitationPanel from './InvitationPanel';
 
 import {MenuButton, MessagesPanel, Message, Photo, StyledMenu, StyledMessageButton} from './styles';
 
 import Slider from "react-slick";
 
-export default ({data, onUpdateChatMessageStatus}) => {
+import { useTranslate } from '../../hooks/Translation';
 
+export default ({
+  data,
+  onUpdateChatMessageStatus,
+  refetch,
+}) => {
+
+  const {t} = useTranslate("dashboard");
   const sliderEl = useRef(null);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -56,6 +64,12 @@ export default ({data, onUpdateChatMessageStatus}) => {
         tab: 2,
       }
     });
+  }
+
+  const [invitation, setInvitation] = React.useState(null);
+  const resetInvitation = () => setInvitation(null);
+  const onShowInvitation = (index) => {
+    setInvitation(data[index]);
   }
 
   const newMessages = data.filter(message => message.status == 0).length;
@@ -104,8 +118,10 @@ export default ({data, onUpdateChatMessageStatus}) => {
                   <Message
                     button
                     onClick={() => {
-                      onUpdateChatMessageStatus(message.id);
-                      onMessageSelected(message);
+                      console.log("ON CLICK", message)
+                      message.type == 1 && onUpdateChatMessageStatus(message.id);
+                      message.type == 1 ? onMessageSelected(message) : onShowInvitation(index);
+                      ;
                     }}
                     key={index}
                     style={{minWidth: '400px', display: 'flex'}}
@@ -115,7 +131,7 @@ export default ({data, onUpdateChatMessageStatus}) => {
                     </Photo>
                     <ListItemText
                       primary={message.member.first_name + ' ' + message.member.last_name}
-                      secondary={message.text}
+                      secondary={message.type == 1 ? message.text : t("invitation-text")}
                     />
                     <div className="status-section" className={message.status == 0 ? 'new' : 'old'}>
                       <div className="time-section">{isToday ? moment(messageDate).format("H:mm") : moment(messageDate).format('DD/MM/YY') }</div>
@@ -142,6 +158,12 @@ export default ({data, onUpdateChatMessageStatus}) => {
           </div>
         </Slider>
       </StyledMenu>
+      <InvitationPanel
+        open={invitation !== null}
+        onClose={resetInvitation}
+        invitation={invitation}
+        refetch={refetch}
+      />
     </StyledMessageButton>
   );
 };

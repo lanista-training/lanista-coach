@@ -2,13 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { useTranslate } from '../../hooks/Translation';
 import Registration from './Registration';
 import Router from 'next/router';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 import { withApollo } from '../../lib/apollo';
 import { REGISTER } from "../../mutations";
+import { GETDOMAININFO } from "../../queries";
 
 const Panel = ({goBack}) => {
 
   const {t, locale, changeLanguage, languages} = useTranslate("login");
+
+  const { data: domainData } = useQuery(GETDOMAININFO, {
+    fetchPolicy: 'no-cache',
+  });
+  const domainLogoUrl = domainData && domainData.getDomainInfo ?  domainData.getDomainInfo.logoUrl : '';
 
   //
   // Component variables
@@ -161,6 +167,8 @@ const Panel = ({goBack}) => {
 
     registrationErrorMessage={registrationErrorMessage}
     registrationSuccessfully={data && data.register && data.register.message == 'USERCREATED'}
+
+    domainLogoUrl={domainLogoUrl}
   />);
 }
 

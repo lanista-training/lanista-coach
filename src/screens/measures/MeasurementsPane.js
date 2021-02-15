@@ -57,15 +57,15 @@ export default ({
           <YAxis yAxisId="left" stroke="#91bd09" label={{ value: 'Messung in cm', angle: -90, position: 'insideLeft', stroke:'#91bd09' }}/>
           <Tooltip content={<CustomTooltip t={t}/>} />
           <Legend wrapperStyle={{paddingTop: "30px"}}/>
-          <Line yAxisId="left" type="monotone" dataKey="arm_right" name={t('arm_right')}  stroke="#00A0DC" connectNulls  activeDot={{ r: 8 }} unit=" cm"/>
           <Line yAxisId="left" type="monotone" dataKey="arm_left" name={t('arm_left')}  stroke="#8D6CAA" connectNulls  activeDot={{ r: 8 }} unit=" cm"/>
+          <Line yAxisId="left" type="monotone" dataKey="arm_right" name={t('arm_right')}  stroke="#00A0DC" connectNulls  activeDot={{ r: 8 }} unit=" cm"/>
+          <Line yAxisId="left" type="monotone" dataKey="chest" name={t('chest')}  stroke="#00AEB3" connectNulls  activeDot={{ r: 8 }} unit=" cm"/>
           <Line yAxisId="left" type="monotone" dataKey="waist" name={t('waist')}  stroke="#DC5142" connectNulls  activeDot={{ r: 8 }} unit=" cm"/>
           <Line yAxisId="left" type="monotone" dataKey="umbilical" name={t('umbilical')}  stroke="#E68523" connectNulls  activeDot={{ r: 8 }} unit=" cm"/>
-          <Line yAxisId="left" type="monotone" dataKey="chest" name={t('chest')}  stroke="#00AEB3" connectNulls  activeDot={{ r: 8 }} unit=" cm"/>
           <Line yAxisId="left" type="monotone" dataKey="spina_ilica_ant" name={t('spina_ilica_ant')}  stroke="#ECB220" connectNulls  activeDot={{ r: 8 }} unit=" cm"/>
           <Line yAxisId="left" type="monotone" dataKey="wide_hips" name={t('wide_hips')}  stroke="#DC4B88" connectNulls  activeDot={{ r: 8 }} unit=" cm"/>
-          <Line yAxisId="left" type="monotone" dataKey="quads_right" name={t('quads_right')}  stroke="#DC4B88" connectNulls  activeDot={{ r: 8 }} unit=" cm"/>
           <Line yAxisId="left" type="monotone" dataKey="quads_left" name={t('quads_left')}  stroke="#DC4B88" connectNulls  activeDot={{ r: 8 }} unit=" cm"/>
+          <Line yAxisId="left" type="monotone" dataKey="quads_right" name={t('quads_right')}  stroke="#DC4B88" connectNulls  activeDot={{ r: 8 }} unit=" cm"/>
           <Line yAxisId="left" type="monotone" dataKey="sum" name={t('sum')}  stroke="#91bd09" connectNulls strokeWidth={4}  activeDot={{ r: 8 }} unit=" cm"/>
         </LineChart>
       </ResponsiveContainer>
@@ -79,15 +79,15 @@ export default ({
               <tbody>
                 <tr>
                   <th className="firstColumn" style={{width: "10%"}}>{t("date")}</th>
-                  <th style={{ transform: "rotate(-50deg)", height: "6em", fontSize: "0.8em", width: "6%" }}>{t("arm_right")}</th>
                   <th style={{ transform: "rotate(-50deg)", height: "6em", fontSize: "0.8em", width: "6%" }}>{t("arm_left")}</th>
+                  <th style={{ transform: "rotate(-50deg)", height: "6em", fontSize: "0.8em", width: "6%" }}>{t("arm_right")}</th>
+                  <th style={{ transform: "rotate(-50deg)", height: "6em", fontSize: "0.8em", width: "6%" }}>{t("chest")}</th>
                   <th style={{ transform: "rotate(-50deg)", height: "6em", fontSize: "0.8em", width: "6%" }}>{t("waist")}</th>
                   <th style={{ transform: "rotate(-50deg)", height: "6em", fontSize: "0.8em", width: "6%" }}>{t("umbilical")}</th>
-                  <th style={{ transform: "rotate(-50deg)", height: "6em", fontSize: "0.8em", width: "6%" }}>{t("chest")}</th>
                   <th style={{ transform: "rotate(-50deg)", height: "6em", fontSize: "0.8em", width: "6%" }}>{t("spina_ilica_ant")}</th>
                   <th style={{ transform: "rotate(-50deg)", height: "6em", fontSize: "0.8em", width: "6%" }}>{t("wide_hips")}</th>
-                  <th style={{ transform: "rotate(-50deg)", height: "6em", fontSize: "0.8em", width: "6%" }}>{t("quads_right")}</th>
                   <th style={{ transform: "rotate(-50deg)", height: "6em", fontSize: "0.8em", width: "6%" }}>{t("quads_left")}</th>
+                  <th style={{ transform: "rotate(-50deg)", height: "6em", fontSize: "0.8em", width: "6%" }}>{t("quads_right")}</th>
                   <th>{t("sum")}</th>
                 </tr>
               </tbody>
@@ -101,15 +101,15 @@ export default ({
                     return (
                       <tr onClick={() => setSelectedRecord(item.index)}>
                         <td className="firstColumn" style={{width: "10%", fontSize: "14px"}}>{moment(item.date, 'DD-MM-YYYY').format('DD MMM YYYY')}</td>
-                        <td style={{width: "6%", fontSize: "13px"}}>{item.arm_right} cm</td>
                         <td style={{width: "6%", fontSize: "13px"}}>{item.arm_left} cm</td>
+                        <td style={{width: "6%", fontSize: "13px"}}>{item.arm_right} cm</td>
+                        <td style={{width: "6%", fontSize: "13px"}}>{item.chest} cm</td>
                         <td style={{width: "6%", fontSize: "13px"}}>{item.waist} cm</td>
                         <td style={{width: "6%", fontSize: "13px"}}>{item.umbilical} cm</td>
-                        <td style={{width: "6%", fontSize: "13px"}}>{item.chest} cm</td>
                         <td style={{width: "6%", fontSize: "13px"}}>{item.spina_ilica_ant} cm</td>
                         <td style={{width: "6%", fontSize: "13px"}}>{item.wide_hips} cm</td>
-                        <td style={{width: "6%", fontSize: "13px"}}>{item.quads_right} cm</td>
                         <td style={{width: "6%", fontSize: "13px"}}>{item.quads_left} cm</td>
+                        <td style={{width: "6%", fontSize: "13px"}}>{item.quads_right} cm</td>
                         <td style={{width: "6%", fontSize: "13px"}}>{item.sum} cm</td>
                       </tr>
                     )

@@ -93,7 +93,7 @@ export const SyledExercise = styled.div`
       box-shadow: 0 0 27px 0 #0000001f;
       overflow: hidden;
       width: 23vw;
-      max-width: 315px;
+      max-width: calc( (100vh/2) - 140px );
       min-width: 210px;
     }
     .image-top {
@@ -101,8 +101,8 @@ export const SyledExercise = styled.div`
       width: 23vw;
       min-height: 210px;
       min-width: 210px;
-      max-width: 315px;
-      max-height: 315px;
+      max-width: calc( (100vh/2) - 140px );
+      max-height: calc( (100vh/2) - 140px );
       background-size: cover;
       background-repeat: no-repeat;
       background-color: #e0e0e0;
@@ -112,8 +112,8 @@ export const SyledExercise = styled.div`
       width: 23vw;
       min-height: 210px;
       min-width: 210px;
-      max-width: 315px;
-      max-height: 315px;
+      max-width: calc( (100vh/2) - 140px );
+      max-height: calc( (100vh/2) - 140px );
       background-size: cover;
       background-repeat: no-repeat;
       background-color: #e0e0e0;
@@ -226,6 +226,7 @@ export const SyledTab = styled(Tab)`
     flex: 1;
     color: grey;
     font-weight: 100;
+    margin-left: calc( ( (100vh/2) - 140px)/7);
     .MuiTextField-root {
       width: 100%;
     }
@@ -295,7 +296,7 @@ export const SyledTab = styled(Tab)`
       display: flex;
       flex-flow: row-reverse;
       justify-content: flex-end;
-      .workout-weight{
+      .workout-weight {
         width: 3em;
       }
       .workout-repetitions {
@@ -308,9 +309,9 @@ export const SyledTab = styled(Tab)`
     height: 100%;
     .panel {
       .messages-list {
-        height: calc(50vw - 160px);
-        max-height: 540px;
+        height: calc(46vw - 124px);
         overflow-y: scroll;
+        max-height: calc(100vh - 331px);
       }
     }
     .input {
@@ -353,7 +354,7 @@ export const NotesPanel = styled.div`
   flex-flow: column;
   .notes-list{
     height: calc(50vw - 160px);
-    max-height: 540px;
+    max-height: calc(100vh - 382px);
     overflow: hidden;
     overflow-y: scroll;
     padding: 1em;
@@ -565,6 +566,13 @@ export const StyledWorkout = styled.div`
     border: 1px solid rgba(0,0,0,.0975)!important;
     border-top-right-radius: 10px!important;
     border-top-left-radius: 10px!important;
+    display: flex;
+    flex-flow: row;
+    justify-content: space-between;
+    .one-rm {
+      color: grey;
+      font-weight: 100;
+    }
   }
   .description {
     .workout-wrapper {
@@ -622,6 +630,17 @@ export const StyledWorkout = styled.div`
       display: flex;
       justify-content: space-between;
       font-size: 1.2em;
+      .workout-weight {
+        display: flex;
+        .weight-in-kg {
+          font-weight: 900;
+          width: 70px;
+        }
+        .one-rep-max {
+          color: grey;
+          font-weight: 100;
+        }
+      }
     }
   }
   .trainer-protocoled {

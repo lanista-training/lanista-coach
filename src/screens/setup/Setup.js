@@ -129,6 +129,7 @@ const Setup = ({
   workoutImageUrl,
   onUpdateUserWorkoutChannelData,
   updateUserWorkoutChannelDataLoading,
+  workoutChannelUrl,
 
   dataPrivacyPolicy,
 
@@ -202,7 +203,7 @@ const Setup = ({
             t={t}
             id={id}
             photoUrl={photoUrl}
-            photoUrlFullSize={photoUrl}
+            photoUrlFullSize={photoUrlFullSize}
             refetch={refetch}
           />
 
@@ -281,7 +282,7 @@ const Setup = ({
             onUpdateUserWorkoutChannelData={onUpdateUserWorkoutChannelData}
             updateUserWorkoutChannelDataLoading={updateUserWorkoutChannelDataLoading}
             readyToSaveWorkout={readyToSaveWorkout}
-
+            workoutChannelUrl={workoutChannelUrl}
             refetch={refetch}
           />
         </>
@@ -326,6 +327,14 @@ const Setup = ({
                 </div>
                 {bu == 0 &&
                   <>
+                    <div className="list-item">
+                      <a href="#section-logo" style={{display: 'flex'}}>
+                        <PhotoIcon/>
+                        <div className="list-item-content">
+                          <div className="list-header">{t( "MY_BUSINESS_LOGO" )}</div>
+                        </div>
+                      </a>
+                    </div>
                     <div className="list-item">
                       <a href="#section-2" style={{display: 'flex'}}>
                         <PhotoIcon/>

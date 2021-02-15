@@ -350,7 +350,7 @@ export default ({
                             style={{
                               height: "100px",
                               width: "200px",
-                              backgroundPosition: "right top,left top",
+                              backgroundPosition: "left top, right top",
                               backgroundRepeat: "no-repeat",
                               backgroundSize: "contain, contain",
                               borderRadius: "10px",
@@ -512,6 +512,7 @@ export default ({
               value={newNote}
               onChange={onNewNoteChange}
               autocomplete="off"
+              autoComplete="off"
             />
           </form>
           <IconButton type="submit" aria-label="search" onClick={() => onCreateNote(newNote, selectedDay)}>

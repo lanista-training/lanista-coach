@@ -50,9 +50,6 @@ const MyFooter = ({t, currentLanguage, languageItems}) => {
   )
 }
 
-// ----------------------------------------------------------------------------
-
-// Say hello from GraphQL, along with a HackerNews feed fetched by GraphQL
 const Login = ({
   authenticateUser,
   authenticating,
@@ -73,7 +70,8 @@ const Login = ({
   validationPasswordErrorMessage,
   authenticationErrorMessage,
 
-  tbt
+  tbt,
+  domainLogoUrl,
 }) => {
 
   const [show, setShow] = useState(true);
@@ -120,7 +118,13 @@ const Login = ({
         { !tbt && (
           <div className="form-section">
             <LanistaLogo>
-              <LogoImage width={60} height={60}/>
+              <div className="logo-section">
+                <LogoImage width={60} height={60}/>
+                { domainLogoUrl && domainLogoUrl.length > 0 &&
+                  <div className="partner-logo" style={{backgroundImage: 'url(' + domainLogoUrl + ')'}}>
+                  </div>
+                }
+              </div>
               <div className="sub-header">
                 Lanista<span>Coach</span>
               </div>

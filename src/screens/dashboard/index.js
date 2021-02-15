@@ -203,6 +203,9 @@ const Panel = ({
         getMembersList={getMembersList}
         membersListLoading={membersListLoading}
         membersListData={membersListData}
+
+        goToCustomers={goToCustomers}
+        goToWorkouts={goToWorkouts}
       />
     </Scene>
   )

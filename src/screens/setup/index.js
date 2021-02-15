@@ -6,7 +6,7 @@ import { useMutation, useQuery } from '@apollo/react-hooks';
 import Scene from "../../components/Scene";
 import Setup from './Setup';
 import { logout } from '../../lib/auth';
-import { ME_SETTINGS } from "../../queries";
+import { ME_SETTINGS, ME } from "../../queries";
 import {
   UPDATEUSERPERSONALDATA,
   VERIFYPASSWORD,
@@ -40,13 +40,8 @@ const SetupWithData = ({goBack, doLogout}) => {
         style: {color: "#db2828"},
         className: 'logout-button',
         onTap: () => {
-          console.log("Logout and reset store...");
-          /*
-          logout();
-          */
-          doLogout();
           client.resetStore();
-          console.log("done !");
+          doLogout();
         }
     }];
   }
@@ -124,6 +119,7 @@ const SetupWithData = ({goBack, doLogout}) => {
   const [promoVideo, setPromoVideo] = useState('');
   const [promoText, setPromoText] = useState('');
   const [workoutImageUrl, setWorkoutImageUrl] = useState('');
+  const [workoutChannelUrl, setWorkoutChannelUrl] = useState('');
 
   // Data privacy policy
   const [dataPrivacyPolicy, setDataPrivacyPolicy] = useState(0);
@@ -157,6 +153,7 @@ const SetupWithData = ({goBack, doLogout}) => {
   // Remote actions
   //
   const { data, loading, error, client, refetch } = useQuery(ME_SETTINGS);
+  const { refetch: refetchMe } = useQuery(ME);
   const [updateUserPersonalData, {
     loading: updateUserPersonalDataLoading,
     error: updateUserPersonalDataError
@@ -406,6 +403,7 @@ const SetupWithData = ({goBack, doLogout}) => {
         promo_video,
         promo_text,
         workout_imageUrl,
+        workout_channelUrl,
         // Data privacy
         dataPrivacyPolicy,
         // Role in team
@@ -443,6 +441,7 @@ const SetupWithData = ({goBack, doLogout}) => {
       setPromoVideo(promo_video);
       setPromoText(promo_text);
       setWorkoutImageUrl(workout_imageUrl);
+      setWorkoutChannelUrl(workout_channelUrl);
 
       if( locale != language ) {
         changeLanguage(language.toLowerCase());
@@ -535,7 +534,10 @@ const SetupWithData = ({goBack, doLogout}) => {
         dataChanged={dataChanged}
         goBack={goBack}
         userData={user_data}
-        refetch={refetch}
+        refetch={() => {
+          refetch();
+          refetchMe();
+        }}
 
         bu={data && data.me && data.me.bu}
         id={data && data.me && data.me.id}
@@ -604,6 +606,7 @@ const SetupWithData = ({goBack, doLogout}) => {
         workoutImageUrl={workoutImageUrl}
         onUpdateUserWorkoutChannelData={onUpdateUserWorkoutChannelData}
         updateUserWorkoutChannelDataLoading={updateUserWorkoutChannelDataLoading}
+        workoutChannelUrl={workoutChannelUrl}
 
         dataPrivacyPolicy={dataPrivacyPolicy}
 

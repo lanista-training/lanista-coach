@@ -39,13 +39,6 @@ export default ({
             <div className="template-name">Standard</div>
           </div>
           <div
-            className={printType == 1 ? "selected print-type bit-font-template" : "print-type bit-font-template"}
-            onClick={() => setPrintType(1)}
-          >
-            <div className="template-image"/>
-            <div className="template-name">Grosse Schrift</div>
-          </div>
-          <div
             className={printType == 2 ? "selected print-type diary-template" : "print-type diary-template"}
             onClick={() => setPrintType(2)}
           >

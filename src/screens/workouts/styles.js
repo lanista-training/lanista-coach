@@ -57,7 +57,7 @@ export const StyledWorkout = styled.div`
     height: 155px;
     overflow: hidden;
     text-align: left;
-    background-color: ${props => props.studio ? "#3F51B5" : (props.public ? (props.plugin ? "#64A992" : "rgb(155, 201, 61)") : "#03a9f4")};
+    background-color: ${props => props.lanista ? '#3F51B5' : props.studio ? "#3F51B5" : (props.public ? (props.plugin ? "#64A992" : "rgb(155, 201, 61)") : "#03a9f4")};
     .workout-list-titel {
       height: 46px;
       line-height: 16px;
@@ -183,4 +183,21 @@ export const LastName  = styled.div`
 export const CustomerSection  = styled.div`
   display: flex;
   margin-right: 1em;
+`;
+
+export const StyledHeaderSwitch = styled.div`
+  display: flex;
+  position: absolute;
+  right: 23em;
+  .lable {
+    line-height: 3.3em;
+    text-transform: uppercase;
+    font-weight: 900;
+    margin-right: 0.5em;
+    font-size: 1.3em;
+  }
+  .react-switch {
+    margin-top: 1em;
+    margin-right: 2em;
+  }
 `;

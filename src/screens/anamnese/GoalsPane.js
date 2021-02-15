@@ -46,7 +46,7 @@ export default ({
 
       placeholder={t("goals input placeholder")}
       emptytext={t("goals emtpy list")}
-      intensity={t("Priorität")}
+      intensity={t("priority")}
 
       onSave={onCreate}
       loading={createLoading || loading || deleteLoading || saveLoading}

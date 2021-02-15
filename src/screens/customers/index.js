@@ -104,6 +104,8 @@ const Panel = ({
   goToCustomer,
   goToSetup,
 
+  resetFilter,
+
 }) => {
   const {t} = useTranslate("customers");
   const [hidden , setHidden] = useState(false);
@@ -299,9 +301,11 @@ const Panel = ({
   }
 
   const onFetchMembers = () => {
+    /*
     if( !showLastMembers && filter.trim() === '' )  {
       return true;
     }
+    */
     const previousCursor = initialLoading ? "0" : (membersData && membersData.members ? membersData.members.cursor : "0");
     if( previousCursor > 0 && previousCursor < pageSize ) return false;
     fetchMore({
@@ -440,7 +444,6 @@ const Panel = ({
   const [ changeFolderNameDialog, setChangeFolderNameDialog ] = React.useState(false);
   const toggleChangeFolderNameDialog = () => setChangeFolderNameDialog(!changeFolderNameDialog);
   const onFolderNameClick = () => {
-    console.log("onFolderNameClick")
     setNewFolderName(folder.name);
     toggleChangeFolderNameDialog();
   }
@@ -455,6 +458,15 @@ const Panel = ({
   useEffect(() => {
     !changeFolderNameDialog && onCloseFolderNameChangeDialog();
   }, [changeFolderNameDialog])
+
+  useEffect(() => {
+    console.log("FILTER CHANGE", filter == '')
+
+    if( filter == '' ) {
+      setInitialLoading(true);
+      resetFilter()
+    };
+  }, [filter]);
 
   return (
     <Scene
@@ -486,7 +498,7 @@ const Panel = ({
       onCloseLicenceExpiredWarning={toggleLicenceExpiredWarning}
       goToSetup={goToSetup}
     >
-      { (initialLoading || membersLoading ) &&
+      { initialLoading &&
         <Loading>
           <CircularProgress size={100}/>
         </Loading>
@@ -496,7 +508,7 @@ const Panel = ({
           result &&
           result.members &&
           result.members.length > 0 &&
-          ( showLastMembers || filter.trim() !== '' || selectedFolderId > 0) &&
+          //( showLastMembers || filter.trim() !== '' || selectedFolderId > 0) &&
           !hidden
         ) &&
         <Customers
@@ -526,8 +538,8 @@ const Panel = ({
       {
         ( (!membersLoading && result  &&
           result.members &&
-          result.members.length == 0) ||
-          ( !membersLoading && !showLastMembers && filter.trim() == '' && selectedFolderId === null)
+          result.members.length == 0)
+          //|| ( !membersLoading && !showLastMembers && filter.trim() == '' && selectedFolderId === null)
         ) &&
         <EmptyListMessage text={t("emptylist")} icon="\e90d"/>
       }

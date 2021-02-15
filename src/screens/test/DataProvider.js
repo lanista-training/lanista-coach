@@ -71,7 +71,7 @@ const withData = (WrappedComponent, {memberId, testType, testId, goBack, goToSet
       {
         update(cache,  { data: { generateTestPdf } }) {
           if( generateTestPdf.filename ) {
-            window.cordova.InAppBrowser ? window.cordova.InAppBrowser.open(generateTestPdf.filename, '_system') : window.open(generateTestPdf.filename, '_blank');
+            (window.cordova && window.cordova.InAppBrowser) ? window.cordova.InAppBrowser.open(generateTestPdf.filename, '_system') : window.open(generateTestPdf.filename, '_blank');
           }
         }
       }

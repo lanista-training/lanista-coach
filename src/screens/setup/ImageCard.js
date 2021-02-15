@@ -36,12 +36,13 @@ export default ({
       setPreviewImage("https://dn2ppfvx6tfpw.cloudfront.net/" + encRequest + '?DC=!' + (new Date()).getTime() );
     }
   };
+  const onStartEditing = () => {
+    setPreviewImage(photoUrlFullSize)
+  }
+  const onEndEditing = () => {
+    setPreviewImage(photoUrlFullSize)
+  }
 
-  React.useEffect(() => {
-    if( id > 0 ) {
-      resetPreviewImage();
-    }
-  }, [id]);
   //
   // Crop image
   const onCropImage = (crop) => {
@@ -113,7 +114,7 @@ export default ({
           if (response.ok) {
             refetch();
           } else {
-            alert('Error uploading [' + file.name + ']. Max upload size is ~4MB.');
+            alert('Error uploading [' + file.name + '].');
           }
           setLoadingImage(false);
         })
@@ -144,6 +145,10 @@ export default ({
     }
   }
 
+  console.log("ImageCard")
+  console.log(photoUrl)
+  console.log(photoUrlFullSize)
+
   return (
     <div className="section profile-image-section" id="section-2">
       <div className="section-header">{t( "profile_picture" )}</div>
@@ -151,7 +156,7 @@ export default ({
         <div className="section-content">
           <ImageEditor
             t={t}
-            imageSrc={photoUrl}
+            imageSrc={photoUrlFullSize}
             previewImage={previewImage}
             resetPreviewImage={resetPreviewImage}
 
@@ -162,6 +167,11 @@ export default ({
             onCropImage={onCropImage}
             onRotateImage={onRotateImage}
             loading={loadingImage}
+
+            onStartEditing={onStartEditing}
+            onEndEditing={onEndEditing}
+
+            pictureMessage={'square image format'}
           />
         </div>
       </StyledCard>

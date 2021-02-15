@@ -50,6 +50,7 @@ function Excercises({editmode, workout, split, member, test}) {
       split={split}
       member={member}
       test={test}
+      testId={test}
 
       goToExercise={goToExercise}
       goBack={goBack}

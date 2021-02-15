@@ -49,48 +49,179 @@ const Panel = ({
 
   goBack,
   goToSetup,
+
+  emailErrorMessage,
+  setEmailErrorMessage,
 }) => {
+
   const {t} = useTranslate("profile");
 
-  //
-  // Member data
-  //
-  const onUpdateMember = ({
+  // Personal data
+  const [readyToSavePersonalData, setReadyToSavePersonalData] = useState(false);
+  const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [firstNameErrorMessage, setFirstNameErrorMessage] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [lastNameErrorMessage, setLastNameErrorMessage] = useState('');
+  const [language, setLanguage] = useState('EN');
+  const [gender, setGender] = useState(0);
+  const [birthday, setBirthday] = useState(null);
+
+
+  // Business address
+  const [readyToSaveAddress, setReadyToSaveAddress] = useState(false);
+  const [country, setCountry] = useState('');
+  const [city, setCity] = useState('');
+  const [zipcode, setZipcode] = useState('');
+  const [street, setStreet] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+
+  // Other information
+  const [dpLocation, setDpLocation] = React.useState('');
+  const [dataPrivacySigned, setDataPrivacySigned] = React.useState(false);
+  const [dpSignaturePolicy, setDpSignaturePolicy] = React.useState(0);
+  const [accountStatus, setAccountStatus] = React.useState(0);
+  const [note, setNote] = useState('');
+
+  React.useEffect(() => {
+    if( member ) {
+
+      const {
+        email,
+        first_name,
+        last_name,
+        birthday,
+        language,
+        gender,
+        phone_nr,
+        country,
+        zipcode,
+        street,
+        city,
+        note,
+        dpSigned,
+        dpSignaturePolicy,
+        dpLocation,
+        status,
+      } = member;
+
+      setEmail(email ? email : '');
+      setFirstName(first_name);
+      setLastName(last_name);
+      setBirthday(birthday  ? new Date(parseInt(birthday)) : null);
+      setLanguage(language);
+      setGender(gender);
+      setPhoneNumber(phone_nr);
+      setCountry(country);
+      setZipcode(zipcode);
+      setStreet(street);
+      setCity(city);
+      setNote(note);
+      setDataPrivacySigned(dpSigned == 1);
+      setDpSignaturePolicy(dpSignaturePolicy);
+      setDpLocation(dpLocation);
+      setAccountStatus(status);
+      setReadyToSavePersonalData(false);
+      setReadyToSaveAddress(false);
+    }
+  }, [member]);
+
+  React.useEffect(() => {
+    if( email != member.email
+      || lastName != member.last_name
+      || firstName != member.first_name
+      || language != member.language
+      || gender != member.gender
+      || (birthday !== null  && birthday.getTime() != parseInt(member.birthday))
+      || note != member.note
+    ) {
+      setReadyToSavePersonalData(true);
+    } else {
+      setReadyToSavePersonalData(false);
+    }
+  }, [
     email,
     firstName,
     lastName,
     birthday,
-    gender,
     language,
-    phoneNumber,
+    gender,
     note,
-  }) => {
-    updateMember({
-      variables: {
-        memberId: member.id,
-        email: email,
-        firstName: firstName,
-        lastName: lastName,
-        birthday: birthday,
-        gender: gender,
-        language: language,
-        phoneNumber: phoneNumber,
-        note: note,
-      }
-    })
+  ]);
+
+  useEffect(() => {
+    setEmailErrorMessage(null);
+  }, [email]);
+
+  useEffect(() => {
+    setFirstNameErrorMessage(null);
+  }, [firstName]);
+
+  useEffect(() => {
+    setLastNameErrorMessage(null);
+  }, [lastName])
+
+  React.useEffect(() => {
+    if( phoneNumber != member.phone_nr
+      || country != member.country
+      || zipcode != member.zipcode
+      || street != member.street
+      || city != member.city
+      || phoneNumber != member.phone_nr
+    ) {
+      setReadyToSaveAddress(true);
+    } else {
+      setReadyToSaveAddress(false);
+    }
+  }, [
+    phoneNumber,
+    country,
+    zipcode,
+    street,
+    city,
+    phoneNumber
+  ]);
+
+  //
+  // Member data
+  //
+  const onUpdateMember = () => {
+    // VALIDATOIN RULES
+    if( email && email.trim().length > 0 &&  !(/^[\w-]+(\.[\w-]+)*@([a-z0-9-]+(\.[a-z0-9-]+)*?\.[a-z]{2,6}|(\d{1,3}\.){3}\d{1,3})(:\d{4})?$/.test( email )) ) {
+      setEmailErrorMessage(t("email_invalid"));
+    } else if( firstName.length == 0 ) {
+      setFirstNameErrorMessage(t("FIRST_NAME_ERROR"))
+    }  else if( lastName.length == 0 ) {
+      setLastNameErrorMessage(t("LAST_NAME_ERROR"))
+    } else {
+      updateMember({
+        variables: {
+          memberId: member.id,
+          email: email,
+          firstName: firstName,
+          lastName: lastName,
+          birthday: birthday,
+          gender: gender,
+          language: language,
+          phoneNumber: phoneNumber,
+          note: note,
+        }
+      });
+    }
   }
 
   //
   // Member address
   //
-  const onUpdateMemberAddress = ({country, city, zipcode, street}) => {
+  const onUpdateMemberAddress = () => {
     updateMemberAddress({
       variables: {
         memberId: member.id,
-        country: country,
-        city: city,
-        zipcode: zipcode,
-        street: street,
+        country: country ? country : null,
+        city: city ? city : null,
+        zipcode: zipcode ? zipcode : null,
+        street: street ? street : null,
+        phoneNumber: phoneNumber,
       }
     })
   }
@@ -195,7 +326,7 @@ const Panel = ({
 
     let uploadBaseUrl = document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/' + 'file/user/';
     if( window.cordova ) {
-      uploadBaseUrl = 'https://preview.lanista-training.com/file/user/';
+      uploadBaseUrl = 'https://app.lanista-training.com/file/user/';
     }
     if(file instanceof File) {
       reader.addEventListener('loadend', function(e){
@@ -276,12 +407,67 @@ const Panel = ({
     >
       {
         member && <Profile
-          member={member}
+
+          readyToSavePersonalData={readyToSavePersonalData}
+
+          id={member ? member.id : 0}
+          status={member ? member.status : 0}
+          photoUrlFullSize={member ? member.photoUrlFullSize : ''}
+
+          email={email}
+          emailErrorMessage={emailErrorMessage}
+          setEmail={setEmail}
+
+          firstName={firstName}
+          setFirstName={setFirstName}
+          firstNameErrorMessage={firstNameErrorMessage}
+
+          lastName={lastName}
+          setLastName={setLastName}
+          lastNameErrorMessage={lastNameErrorMessage}
+
+          birthday={birthday}
+          setBirthday={setBirthday}
+
+          language={language}
+          setLanguage={setLanguage}
+
+          gender={gender}
+          setGender={setGender}
+
+          readyToSaveAddress={readyToSaveAddress}
+          setReadyToSaveAddress={setReadyToSaveAddress}
+
+          phoneNumber={phoneNumber}
+          setPhoneNumber={setPhoneNumber}
+
+          country={country}
+          setCountry={setCountry}
+
+          zipcode={zipcode}
+          setZipcode={setZipcode}
+
+          street={street}
+          setStreet={setStreet}
+
+          city={city}
+          setCity={setCity}
+
+          note={note}
+          setNote={setNote}
+
+          dpLocation={dpLocation}
+          dpSignaturePolicy={dpSignaturePolicy}
+          dataPrivacySigned={dataPrivacySigned}
+          setDataPrivacySigned={setDataPrivacySigned}
+
+          accountStatus={accountStatus}
+          setAccountStatus={setAccountStatus}
+
           error={error}
           loading={loading}
           goBack={goBack}
 
-          t={t}
           languages={languages}
 
           onUpdateMember={onUpdateMember}

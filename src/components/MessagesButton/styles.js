@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 import ListItem from '@material-ui/core/ListItem';
 import Menu from '@material-ui/core/Menu';
+import Dialog from '@material-ui/core/Dialog';
 
 export const StyledMenu = styled(Menu)`
   .MuiPopover-paper {
     width: 400px;
     height: 80vh;
+    border-radius: 15px;
   }
   .slick-slider {
     position: relative;
@@ -176,5 +178,66 @@ export const StyledMessageButton = styled.div`
   .MuiBadge-badge {
     top: 15px;
     right: 20px;
+  }
+`;
+
+export const StyledDialog = styled(Dialog)`
+  .MuiPaper-root {
+    border-radius: 10px;
+    max-width: fit-content;
+    .dialog-panel {
+      display: flex;
+      .user-section, .info-section {
+        flex: 1;
+        display: flex;
+        flex-flow: column;
+        padding: 20px;
+        align-items: center;
+        margin-bottom: 20px;
+        margin-top: 20px;
+        .MuiAvatar-root {
+          width: 80px;
+          height: 80px;
+        }
+        .name-section {
+          font-size: 20px;
+        }
+        .first-name {
+          margin-top: 10px;
+        }
+        .last-name {
+          font-weight: 900;
+        }
+      }
+      .info-section {
+        align-self: center;
+      }
+    }
+    .action-buttons {
+      margin-bottom: 3em;
+      width: 100%;
+      justify-content: space-around;
+      display: flex;
+      button {
+        padding: 0 15px;
+        box-shadow: none;
+        border: 1px solid black;
+        width: 15em;
+      }
+      button.positive {
+        background-color: black;
+        color: white;
+      }
+      button.negative {
+        background-color: white;
+        color: black;
+      }
+      .fab-progress {
+        color: white;
+        position: absolute;
+        right: 11em;
+        margin-top: 2px;
+      }
+    }
   }
 `;

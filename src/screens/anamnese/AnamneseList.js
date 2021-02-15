@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useTranslate } from '../../hooks/Translation';
 import {StyledAnamneseList} from './styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
@@ -6,15 +7,14 @@ import moment from "moment";
 
 export default ( {data, onSelection, placeholder, emptytext, intensity, onSave, loading, error} ) => {
 
+  const {t} = useTranslate("anamnese");
   const [inputField, setInputField] = React.useState('');
 
   const [selection, setSelection] = React.useState(null);
 
   React.useEffect(() => {
     setInputField("");
-  }, [data])
-
-  console.log("AnamneseList", data)
+  }, [data]);
 
   return (
     <StyledAnamneseList>
@@ -46,7 +46,7 @@ export default ( {data, onSelection, placeholder, emptytext, intensity, onSave, 
           >
             <div className="anamnese-info">
               <div className="anamnese-description">{item.description}</div>
-              <div className="anamnese-intensity">{intensity}: <span>{(item.rating && item.rating.length > 0) ? item.rating[0].value : 0}</span> (0 - 5)</div>
+              <div className="anamnese-intensity">{intensity}: <span>{(item.rating && item.rating.length > 0) ? (item.rating[0].value !== null ? item.rating[0].value + ' ' + t('from') + ' 10' : t("NO_VALUE")): t("NO_VALUE")}</span></div>
             </div>
             <div className="anamnese-extra-info">
               <div className="anamnese-creation-date">{moment(new Date(parseInt(item.creation_date))).format("DD-MM-YYYY")}</div>

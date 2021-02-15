@@ -19,7 +19,7 @@ export function useTranslate(namespace) {
 export function TranslatorProvider({ children, client }) {
   const isBrowser = typeof window !== 'undefined';
 
-  const localLanguage = window.localStorage.getItem("language");
+  const localLanguage = isBrowser ? window.localStorage.getItem("language") : 'en';
   let defaultLanguage = localLanguage ? localLanguage : 'de';
 
   const { data, error, loading } = useQuery(ME);
@@ -29,7 +29,6 @@ export function TranslatorProvider({ children, client }) {
 
     }
   }
-
   React.useEffect(() => {
     if(error) {
       const storedLanguage = window.localStorage.getItem("language");
@@ -40,6 +39,38 @@ export function TranslatorProvider({ children, client }) {
     }
   },[error]);
 
+  let [language, setLanguage] = useState(defaultLanguage);
+  let translations = require('../../../static/locales/' + language + '/translations.json');
+
+  React.useEffect(() => {
+    translations = require('../../../static/locales/' + language + '/translations.json');
+  }, [language]);
+
+
+  return (
+    <Context.Provider
+      value={{
+        translator: createTranslator(translations),
+        locale: translations.locale,
+        changeLanguage: (lang) => {
+          if(lang != language) {
+            window.localStorage.clear();
+          }
+          window.localStorage.setItem('language', lang.toLowerCase());
+          setLanguage(lang.toLowerCase())
+        },
+      }}
+    >
+      {children}
+    </Context.Provider>
+  );
+}
+
+export function TranslatorProviderStandalone({ children, client }) {
+  const isBrowser = typeof window !== 'undefined';
+
+  const localLanguage = isBrowser ? window.localStorage.getItem("language") : 'en';
+  let defaultLanguage = localLanguage ? localLanguage : 'en';
 
   let [language, setLanguage] = useState(defaultLanguage);
   let translations = require('../../../static/locales/' + language + '/translations.json');

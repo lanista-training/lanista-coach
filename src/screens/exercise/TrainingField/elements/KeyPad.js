@@ -305,9 +305,9 @@ const KeyPad = forwardRef(function KeyPad(
           fullWidth={true}
           size="large"
         >
-          <UnitButton className={unit== 0 ? 'active' : 'inactive'} onClick={() => onUnitChange(0)}>Wdh</UnitButton>
-          <UnitButton className={unit== 2 ? 'active' : 'inactive'} onClick={() => onUnitChange(2)}>Min</UnitButton>
-          <UnitButton className={unit== 1 ? 'active' : 'inactive'} onClick={() => onUnitChange(1)}>Sek</UnitButton>
+          <UnitButton className={unit== 0 ? 'active' : 'inactive'} onClick={() => onUnitChange(0)}>{t("rep")}</UnitButton>
+          <UnitButton className={unit== 2 ? 'active' : 'inactive'} onClick={() => onUnitChange(2)}>{t("min")}</UnitButton>
+          <UnitButton className={unit== 1 ? 'active' : 'inactive'} onClick={() => onUnitChange(1)}>{t("sec")}</UnitButton>
         </ButtonGroup>
       </div>
 

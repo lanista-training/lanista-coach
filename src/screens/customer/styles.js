@@ -330,6 +330,19 @@ export const Card = styled.div`
     .target-section {
       text-align: right;
       display: flex;
+      .rating-lable {
+        position: relative!important;
+        left: -188px!important;
+        min-width: 110px!important;
+        top: 20px!important;
+      }
+      .MuiRating-root {
+        left: -76px;
+        svg {
+          width: 18px;
+          height: 18px;
+        }
+      }
       .MuiRating-iconFilled {
         color: rgb(136,217,108);
       }
@@ -431,6 +444,10 @@ export const Card = styled.div`
     background: #12006f;
     color: white;
     font-family: Roboto;
+    overflow: hidden;
+    .file-date {
+      text-align: right;
+    }
     .workoutname {
       flex: 1;
     }
@@ -466,6 +483,13 @@ export const Card = styled.div`
       top: -5.5em;
       .workoutextrainfo {
         text-align: right;
+        position: relative;
+        top: -10px;
+        right: -8px;
+        svg {
+          width: 13px;
+          height: 13px;
+        }
       }
     }
   }
@@ -752,7 +776,7 @@ export const ExerciseImages = styled.div`
   min-width: 180px;
   height: 90px;
   max-height: 90px;
-  background-position: right top,left top;
+  background-position: left top,right top;
   background-repeat: no-repeat;
   background-size: 50.5% auto,50.5% auto;
   background-color: #efefef;
@@ -885,7 +909,7 @@ export const ProtocolsOptions = styled(Menu)`
   }
 `;
 
-export const StyledMenu = styled(Menu)`
+export const StyledMenu = styled(Dialog)`
   .MuiMenu-paper::-webkit-scrollbar {
     display: none!important;
   }
@@ -967,7 +991,7 @@ export const StyledMenu = styled(Menu)`
     .note-header {
       margin-bottom: 15px!important;
       span, p {
-        line-height: 10px;
+        line-height: 15px;
       }
     }
   }

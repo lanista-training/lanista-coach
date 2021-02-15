@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Pane } from './styles';
-import AnamneseList from './AnamneseList';
+import PhysioList from './PhysioList';
 import Physio from './Physio';
 
 export default ({
@@ -24,23 +24,23 @@ export default ({
   deleteError,
 }) => {
 
-  const [selection, setSelection] = useState(-1);
-
+  const [selection, setSelection] = useState(null);
   const [openFirst, setOpenFirst] = useState(id);
+
   useEffect(() => {
     if( openFirst && physios ) {
       const index = physios.findIndex(f => f.id == openFirst);
-      setSelection(index);
+      setSelection(physios[index]);
       setOpenFirst(undefined);
     }
   }, [physios]);
 
-  const onSelection = (index) => {
-    setSelection(index);
+  const onSelection = (item) => {
+    setSelection(item);
   }
 
   return <Pane style={{ height: "calc((100vh - 130px) - 7em)" }}>
-    <AnamneseList
+    <PhysioList
       data={physios}
       onSelection={onSelection}
 
@@ -53,12 +53,12 @@ export default ({
       error={createError}
     />
   {
-    selection >= 0 &&
+    selection &&
     <Physio
       t={t}
-      data={physios[selection]}
+      data={selection}
       open={true}
-      onClose={() => setSelection(-1)}
+      onClose={() => setSelection(null)}
 
       onSave={onSave}
       onDelete={onDelete}

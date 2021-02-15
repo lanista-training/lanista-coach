@@ -21,6 +21,19 @@ export const Root = styled.div`
       background: white;
       box-shadow: 0 0 27px 0 #0000001f;
       border-radius: 15px;
+      .logo-section {
+        display: flex;
+        justify-content: center;
+        .partner-logo {
+          width: 60px;
+          height: 60px;
+          background-size: contain;
+          background-position: center;
+          background-repeat: no-repeat;
+          margin-left: 5px;
+          margin-right: 5px;
+        }
+      }
       .email-field {
         fieldset {
           border-bottom-right-radius: 0;

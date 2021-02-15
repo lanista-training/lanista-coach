@@ -2,6 +2,9 @@ import styled from 'styled-components';
 import {  Tab } from 'semantic-ui-react';
 import IconButton from '@material-ui/core/IconButton';
 import Popover from '@material-ui/core/Popover';
+import List from '@material-ui/core/List';
+import Slider from '@material-ui/core/Slider';
+import Dialog from '@material-ui/core/Dialog';
 
 export const Stage = styled.div`
   padding-top: 6em!important;
@@ -15,6 +18,23 @@ export const Stage = styled.div`
 export const StyledTab = styled(Tab)`
   width: 100%;
   height: 100%;
+  .tab-menu {
+    .ui.label {
+      background: #999;
+      margin-left: 1px;
+      border-radius: 50%;
+      font-size: 9px;
+      height: 18px;
+      line-height: 12px;
+      position: relative;
+      top: -2px;
+    }
+  }
+  .tab-menu.active  {
+    .ui.label {
+      background: black!important;
+    }
+  }
   .ui.grid {
     margin: initial!important;
   }
@@ -24,14 +44,14 @@ export const StyledTab = styled(Tab)`
   }
   .item {
     font-family: Roboto;
-    font-size: 1.1em!important;
+    font-size: 1em!important;
     font-weight: initial!important;
     color: #b1b1b1!important;
     text-align: center!important;
     display: initial!important;
     margin: 0!important;
     padding-left: 1em!important;
-    min-width: 8.5em;
+    min-width: 7.5em;
     line-height: 2em!important;
   }
   .item.active {
@@ -51,13 +71,13 @@ export const StyledAnamneseList = styled.div`
   height: 100%;
   .anamnese-input-field {
     input {
+      border-radius: 15px;
       width: 100%;
       background-color: #efefef;
       -webkit-text-fill-color: initial!important;
       min-height: 2.5em;
       border-width: 0;
       -webkit-appearance: none;
-      border-radius: 5px;
       padding: 1em;
       ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
         color: grey;
@@ -70,7 +90,7 @@ export const StyledAnamneseList = styled.div`
     height: 100%;
     margin-top: 1em;
     background-color: #efefef;
-    border-radius: 5px;
+    border-radius: 15px;
     overflow: scroll;
     padding-bottom: 4em;
     .empty-list {
@@ -143,6 +163,7 @@ export const Pane = styled(Tab.Pane)`
   max-height: 675px!important;
   margin-right: auto!important;
   margin-left: auto!important;
+  border-radius: 15px!important;
   .image-wrapper {
     align-items: center;
     height: 100%;
@@ -169,8 +190,8 @@ export const StyledFinding = styled(IconButton)`
   }
 `;
 
-export const FindingForm = styled(Popover)`
-  .MuiPopover-paper {
+export const FindingForm = styled(Dialog)`
+  .MuiDialog-paper {
     border-radius: 15px;
     overflow: visible;
     .editing.rating-section {
@@ -197,7 +218,10 @@ export const FindingForm = styled(Popover)`
     }
     .finding-form {
       width: 595px;
+      height: 509px;
       padding: 2em;
+      display: flex;
+      flex-flow: column;
       .header-section {
         display: flex;
         justify-content: space-between;
@@ -220,7 +244,9 @@ export const FindingForm = styled(Popover)`
       }
       .content-section {
         padding-top: 1em;
+        flex: 1;
         .description-section {
+          height: 86px;
           padding-bottom: 1em;
           font-size: 1em;
           font-weight: 100;
@@ -253,6 +279,10 @@ export const FindingForm = styled(Popover)`
       .history-section {
 
       }
+      .notes-list-section {
+        height: 92px;
+        overflow: scroll;
+      }
       .author-section {
         display: flex;
         color: #a0a0a0;
@@ -281,12 +311,12 @@ export const FindingForm = styled(Popover)`
         }
       }
       .buttons-section {
-        padding-top: 3em;
+        padding-top: 1em;
         display: flex;
         justify-content: space-between;
       }
       .request-deletion {
-        min-height: 300px;
+        min-height: 231px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -327,8 +357,8 @@ export const GraphSection = styled.div`
   }
 `;
 
-export const ModalForm = styled(Popover)`
-  .MuiPopover-paper {
+export const ModalForm = styled(Dialog)`
+  .MuiDialog-paper {
     border-radius: 15px;
     overflow: visible;
     .editing.rating-section {
@@ -390,6 +420,15 @@ export const ModalForm = styled(Popover)`
           margin-top: 1em;
           align-items: center;
           font-weight: 100;
+          .MuiFormControl-root {
+            margin-top: 0!important;
+            margin-bottom: 0;
+            .MuiInputBase-root {
+              ::before {
+                border-bottom: none;
+              }
+            }
+          }
           .time-text {
             margin-right: 2em;
           }
@@ -397,6 +436,9 @@ export const ModalForm = styled(Popover)`
         .rating-section.inverted {
           background: #00000047;
           color: white;
+        }
+        button {
+          padding: 0px 15px!important;
         }
       }
       .history-section {
@@ -434,7 +476,7 @@ export const ModalForm = styled(Popover)`
         justify-content: space-between;
       }
       .request-deletion {
-        min-height: 300px;
+        min-height: 231px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -459,5 +501,64 @@ export const ModalForm = styled(Popover)`
     .MuiBottomNavigationAction-root.Mui-selected {
       color: white;
     }
+  }
+`;
+
+export const NotesList = styled(List)`
+  width: 100%;
+  .empty-list {
+    text-align: center;
+    padding-top: 2em;
+    color: #afafaf;
+  }
+  .MuiListItem-root  {
+    padding-top: 0;
+    padding-bottom: 0;
+    .MuiListItemText-root {
+      margin-top: 3px;
+      margin-bottom: 3px;
+    }
+  }
+  .anamnese-note {
+    display: flex;
+    .anamnese-note-date {
+      font-weight: 900;
+      width: 90px;
+      min-width: 90px;
+      font-size: 12px;
+    }
+    .anamnese-note-text {
+      font-size: 12px;
+    }
+  }
+  button {
+    padding: 0px 15px;
+    background-color: white;
+  }
+  .MuiAvatar-root {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12);
+  }
+`;
+
+export const NoteForm = styled(List)`
+  display: flex;
+  width: 100%;
+  .text-field {
+    flex: 1;
+  }
+  .MuiFormControl-root {
+    margin: 0;
+  }
+`;
+
+export const RatingSlider = styled(Slider)`
+  width: 350px!important;
+  margin: 0 1em!important;
+  padding-top: 0px!important;
+  .MuiSlider-markLabel {
+    top: 8px;
   }
 `;

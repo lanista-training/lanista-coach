@@ -11,7 +11,8 @@ import {
   Button,
   List,
   Modal,
-  Placeholder
+  Placeholder,
+  Label,
 } from 'semantic-ui-react';
 import {useDropzone} from 'react-dropzone';
 import moment from 'moment';
@@ -52,33 +53,54 @@ import ActivityList from './ActivityList';
 import ScrollBooster from 'scrollbooster';
 
 const customIcons = {
+  0: {
+    icon: <AdjustIcon />,
+    label: '0',
+  },
   1: {
-    icon: <SentimentVeryDissatisfiedIcon />,
-    label: 'Very Dissatisfied',
+    icon: <AdjustIcon />,
+    label: '1',
   },
   2: {
-    icon: <SentimentDissatisfiedIcon />,
-    label: 'Dissatisfied',
+    icon: <AdjustIcon />,
+    label: '2',
   },
   3: {
-    icon: <SentimentSatisfiedIcon />,
-    label: 'Neutral',
+    icon: <AdjustIcon />,
+    label: '3',
   },
   4: {
-    icon: <SentimentSatisfiedAltIcon />,
-    label: 'Satisfied',
+    icon: <AdjustIcon />,
+    label: '4',
   },
   5: {
-    icon: <SentimentVerySatisfiedIcon />,
-    label: 'Very Satisfied',
+    icon: <AdjustIcon />,
+    label: '5',
   },
   6: {
-    icon: <SentimentVerySatisfiedIcon />,
-    label: 'Very Satisfied',
+    icon: <AdjustIcon />,
+    label: '6',
+  },
+  7: {
+    icon: <AdjustIcon />,
+    label: '7',
+  },
+  8: {
+    icon: <AdjustIcon />,
+    label: '8',
+  },
+  9: {
+    icon: <AdjustIcon />,
+    label: '9',
+  },
+  10: {
+    icon: <AdjustIcon />,
+    label: '10',
   },
 };
 
 const IconContainer = (props) => {
+  console.log("IconContainer", props);
   const { value, ...other } = props;
   return <span {...other}>{customIcons[value].icon}</span>;
 }
@@ -112,37 +134,41 @@ const FileDropZone = ({memberId, updateMemberFiles, closeFileUploadPanel, setLoa
   });
 
   const files = acceptedFiles.map((file, index) => {
-      setLoading(true);
-      let reader = new FileReader();
-      let uploadBaseUrl = document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/' + 'file/user/';
-      const token = cookie.get('token');
-      reader.addEventListener('loadend', function(e) {
-        fetch(uploadBaseUrl + memberId + '/files/' + file.name, {
-          method: "POST",
-          body: new Blob([reader.result], {type: file.type}),
-          headers: {
-            authorization: token ? `Bearer ${token}` : ''
-          },
-        })
-        .then((response) => {
-          if (response.ok) {
-            if(index == acceptedFiles.length-1) {
-              closeFileUploadPanel();
-              updateMemberFiles();
-              setLoading(false);
-            }
-          } else {
+    setLoading(true);
+    let reader = new FileReader();
+    let uploadBaseUrl = document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/' + 'file/user/';
+    if( window.cordova ) {
+      uploadBaseUrl = 'https://preview.lanista-training.com/file/user/';
+    }
+    const token = cookie.get('token');
+    const fileName = file.name == 'image.jpg' ? ('image-' + moment().format('DD-MM-YYYY-h-mm-ss') + '.jpg') : file.name;
+    reader.addEventListener('loadend', function(e) {
+      fetch(uploadBaseUrl + memberId + '/files/' + fileName, {
+        method: "POST",
+        body: new Blob([reader.result], {type: file.type}),
+        headers: {
+          authorization: token ? `Bearer ${token}` : ''
+        },
+      })
+      .then((response) => {
+        if (response.ok) {
+          if(index == acceptedFiles.length-1) {
+            closeFileUploadPanel();
+            updateMemberFiles();
             setLoading(false);
-            alert('Error uploading [' + file.name + ']');
           }
-        })
-        .catch((error) => {
-          console.log("ERROR UPLOADING FILE");
-          console.log(error);
+        } else {
           setLoading(false);
-          updateMemberFiles()
-          closeFileUploadPanel()
-        });
+          alert('Error uploading [' + file.name + ']');
+        }
+      })
+      .catch((error) => {
+        console.log("ERROR UPLOADING FILE");
+        console.log(error);
+        setLoading(false);
+        updateMemberFiles()
+        closeFileUploadPanel()
+      });
     });
     reader.readAsArrayBuffer(file);
     return (
@@ -152,7 +178,10 @@ const FileDropZone = ({memberId, updateMemberFiles, closeFileUploadPanel, setLoa
     )
   });
 
-  console.log("DropZone", loading)
+  if( window.cordova ) {
+    window.StatusBar.hide();
+    window.StatusBar.show();
+  }
 
   return ( (!loading ) ?
       <StyledDropZone>
@@ -350,8 +379,18 @@ const Customer = ({
 
   const token = cookie.get('token');
 
+  const handleFileOpen = (file) => {
+    (window.cordova && window.cordova.InAppBrowser) ? window.cordova.InAppBrowser.open(file, '_system') : window.open(file, '_blank');
+  }
+
   const panes = [
-    { menuItem: { key: 'data',  icon: 'chevron right', content: t("costomer info") }, render: () =>
+    {
+      menuItem: {
+        key: 'data',
+        icon: 'chevron right',
+        content: t("costomer info")
+      },
+      render: () =>
       <Tab.Pane>
         <div className="info-list-viewport">
           <div className="info-list-content">
@@ -419,12 +458,15 @@ const Customer = ({
                       {
                         <Rating
                           name="customized-icons"
-                          defaultValue={item.rating[item.rating.length-1].value+1}
-                          getLabelText={value => customIcons[value].label}
-                          IconContainerComponent={IconContainer}
+                          defaultValue={ item.rating[item.rating.length-1].value === null ? null : item.rating[item.rating.length-1].value + 1 }
+                          icon={<AdjustIcon fontSize="inherit" />}
+                          max={11}
                           readOnly
                         />
                       }
+                      <div className="rating-lable">
+                        {item.rating[item.rating.length-1].value === null ? t('NO_VALUE') : item.rating[item.rating.length-1].value +  ' ' + t('from') + ' 10'}
+                      </div>
                     </div>
                   </div>
                 </Card>
@@ -461,18 +503,17 @@ const Customer = ({
                 loading={uploadingFiles}
               />
             }
-            {!loadingFiles && !fileDownloadMode && memberFiles && memberFiles.map(file => (
+            {!loadingFiles && !fileDownloadMode && memberFiles && memberFiles.slice().reverse().map(file => (
               <Card key={file.flinename}>
                 <div className="workout-wrapper member-file" >
                   <div className="workoutname">{decodeURI(file.filename)}</div>
+                  <div className="file-date">{ moment(new Date(parseInt(file.last_change))).format('DD MMMM YYYY')}</div>
                   <div className="member-file-icons">
                     <div className="member-file-icon trash">
                       <Icon name='trash alternate outline' onClick={() => handleOpen(file)}/>
                     </div>
-                    <div className="member-file-icon file">
-                      <a href={'https://kxt70ua3ml.execute-api.eu-central-1.amazonaws.com/prod/file/user/' + customer.id + '/files/' + token + '/' + file.filename} target="_blank">
-                        <Icon name='file alternate outline'/>
-                      </a>
+                    <div className="member-file-icon file" onClick={() => handleFileOpen('https://kxt70ua3ml.execute-api.eu-central-1.amazonaws.com/prod/file/user/' + customer.id + '/files/' + token + '/' + file.filename)}>
+                      <Icon name='file alternate outline'/>
                     </div>
                   </div>
                 </div>
@@ -504,22 +545,24 @@ const Customer = ({
                           item.warning_type == 'MED' &&
                           <StyledRating
                             name="customized-icons"
-                            defaultValue={item.rating+1}
+                            defaultValue={item.rating !== null ? item.rating+1 : null}
                             readOnly
                             icon={<AdjustIcon fontSize="inherit" />}
+                            max={11}
                           />
                         }
                         {
                           item.warning_type != 'MED' &&
                           <Rating
                             name="customized-icons"
-                            defaultValue={item.rating+1}
+                            defaultValue={item.rating !== null ? item.rating+1 : null}
                             icon={<AdjustIcon fontSize="inherit" />}
                             readOnly
+                            max={11}
                           />
                         }
-                        <div>
-                          {t(getTranslationKey(item.warning_type) + "_rating_" + (item.rating + 1))}
+                        <div className="rating-lable">
+                          {item.rating === null ? t('NO_VALUE') : item.rating +  ' ' + t('from') + ' 10'}
                         </div>
                       </div>
                     </div>
@@ -588,7 +631,7 @@ const Customer = ({
         });
       }, 1500);
     }
-  }, [activeTab]);
+  }, [activeTab, memberFiles]);
 
   return(
     <Stage>

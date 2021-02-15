@@ -321,6 +321,7 @@ const CustomerPane = ({
     UPLOADSIGNATURE,
     {
       update(cache,  { data: { dataPrivacyDocumentSigned } }) {
+        console.log("refetch")
         setDpDocumentSigned(true);
         refetch();
       }
@@ -413,7 +414,10 @@ const CustomerPane = ({
 
   const removeMemberFile = (file) => {
 
-    const uploadBaseUrl = document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/' + 'file/user/';
+    let uploadBaseUrl = document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/' + 'file/user/';
+    if( window.cordova ) {
+      uploadBaseUrl = 'https://app.lanista-training.com/file/user/';
+    }
     const token = cookie.get('token');
 
     fetch( uploadBaseUrl + memberId + '/files/' + file.filename, {
@@ -591,13 +595,11 @@ const CustomerPane = ({
       typex: 'Ionicons',
       name: 'refresh',
       onTap: () => {
-        goToAnamnese();
-        /*
-        Router.push({
-          pathname: '/anamnese',
-          query: { customer: memberId }
-        });
-        */
+        if(!data.member.dpSigned && me.dataPrivacyPolicy == 2) {
+          toggleDpDialogOpen();
+        } else {
+          goToAnamnese();
+        }
       }
     });
     return commands;

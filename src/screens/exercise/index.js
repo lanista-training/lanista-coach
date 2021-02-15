@@ -23,6 +23,21 @@ const groupWorkouts = (workouts) => {
   return grouped;
 }
 
+const oneRmMax = (workouts) => {
+  var grouped = _.mapValues(_.groupBy(workouts, 'formated_date'), clist => clist.map(workout => _.omit(workout, 'formated_date')));
+  var result = _.mapValues( grouped, workouts => {
+    var max = 0;
+    workouts.map(workout => {
+      const dayValue = Math.round((workout.weight * workout.repetitions * 0.033) + workout.weight);
+      if( dayValue > max ) {
+        max = dayValue;
+      }
+    });
+    return max;
+  });
+  return result;
+}
+
 const Panel = ({
   exercise,
   refetch,
@@ -327,6 +342,8 @@ const Panel = ({
       )}
       headerChildren={<ExerciseHeader
         owner={editMode && exercise && exercise.owner}
+        creator={exercise && exercise.owner && !(planexerciseId > 0) && exercise.creator}
+        changer={exercise && exercise.owner && !(planexerciseId > 0) && exercise.changer}
         exercise={exercise}
         editNameMode={editNameMode}
         toggleEditNameMode={toggleEditNameMode}/>
@@ -342,6 +359,7 @@ const Panel = ({
         exercise={exercise ? exercise : {}}
         refetch={refetch}
         groppedWorkouts={groupWorkouts(exercise ? exercise.workouts : [])}
+        oneRMArray={oneRmMax(exercise ? exercise.workouts : [])}
         settings={settings}
 
         t={t}

@@ -103,10 +103,10 @@ const Panel = ({goBack}) => {
     // data validation
     if( email == "" || email === undefined ) {
       setEmailIsValid(false);
-      setErrorMessage(t("login:email_empty"));
+      setErrorMessage(t("email_empty"));
     } else if( !re.test(email) ) {
       setEmailIsValid(false);
-      setErrorMessage(t("login:email_invalid"));
+      setErrorMessage(t("email_invalid"));
     } else {
       sendpasswordreset({ variables: { email: email } });
     }
@@ -130,9 +130,14 @@ const Panel = ({goBack}) => {
     <Forgotpassword
       languages={languages}
       currentLanguage={locale}
+
       goBack={goBack}
+
       onSendpasswordreset={validateEmail}
       errorMessage={errorMessage || ( errorCode && t(errorCode))}
+      loading={loading}
+
+      email={email}
       emailIsValid={emailIsValid}
       handleEmailChange={handleEmailChange}
       passwordresetsuccessfull={(data && data.sendpasswordreset && data.sendpasswordreset == "PASSWORDRESETSENT")}

@@ -97,6 +97,7 @@ export const ConfigurationPanel = styled.div`
       display: flex;
       flex-flow: column;
       align-items: flex-end;
+      z-index: 1;
       button {
         position: relative;
         width: 87%;

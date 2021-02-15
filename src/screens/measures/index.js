@@ -72,6 +72,7 @@ const findLastCaliperValues = (records) => {
 }
 
 const findLastMeasuresValues = (records) => {
+
   let lastArmRight = 0;
   let lastArmLeft = 0;
   let lastWaist = 0;
@@ -108,8 +109,8 @@ const findLastMeasuresValues = (records) => {
     chest: lastChest,
     spina_ilica_ant: lastSpinaIlicaAnt,
     wide_hips: lastWideHips,
-    lastQuadsRight: lastQuadsRight,
-    lastQuadsLeft: lastQuadsLeft,
+    quads_right: lastQuadsRight,
+    quads_left: lastQuadsLeft,
   }
 
 }

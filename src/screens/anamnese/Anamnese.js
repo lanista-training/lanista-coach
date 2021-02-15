@@ -2,7 +2,7 @@ import * as React from "react";
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import _ from 'lodash';
-import { Grid, Tab, Icon, Statistic, List, Image } from 'semantic-ui-react';
+import { Grid, Tab, Menu, Label, Icon, Statistic, List, Image } from 'semantic-ui-react';
 import moment from "moment";
 import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts';
 import {Stage, StyledTab} from './styles';
@@ -99,6 +99,15 @@ const Screen = ({
   onDeletePhysio,
   deletePhysioLoading,
   deletePhysioError,
+
+  onSaveAnamneseNote,
+  saveAnamneseNoteLoading,
+  saveAnamneseNoteError,
+
+  onDeleteAnamneseNote,
+  deleteAnamneseNoteLoading,
+  deleteAnamneseNoteError,
+
 }) => {
 
   const {goals, drugs, sport_activities, lifestyles, physios, findings} = customer;
@@ -111,7 +120,11 @@ const Screen = ({
   }, [activeIndex])
 
   const panes = [
-    { menuItem: { key: 'injuries',  content: t('injuries') }, render: () =>
+    { menuItem: (
+      <Menu.Item key='injuries' className="tab-menu">
+        {t('injuries')}<Label>{findings ? findings.length : 0}</Label>
+      </Menu.Item>
+    ), render: () =>
       <FindingsPane
         me={me}
 
@@ -131,9 +144,21 @@ const Screen = ({
         onDeleteFinding={onDeleteFinding}
         deleteFindingLoading={deleteFindingLoading}
         deleteFindingError={deleteFindingError}
+
+        onSaveAnamneseNote={onSaveAnamneseNote}
+        saveAnamneseNoteLoading={saveAnamneseNoteLoading}
+        saveAnamneseNoteError={saveAnamneseNoteError}
+
+        onDeleteAnamneseNote={onDeleteAnamneseNote}
+        deleteAnamneseNoteLoading={deleteAnamneseNoteLoading}
+        deleteAnamneseNoteError={deleteAnamneseNoteError}
       />
     },
-    { menuItem: { key: 'ailment',  content: t('ailment') }, render: () =>
+    { menuItem: (
+      <Menu.Item key='ailment' className="tab-menu">
+        {t('ailment')}<Label>{lifestyles ? lifestyles.length : 0}</Label>
+      </Menu.Item>
+    ), render: () =>
       <LifestylePane
         t={t}
 
@@ -155,7 +180,11 @@ const Screen = ({
         deleteLifestyleError={deleteLifestyleError}
       />
     },
-    { menuItem: { key: 'drugs',  content: t('drugs') }, render: () =>
+    { menuItem: (
+      <Menu.Item key='drugs' className="tab-menu">
+        {t('drugs')}<Label>{drugs ? drugs.length : 0}</Label>
+      </Menu.Item>
+    ), render: () =>
       <DrugsPane
         t={t}
 
@@ -177,7 +206,11 @@ const Screen = ({
         deleteError={deleteDrugError}
       />
     },
-    { menuItem: { key: 'sport activities',  content: t('sport activities') }, render: () =>
+    { menuItem: (
+      <Menu.Item key='sport activities' className="tab-menu">
+        {t('sport activities')}<Label>{sport_activities ? sport_activities.length : 0}</Label>
+      </Menu.Item>
+    ), render: () =>
       <SportActivitiesPane
         t={t}
 
@@ -198,7 +231,11 @@ const Screen = ({
         deleteLoading={deleteSportActivityLoading}
         deleteError={deleteSportActivityError}
       />
-    },{ menuItem: { key: 'goals',  content: t('goals') }, render: () =>
+    },{ menuItem: (
+      <Menu.Item key='goals' className="tab-menu">
+        {t('goals')}<Label>{goals ? goals.length : 0}</Label>
+      </Menu.Item>
+    ), render: () =>
       <GoalsPane
         t={t}
 
@@ -219,7 +256,11 @@ const Screen = ({
         deleteLoading={deleteGoalLoading}
         deleteError={deleteGoalError}
       />
-    },{ menuItem: { key: 'physio',  content: t('physio') }, render: () =>
+    },{ menuItem: (
+      <Menu.Item key='physio' className="tab-menu">
+        {t('physio')}<Label>{physios ? physios.length : 0}</Label>
+      </Menu.Item>
+    ), render: () =>
       <PhysiosPane
         t={t}
 

@@ -96,7 +96,6 @@ const Dashboard = () => {
 const Exercise = () => {
   let history = useHistory();
   let { exerciseId, memberId, tab, planexerciseId } = useParams();
-  console.log("Exercise", exerciseId, memberId, tab, planexerciseId);
   return <ExercisePanel
     exerciseId={exerciseId}
     memberId={memberId}
@@ -110,9 +109,10 @@ const Exercise = () => {
 
 const Exercises = () => {
   let history = useHistory();
-  let { muscle, type, addition, exercises, memberId, workoutId, split, editmode, planexerciseId } = useParams();
+  let { muscle, type, addition, exercises, memberId, workoutId, split, editmode, planexerciseId, testId } = useParams();
   return <ExercisesPanel
     member={memberId}
+    testId={testId}
     workout={workoutId}
     split={split}
     editmode={editmode}
@@ -170,8 +170,8 @@ const Measures = () => {
     goBack={() => history.goBack()}
     goToSetup={() => history.push("/setup")}
     goToTest={(testData) => {
-      const {testtype, id} = testData;
-      history.push("/test/" + memberId + '/' + testtype + '/' + id)
+      const {testType, id} = testData;
+      history.push("/test/" + memberId + '/' + testType + '/' + id)
     }}
   />
 }
@@ -224,6 +224,7 @@ const Testsmanager = () => {
     goBack={() => history.goBack()}
     goToTest={(testId) => history.push("/testsmanager/" + testId)}
     goToSetup={() => history.push("/setup")}
+    goToExercises={(testId) => history.push("/exercises/" + testId + "/true")}
   />
 }
 
@@ -234,9 +235,7 @@ const Workout = () => {
     workoutId={workoutId}
     goBack={() => history.goBack()}
     goToExercise={(exerciseId, memberId, planexerciseId) => {
-      console.log("Workout", exerciseId, memberId, planexerciseId);
       const path = '/exercise/' + exerciseId + '/' + memberId + '/' + '0' + '/' + planexerciseId;
-      console.log("PATH: ", path);
       history.push( path );
     }}
     goToExercises={(workoutId, split, editmode) => history.push('/exercises/' + workoutId + '/' + split + '/' + editmode)}
@@ -301,6 +300,9 @@ function App() {
         <Route path="/exercises/:workoutId/:split/:editmode">
           <Exercises />
         </Route>
+        <Route path="/exercises/:testId/:editmode">
+          <Exercises />
+        </Route>
         <Route path="/exercises/:memberId">
           <Exercises />
         </Route>
@@ -349,7 +351,6 @@ function App() {
 }
 
 function PrivateRoute({ children, ...rest }) {
-  console.log("PrivateRoute")
   return (
     <Route
       {...rest}

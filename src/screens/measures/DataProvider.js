@@ -85,6 +85,7 @@ const withData = (WrappedComponent, {memberId, goBack, goToTest, goToSetup}) => 
         update(cache,  { data: { createTestRecord } }) {
           if( createTestRecord.success ) {
             // jump to the test
+            /*
             Router.push({
               pathname: '/test',
               query: {
@@ -92,6 +93,12 @@ const withData = (WrappedComponent, {memberId, goBack, goToTest, goToSetup}) => 
                 testType: createTestRecord.testType,
                 testId: createTestRecord.testRecordId,
               }
+            });
+            */
+            goToTest({
+              memberId: memberId,
+              testType: createTestRecord.testType,
+              id: createTestRecord.testRecordId,
             });
           }
         }
@@ -102,7 +109,7 @@ const withData = (WrappedComponent, {memberId, goBack, goToTest, goToSetup}) => 
       GENERATEMEASURESPDF,
       {
         update(cache,  { data: { generateMeasuresPdf } }) {
-          window.cordova.InAppBrowser ? window.cordova.InAppBrowser.open(generateMeasuresPdf.filename, '_system') : window.open(generateMeasuresPdf.filename, '_blank');
+          (window.cordova && window.cordova.InAppBrowser) ? window.cordova.InAppBrowser.open(generateMeasuresPdf.filename, '_system') : window.open(generateMeasuresPdf.filename, '_blank');
         }
       }
     );

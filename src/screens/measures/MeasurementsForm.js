@@ -172,6 +172,18 @@ export default ({
         />
       </MuiPickersUtilsProvider>
       <TextField
+        label={t("armLeft")}
+        id="armLeft-field"
+        InputProps={{
+          endAdornment: <InputAdornment position="start">cm</InputAdornment>,
+        }}
+        value={armLeft}
+        onChange={(e) => setArmLeft(e.target.value)}
+        variant="outlined"
+        type="number"
+        disabled={loading}
+      />
+      <TextField
         label={t("armRight")}
         id="armRight-field"
         InputProps={{
@@ -185,13 +197,13 @@ export default ({
         disabled={loading}
       />
       <TextField
-        label={t("armLeft")}
-        id="armLeft-field"
+        label={t("chest")}
+        id="chest-field"
         InputProps={{
           endAdornment: <InputAdornment position="start">cm</InputAdornment>,
         }}
-        value={armLeft}
-        onChange={(e) => setArmLeft(e.target.value)}
+        value={chest}
+        onChange={(e) => setChest(e.target.value)}
         variant="outlined"
         type="number"
         disabled={loading}
@@ -221,18 +233,6 @@ export default ({
         disabled={loading}
       />
       <TextField
-        label={t("chest")}
-        id="chest-field"
-        InputProps={{
-          endAdornment: <InputAdornment position="start">cm</InputAdornment>,
-        }}
-        value={chest}
-        onChange={(e) => setChest(e.target.value)}
-        variant="outlined"
-        type="number"
-        disabled={loading}
-      />
-      <TextField
         label={t("spinaIlicaAnt")}
         id="spinaIlicaAnt-field"
         InputProps={{
@@ -257,18 +257,6 @@ export default ({
         disabled={loading}
       />
       <TextField
-        label={t("quadsRight")}
-        id="quadsRight-field"
-        InputProps={{
-          endAdornment: <InputAdornment position="start">cm</InputAdornment>,
-        }}
-        value={quadsRight}
-        onChange={(e) => setQuadsRight(e.target.value)}
-        variant="outlined"
-        type="number"
-        disabled={loading}
-      />
-      <TextField
         label={t("quadsLeft")}
         id="quadsLeft-field"
         InputProps={{
@@ -276,6 +264,18 @@ export default ({
         }}
         value={quadsLeft}
         onChange={(e) => setQuadsLeft(e.target.value)}
+        variant="outlined"
+        type="number"
+        disabled={loading}
+      />
+      <TextField
+        label={t("quadsRight")}
+        id="quadsRight-field"
+        InputProps={{
+          endAdornment: <InputAdornment position="start">cm</InputAdornment>,
+        }}
+        value={quadsRight}
+        onChange={(e) => setQuadsRight(e.target.value)}
         variant="outlined"
         type="number"
         disabled={loading}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import moment from "moment";
 
-import { ModalForm, GraphSection } from './styles';
+import { ModalForm, GraphSection, RatingSlider } from './styles';
 
 import Rating from '@material-ui/lab/Rating';
 import { withStyles } from '@material-ui/core/styles';
@@ -57,35 +57,70 @@ const renderGraphSection = (graphData, t) => {
   )
 }
 
-const customIcons = {
-  1: {
-    icon: <DotsIcon1 />,
+//
+// RATING FIELD
+//
+const Slider = withStyles({
+  root: {
+    color: 'black',
   },
-  2: {
-    icon: <DotsIcon2 />,
-  },
-  3: {
-    icon: <DotsIcon3 />,
-  },
-  4: {
-    icon: <DotsIcon4 />,
-  },
-  5: {
-    icon: <DotsIcon5 />,
-  },
-  6: {
-    icon: <DotsIcon6 />,
-  }
-};
+  })(RatingSlider);
 
-const StyledRating = withStyles({
-  iconFilled: {
-    color: 'black',
+function valuetext(value) {
+  return `${value}`;
+}
+
+const marks = [
+  {
+    value: 0,
+    label: '0',
   },
-  iconHover: {
-    color: 'black',
+  {
+    value: 1,
+    label: '1',
   },
-})(Rating);
+  {
+    value: 2,
+    label: '2',
+  },
+  {
+    value: 3,
+    label: '3',
+  },
+  {
+    value: 3,
+    label: '3',
+  },
+  {
+    value: 4,
+    label: '4',
+  },
+  {
+    value: 5,
+    label: '5',
+  },
+  {
+    value: 6,
+    label: '6',
+  },
+  {
+    value: 7,
+    label: '7',
+  },
+  {
+    value: 8,
+    label: '8',
+  },
+  {
+    value: 9,
+    label: '9',
+  },
+  {
+    value: 10,
+    label: '10',
+  },
+];
+
 
 const AnamneseSwitch = withStyles({
   switchBase: {
@@ -101,10 +136,6 @@ const AnamneseSwitch = withStyles({
   track: {},
 })(Switch);
 
-function IconContainer( { value, ...other }) {
-  return <span {...other}>{customIcons[value].icon}</span>;
-}
-
 export default ({
   t,
   data,
@@ -116,6 +147,8 @@ export default ({
   error,
 
 }) => {
+
+  const [showScale, setShowScale] = React.useState(false);
 
   const {id, creation_date, creator} = data ? data : {};
   const {first_name, last_name, photoUrl} = creator ? creator : {};
@@ -269,13 +302,14 @@ export default ({
                 name="description-field"
                 id={"description-field"}
                 editing={editing || descriptionEditing}
-                value={(descriptionValue && descriptionValue.length > 0) ? descriptionValue : (editing || id === undefined) ? '' : t("no_description")}
+                value={(descriptionValue && descriptionValue.length > 0) ? descriptionValue : ''}
                 multiline={true}
                 rows={2}
                 label={t("description")}
                 onChange={(e) => setDescriptionValue(e.target.value)}
                 disabled={loading}
                 onBlur={() => readyToSave ? onSaveButtonClick() : setDescriptionEditing(false)}
+                emptyText={t("no_description")}
               />
             </div>
             <div
@@ -284,17 +318,32 @@ export default ({
                 e.target.nodeName != 'LABEL' && e.target.nodeName != 'INPUT' && setRatingEditing(!ratingEditing)
               }}
             >
-              <div className="rating-text">{t("goal_rating_" + (ratingValue + 1))}</div>
-              <StyledRating
-                name="customized-icons"
-                value={ratingValue + 1}
-                IconContainerComponent={IconContainer}
-                max={6}
-                readOnly={!ratingEditing && !editing}
-                size="large"
-                onChange={(e) => setRatingValue(e.target.value - 1)}
-                disabled={loading}
-              />
+              <div className="rating-text">{t("priority")}</div>
+                { ratingValue === null && !showScale &&
+                  <Button onClick={() => setShowScale(true)}>
+                    {t("NEW_VALUE")}
+                  </Button>
+                }
+                { (ratingValue !== null || showScale) &&
+                  <Slider
+                    defaultValue={0}
+                    getAriaValueText={valuetext}
+                    aria-labelledby="discrete-slider"
+                    valueLabelDisplay="auto"
+                    step={1}
+                    marks={marks}
+                    min={0}
+                    max={10}
+                    value={ratingValue}
+
+                    readOnly={!ratingEditing && !editing}
+                    onChange={(event, newValue) => {
+                      console.log("onChange", newValue);
+                      setRatingValue(newValue);
+                    }}
+                    disabled={loading || !ratingEditing || editing}
+                  />
+               }
             </div>
             { history &&
               <div className="history-section">
@@ -379,12 +428,10 @@ export default ({
       value={value}
       onChange={(event, newValue) => {
         setValue(newValue);
-        setHistory(newValue == 1);
-        setRequestDeletion(newValue == 2);
+        setRequestDeletion(newValue == 1);
       }}
     >
       <BottomNavigationAction icon={<HomeIcon />} />
-      <BottomNavigationAction icon={<HistoryIcon />} />
       <BottomNavigationAction icon={<DeleteIcon />} />
     </BottomNavigation>
   </ModalForm>

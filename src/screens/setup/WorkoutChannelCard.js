@@ -29,6 +29,7 @@ export default ({
   promoText,
   setPromoText,
   workoutImageUrl,
+  workoutChannelUrl,
 
   onUpdateUserWorkoutChannelData,
   updateUserWorkoutChannelDataLoading,
@@ -51,12 +52,13 @@ export default ({
       setPreviewImage("https://dn2ppfvx6tfpw.cloudfront.net/" + encRequest + '?DC=!' + (new Date()).getTime() );
     }
   };
+  const onStartEditing = () => {
+    setPreviewImage(workoutImageUrl)
+  }
+  const onEndEditing = () => {
+    setPreviewImage(workoutImageUrl)
+  }
 
-  React.useEffect(() => {
-    if( id > 0 ) {
-      resetPreviewImage();
-    }
-  }, [id]);
   //
   // Crop image
   const onCropImage = (crop) => {
@@ -129,7 +131,7 @@ export default ({
           if (data.message == 'OK') {
             refetch();
           } else {
-            alert('Error uploading [' + file.name + ']. Max upload size is ~4MB.');
+            alert('Error uploading [' + file.name + '].');
           }
           setLoadingImage(false);
         })
@@ -239,11 +241,20 @@ export default ({
             onCropImage={onCropImage}
             onRotateImage={onRotateImage}
             loading={loadingImage}
+
+            onStartEditing={onStartEditing}
+            onEndEditing={onEndEditing}
+
+            pictureMessage={'free image format'}
+            notEditable={true}
           />
         </div>
         <LanistaButton
           className="preview-workout-channel-button"
-          onClick={() => console.log("SHOW PREVIEW")}
+          onClick={() => {
+            (window.cordova && window.cordova.InAppBrowser) ? window.cordova.InAppBrowser.open(workoutChannelUrl, '_system') : window.open(workoutChannelUrl, '_blank');
+          }}
+          disabled={!workoutEnable}
         >
           {t( "workout_preview" )}
         </LanistaButton>

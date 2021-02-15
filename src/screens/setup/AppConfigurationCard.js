@@ -38,12 +38,13 @@ export default ({
       setPreviewImage("https://dn2ppfvx6tfpw.cloudfront.net/" + encRequest + '?DC=!' + (new Date()).getTime() );
     }
   };
+  const onStartEditing = () => {
+    setPreviewImage(bannerPhotoUrl)
+  }
+  const onEndEditing = () => {
+    setPreviewImage(bannerPhotoUrl)
+  }
 
-  React.useEffect(() => {
-    if( id > 0 ) {
-      resetPreviewImage();
-    }
-  }, [id]);
   //
   // Crop image
   const onCropImage = (crop) => {
@@ -160,12 +161,18 @@ export default ({
             resetPreviewImage={resetPreviewImage}
 
             containerWidth={350}
-            containerHeight={350}
+            containerHeight={244}
 
             onUploadMemberImage={onUploadMemberImage}
             onCropImage={onCropImage}
             onRotateImage={onRotateImage}
             loading={loadingImage}
+
+            onStartEditing={onStartEditing}
+            onEndEditing={onEndEditing}
+
+            pictureMessage={'app image format'}
+            notEditable={true}
           />
           <TextField
             id="banner-url"

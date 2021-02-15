@@ -41,6 +41,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 
+import MaterialCard from '@material-ui/core/Card';
+import MaterialCardActionArea from '@material-ui/core/CardActionArea';
+import MaterialCardContent from '@material-ui/core/CardContent';
+
 const Feeds = ({
   feeds,
   t,
@@ -65,6 +69,9 @@ const Feeds = ({
   getMembersList,
   membersListLoading,
   membersListData,
+
+  goToCustomers,
+  goToWorkouts,
 }) => {
 
   const [selectedDay, setSelectedDay] = React.useState(new Date());
@@ -149,7 +156,6 @@ const Feeds = ({
   return (
     <Stage id="feed-stage">
       <StatisticsSection>
-
         <Widget className="dashboard-widget-first-child">
           <WidgetStatistic
             title={t( 'STATISTC_1_' + type + (hasInterface ? '_WITH_INTERFACE' : '') )}
@@ -179,7 +185,7 @@ const Feeds = ({
               ))
             )}
             { myMembersList.length === 0 && (
-              <div className="widget-empty-list">{t("widget-empty-list")}</div>
+              <div className="widget-empty-list">{t("widget-empty-list")}...</div>
             )}
           </MaterialList>
         </Menu>
@@ -213,17 +219,42 @@ const Feeds = ({
 
       </StatisticsSection>
       <Timeline className='hide-scrollbar' id="infinte-list-wrapper">
-        <InfiniteList
-          loadMore={onRequestPage}
-          hasMore={hasMore}
-          hasMoreUp={hasMoreUp}
-          loader={<div class="loader">Loading...</div>}
-          initialLoading={initialLoading}
-          loading={loading}
-          setPageSize={setPageSize}
-        >
-          {items}
-        </InfiniteList>
+        {items && items.length > 0 && (
+          <InfiniteList
+            loadMore={onRequestPage}
+            hasMore={hasMore}
+            hasMoreUp={hasMoreUp}
+            loader={<div class="loader">Loading...</div>}
+            initialLoading={initialLoading}
+            loading={loading}
+            setPageSize={setPageSize}
+          >
+            {items}
+          </InfiniteList>
+        )}
+        {!(items && items.length > 0) && !loading && (
+          <>
+            <div className="buttons-list">
+              <MaterialCard style={{marginRight: "20px"}}>
+                <MaterialCardActionArea onClick={goToCustomers}>
+                  <div className="card-content">
+                    <div className="card-title">{t("create-customer")}</div>
+                    <div className="card-text">{t("create-customer-text")}</div>
+                  </div>
+                </MaterialCardActionArea>
+              </MaterialCard>
+              <MaterialCard>
+                <MaterialCardActionArea onClick={goToWorkouts}>
+                  <div className="card-content">
+                    <div className="card-title">{t("create-plan")}</div>
+                    <div className="card-text">{t("create-plan-text")}</div>
+                  </div>
+                </MaterialCardActionArea>
+              </MaterialCard>
+            </div>
+            <div className="empty-feeds-list">{t("empty-feeds-list")}</div>
+          </>
+        )}
       </Timeline>
       { !error &&
         <ToolsSection>

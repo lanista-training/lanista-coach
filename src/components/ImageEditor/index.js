@@ -14,6 +14,7 @@ import Button from './Button';
 
 export default ({
   t,
+  pictureMessage,
 
   imageSrc,
   previewImage,
@@ -26,7 +27,11 @@ export default ({
   onCropImage,
   onRotateImage,
 
+  onStartEditing,
+  onEndEditing,
+
   loading,
+  notEditable,
 }) => {
   const [imageError, setImageError] = useState(false);
   const [currentSrc, setCurrentSrc] = useState(null);
@@ -73,11 +78,8 @@ export default ({
   }, [imageSrc]);
 
   useEffect(() => {
-    console.log("NEW PREVIEW IMAGE ARRIVED");
     if(previewImage) {
       const imgTest = document.createElement('img');
-      console.log("previewImage")
-      console.log(previewImage)
       imgTest.src = previewImage;
       imgTest.onload = function() {
         setNaturalHeight(imgTest.naturalHeight);
@@ -105,7 +107,13 @@ export default ({
   //
   const [editingMode, setEditingMode] = React.useState(false);
   const toggleEditingMode = () => setEditingMode(!editingMode);
-
+  React.useEffect(() => {
+    if( editingMode ) {
+      onStartEditing && onStartEditing();
+    } else {
+      onEndEditing && onEndEditing();
+    }
+  }, [editingMode])
 
   //
   // Photo crop
@@ -118,8 +126,8 @@ export default ({
   };
   React.useEffect(() => {
     !cropMode && resetPreviewImage();
-  }, [cropMode])
-
+    !cropMode && onEndEditing && onEndEditing();
+  }, [cropMode]);
 
   //
   // Photo rotate
@@ -136,6 +144,7 @@ export default ({
   React.useEffect(() => {
     if(!rotateMode) {
       resetPreviewImage();
+      onEndEditing && onEndEditing();
       setAngle(0);
     }
   }, [rotateMode])
@@ -220,9 +229,11 @@ export default ({
         <Button name={t('UPLOAD_PHOTO')} onClick={toggleUploadMode}/>
       );
       if( !imageError &&  imageSrc && imageSrc.indexOf('dn2ppfvx6tfpw.cloudfront.net') > 0 ) {
-        result.push(
-          <Button name={t('EDIT_PHOTO')} onClick={toggleEditingMode}/>
-        );
+        if( !notEditable ) {
+          result.push(
+            <Button name={t('EDIT_PHOTO')} onClick={toggleEditingMode}/>
+          );
+        }
       }
     }
     return result;
@@ -245,11 +256,13 @@ export default ({
         </IconButton>
       );
     } else {
+      /*
       result.push(
         <IconButton aria-label="crop">
           <CropIcon fontSize="large" onClick={toggleCropMode}/>
         </IconButton>
       );
+      */
       result.push(
         <IconButton aria-label="rotate">
           <Rotate90DegreesCcwIcon fontSize="large" onClick={toggleRotateMode}/>
@@ -279,7 +292,7 @@ export default ({
       { !uploadMode && !cropMode &&
         <div className="empty-image">
           <Icon name='file image outline' />
-          {t( "profile_picture_size" )}
+          {t( pictureMessage )}
         </div>
       }
       { cropMode &&

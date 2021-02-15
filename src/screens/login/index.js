@@ -4,8 +4,14 @@ import Login from './Login';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import { withApollo } from '../../lib/apollo';
 import { LOGIN } from "../../mutations/authenticate";
+import { GETDOMAININFO } from "../../queries";
 import { login } from '../../lib/auth';
 import cookie from 'js-cookie';
+
+const getDomainName = () => {
+  const hostName = window.location.hostname;
+  return hostName.substring(hostName.lastIndexOf(".", hostName.lastIndexOf(".") - 1) + 1);
+}
 
 const LoginPanel = ({
   goToRoot,
@@ -13,9 +19,16 @@ const LoginPanel = ({
   goToForgotPassword,
 }) => {
   const {t} = useTranslate("login");
+  const domainName = getDomainName();
+
+
   //
   // Domain info
   //
+  const { loading, error, data } = useQuery(GETDOMAININFO, {
+    fetchPolicy: 'no-cache',
+  });
+  const domainLogoUrl = data && data.getDomainInfo ?  data.getDomainInfo.logoUrl : '';
   const tbt = cookie.get('tbt');
 
   // mutation
@@ -142,6 +155,7 @@ const LoginPanel = ({
       authenticationErrorMessage={errorCode ? t(errorCode) : undefined}
 
       tbt={tbt}
+      domainLogoUrl={domainLogoUrl}
 
       goToRegistration={goToRegistration}
     />

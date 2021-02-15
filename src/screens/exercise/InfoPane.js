@@ -366,6 +366,7 @@ const EditImageSection = ({t, exercise, refetch, editImageMode, toggleEditImageM
           onCropImage={onCropImage}
           onRotateImage={onRotateImage}
           loading={loadingImage}
+          pictureMessage={'square image format'}
         />
       }
     </Tab.Pane>
@@ -547,6 +548,7 @@ const EditIndexesSection = withApollo(({t, exerciseId, refetch, editIndexesMode,
             <MenuItem value={2}>{t("upperback")}</MenuItem>
             <MenuItem value={3}>{t("shoulder")}</MenuItem>
             <MenuItem value={4}>{t("frontfemoral")}</MenuItem>
+            <MenuItem value={14}>{t("backfemoral")}</MenuItem>
             <MenuItem value={5}>{t("lowerback")}</MenuItem>
             <MenuItem value={6}>{t("hip")}</MenuItem>
             <MenuItem value={7}>{t("abs")}</MenuItem>
@@ -554,7 +556,6 @@ const EditIndexesSection = withApollo(({t, exerciseId, refetch, editIndexesMode,
             <MenuItem value={9}>{t("triceps")}</MenuItem>
             <MenuItem value={10}>{t("forearm")}</MenuItem>
             <MenuItem value={11}>{t("lowerleg")}</MenuItem>
-            <MenuItem value={14}>{t("lowerleg")}</MenuItem>
           </Select>
         </FormControl>
 
@@ -611,6 +612,7 @@ const InfoSection = ({t, exercise, owner, toggleEditMode, toggleEditIndexesMode}
     frontfemoral: {"fill":(exercise && exercise.muscle == "4" ? "red" : "rgb(151, 151, 151)"),"fillRule":"nonzero"},
     backfemoral: {"fill":(exercise && exercise.muscle == "4" ? "red" : "rgb(151, 151, 151)"),"fillRule":"nonzero"},
     lowerleg: {"fill":(exercise && exercise.muscle == "11" ? "red" : "rgb(151, 151, 151)"),"fillRule":"nonzero"},
+    backfemoral: {"fill":(exercise && exercise.muscle == "14" ? "red" : "rgb(151, 151, 151)"),"fillRule":"nonzero"},
   }
 
   return (<>

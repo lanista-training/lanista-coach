@@ -8,12 +8,12 @@ function Measures({memberId}) {
   const goBack = () => Router.back();
 
   const goToTest = (testData) => {
-    const {testtype, id} = testData;
+    const {testType, id} = testData;
     Router.push({
       pathname: '/test',
       query: {
         memberId: memberId,
-        testType: testtype,
+        testType: testType,
         testId: id,
       }
     });

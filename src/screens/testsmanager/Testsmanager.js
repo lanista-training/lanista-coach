@@ -14,6 +14,7 @@ const Testsmanager = ({
 
   testId,
   goToTest,
+  goToExercises,
 
   tests,
   testsLoading,
@@ -35,6 +36,7 @@ const Testsmanager = ({
       t={t}
 
       testId={testId}
+      goToExercises={goToExercises}
 
     />
   )

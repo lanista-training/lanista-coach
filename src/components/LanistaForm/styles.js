@@ -10,6 +10,9 @@ export const StyledForm = styled.div`
     .MuiOutlinedInput-notchedOutline {
       border-color: rgb(236, 236, 236);
     }
+    .MuiFormHelperText-root {
+      margin: 0;
+    }
   }
   .MuiExpansionPanel-root {
     padding: 0;

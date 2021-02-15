@@ -53,6 +53,41 @@ export const Timeline = styled.div`
   max-width: 410px;
   width: 100%;
   scrollbar-width: none;
+  .buttons-list {
+    display: inline-flex;
+    margin-top: 50px;
+    padding: 0 25px;
+    width: 100%;
+    .MuiPaper-root {
+      flex: 1;
+      height: 100px;
+      background-color: white;
+      border: 1px solid rgba(0,0,0,.0975);
+      border-radius: 15px;
+      box-shadow: 0 0 25px 0 #0000001f;
+      height: 100%;
+      .card-content {
+        padding: 15px;
+      }
+      .card-title {
+        font-family: Roboto;
+        font-size: 13px;
+        font-weight: 900;
+        line-height: 11px;
+        margin-bottom: 6px;
+      }
+      .card-text {
+        font-family: Roboto;
+        font-size: 11px;
+        font-weight: 100;
+      }
+    }
+  }
+  .empty-feeds-list {
+    text-align: center;
+    margin-top: 50px;
+    color: darkgrey;
+  }
 `;
 
 export const ToolsSection = styled.div`

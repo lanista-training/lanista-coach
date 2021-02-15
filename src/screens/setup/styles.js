@@ -396,4 +396,7 @@ export const Shop = styled(Form.Field)`
       margin: 10px 0;
     }
   }
+  .shop-footer {
+    padding: 3em;
+  }
 `;

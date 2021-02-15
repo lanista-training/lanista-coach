@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useTranslate } from '../../hooks/Translation';
 import PropTypes from 'prop-types';
 import moment from "moment";
 import {
@@ -49,6 +50,11 @@ import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
 import HomeWorkIcon from '@material-ui/icons/HomeWork';
 import DeleteIcon from '@material-ui/icons/Delete';
+import TrafficIcon from '@material-ui/icons/Traffic';
+
+import PersonalDataCard from './PersonalDataCard';
+import AddressCard from './AddressCard';
+import StatusCard from './StatusCard';
 
 import {
   Stage,
@@ -85,12 +91,64 @@ const countries = countryList.getData().map(country => ({
 }))
 
 const Profile = ({
-  t,
+
   languages,
-  member,
   loading,
   error,
   goBack,
+
+  readyToSavePersonalData,
+
+  email,
+  setEmail,
+  emailErrorMessage,
+
+  firstName,
+  setFirstName,
+  firstNameErrorMessage,
+
+  lastName,
+  setLastName,
+  lastNameErrorMessage,
+
+  birthday,
+  setBirthday,
+
+  language,
+  setLanguage,
+
+  gender,
+  setGender,
+
+  readyToSaveAddress,
+
+  phoneNumber,
+  setPhoneNumber,
+
+  country,
+  setCountry,
+
+  zipcode,
+  setZipcode,
+
+  street,
+  setStreet,
+
+  city,
+  setCity,
+
+  note,
+  setNote,
+
+  id,
+  status,
+
+  photoUrlFullSize,
+  dpLocation,
+  dataPrivacySigned,
+  setDataPrivacySigned,
+
+  dpSignaturePolicy,
 
   onUpdateMember,
   updateMemberLoading,
@@ -120,130 +178,30 @@ const Profile = ({
 
   onDeleteMember,
   memberDeleted,
+
 }) => {
-  React.useEffect(() => {
-    if( member ) {
-      const {
-        email,
-        first_name,
-        last_name,
-        birthday,
-        language,
-        gender,
-        phone_nr,
-        note,
-        country,
-        zipcode,
-        street,
-        city,
-      } = member;
-      setEmail(email);
-      setFirstName(first_name);
-      setLastname(last_name);
-      setBirthday(new Date(parseInt(birthday)));
-      setLanguage(language);
-      setGender(gender);
-      setPhoneNumber(phone_nr);
-      setNote(note);
-      setCountry(country);
-      setZipcode(zipcode);
-      setStreet(street);
-      setCity(city);
-      setSaveButtonDisabled(true);
-      setSaveAddressButtonDisabled(true);
-    }
-  }, [member]);
-  // profile data
-  const [email, setEmail] = React.useState('');
-  const validateEmail = () => ({valid: true, error: null});
 
-  const [firstName, setFirstName] = React.useState('');
-  const [lastName, setLastname] = React.useState('');
-  const validateName = () => ({valid: true, error: null});
-
-  const [birthday, setBirthday] = React.useState(null);
-  const validateBirthday = () => ({valid: true, error: null});
-
-  const [gender, setGender] = React.useState(0);
-  const [language, setLanguage] = React.useState('EN');
-  const [phoneNumber, setPhoneNumber] = React.useState('');
-  const [note, setNote] = React.useState('');
-  const [country, setCountry] = React.useState('');
-  const [zipcode, setZipcode] = React.useState('');
-  const [street, setStreet] = React.useState('');
-  const [city, setCity] = React.useState('');
-  const [dataPrivacySigned, setDataPrivacySigned] = React.useState(false);
-  const [accountStatus, setAccountStatus] = React.useState(0);
-
-  const [saveButtonDisabled, setSaveButtonDisabled] = React.useState(true);
-  const [saveAddressButtonDisabled, setSaveAddressButtonDisabled] = React.useState(true);
-
-  const [emailValidation, setEmailValidation] = React.useState(validateEmail());
-  const firstNameValidation = validateName();
-  const lastNameValidation = validateName();
-  const birthdayValidation = validateBirthday();
-
-  //
-  // Data protection dialog
-  //
-  const [dpDialogOpen, setDpDialogOpen] = React.useState(false);
-  const toggleDpDialogOpen = () => setDpDialogOpen(!dpDialogOpen);
-
-  React.useEffect(() => {
-    if( email != member.email
-      || lastName != member.last_name
-      || firstName != member.first_name
-      || language != member.language
-      || gender != member.gender
-      || phoneNumber != member.phone_nr
-      || note != member.note
-      || (birthday && birthday.getTime()) != parseInt(member.birthday)
-    ) {
-      setSaveButtonDisabled(false);
-    } else {
-      setSaveButtonDisabled(true);
-    }
-  }, [
-    email,
-    firstName,
-    lastName,
-    birthday,
-    language,
-    gender,
-    phoneNumber,
-    note,
-  ]);
+  const {t} = useTranslate("profile");
 
   //
   // Status dialog
   //
   const [statusDialogOpen, setStatusDialogOpen] = React.useState(false);
   const toggleStatusDialogOpen = () => setStatusDialogOpen(!statusDialogOpen);
-
   const onShowDataPrivaryStatus = () => {
     toggleDpDialogOpen();
   }
 
+
+  //
+  //  Data protectzion dialog
+  //
+  const [dpDialogOpen, setDpDialogOpen] = React.useState(false);
+  const toggleDpDialogOpen = () => setDpDialogOpen(!dpDialogOpen);
+
   const onShowMemberStatus = () => {
     toggleStatusDialogOpen();
   }
-
-  React.useEffect(() => {
-    if( country != member.country
-      || zipcode != member.zipcode
-      || street != member.street
-      || city != member.city
-    ) {
-      setSaveAddressButtonDisabled(false);
-    } else {
-      setSaveAddressButtonDisabled(true);
-    }
-  }, [
-    country,
-    zipcode,
-    street,
-    city,
-  ]);
 
   React.useEffect(() => {
     if(dataPrivacyDocument !== null) {
@@ -272,267 +230,48 @@ const Profile = ({
   const [deleteDialog, setDeleteDialog] = React.useState(false);
   const toggleDeleteDialog = () => setDeleteDialog(!deleteDialog);
 
-  const {id, dpSigned, dpSignatureType} = member;
-
-  React.useEffect(() => {
-    if( updateMemberError ) {
-      if( updateMemberError.message.indexOf("Validation error") > -1 ) {
-        setEmail('');
-        setEmailValidation({
-          valid: false,
-          error: t("duplicate error")
-        });
-      }
-    }
-  }, [updateMemberError])
-  React.useEffect(() => {
-    email && email.length > 0 && setEmailValidation(validateEmail());
-  }, [email]);
+  const dpSignatureType = !(dpLocation === null);
 
   return(
   <Stage centered columns={2} padded name="stage">
     <div className="content-section">
-      <CardSection id="section-personal">
-        <CardHeader as='h3'>{t( "personal_data" )}</CardHeader>
-        <StyledCard>
-          <Card.Content style={{paddingTop: 0, paddingBottom: '1.5em'}}>
-            <Form>
-              <div className="user-identification">
-                {t("CUSTOMER_ID")} <span>{id}</span>
-              </div>
-              <CardInput placeholder='Email' error={!emailValidation.valid}>
-                <FormHeader>Email</FormHeader>
-                <FormInput
-                  name='email'
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                {
-                  !emailValidation.valid &&
-                  <StyledLabel color='red' pointing='left'>
-                    {emailValidation.error}
-                  </StyledLabel>
-                }
-              </CardInput>
-              <CardInput placeholder={t( "first_name" )} error={!firstNameValidation.valid}>
-                <FormHeader>{t( "first_name" )}</FormHeader>
-                <FormInput
-                  name='first_name'
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                />
-                {
-                  !firstNameValidation.valid &&
-                  <StyledLabel color='red' pointing='left'>
-                    {firstNameValidation.error}
-                  </StyledLabel>
-                }
-              </CardInput>
-              <CardInput placeholder={t( "last_name" )} error={!lastNameValidation.valid}>
-                <FormHeader>{t( "last_name" )}</FormHeader>
-                <FormInput
-                  name='last_name'
-                  value={lastName}
-                  onChange={(e) => setLastname(e.target.value)}
-                />
-                {
-                  !lastNameValidation.valid &&
-                  <StyledLabel color='red' pointing='left'>
-                    {lastNameValidation.error}
-                  </StyledLabel>
-                }
-              </CardInput>
-              <CardDateInput
-                placeholder={t( "birthday" )}
-                error={!lastNameValidation.valid}
-              >
-                <FormHeader>{t( "birthday" )}</FormHeader>
-                <MuiPickersUtilsProvider utils={DateFnsUtils} className="input-birthday">
-                  <KeyboardDatePicker
-                    variant="inline"
-                    format="dd/MM/yyyy"
-                    margin="normal"
-                    id="date-picker-birthday"
-                    value={birthday}
-                    onChange={(value) => {setBirthday(moment(value).toDate())}}
-                    KeyboardButtonProps={{
-                      'aria-label': 'change birthday',
-                    }}
-                  />
-                </MuiPickersUtilsProvider>
-                {
-                  !lastNameValidation.valid &&
-                  <StyledLabel color='red' pointing='left'>
-                    {lastNameValidation.error}
-                  </StyledLabel>
-                }
-              </CardDateInput>
-              <CardInput>
-                <FormHeader>{t( "gender" )}</FormHeader>
-                <CardDropdown
-                  placeholder={t( "gender" )}
-                  fluid
-                  selection
-                  options={[
-                    {
-                      key: 'male',
-                      text: t("male"),
-                      value: 0,
-                    }, {
-                      key: 'female',
-                      text: t("female"),
-                      value: 1,
-                    },
-                  ]}
-                  value={gender}
-                  onChange={ (event, {value}) => setGender(value)}
-                />
-              </CardInput>
-              <CardInput placeholder={t( "phone_nr" )} >
-                <FormHeader>{t( "phone_nr" )}</FormHeader>
-                <FormInput
-                  name='phone_nr'
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                />
-              </CardInput>
-              <CardInput placeholder={t( "note" )} >
-                <FormHeader>{t( "note" )}</FormHeader>
-                <FormInput
-                  name='note'
-                  value={note}
-                  onChange={(e) => setNote(e.target.value)}
-                />
-              </CardInput>
-              <CardInput>
-                <FormHeader>{t( "language" )}</FormHeader>
-                <CardDropdown
-                  placeholder={t( "language" )}
-                  fluid
-                  selection
-                  options={languages}
-                  value={language}
-                  onChange={ (event, {value}) => setLanguage(value)}
-                />
-              </CardInput>
-              <ColloredCardInput className="no-text">
-                <FormHeader>{t( "DATA_PRIVACY" )}</FormHeader>
-                <div onClick={onShowDataPrivaryStatus}>
-                  <FormInput
-                    className={member.dpSigned == 1 ? "green" : "yellow"}
-                    name='data_privacy'
-                    value={member.dpSigned == 1 ? t('DATA_PRIVACY_YES') : t('DATA_PRIVACY_NO')}
-                    onChange={(e) => setNote(e.target.value)}
-                    readonly=""
-                    onClick={() => console.log("CLICK !")}
-                  />
-                </div>
-              </ColloredCardInput>
-              <ColloredCardInput className="no-text" >
-                <FormHeader>{t( "ACCOUNT_STATUS" )}</FormHeader>
-                <div onClick={onShowMemberStatus}>
-                  <FormInput
-                    className={member.status == 1 ? "green" : member.status == 0 ? "yellow" : "red"}
-                    name='data_privacy'
-                    value={member.status == 1 ? t('ACCOUNT_ACTIVE') : member.status == 0 ? t('ACCOUNT_INACTIVE') : t('EMAIL_INVALID')}
-                    onChange={(e) => setNote(e.target.value)}
-                    readonly=""
-                  />
-                </div>
-              </ColloredCardInput>
-              <CardButton
-                disabled={updateMemberLoading || saveButtonDisabled}
-                onClick={ () => onUpdateMember({
-                    email: email,
-                    firstName: firstName,
-                    lastName: lastName,
-                    birthday: birthday,
-                    gender: gender,
-                    language: language,
-                    phoneNumber: phoneNumber,
-                    note: note,
-                  })
-                }
-                name={t( "save" )}
-                loading={updateMemberLoading}
-              />
-            </Form>
-          </Card.Content>
-        </StyledCard>
-      </CardSection>
+      <PersonalDataCard
 
-      <CardSection id="section-address">
-        <CardHeader as='h3'>{t( "address" )}</CardHeader>
-        <StyledCard>
-          <Card.Content style={{paddingTop: 0, paddingBottom: '1.5em'}}>
-            <Form>
-              <CardInput
-                placeholder={t( "street" )}
-              >
-                <FormHeader>{t( "street" )}</FormHeader>
-                  <FormInput
-                    type='text'
-                    name="street"
-                    value={street}
-                    onChange={(e) => setStreet(e.target.value)}
-                    placeholder={t( "street" )}
-                  />
-              </CardInput>
-              <CardInput
-                placeholder={t( "zip_code" )}
-              >
-                <FormHeader>{t( "zip_code" )}</FormHeader>
-                  <FormInput
-                    type='text'
-                    name="zip_code"
-                    value={zipcode}
-                    onChange={(e) => setZipcode(e.target.value)}
-                    placeholder={t( "zip_code" )}
-                  />
-              </CardInput>
-              <CardInput
-                placeholder={t( "city" )}
-              >
-                <FormHeader>{t( "city" )}</FormHeader>
-                  <FormInput
-                    type='text'
-                    name="city"
-                    value={city}
-                    onChange={(e) => setCity(e.target.value)}
-                    placeholder={t( "city" )}
-                  />
-              </CardInput>
-              <CardInput>
-                <FormHeader>{t( "country" )}</FormHeader>
-                <CardDropdown
-                  placeholder={t( "country" )}
-                  fluid
-                  search
-                  selection
-                  options={countries}
-                  value={country}
-                  onChange={ (event, {value}) => setCountry(value)}
-                />
-              </CardInput>
+        id={id}
 
-              <CardButton
-                disabled={updateMemberAddressLoading || saveAddressButtonDisabled}
-                onClick={ () => onUpdateMemberAddress({
-                    country: country,
-                    zipcode: zipcode,
-                    street: street,
-                    city: city,
-                  })
-                }
-                name={t( "save" )}
-                loading={updateMemberAddressLoading}
-              />
+        onSave={onUpdateMember}
+        loading={updateMemberLoading || loading}
 
-            </Form>
-          </Card.Content>
-        </StyledCard>
-      </CardSection>
+        readyToSave={readyToSavePersonalData}
+
+        email={email}
+        setEmail={setEmail}
+        emailErrorMessage={emailErrorMessage}
+
+        firstName={firstName}
+        setFirstName={setFirstName}
+        firstNameErrorMessage={firstNameErrorMessage}
+
+        lastName={lastName}
+        setLastName={setLastName}
+        lastNameErrorMessage={lastNameErrorMessage}
+
+        birthday={birthday}
+        setBirthday={setBirthday}
+
+        birthday={birthday}
+        setBirthday={setBirthday}
+
+        language={language}
+        setLanguage={setLanguage}
+
+        gender={gender}
+        setGender={setGender}
+
+        note={note}
+        setNote={setNote}
+
+      />
 
       <CardSection id="section-photo">
         <CardHeader as='h3'>{t( "profile_picture" )}</CardHeader>
@@ -540,7 +279,7 @@ const Profile = ({
           <Card.Content>
             <ImageEditor
               t={t}
-              imageSrc={member.photoUrlFullSize}
+              imageSrc={photoUrlFullSize}
               previewImage={previewImage}
               resetPreviewImage={resetPreviewImage}
 
@@ -551,38 +290,84 @@ const Profile = ({
               onCropImage={onCropImage}
               onRotateImage={onRotateImage}
               loading={loadingImage}
+
+              pictureMessage={'square image format'}
             />
           </Card.Content>
         </StyledCard>
       </CardSection>
+
+      <StatusCard
+        dataPrivacySigned={dataPrivacySigned}
+        status={status}
+
+        onShowDataPrivaryStatus={onShowDataPrivaryStatus}
+        onShowMemberStatus={onShowMemberStatus}
+      />
+
+      <AddressCard
+
+        onUpdate={onUpdateMemberAddress}
+        loading={updateMemberAddressLoading || loading}
+
+        readyToSave={readyToSaveAddress}
+
+        phoneNumber={phoneNumber}
+        setPhoneNumber={setPhoneNumber}
+
+        country={country}
+        setCountry={setCountry}
+
+        zipcode={zipcode}
+        setZipcode={setZipcode}
+
+        street={street}
+        setStreet={setStreet}
+
+        city={city}
+        setCity={setCity}
+
+      />
     </div>
 
     <div className="navigation-section">
-      <Scrollspy items={ ['section-personal', 'section-address', 'section-photo'] } className="navigation-panel">
-        <ListItem button component="a" href="#section-personal">
+      <Scrollspy items={ ['section-personal', 'section-address', 'section-status', 'section-photo'] } className="navigation-panel">
+
+        <ListItem button component="a" onClick={() => window.location.replace("#section-personal")}>
           <ListItemIcon>
             <AccountBoxIcon />
           </ListItemIcon>
           <ListItemText primary={t("personal_data")} />
         </ListItem>
-        <ListItem button component="a" href="#section-address">
+
+        <ListItem button component="a" onClick={() => window.location.replace("#section-photo")}>
+          <ListItemIcon>
+            <PhotoCameraIcon />
+          </ListItemIcon>
+            <ListItemText primary={t("profile_picture")} />
+        </ListItem>
+
+        <ListItem button component="a"  onClick={() => window.location.replace("#section-status")}>
+          <ListItemIcon>
+            <TrafficIcon />
+          </ListItemIcon>
+          <ListItemText primary={t("CUSTOMER_STATUS")} />
+        </ListItem>
+
+        <ListItem button component="a" onClick={() => window.location.replace("#section-address")}>
           <ListItemIcon>
             <HomeWorkIcon />
           </ListItemIcon>
           <ListItemText primary={t("address")} />
         </ListItem>
-        <ListItem button component="a" href="#section-photo">
-        <ListItemIcon>
-          <PhotoCameraIcon />
-        </ListItemIcon>
-          <ListItemText primary={t("profile_picture")} />
-        </ListItem>
+
         <ListItem button onClick={toggleDeleteDialog}>
           <ListItemIcon>
             <DeleteIcon />
           </ListItemIcon>
           <ListItemText primary={t("DELETE_CUSTOMER")} />
         </ListItem>
+
       </Scrollspy>
     </div>
 
@@ -599,14 +384,14 @@ const Profile = ({
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            { !dpSigned && t("DATA_PRIVACY_WARNING") }
-            { dpSigned && dpSignatureType && t("DATA_PRIVACY_ON_DIGITAL") }
-            { dpSigned && !dpSignatureType && t("DATA_PRIVACY_ON_CONTRACT") }
+            { !dataPrivacySigned && t("DATA_PRIVACY_WARNING") }
+            { dataPrivacySigned && dpSignaturePolicy > 0 && t("DATA_PRIVACY_ON_DIGITAL") }
+            { dataPrivacySigned && dpSignaturePolicy == 0 && t("DATA_PRIVACY_ON_CONTRACT") }
           </DialogContentText>
         </DialogContent>
         <DialogActions>
         {
-          dpSigned && <Button
+          dataPrivacySigned && <Button
             variant="contained"
             onClick={onRequestDataPrivacyDocument}
             endIcon={<GetAppIcon style={{ fontSize: 40 }}/>}
@@ -616,13 +401,13 @@ const Profile = ({
           </Button>
         }
         {
-          !dpSigned && <Button
+          !dataPrivacySigned && <Button
             variant="contained"
             onClick={onRequestDataPrivacySignature}
             endIcon={<AssignmentTurnedInIcon style={{ fontSize: 40 }}/>}
             autoFocus
           >
-            {dpSignatureType ? t("CONTACT_GO_TO_DP_SETTINGS") : t("BACK")  }
+            {t("CONTACT_GO_TO_DP_SETTINGS")}
           </Button>
         }
         </DialogActions>
@@ -639,24 +424,24 @@ const Profile = ({
           <IconButton color="primary" aria-label="close" component="span" onClick={toggleStatusDialogOpen}>
             <CloseIcon />
           </IconButton>
-          {member.status == -1 ? t("EMAIL_INVALID") : member.status == 1 ? t("ACCOUNT_ACTIVE") : t("ACCOUNT_INACTIVE")}
+          {status == -1 ? t("EMAIL_INVALID") : status == 1 ? t("ACCOUNT_ACTIVE") : t("ACCOUNT_INACTIVE")}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {member.status == -1 ? t("EMAIL_INVALID_MESSAGE") : member.status == 1 ? t("ACCOUNT_ACTIVE_INFO") : t("ACCOUNT_INACTIVE_INFO") }
+            {status == -1 ? t("EMAIL_INVALID_MESSAGE") : status == 1 ? t("ACCOUNT_ACTIVE_INFO") : t("ACCOUNT_INACTIVE_INFO") }
             {activationMailSent &&
               <div className="email-successfully-sent">
                 {t("ACTIVATION_EMAIL_SUCCESSFULLY_SENT")}
               </div>
             }
             <div className="icon-section">
-              { member.status == -1 &&
+              { status == -1 &&
                 <AlternateEmailIcon style={{ fontSize: 100 }} style={{color: "#db2828"}}/>
               }
-              { (member.status == 1 || activationMailSent) &&
+              { (status == 1 || activationMailSent) &&
                 <CheckCircleIcon style={{ fontSize: 100 }}/>
               }
-              {  !activationMailSent && member.status == 0 &&
+              {  !activationMailSent && status == 0 &&
                 <EmailIcon style={{ fontSize: 100 }} style={{color: "#FDB825"}}/>
               }
             </div>
@@ -666,12 +451,12 @@ const Profile = ({
           {!activationMailSent &&
             <CardButton
               variant="contained"
-              onClick={member.status == -1 ? toggleStatusDialogOpen : member.status == 1 ? toggleStatusDialogOpen : onSendActivationMail}
-              endIcon={member.status == -1 ? <SendIcon style={{ fontSize: 40 }}/> : member.status == 1 ? <CheckIcon style={{ fontSize: 40 }}/> : <CheckIcon style={{ fontSize: 40 }}/>}
+              onClick={status == -1 ? toggleStatusDialogOpen : status == 1 ? toggleStatusDialogOpen : onSendActivationMail}
+              endIcon={status == -1 ? <SendIcon style={{ fontSize: 40 }}/> : status == 1 ? <CheckIcon style={{ fontSize: 40 }}/> : <CheckIcon style={{ fontSize: 40 }}/>}
               autoFocus
               loading={sendActivationMailLoading}
               disabled={sendActivationMailLoading}
-              name={member.status == 1 || member.status == -1 ? t("BACK") : t("SEND_ACTIVATION_MAIL") }
+              name={status == 1 ||status == -1 ? t("BACK") : t("SEND_ACTIVATION_MAIL") }
             />
           }
           {activationMailSent &&

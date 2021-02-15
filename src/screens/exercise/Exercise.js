@@ -18,6 +18,7 @@ const Exercise = ({
   exercise,
   refetch,
   groppedWorkouts,
+  oneRMArray,
   settings,
 
   t,
@@ -205,6 +206,7 @@ const Exercise = ({
         className="protocolls-pane"
         settings={settings}
         workouts={groppedWorkouts}
+        oneRMArray={oneRMArray}
 
         onCreateProtocoll={onCreateProtocoll}
         createProtocollLoading={createProtocollLoading}

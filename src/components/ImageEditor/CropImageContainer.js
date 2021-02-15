@@ -11,8 +11,6 @@ export default ({
   const [crop, setCrop] = useState({ unit: '%', width: 30, aspect: 50 / 50 });
   const [img, setImg] = useState(null);
   const onImageLoaded = i => {
-    console.log("onImageLoaded")
-    console.log(i)
     setImg(i);
   };
 

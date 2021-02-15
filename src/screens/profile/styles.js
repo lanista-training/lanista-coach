@@ -1,35 +1,28 @@
 import styled from 'styled-components';
-import {
-  Button,
-  Checkbox,
-  Form,
-  Card,
-  Segment,
-  Grid,
-  Divider,
-  Header,
-  Icon,
-  Radio,
-  List,
-  Input,
-  Label,
-  Dropdown,
-} from 'semantic-ui-react';
+import Input from '@material-ui/core/Input';
 import Dialog from '@material-ui/core/Dialog';
+import { List } from '@material-ui/core';
+import Item from '@material-ui/core/ListItem';
+import Icon from '@material-ui/core/Icon';
 
-export const Stage = styled(Grid)`
+export const Stage = styled.div`
   padding-top: 60px!important;
   padding-bottom: 6em!important;
   overflow: scroll;
   height: 100vh;
+  width: 750px;
+  overflow: visible;
   display: flex;
   ::-webkit-scrollbar {
     display: none!important;
   }
   .content-section {
-    flex: 1;
+    flex: 2 1 0%;
   }
   .navigation-section {
+    width: 250px;
+    margin-left: 40px;
+    flex: 1 1 0%;
     .navigation-panel {
       position: fixed;
       top: 35%;
@@ -54,27 +47,126 @@ export const Stage = styled(Grid)`
       }
     }
   }
+  .section {
+    padding-top: 2em;
+    width: 100%;
+    padding-bottom: 2em;
+    form {
+      padding: 2em;
+      label.Mui-focused {
+        color: black;
+      }
+      .MuiInput-underline:after {
+        border-bottom-color: black;
+      }
+    }
+    .id-section {
+      display: flex;
+      flex-flow: row-reverse;
+      span {
+        font-weight: 900;
+        margin-left: 10px;
+      }
+    }
+    .section-header {
+      font-size: 19px;
+      font-weight: 900;
+      font-family: Roboto;
+      line-height: 3em;
+      text-align: left;
+    }
+    .MuiFormControl-root {
+      width: 100%;
+      margin: 1.5em 0;
+    }
+    .MuiSelect-root {
+      text-align: left;
+    }
+    .strength-meter {
+      padding: 1em;
+      border-radius: 15px;
+      border-style: solid;
+      border-width: 1px;
+      border-color: #cccccc;
+      text-align: left;
+      .progress-bar {
+        margin-bottom: 1em;
+      }
+      .messages-header {
+        margin-bottom: 1em;
+        font-weight: 700;
+      }
+      .strength-message, .strength-message-pass {
+        display: flex;
+        place-items: center;
+        padding: 3px;
+        svg {
+          margin-right: 10px;
+        }
+      }
+      .strength-message {
+        color: rgb(219,40,40);
+      }
+      .strength-message-pass {
+        color: rgb(155,201,61);
+      }
+    }
+    .password-successfully-changed {
+      min-height: 10em;
+      display: flex;
+      flex-flow: column;
+      padding: 2em;
+      align-items: center;
+      svg {
+        color: rgb(155,201,61);
+        font-size: 5em;
+        margin-top: 0.2em;
+      }
+      button{
+        margin-top: 2em;
+      }
+    }
+    .MuiStepIcon-root.MuiStepIcon-active {
+      color: black;
+    }
+    .MuiStepIcon-root.MuiStepIcon-completed {
+      color: black;
+    }
+    .status-item-section {
+      display: flex;
+      justify-content: space-between;
+      margin: 20px 0;
+      button {
+        width: 250px;
+        .MuiButton-label {
+          color: white;
+        }
+      }
+      .green {
+        background-color: #59d76e!important;
+        padding-left: 1em!important;
+        font-weight: 900;
+        color: white!important;
+      }
+      .yellow {
+        background-color: #FDB825!important;
+        padding-left: 1em!important;
+        font-weight: 900;
+        color: white!important;
+      }
+      .red {
+        background-color: #db2828!important;
+        padding-left: 1em!important;
+        font-weight: 900;
+        color: white!important;
+      }
+    }
+  }
+  #section-address {
+    padding-bottom: 8em;
+  }
 `;
 
-export const CenteredButton = styled(Button)`
-  margin-right: auto!important;
-  margin-left: auto!important;
-  display: block!important;
-`;
-export const StyledHeader = styled(Header)`
-  font-weight: bold!important;
-`;
-export const StyledHeaderCentered = styled(Header)`
-  font-size: 1em!important;
-  margin-right: auto!important;
-  margin-left: auto!important;
-  display: block!important;
-`;
-export const FormHeader = styled(Header)`
-  font-size: 1em!important;
-  margin-bottom: 0!important;
-  text-align: left!important;
-`;
 export const FormInput = styled.input`
   border-color: transparent!important;
   padding-left: 0!important;
@@ -108,55 +200,29 @@ export const FixedSection = styled.div`
   max-width: 290px;
   padding-left: 1em;
 `;
-export const CardHeader = styled(Header)`
+export const CardHeader = styled.div`
   font-weight: bold;
   text-align: left!important;
 `;
-export const StyledCard = styled(Card)`
+
+export const StyledCard = styled.div`
   width: 100%!important;
-  border: rgb(242, 242, 242)!important;
-  border-style: solid!important;
-  border-width: 1px!important;
-  box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 4px 1px!important;
-  .user-identification {
-    margin: 1em 0;
-    font-weight: 100;
-    font-size: 17px;
-    text-align: right;
-    span {
-      font-weight: 900;
-    }
+  background-color: white;
+  border: 1px solid rgba(0,0,0,.0975);
+  border-radius: 15px;
+  box-shadow: 0 0 27px 0 #0000001f;
+  padding: 2em;
+  text-align: center;
+  .save-personal-data-button {
+    margin-top: 3em;
   }
-  .placeholder {
-    background-size: cover;
-    background: transparent;
-    width: 500px;
-    height: 500px;
-    margin-right: auto;
-    margin-left: auto;
-    z-index: 2;
-  }
-  .icon.header {
-    position: absolute;
-    width: 100%;
-    top: 36%;
-  }
-  .loading-photo {
-    width: 500px;
-    height: 500px;
-    margin-right: auto;
-    margin-left: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .buttons-section {
-    display: flex;
-    flex-flow: row;
-    justify-content: space-around;
+  .empty-image {
+    margin-top: 20%;
+    top: initial!important;
   }
 `;
-export const CardInput = styled(Form.Input)`
+
+export const CardInput = styled(Input)`
   border: 0;
   border-bottom-color: rgb(201, 201, 201);
   border-bottom-style: solid;
@@ -167,7 +233,7 @@ export const CardInput = styled(Form.Input)`
     display: block;
   }
 `;
-export const ColloredCardInput = styled(Form.Input)`
+export const ColloredCardInput = styled(Input)`
   border: 0;
   border-bottom: 0!important;
   border-bottom-color: rgb(201, 201, 201);
@@ -218,7 +284,8 @@ export const ColloredCardInput = styled(Form.Input)`
     margin-left: 1em;
   }
 `;
-export const CardDateInput = styled(Form.Input)`
+
+export const CardDateInput = styled(Input)`
   border: 0;
   border-bottom-color: rgb(201, 201, 201);
   border-bottom-style: solid;
@@ -242,24 +309,15 @@ export const CardDateInput = styled(Form.Input)`
      }
    }
 `;
-export const CardCheckbox = styled(Form.Input)`
+
+export const CardCheckbox = styled(Input)`
   border: 0;
   border-radius: 0;
   margin-top: 2em!important;
 `;
-export const CardDropdown = styled(Dropdown)`
-  border: 0!important;
-  padding-left: 0!important;
-`;
-export const StyledNavigationCard = styled(Card)`
-  width: 100%!important;
-  margin: 0!important;
-  border: rgb(242, 242, 242)!important;
-  border-style: solid!important;
-  border-width: 1px!important;
-  box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 4px 1px!important;
-`;
-export const ImageSegment = styled(Segment)`
+
+
+export const ImageSegment = styled.div`
   background-image: url(${props => props.photoUrl})!important;
   background-size: cover!important;
   height: 330px;
@@ -271,25 +329,18 @@ export const ImageSegment = styled(Segment)`
 export const ToolsList = styled(List)`
   color: rgba(0,0,0,.6);
 `;
-export const ListItem = styled(List.Item)`
+export const ListItem = styled(Item)`
   padding: 1.5em!important;
   border-bottom-style: solid;
   border-bottom-width: 1px!important;
   border-bottom-color: rgba(0, 0, 0, 0.075)!important;
 `;
-export const ListHeader = styled(List.Header)`
+export const ListHeader = styled.div`
   color: rgb(116, 116, 116)!important;
 `;
-export const ListIcon = styled(List.Icon)`
+export const ListIcon = styled(Icon)`
   color: rgb(116, 116, 116)!important;
   padding-right: 1.5em!important;
-`;
-export const StyledLabel = styled(Label)`
-  line-height: 2em!important;
-`;
-export const LicenceField = styled(Form.Field)`
-  color: black!important;
-  opacity: 1!important;
 `;
 export const CardButton = styled.div`
   .Mui-disabled {

@@ -591,6 +591,7 @@ const Panel = ({
           name: 'back',
           onTap: () => {
             // save the changes first
+            console.log("GO BACK", editmode, folder, workoutId, testId)
             if(editmode) {
               if(folder) {
                 onFolderSelection(null);
@@ -1023,8 +1024,9 @@ const Panel = ({
   )
 }
 
-const PanelWithData = ({editmode, workout, split, member, test, goBack, goToExercise, goToSetup}) => {
-  const ExerciseData = withData(Panel, {editmode, workout, split, member, test, goBack, goToExercise, goToSetup});
+const PanelWithData = ({editmode, workout, testId, split, member, test, goBack, goToExercise, goToSetup}) => {
+  console.log("PanelWithData", testId, test, editmode);
+  const ExerciseData = withData(Panel, {editmode, workout, testId, split, member, test, goBack, goToExercise, goToSetup});
   return <ExerciseData/>
 }
 

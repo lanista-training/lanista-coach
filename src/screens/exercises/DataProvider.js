@@ -74,7 +74,7 @@ const filterInitialValues = {
   private: false,
 };
 
-const withData = (WrappedComponent, {editmode, workout: workoutId, split, member, test: testId, goBack, goToExercise}) => {
+const withData = (WrappedComponent, {editmode, workout: workoutId, testId, split, member, goBack, goToExercise}) => {
 
   const DataProvider = () => {
 

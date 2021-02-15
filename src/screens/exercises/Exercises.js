@@ -28,8 +28,8 @@ const Exercise = ({
   return (
     <ListItem onClick={() => !(folderMode > 0) && onShowExercise(exercise.id) } className={exercise.selected ? 'selected' : ''}>
       <div className="exercise-item">
-        <div className="exercise-list-img-right" style={{backgroundImage: 'url(' + exercise.start_image + ')'}}/>
-        <div className="exercise-list-img-left" style={{backgroundImage: 'url(' + exercise.end_image + ')'}}/>
+        <div className="exercise-list-img-left" style={{backgroundImage: 'url(' + exercise.start_image + ')'}}/>
+        <div className="exercise-list-img-right" style={{backgroundImage: 'url(' + exercise.end_image + ')'}}/>
         <div className="exercise-list-text">{exercise.name}</div>
         {folderMode == 2 &&
           <Button

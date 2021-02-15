@@ -3,6 +3,7 @@ import { useTranslate } from '../../hooks/Translation';
 import _ from 'lodash';
 import moment from "moment";
 import arrayMove from 'array-move';
+import QRCode from 'qrcode.react';
 
 import { withApollo } from '../../lib/apollo';
 import { useMutation, useQuery } from '@apollo/react-hooks';
@@ -26,7 +27,18 @@ import {
   DUPLICATESPLIT,
   SENDACTIVATIONMAIL,
 } from "../../mutations";
-import {StyledDrawer, StyledSnackbar, ImageBlock, Foto, CustomerHeader, TextBlock, FirstName, LastName, CustomerSection } from './styles';
+import {
+  StyledDrawer,
+  StyledSnackbar,
+  ImageBlock,
+  Foto,
+  CustomerHeader,
+  TextBlock,
+  FirstName,
+  LastName,
+  CustomerSection,
+  QrCodeSection 
+} from './styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -51,6 +63,7 @@ import WorkoutEditPanel from '../../components/WorkoutEditPanel';
 import PrintPlanPanel from '../../components/PrintPlanPanel';
 import SendPlanPanel from '../../components/SendPlanPanel';
 import LanistaButton from '../../components/LanistaButton';
+import ChannelInfoPanel from '../../components/ChannelInfoPanel';
 
 import Help from '../../components/icons/Help';
 import Tools from '../../components/icons/Tools';
@@ -131,6 +144,11 @@ const Panel = ({
   const [workoutEditOpen, setWorkoutEditOpen] = React.useState(false);
   const toggleWorkoutEditOpen = () => setWorkoutEditOpen(!workoutEditOpen);
 
+  const [workoutChannelInfoOpen, setWorkoutChannelInfo] = React.useState(false);
+  const toggleWorkoutChannelInfo = () => setWorkoutChannelInfo(!workoutChannelInfoOpen);
+
+  const [publishPlan, setPublishPlan] = React.useState(false);
+  const togglePublishPlan = () => setPublishPlan(!publishPlan)
 
   //
   // Queries
@@ -315,7 +333,7 @@ const Panel = ({
     GENERATEPLANPDF,
     {
       update(cache,  { data: { generatePlanPdf } }) {
-        window.cordova.InAppBrowser ? window.cordova.InAppBrowser.open(generatePlanPdf.filename, '_system') : window.open(generatePlanPdf.filename, '_blank');
+        (window.cordova && window.cordova.InAppBrowser) ? window.cordova.InAppBrowser.open(generatePlanPdf.filename, '_system') : window.open(generatePlanPdf.filename, '_blank');
         togglePrintPanelOpen();
       }
     }
@@ -360,7 +378,6 @@ const Panel = ({
     CLONEPLAN,
     {
       update(cache,  { data: {clonePlan} }) {
-        console.log("clonePlan update")
         const {id} = clonePlan;
         if( id > 0 ) {
           if( localStorage.getItem('assignToUser') ) {
@@ -370,8 +387,12 @@ const Panel = ({
             goBack();
           } else {
             localStorage.setItem('openplan', id);
-            goToRoot();
-            goToWorkouts();
+            if( clonePlan.public ) {
+              goBack();
+            } else {
+              goToRoot();
+              goToWorkouts();
+            }
           }
         }
 
@@ -630,6 +651,16 @@ const Panel = ({
     });
   }
 
+  const publishTemplate = () => {
+    clonePlan({
+      variables: {
+        planId: workoutId,
+        memberId: null,
+        publicPlan: true,
+      }
+    });
+  }
+
   const createSplit = () => {
     const {splits} = workout;
     splits.push({
@@ -676,7 +707,12 @@ const Panel = ({
     })
   }
 
-  console.log("workout", workout)
+  const onQRCodeClick = () => {
+
+    toggleWorkoutChannelInfo();
+  }
+
+  console.log("workout", workout, me)
 
   return (
     <Scene
@@ -686,9 +722,9 @@ const Panel = ({
         <>
           <WorkoutHeader
             title={workout ? workout.name : ''}
-            subtitle={workout ? (t("duration") + workout.duration + ' Wochen') : ''}
+            subtitle={workout ? (t("duration") + ': ' +  workout.duration + ' ' + (workout.duration > 1 ? t("weeks") : t("week"))) : ''}
           />
-        { workout && workout.member && (
+          { workout && workout.member && (
             <CustomerSection>
               <TextBlock >
                 <LastName >{workout.member.last_name}</LastName>
@@ -698,6 +734,16 @@ const Panel = ({
                 <Foto style={{ backgroundImage: 'url(' + workout.member.photoUrl }} editable={false}/>
               </ImageBlock>
             </CustomerSection>
+          )}
+          { me.bu == 0 && workout && workout.template && workout.public && me.id == workout.creator_id && (
+            <QrCodeSection>
+              <QRCode
+                value={"https://workout.lanista-training.com/" + workout.id}
+                size={60}
+                fgColor="#9bc93d"
+                onClick={onQRCodeClick}
+              />
+            </QrCodeSection>
           )}
         </>
       }
@@ -785,6 +831,14 @@ const Panel = ({
               <ListItemText primary={t("save as my template")} />
             </ListItem>
           </div>
+          { me.bu == 0 && workout && workout.template && !workout.public && me.id == workout.creator_id && (
+            <div className="list-item-wrapper">
+              <ListItem button key="publish-template" onClick={togglePublishPlan}>
+                <ListItemText primary={t("publish")} />
+              </ListItem>
+            </div>
+          )}
+
         </List>
       </div>
     </StyledDrawer>
@@ -886,6 +940,31 @@ const Panel = ({
       </Dialog>
     }
 
+    <Dialog
+      open={publishPlan}
+      onClose={togglePublishPlan}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">{t("publish plan")}</DialogTitle>
+      <DialogContent>
+        <DialogContentText id="settings-dialog-description">
+          {t("publish plan info")}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={togglePublishPlan} color="primary">
+          {t("back")}
+        </Button>
+        <Button onClick={() => {
+          publishTemplate();
+          togglePublishPlan();
+        }} color="primary" autoFocus>
+          {t("publish")}
+        </Button>
+      </DialogActions>
+    </Dialog>
+
 
 
     { defaultSettings &&
@@ -909,7 +988,14 @@ const Panel = ({
       saveError={updateError}
     />
 
-
+    {workout && (
+      <ChannelInfoPanel
+        t={t}
+        open={workoutChannelInfoOpen}
+        onClose={toggleWorkoutChannelInfo}
+        workoutChanellUrl={"https://workout.lanista-training.com/" + workout.id}
+      />
+    )}
 
     <PrintPlanPanel
       open={printPanelOpen}

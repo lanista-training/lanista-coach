@@ -71,7 +71,7 @@ const Measures = ({
     }
   }
 
-  const {measures, calipers, gender, birthday, tests} = customer
+  const {measures, calipers, gender, birthday, tests, id} = customer
   prepareTestData(tests);
 
   const panes = [
@@ -89,7 +89,7 @@ const Measures = ({
     },
     {
       menuItem: { key: 'measures',  content: t('testings') },
-      render: () => <TestsPane t={t} tests={tests} goToTest={goToTest}/>
+      render: () => <TestsPane t={t} tests={tests} goToTest={goToTest} memberId={id}/>
     },
   ]
 

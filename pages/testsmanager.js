@@ -22,12 +22,23 @@ function Template({testId}) {
     });
   }
 
+  const goToExercises = (testId) => {
+    Router.push({
+      pathname: '/exercises',
+      query: {
+        editmode: true,
+        test: testId
+      }
+    });
+  }
+
   return (
     <TemplateScreen
       testId={testId}
       goBack={goBack}
       goToTest={goToTest}
       goToSetup={goToSetup}
+      goToExercises={goToExercises}
     />
   );
 }

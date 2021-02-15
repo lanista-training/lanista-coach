@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslate } from '../../hooks/Translation';
 import { withApollo } from '../../lib/apollo';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import moment from "moment";
@@ -15,6 +16,8 @@ import {
 export const withData = (WrappedComponent, {memberId, goBack, goToSetup}) => {
 
   const DataProvider = () => {
+    const {t} = useTranslate("profile");
+    const [emailErrorMessage, setEmailErrorMessage] = useState(null);
     const { data: meData } = useQuery(ME);
     const {me} = meData ? meData : {me: {}};
 
@@ -22,6 +25,7 @@ export const withData = (WrappedComponent, {memberId, goBack, goToSetup}) => {
       variables: {
         memberId: memberId,
       },
+      fetchPolicy: 'no-cache',
     });
     const {member} = memberData ? memberData : {member: {}};
 
@@ -40,6 +44,17 @@ export const withData = (WrappedComponent, {memberId, goBack, goToSetup}) => {
         }
       }
     );
+    useEffect(() => {
+      console.log("updateMemberError", updateMemberError)
+      if( updateMemberError && updateMemberError.message.indexOf('DUPLICATEERROR') > -1 ) {
+        console.log("MARK")
+        if( updateMemberError.message.indexOf('IAC') > -1 ) {
+          setEmailErrorMessage(t("USERNOTELEGIBLE_CREATE_ERROR") + t("CUSTOMER_NEED_TO_ACTIVATE_ACCOUNT") + ".");
+        } else {
+          setEmailErrorMessage(t("USERNOTELEGIBLE_CREATE_ERROR") + ".");
+        }
+      }
+    }, [updateMemberError])
 
     const [memberDeleted, setMemberDeleted] = React.useState(false);
     const [deleteMember, {
@@ -135,6 +150,9 @@ export const withData = (WrappedComponent, {memberId, goBack, goToSetup}) => {
 
         goBack={goBack}
         goToSetup={goToSetup}
+
+        emailErrorMessage={emailErrorMessage}
+        setEmailErrorMessage={setEmailErrorMessage}
       />
     )
   }

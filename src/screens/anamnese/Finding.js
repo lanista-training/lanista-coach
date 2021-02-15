@@ -1,13 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
 import moment from "moment";
-import { Pane, StyledFinding, FindingForm, GraphSection } from './styles';
+import { Pane, StyledFinding, FindingForm, GraphSection, RatingSlider } from './styles';
 
 import PlaceIcon from '@material-ui/icons/Place';
 import HistoryIcon from '@material-ui/icons/History';
 import HomeIcon from '@material-ui/icons/Home';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import Rating from '@material-ui/lab/Rating';
 import { withStyles } from '@material-ui/core/styles';
 import Switch from '@material-ui/core/Switch';
 import { grey } from '@material-ui/core/colors';
@@ -16,48 +15,77 @@ import Button from '../../components/LanistaButton';
 import LanistaField from '../../components/LanistaField';
 import LanistaTime from '../../components/LanistaTime';
 
-import DotsIcon1 from '../../components/icons/DotsIcon1';
-import DotsIcon2 from '../../components/icons/DotsIcon2';
-import DotsIcon3 from '../../components/icons/DotsIcon3';
-import DotsIcon4 from '../../components/icons/DotsIcon4';
-import DotsIcon5 from '../../components/icons/DotsIcon5';
-import DotsIcon6 from '../../components/icons/DotsIcon6';
-
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 
 import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts';
 
-const customIcons = {
-  1: {
-    icon: <DotsIcon1 />,
-  },
-  2: {
-    icon: <DotsIcon2 />,
-  },
-  3: {
-    icon: <DotsIcon3 />,
-  },
-  4: {
-    icon: <DotsIcon4 />,
-  },
-  5: {
-    icon: <DotsIcon5 />,
-  },
-  6: {
-    icon: <DotsIcon6 />,
-  }
-};
+import NotesList from './NotesList';
 
-
-const StyledRating = withStyles({
-  iconFilled: {
+//
+// RATING FIELD
+//
+const Slider = withStyles({
+  root: {
     color: 'black',
   },
-  iconHover: {
-    color: 'black',
+  })(RatingSlider);
+
+function valuetext(value) {
+  return `${value}`;
+}
+
+const marks = [
+  {
+    value: 0,
+    label: '0',
   },
-})(Rating);
+  {
+    value: 1,
+    label: '1',
+  },
+  {
+    value: 2,
+    label: '2',
+  },
+  {
+    value: 3,
+    label: '3',
+  },
+  {
+    value: 4,
+    label: '4',
+  },
+  {
+    value: 5,
+    label: '5',
+  },
+  {
+    value: 6,
+    label: '6',
+  },
+  {
+    value: 7,
+    label: '7',
+  },
+  {
+    value: 8,
+    label: '8',
+  },
+  {
+    value: 9,
+    label: '9',
+  },
+  {
+    value: 10,
+    label: '10',
+  },
+];
+
+
+
+
+
 
 const AnamneseSwitch = withStyles({
   switchBase: {
@@ -73,19 +101,28 @@ const AnamneseSwitch = withStyles({
   track: {},
 })(Switch);
 
-function IconContainer( { value, ...other }) {
-  return <span {...other}>{customIcons[value].icon}</span>;
-}
-
 
 const CustomizedLabel = ({x, y, stroke, value, t}) => {
   return <text x={x} y={y-10} dy={-4} fill="black" fontSize={15} textAnchor="middle">{(value)}</text>;
 }
 
-const renderGraphSection = (graphData, t) => {
+const renderGraphSection = (
+  graphData,
+   t,
+   selectedDate,
+   setSelectedDate,
+ ) => {
 
-  const curatedDate = graphData.map(item => ({...item, label: moment(new Date(parseInt(item.date))).format("DD-MMMM-YYYY") }) );
+  const curatedDate = graphData && graphData.map(item => ({...item, label: moment(new Date(parseInt(item.date))).format("DD-MMMM-YYYY") }) );
   const available = graphData && graphData.length > 1;
+  const onChartClick = (event) => {
+    if( event ) {
+      const {activePayload} = event;
+      const {payload} = activePayload[0];
+      const selectedDate = new Date(parseInt(payload.date))
+      setSelectedDate(selectedDate)
+    }
+  }
 
   return(
     <GraphSection>
@@ -96,9 +133,11 @@ const renderGraphSection = (graphData, t) => {
             margin={{
               top: 50, right: 70, left: 70, bottom: 5,
             }}
+            onClick={onChartClick}
           >
             <XAxis dataKey="label"/>
             <Line yAxisId="left" type="monotone" dataKey="value" name={t('score')}  strokeWidth={2} stroke="black" connectNulls label={<CustomizedLabel t={t} />}/>
+            <Tooltip />
           </LineChart>
         </ResponsiveContainer>
         :
@@ -125,7 +164,17 @@ const Finding = ({
   onDeleteFinding,
 
   cleanupPanel,
+
+  onSaveAnamneseNote,
+  saveAnamneseNoteLoading,
+  saveAnamneseNoteError,
+
+  onDeleteAnamneseNote,
+  deleteAnamneseNoteLoading,
+  deleteAnamneseNoteError,
 }) => {
+
+  const [showScale, setShowScale] = React.useState(false);
 
   const {first_name, last_name, photoUrl} = finding.creator;
   const {creation_date} = finding;
@@ -138,6 +187,7 @@ const Finding = ({
     setRequestDeletion(false);
     setEditing(false);
     setHistory(false);
+    setCreateNoteMode(false);
   };
 
   const [editing, setEditing] = useState( finding.id == undefined );
@@ -145,6 +195,12 @@ const Finding = ({
 
   const [history, setHistory] = useState( false );
   const toggleHistory = () => setHistory(!history);
+
+  const [note, setNote] = useState('');
+  const [createNoteMode, setCreateNoteMode] = useState( false );
+  const toggleCreateNoteMode = () => setCreateNoteMode(!createNoteMode);
+  const [readyToSaveNote, setReadyToSaveNote] = useState( false );
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const [requestDeletion, setRequestDeletion] = useState(false);
   const toggleRequestDeletion = () => setRequestDeletion(!requestDeletion);
@@ -164,6 +220,8 @@ const Finding = ({
   const [startDateValue, setStartDateValue] = useState(0);
   const [endDateValue, setEndDateValue] = useState(0);
   const [timeEditing, setTimeEditing] = useState(false);
+
+  const [titleErrorMessage, setTitleErrorMessage] = useState(null);
 
   useEffect(() => {
     const {title, description, rating, warning_flag, visible, start_date, end_date} = finding;
@@ -255,7 +313,8 @@ const Finding = ({
 
   useEffect(() => {
     const {title, description, rating, warning_flag, visible, start_date, end_date} = finding;
-    if( (rating && rating[0].value )!=  ratingValue || warning_flag!= warningFlagValue || visible != visibleValue || start_date != startDateValue || end_date != endDateValue ) {
+    setTitleErrorMessage(null);
+    if( (rating && rating[0].value !=  ratingValue ) || warning_flag!= warningFlagValue || visible != visibleValue || start_date != startDateValue || end_date != endDateValue ) {
       titleValue !== "" && onSaveButtonClick();
       //onSaveButtonClick();
     } else if(title != titleValue || description !=  descriptionValue) {
@@ -291,33 +350,45 @@ const Finding = ({
     }
   }, [saveFindingLoading])
 
+  useEffect(() => {
+    saveAnamneseNoteLoading && setCreateNoteMode(false);
+  }, [saveAnamneseNoteLoading]);
+
   const onSaveButtonClick = () => {
-    if( finding.id > 0 ) {
-      onSaveFinding({
-        id: finding.id,
-        title: titleValue,
-        description: descriptionValue,
-        rating: ratingValue,
-        warningFlag: warningFlagValue,
-        visible: visibleValue,
-        startDate: startDateValue,
-        endDate: endDateValue,
-      });
+    if( titleValue.length === 0 ) {
+      setTitleErrorMessage(t("title is mandatory"));
     } else {
-      const {x, y} = finding.position;
-      onCreateFinding({
-        title: titleValue,
-        xPosition: x,
-        yPosition: y,
-        description: descriptionValue,
-        rating: ratingValue,
-        warningFlag: warningFlagValue,
-        visible: visibleValue,
-        startDate: startDateValue,
-        endDate: endDateValue,
-      });
+      if( finding.id > 0 ) {
+        onSaveFinding({
+          id: finding.id,
+          title: titleValue,
+          description: descriptionValue,
+          rating: ratingValue,
+          warningFlag: warningFlagValue,
+          visible: visibleValue,
+          startDate: startDateValue,
+          endDate: endDateValue,
+        });
+      } else {
+        const {x, y} = finding.position;
+        onCreateFinding({
+          title: titleValue,
+          xPosition: x,
+          yPosition: y,
+          description: descriptionValue,
+          rating: ratingValue,
+          warningFlag: warningFlagValue,
+          visible: visibleValue,
+          startDate: startDateValue,
+          endDate: endDateValue,
+        });
+      }
     }
   };
+
+  const onSaveAnamneseNoteButtonClick = () => {
+    onSaveAnamneseNote(finding.id, note, selectedDate);
+  }
 
   const onDeleteButtonClick = () => {
     onDeleteFinding({
@@ -361,7 +432,7 @@ const Finding = ({
       >
         <div className={editing ? 'finding-form editing' : 'finding-form'}>
           <div className="header-section">
-            {!requestDeletion &&
+            {!requestDeletion  &&
               <div className="title-section" onClick={() => setTitleEditing(true)}>
                 <LanistaField
                   name="title-field"
@@ -374,6 +445,9 @@ const Finding = ({
                   disabled={saveFindingLoading}
                   onBlur={() => readyToSave ? onSaveButtonClick() : setTitleEditing(false)}
                   onKeyDown={(e) => e.keyCode == 13 && (readyToSave ? onSaveButtonClick() : setTitleEditing(false))}
+                  emptyText={t("name")}
+                  error={titleErrorMessage !== null}
+                  helperText={titleErrorMessage}
                 />
               </div>
             }
@@ -388,20 +462,23 @@ const Finding = ({
           <div className="content-section">
             { !requestDeletion &&
               <>
-                <div className="description-section" onClick={() => setDescriptionEditing(true)}>
-                  <LanistaField
-                    name="description-field"
-                    id={"description-field"}
-                    editing={editing || descriptionEditing}
-                    value={(descriptionValue && descriptionValue.length > 0) ? descriptionValue : (editing || finding.id === undefined) ? '' : t("no_description")}
-                    multiline={true}
-                    rows={2}
-                    label={t("description")}
-                    onChange={(e) => setDescriptionValue(e.target.value)}
-                    disabled={saveFindingLoading}
-                    onBlur={() => readyToSave ? onSaveButtonClick() : setDescriptionEditing(false)}
-                  />
-                </div>
+                { !history &&
+                  <div className="description-section" onClick={() => setDescriptionEditing(true)}>
+                    <LanistaField
+                      name="description-field"
+                      id={"description-field"}
+                      editing={editing || descriptionEditing}
+                      value={(descriptionValue && descriptionValue.length > 0) ? descriptionValue : ''}
+                      multiline={true}
+                      rows={2}
+                      label={t("description")}
+                      onChange={(e) => setDescriptionValue(e.target.value)}
+                      disabled={saveFindingLoading}
+                      onBlur={() => readyToSave ? onSaveButtonClick() : setDescriptionEditing(false)}
+                      emptyText={t("no_description")}
+                    />
+                  </div>
+                }
                 <div
                   className={history ? "rating-section inverted" : ratingEditing ? "rating-section editing" : "rating-section"}
                   onClick={(e) => {
@@ -409,23 +486,36 @@ const Finding = ({
                     e.target.nodeName != 'LABEL' && e.target.nodeName != 'INPUT' && setRatingEditing(!ratingEditing)
                   }}
                 >
-                  <div className="rating-text">{t("finding_rating_" + (ratingValue + 1))}</div>
-                  <StyledRating
-                    name="customized-icons"
-                    value={ratingValue + 1}
-                    IconContainerComponent={IconContainer}
-                    max={6}
-                    readOnly={!ratingEditing && !editing}
-                    size="large"
-                    onChange={(e) => {
-                      setRatingValue(e.target.value - 1);
-                    }}
-                    disabled={saveFindingLoading}
-                  />
+                  <div className="rating-text">{t("intensity")}</div>
+                  { ratingValue === null && !showScale &&
+                    <Button onClick={() => setShowScale(true)}>
+                      {t("NEW_VALUE")}
+                    </Button>
+                  }
+                  { (ratingValue !== null || showScale) &&
+                    <Slider
+                      defaultValue={0}
+                      getAriaValueText={valuetext}
+                      aria-labelledby="discrete-slider"
+                      valueLabelDisplay="auto"
+                      step={1}
+                      marks={marks}
+                      min={0}
+                      max={10}
+                      value={ratingValue}
+
+                      readOnly={!ratingEditing && !editing}
+                      onChange={(event, newValue) => {
+                        console.log("onChange", newValue);
+                        setRatingValue(newValue);
+                      }}
+                      disabled={saveFindingLoading || !ratingEditing || editing}
+                    />
+                  }
                 </div>
                 { history &&
                   <div className="history-section">
-                    {renderGraphSection(finding.rating, t)}
+                    {renderGraphSection(finding.rating, t, selectedDate, setSelectedDate)}
                   </div>
                 }
                 { !history &&
@@ -473,10 +563,34 @@ const Finding = ({
                 <div>{t("delete_finding")}</div>
               </div>
             }
+            { history &&
+              <div className="notes-list-section hide-scrollbar">
+                <NotesList
+                  createNoteMode={createNoteMode}
+                  notes={finding ? finding.notes : []}
+                  readyToSaveNote={readyToSaveNote}
+                  setReadyToSaveNote={setReadyToSaveNote}
+
+                  selectedDate={selectedDate}
+                  setSelectedDate={setSelectedDate}
+
+                  note={note}
+                  setNote={setNote}
+
+                  onSaveAnamneseNote={onSaveAnamneseNote}
+                  saveAnamneseNoteLoading={saveAnamneseNoteLoading}
+                  saveAnamneseNoteError={saveAnamneseNoteError}
+
+                  onDeleteAnamneseNote={onDeleteAnamneseNote}
+                  deleteAnamneseNoteLoading={deleteAnamneseNoteLoading}
+                  deleteAnamneseNoteError={deleteAnamneseNoteError}
+                />
+              </div>
+            }
           </div>
           <div className="buttons-section">
-            <Button onClick={handleClose} color="primary">
-              {t("close")}
+            <Button onClick={createNoteMode ? toggleCreateNoteMode : handleClose} color="primary">
+              {createNoteMode ? t("cancel") : t("close")}
             </Button>
             {requestDeletion && finding.id > 0 &&
               <Button
@@ -497,6 +611,16 @@ const Finding = ({
                 loading={saveFindingLoading}
               >
                 {editing ? t("save") : t("edit")}
+              </Button>
+            }
+            { history &&
+              <Button
+                onClick={createNoteMode ? onSaveAnamneseNoteButtonClick : toggleCreateNoteMode}
+                color="primary"
+                inverted={readyToSaveNote}
+                loading={saveAnamneseNoteLoading}
+              >
+                {createNoteMode ? t("SAVE_PHYSIO_TREATMENT") : t("PHYSIO_TREATMENT")}
               </Button>
             }
           </div>

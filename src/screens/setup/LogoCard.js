@@ -17,7 +17,6 @@ export default ({
   refetch,
 
   photoUrl,
-  photoUrlFullSize,
 
 }) => {
   //
@@ -36,12 +35,13 @@ export default ({
       setPreviewImage("https://dn2ppfvx6tfpw.cloudfront.net/" + encRequest + '?DC=!' + (new Date()).getTime() );
     }
   };
+  const onStartEditing = () => {
+    setPreviewImage(photoUrl)
+  }
+  const onEndEditing = () => {
+    setPreviewImage(photoUrl)
+  }
 
-  React.useEffect(() => {
-    if( id > 0 ) {
-      resetPreviewImage();
-    }
-  }, [id]);
   //
   // Crop image
   const onCropImage = (crop) => {
@@ -114,7 +114,7 @@ export default ({
           if (response.ok) {
             refetch();
           } else {
-            alert('Error uploading [' + file.name + ']. Max upload size is ~4MB.');
+            alert('Error uploading [' + file.name + '].');
           }
           setLoadingImage(false);
         })
@@ -148,7 +148,7 @@ export default ({
   console.log("photoUrl", photoUrl)
 
   return (
-    <div className="section profile-image-section" id="section-2">
+    <div className="section profile-image-section" id="section-logo">
       <div className="section-header">{t( "MY_BUSINESS_LOGO" )}</div>
       <StyledCard>
         <div className="section-content">
@@ -165,6 +165,11 @@ export default ({
             onCropImage={onCropImage}
             onRotateImage={onRotateImage}
             loading={loadingImage}
+
+            onStartEditing={onStartEditing}
+            onEndEditing={onEndEditing}
+
+            pictureMessage={'free image format'}
           />
         </div>
       </StyledCard>

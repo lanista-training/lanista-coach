@@ -70,7 +70,7 @@ export default ({t, settings, onSettingsChange, onSyncSettings, editable}) => {
         <div className="exercise-indications">
           <div className="input-fields">
             <TextArea
-              placeholder="Keine Anweisungen für den Kunde eingetragen."
+              placeholder={t("no instructions")}
               rows="2"
               value={settings.indications}
               onChange={onIndicationsChange}

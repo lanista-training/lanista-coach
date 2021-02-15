@@ -32,6 +32,7 @@ const Panel = ({
   goBack,
   goToTest,
   goToSetup,
+  goToExercises,
 }) => {
 
   const {t} = useTranslate("testsmanager");
@@ -105,6 +106,7 @@ const Panel = ({
 
         goBack={goBack}
         goToTest={goToTest}
+        goToExercises={goToExercises}
 
       />
     </Scene>
@@ -112,8 +114,8 @@ const Panel = ({
 
 }
 
-const PanelWithData = ({testId, goBack, goToTest, goToSetup}) => {
-  const MeasuresData = withData(Panel, {testId, goBack, goToTest, goToSetup});
+const PanelWithData = ({testId, goBack, goToTest, goToSetup, goToExercises}) => {
+  const MeasuresData = withData(Panel, {testId, goBack, goToTest, goToSetup, goToExercises});
   return <MeasuresData/>
 }
 

@@ -31,6 +31,9 @@ const Dashboard = ({
   getMembersList,
   membersListLoading,
   membersListData,
+
+  goToCustomers,
+  goToWorkouts,
 }) => {
 
   return (
@@ -60,6 +63,9 @@ const Dashboard = ({
         getMembersList={getMembersList}
         membersListLoading={membersListLoading}
         membersListData={membersListData}
+
+        goToCustomers={goToCustomers}
+        goToWorkouts={goToWorkouts}
       />
       <Modal
         open={showModal}

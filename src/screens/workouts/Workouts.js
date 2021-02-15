@@ -8,11 +8,13 @@ import moment from "moment";
 
 const Workout = ({workout, onWorkoutSelection, onSelection, clonePlanLoading}) => {
   const [loading, setLoading] = React.useState(false);
+  console.log("Workout", workout)
   return (
     <StyledWorkout
       public={workout.public}
       plugin={workout.plugin}
       studio={workout.studio}
+      lanista={workout.lanista}
       onClick={clonePlanLoading ? () => {} : () => {
         setLoading(true);
         onWorkoutSelection();

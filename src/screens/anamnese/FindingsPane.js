@@ -28,6 +28,15 @@ export default ({
   onDeleteFinding,
   deleteFindingLoading,
   deleteFindingError,
+
+  onSaveAnamneseNote,
+  saveAnamneseNoteLoading,
+  saveAnamneseNoteError,
+
+  onDeleteAnamneseNote,
+  deleteAnamneseNoteLoading,
+  deleteAnamneseNoteError,
+
 }) => {
 
   const [openFirst, setOpenFirst] = useState(id);
@@ -122,6 +131,14 @@ export default ({
             onDeleteFinding={onDeleteFinding}
 
             cleanupPanel={cleanupPanel}
+
+            onSaveAnamneseNote={onSaveAnamneseNote}
+            saveAnamneseNoteLoading={saveAnamneseNoteLoading}
+            saveAnamneseNoteError={saveAnamneseNoteError}
+
+            onDeleteAnamneseNote={onDeleteAnamneseNote}
+            deleteAnamneseNoteLoading={deleteAnamneseNoteLoading}
+            deleteAnamneseNoteError={deleteAnamneseNoteError}
           />
         })}
       </div>

@@ -335,13 +335,20 @@ export const TextBlock  = styled.div`
 
 export const FirstName  = styled.div`
   font-size: 0.8em;
+  white-space: nowrap;
 `;
 
 export const LastName  = styled.div`
   font-weight: bold;
+  white-space: nowrap;
 `;
 
 export const CustomerSection  = styled.div`
   display: flex;
   margin-right: 1em;
+`;
+
+export const QrCodeSection = styled.div`
+  display: flex;
+  padding: 15px;
 `;

@@ -8,7 +8,7 @@ import { withApollo } from '../../lib/apollo'
 import { useMutation, useQuery } from '@apollo/react-hooks'
 import Scene from "../../components/Scene";
 import Workouts from './Workouts';
-import WorkoutsHeader from "../../components/WorkoutsHeader";
+import WorkoutsHeader from "./WorkoutsHeader";
 import { MEMBER, WORKOUTS, PLUGINS, ME } from "../../queries";
 import { CREATEPLAN } from "../../mutations";
 import { Search } from 'semantic-ui-react';
@@ -47,6 +47,7 @@ const Counter  = styled.div`
 `;
 
 const WorkoutsPanel = ({memberId, goBack, goToWorkout, goToSetup}) => {
+
   const {t} = useTranslate("workouts");
   //
   // Create Plan dialog
@@ -56,6 +57,8 @@ const WorkoutsPanel = ({memberId, goBack, goToWorkout, goToSetup}) => {
   const handleCloseDialogCreatePlan = () => {setDialogCreatePlanOpen(false)}
 
   const [filter, setFilter] = React.useState('');
+  const [publicPlan, setPublicPlan] = React.useState(false);
+  const togglePublicPlan = () => setPublicPlan(!publicPlan);
 
   const { data:meData } = useQuery(ME);
   const {me} = meData ? meData : {me: {}};
@@ -69,6 +72,7 @@ const WorkoutsPanel = ({memberId, goBack, goToWorkout, goToSetup}) => {
   const { loading: workoutsLoading, error: workoutsError, data: workoutsData, networkStatus } = useQuery(WORKOUTS, {
     variables: {
       filter: filter,
+      public: publicPlan,
       language: me.language,
     },
     fetchPolicy: "network-only",
@@ -85,12 +89,6 @@ const WorkoutsPanel = ({memberId, goBack, goToWorkout, goToSetup}) => {
       update(cache,  { data: {createPlan} }) {
         if( createPlan.id > 0 ) {
           goToWorkout(createPlan.id);
-          /*
-          Router.push({
-            pathname: '/workout',
-            query: { workout: createPlan.id }
-          });
-          */
         }
       }
     }
@@ -101,12 +99,6 @@ const WorkoutsPanel = ({memberId, goBack, goToWorkout, goToSetup}) => {
     if( planId && planId > 0 ) {
       localStorage.removeItem('openplan');
       goToWorkout(planId);
-      /*
-      Router.push({
-        pathname: '/workout',
-        query: { workout: planId }
-      });
-      */
     }
   }, []);
 
@@ -183,6 +175,8 @@ const WorkoutsPanel = ({memberId, goBack, goToWorkout, goToSetup}) => {
             onTextSearchChange={(event) => onTextSearch(event.target.value)}
             filter={filter}
             plugins={(plugins) ? plugins : [] }
+            publicPlan={publicPlan}
+            togglePublicPlan={togglePublicPlan}
           />
           <Counter className="counter"><span>{t("plans")}</span> {workouts && workouts.length}</Counter>
           { localStorage.getItem('assignToUser') && (

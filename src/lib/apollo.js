@@ -30,7 +30,6 @@ export function withApollo (PageComponent, { ssr = true } = {}) {
       const cache = new InMemoryCache(initData);
 
       //console.log(env)
-      //console.log("SERVER CONFIGURATION: " + env.server);
       // Mobile App GrapQL Link
       //var graphqlServer = 'https://' + mobile.lanista-training.com + '/graphql';
 
@@ -38,7 +37,7 @@ export function withApollo (PageComponent, { ssr = true } = {}) {
 
      //var graphqlServer = 'http://localhost:4000/graphql';
      //var graphqlServer = env.server + 'graphql';
-     //var graphqlServer = 'https://preview.lanista-training.com/graphql';
+     //var graphqlServer = 'https://app.lanista-training.com/graphql';
      var graphqlServer = document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/graphql';
 
 

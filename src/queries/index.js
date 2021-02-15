@@ -141,6 +141,7 @@ query messages {
     status
     data {
       id
+      type
       text
       creation_date
       status
@@ -266,6 +267,20 @@ export const EXERCISE = gql`
           unit
         }
       }
+      creator {
+        id
+        first_name
+        last_name
+        photoUrl
+      }
+      changer {
+        id
+        first_name
+        last_name
+        photoUrl
+      }
+      creation_date
+      last_change
     }
   }
 `
@@ -320,8 +335,8 @@ export const EXERCISES = gql`
 `
 
 export const WORKOUTS = gql`
-  query Workouts($filter:String, $language: String) {
-    workouts(filter: $filter, language: $language) {
+  query Workouts($filter:String, $language: String, $public:Boolean) {
+    workouts(filter: $filter, language: $language, public: $public) {
       id
       name
       description
@@ -329,6 +344,7 @@ export const WORKOUTS = gql`
       public
       plugin
       studio
+      lanista
     }
   }
 `
@@ -344,6 +360,7 @@ export const WORKOUT = gql`
       creator_id
       creator_image
       template
+      public
       member {
         id
         first_name
@@ -430,6 +447,7 @@ export const ME_SETTINGS = gql`
       first_name
       last_name
       photoUrl
+      photoUrlFullSize
       role
       bu
       accesslevel
@@ -454,6 +472,7 @@ export const ME_SETTINGS = gql`
       workout_imageUrl
       logo_imageUrl
       ll
+      workout_channelUrl
     }
   }
 `
@@ -476,7 +495,9 @@ export const MEMBER = gql`
       city
       language
       dpSigned
+      dpSignaturePolicy
       dpSignatureType
+      dpLocation
       photoUrl
       photoUrlFullSize
       workouts {
@@ -758,6 +779,7 @@ export const MEMBER_ANAMNESE = gql`
       physios {
         id
         description
+        findingName
         rating {
           id
           date
@@ -816,6 +838,17 @@ export const MEMBER_ANAMNESE = gql`
           creation_date
         }
         visible
+        notes {
+          id
+          text
+          note_date
+          creator {
+            id
+            first_name
+            last_name
+            photoUrl
+          }
+        }
       }
     }
   }
@@ -915,6 +948,7 @@ export const GETMEMBERFILES = gql`
       filename
       mimetype
       encoding
+      last_change
     }
   }
 `;
@@ -995,6 +1029,14 @@ export const GETTRAINERSLIST = gql`
       photoUrl
       first_name
       last_name
+    }
+  }
+`;
+
+export const GETDOMAININFO = gql`
+  query GetDomainInfo {
+    getDomainInfo {
+      logoUrl
     }
   }
 `;

@@ -17,9 +17,9 @@ export const ImageBlock  = styled.div`
     font-family: Icons;
     content: "\f2bd";
     content: "\f2bd";
-    font-size: 80px;
+    font-size: 77px;
     color: white;
-    line-height: 74px;
+    line-height: 80px;
   }
 `;
 
@@ -29,7 +29,7 @@ export const Foto  = styled.div`
   border-radius: 50%;
   background-size: cover;
   position: relative;
-  top: -74px;
+  top: -80px;
   box-shadow: ${props => props.editable ? 'rgba(0,0,0,0.7) 0 1px 4px 0 inset, rgba(255,255,255,0.2) 0 1px 0 0' : 'initial'} ;
   background-repeat: no-repeat;
   background-position: center;

@@ -99,6 +99,14 @@ const Panel = ({
   deletePhysioLoading,
   deletePhysioError,
 
+  saveAnamneseNote,
+  saveAnamneseNoteLoading,
+  saveAnamneseNoteError,
+
+  deleteAnamneseNote,
+  deleteAnamneseNoteLoading,
+  deleteAnamneseNoteError,
+
   goBack,
   goToSetup,
 }) => {
@@ -322,6 +330,25 @@ const Panel = ({
     })
   }
 
+  const onSaveAnamneseNote = (anamneseId, text, noteDate) => {
+    saveAnamneseNote({
+      variables: {
+        anamneseId: anamneseId,
+        text: text,
+        noteDate: noteDate,
+      }
+    })
+  }
+
+  const onDeleteAnamneseNote = (noteId) => {
+    console.log("onDeleteAnamneseNote")
+    deleteAnamneseNote({
+      variables: {
+        noteId: noteId,
+      }
+    })
+  }
+
   return (
     <Scene
       commandsLeft={getCommandsLeft()}
@@ -427,6 +454,14 @@ const Panel = ({
         onDeletePhysio={onDeletePhysio}
         deletePhysioLoading={deletePhysioLoading}
         deletePhysioError={deletePhysioError}
+
+        onSaveAnamneseNote={onSaveAnamneseNote}
+        saveAnamneseNoteLoading={saveAnamneseNoteLoading}
+        saveAnamneseNoteError={saveAnamneseNoteError}
+
+        onDeleteAnamneseNote={onDeleteAnamneseNote}
+        deleteAnamneseNoteLoading={deleteAnamneseNoteLoading}
+        deleteAnamneseNoteError={deleteAnamneseNoteError}
       />
     </Scene>
   )

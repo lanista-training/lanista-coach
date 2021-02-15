@@ -131,7 +131,7 @@ export default ({
             }}
             open={activeField == 0}
           />
-        <div className="training-unit">{unit == 0 ? 'Wdh ' : unit == 1 ? 'Sek' : 'Min'}</div>
+        <div className="training-unit">{unit == 0 ? (t('rep') + ' ') : unit == 1 ? t('Sec') : 'Min'}</div>
       </div>
       <div
         className={ activeField == 1 ? "set-weight active" : "set-weight" }
@@ -181,7 +181,6 @@ export default ({
           circular
           color='black'
           onClick={() => {
-            console.log("APPLY TO ALL SETS");
             onApplyToAllSets();
           }}
           content={t("apply to all sets")}

@@ -2,145 +2,235 @@
 import * as React from "react";
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Input, Grid, Button, Checkbox, Icon, Modal, Header, Image } from 'semantic-ui-react';
+import LanistaTextField from '../../components/LanistaTextField';
+import Button from '../../components/LanistaButton';
 import { Menu, MainButton, ChildButton } from "react-mfb";
 import LogoImage from '-!react-svg-loader!../../images/LanistaLogo.svg';
 import _ from 'lodash';
 import moment from "moment";
 
-const effect = 'zoomin', pos = 'br', method = 'hover';
-
-const Root = styled.div`
-  background-image: url(https://lanistacoach.s3.amazonaws.com/static/img/login-background.jpg);
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-`;
-
-const LanistaLogo = styled.div`
- font-size: 16px;
- text-align: center;
- a:hover {
-   /* shows an example of how we can use themes */
-   color: #FFA500;
- }
-`;
-
-const StyledLink = styled.div`
- font-size: 16px;
- text-align: center;
- padding-top: 1em;
- a {
-   /* shows an example of how we can use themes */
-   color: black;
- }
- a:hover {
-   /* shows an example of how we can use themes */
-   color: #d20027;
- }
-`;
-
-const EmailValidationMessage = styled.div`
- position: absolute;
- text-align: center;
- width: 100%;
- top: -20px;
- color: #d20027;
-`;
-
-const PasswordValidationMessage = styled.div`
- position: absolute;
- text-align: center;
- width: 100%;
- top: 100px;
- color: #d20027;
-`;
-
-const StyledActionButton = styled(Button)`
- width: 345px;
- height: 50px;
- background: #d20027!important;
- color: white!important;
- line-height: 1.5em!important;
+const StyledRegisterButton = styled(Button)`
+  width: 345px;
+  height: 50px;
+  background: #d20027!important;
+  color: white!important;
+  line-height: 1.5em!important;
 `;
 
 const StyledBackButton = styled(Button)`
   width: 345px;
   height: 50px;
+  margin-top: 4.5em!important;
   background: #f4f2f2!important;
   color: #d20027!important;
   line-height: 1.5em!important;
 `;
 
-const Footer = styled.footer`
- display: block;
- font-weight: 300;
- font-style: normal;
- font: 125% / 1.45 sans-serif;
- color: #f4f2f2;
- background-color: rgb(255, 255, 255);
- box-shadow: rgba(0, 0, 0, 0.05) 0px -1em 3em;
- min-height: 60px;
- width: 100%;
- position: absolute;
- bottom: 0;
- padding: 1em;
+const Root = styled.div`
+width: 100%;
+height: 100%;
+background-size: cover;
+background-position: center center;
+background-repeat: no-repeat;
+display: flex;
+flex-flow: column;
+.main-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .form-section {
+    width: 370px;
+    padding: 3em;
+    margin-top: -50px;
+    background: white;
+    box-shadow: 0 0 27px 0 #0000001f;
+    border-radius: 15px;
+    .MuiFormHelperText-root {
+      color: white;
+      background: #d20027;
+      margin: 0;
+      text-align: center;
+      line-height: 21px;
+      margin-top: 10px;
+      border-radius: 7px;
+    }
+    .email-field {
+      fieldset {
+        border-radius: 15px;
+      }
+      input {
+        border-radius: 15px;
+      }
+    }
+    .input-fields-section {
+      .MuiTextField-root {
+        input {
+          ::selection {
+            background-color: initial!important;
+          }
+        }
+      }
+    }
+    .input-fields-section {
+      display: flex;
+      flex-flow: column;
+    }
+    .buttons-section {
+      margin-top: 3em;
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+      button {
+        height: 50px;
+        width: 200px;
+        border-radius: 35px!important;
+        margin-bottom: 1em;
+      }
+    }
+  }
+}
 `;
 
-const SuccessMessage = styled.div`
-  color: #d20027;
-  position: relative;
+const LanistaLogo = styled.div`
+  text-align: center;
+  margin-bottom: 3em;
+  svg {
+    width: 45px;
+  }
+  .sub-header {
+   font-size: 18px;
+   font-weight: 900;
+   letter-spacing: -1px;
+   margin-top: -10px;
+   span {
+     font-weight: 100;
+   }
+  }
+  a:hover {
+    /* shows an example of how we can use themes */
+    color: #FFA500;
+  }
+`;
+
+const PasswordValidationMessage = styled.div`
+  text-align: center;
   width: 100%;
-  font-size: 1.5em;
-  font-weight: 700;
+  color: #d20027;
+  margin-top: 2em;
+`;
+
+const Footer = styled.footer`
+  display: block;
+  font-weight: 300;
+  font-style: normal;
+  font: 125% / 1.45 sans-serif;
+  color: #f4f2f2;
+  background-color: rgb(255, 255, 255);
+  box-shadow: rgba(0, 0, 0, 0.05) 0px -1em 3em;
+  min-height: 60px;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  padding: 1em;
 `;
 
 const Nav = styled.nav`
- font-size: 0.8em;
- a {
-   padding-left: 3.5em;
-   color: black;
- }
- a:hover {
-   /* shows an example of how we can use themes */
-   color: #d20027;
- }
- a:after {
-   /* shows an example of how we can use themes */
-   content: ">";
-   font-size: 1.2em;
-   position: fixed;
-   padding-left: 0.1em;
- }
+  font-size: 0.8em;
+  a {
+    padding-left: 3.5em;
+    color: black;
+  }
+  a:hover {
+    /* shows an example of how we can use themes */
+    color: #d20027;
+  }
+  a:after {
+    /* shows an example of how we can use themes */
+    content: ">";
+    font-size: 1.2em;
+    position: fixed;
+    padding-left: 0.1em;
+  }
+`;
+
+const SuccessfullMessage  = styled.div`
+  color: #d20027;
+  width: 100%;
+  font-size: 2em;
+  font-weight: 700;
+  padding: 0 0 2em 0;
+  line-height: 1em;
+  text-align: center;
 `;
 
 class Forgotpassword extends React.Component {
 
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
-      value: null,
-    }
+      show: false,
+      entered: false,
+      enteredFinished: false,
+      showLegalAgreements: false,
+      agreedToLA: false,
+    };
+    this.onShowLegalAgreements = this.onShowLegalAgreements.bind(this);
+  }
+
+  componentDidMount() {
+    this.setState({
+      show: true
+    });
+  }
+
+  onShowLegalAgreements() {
+    this.setState({
+      showLegalAgreements: true
+    });
+  }
+
+  onAgreedToLA() {
+    const {handleAgreedToLAChange} = this.props;
+    this.setState({
+      showLegalAgreements: false,
+    });
+    handleAgreedToLAChange(true);
+  }
+
+  onNotAgreedToLA() {
+    const {handleAgreedToLAChange} = this.props;
+    this.setState({
+      showLegalAgreements: false,
+    });
+    handleAgreedToLAChange(false);
   }
 
   render() {
+
+    const effect = 'zoomin', pos = 'br', method = 'hover';
+
     const {
-      errorMessage,
-      processing,
-      emailIsValid,
-      email,
-      handleEmailChange,
-      t,
-      currentLanguage,
-      onChangeLanguage,
       languages,
+      currentLanguage,
       goBack,
       onSendpasswordreset,
+      loading,
+      errorMessage,
+      email,
+      emailIsValid,
+      handleEmailChange,
       passwordresetsuccessfull,
-    } = this.props
+      t,
+      onChangeLanguage,
+    } = this.props;
 
-    console.log( "emailIsValid" )
-    console.log(emailIsValid)
+    const {
+      show,
+      entered,
+      enteredFinished,
+      showLegalAgreements,
+    } = this.state;
 
     const languageItems = (languages ? languages.map((language) => <ChildButton
       icon="ion-social-github"
@@ -152,59 +242,63 @@ class Forgotpassword extends React.Component {
       }} />)
       : <ChildButton/>);
 
+    console.log("errorMessage", errorMessage)
+
     return(
-      <div key="content" style={{height: "100vh", width: "100vw"}}>
-        <div style={{
-          display: "table-cell",
-          verticalAlign: "middle",
-        }}>
-          <Root className={"scene"} style={{height: "100vh", width: "100vw", verticalAlign: "middle"}}>
-            <Grid centered columns={1} style={{height:"60vh", marginTop: "20vh"}}>
-              <Grid.Row centered columns={1}>
-                <LanistaLogo  style={{}}>
-                  <LogoImage width={60} height={60}/>
-                  <div style={{
-                    fontFamily: "Roboto",
-                    fontSize: "1.75em",
-                    marginTop: "1em",
-                  }}>
-                    Lanista Coach
-                  </div>
-                </LanistaLogo>
-              </Grid.Row>
-              {!passwordresetsuccessfull && (<Grid.Row centered columns={1}>
-                <EmailValidationMessage>{errorMessage}</EmailValidationMessage>
-                <Input placeholder='Email' disabled={processing} type={"email"}>
-                  <input
-                    className={emailIsValid == false ? 'text-input-invalid': ''}
-                    style={{
-                      width: 345,
-                      lineHeight: "2em",
-                      boxShadow: "rgba(0, 0, 0, 0.075) 0px 3.6px 4.5px 0px",
-                    }}
-                    value= {email}
-                    onChange= {handleEmailChange}
-                  />
-                </Input>
-              </Grid.Row>)}
-              {!passwordresetsuccessfull && (<Grid.Row centered columns={1} style={{paddingTop: 0, paddingBottom: 0, height: 30, display: "grid"}}>
-                <StyledActionButton loading={processing} onClick={onSendpasswordreset} disabled={processing}>
-                  { processing ? ("...") : t("reset password") }
-                </StyledActionButton>
-              </Grid.Row>)}
-              {passwordresetsuccessfull && (
-                <SuccessMessage>{t('check your mailbox')}</SuccessMessage>
+      <Root className={"scene"} style={{height: "100vh", width: "100vw", verticalAlign: "middle"}}>
+        <div className="main-section">
+          <div className="form-section">
+          <LanistaLogo>
+            <LogoImage width={60} height={60}/>
+              <div className="sub-header">
+                Lanista<span>Coach</span>
+              </div>
+            </LanistaLogo>
+
+            <div className="input-fields-section">
+              <LanistaTextField
+                className="email-field"
+                variant="outlined"
+                placeholder='Email'
+                disabled={loading}
+                type={"email"}
+                error={emailIsValid}
+                value= {email}
+                onChange={handleEmailChange}
+                helperText="Incorrect entry."
+                helperText={errorMessage}
+              />
+            </div>
+
+            <div className="buttons-section">
+              {!passwordresetsuccessfull && (
+                <Button
+                  inverted
+                  style={{marginTop: "2em"}}
+                  loading={loading}
+                  onClick={ () => { onSendpasswordreset() }}
+                  disabled={loading}
+                >
+                  { loading ? ("...") : t("reset password") }
+                </Button>
               )}
-              <StyledBackButton key="button"  onClick={() => {
+
+              {passwordresetsuccessfull && (
+                <SuccessfullMessage>
+                  {t('password-reset-successful')}
+                </SuccessfullMessage>
+              )}
+
+              <Button key="button"  onClick={() => {
                 this.setState({
                   show: false
                 });
                 goBack();
               }}>
                 {t("to_login")}
-              </StyledBackButton>
-            </Grid>
-          </Root>
+              </Button>
+            </div>
+          </div>
           <Footer style={{}}>
             <Nav style={{color: 'black', fontFamily: 'Roboto'}}>
               © Lanista Trainingssoftware 2012
@@ -224,7 +318,7 @@ class Forgotpassword extends React.Component {
             </Menu>
           </Footer>
         </div>
-      </div>
+      </Root>
     );
   }
 };

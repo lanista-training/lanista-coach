@@ -139,7 +139,15 @@ export default withApollo(({
       return (
         <>
           <div className="message-section-title">{t("DUPLICATE_CREATE_ERROR_TITLE")}</div>
-          <div className="message-section-content">{t("DUPLICATE_CREATE_ERROR_MESSAGE")}</div>
+          <div className="message-section-content">{t("DUPLICATE_CREATE_ERROR_MESSAGE").split('<br>').map(line => <div className="line">{line}</div>)}</div>
+        </>
+      )
+    }
+    if( emailError && error && error.message.indexOf('USERNOTELEGIBLE') > -1 ) {
+      return (
+        <>
+          <div className="message-section-title">{t("DUPLICATE_CREATE_ERROR_TITLE")}</div>
+          <div className="message-section-content">{t("USERNOTELEGIBLE_CREATE_ERROR_MESSAGE")}</div>
         </>
       )
     }
@@ -160,7 +168,26 @@ export default withApollo(({
   }
 
   const getDialogButtons = () => {
-    if( emailError && error && error.message.indexOf('DUPLICATEERROR') > -1 ) {
+    if( emailError && error && (error.message.indexOf('DUPLICATEERROR') > -1 || error.message.indexOf('USERNOTELEGIBLE') > -1 )) {
+      if( error.message.indexOf('USERNOTELEGIBLE') > -1 ) {
+        return (
+          <>
+            <Button
+              onClick={onChangeEmail}
+              color="primary"
+              disabled={loading}
+            >
+              {t("CHANGE_EMAIL")}
+            </Button>
+            <Button
+              onClick={onClose}
+              color="primary"
+            >
+              {t("CLOSE")}
+            </Button>
+          </>
+        )
+      }
       return (
         <>
           <Button
@@ -240,6 +267,9 @@ export default withApollo(({
       console.log(error.message)
       if( error.message.indexOf('DUPLICATEERROR') > -1 ) {
         setEmailError(t("DUPLICATE_CREATE_ERROR"));
+      }
+      if( error.message.indexOf('USERNOTELEGIBLE') > -1 ) {
+        setEmailError(t("USERNOTELEGIBLE_CREATE_ERROR"));
       }
     }
   },[error]);

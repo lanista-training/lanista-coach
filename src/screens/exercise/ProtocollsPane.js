@@ -11,12 +11,27 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 const formatNumber = (number) => (number === null || isNaN(number)) ? 0 : number.toLocaleString();
 
-const Workout = ({t, workouts, date, onDeleteProtocoll, loading, selected, setSelected}) => {
+const Workout = ({
+  t,
+  workouts,
+  oneRM,
+  previousOneRm,
+  date,
+  onDeleteProtocoll,
+  loading,
+  selected,
+  setSelected
+}) => {
+
+  console.log("1RM", date, oneRM, previousOneRm);
 
   return (
     <StyledWorkout>
       <div className="content">
-        <div className="header">{moment(new Date(date)).format("DD MMMM YYYY")}</div>
+        <div className="header">
+          <div className="date-entry">{moment(new Date(date)).format("DD MMMM YYYY")}</div>
+          <div className="one-rm">1RM: {oneRM} Kg</div>
+        </div>
           <div className="description">
           {
             workouts && workouts.length > 0 && _.map(workouts, (workout, index) => {
@@ -30,7 +45,10 @@ const Workout = ({t, workouts, date, onDeleteProtocoll, loading, selected, setS
                     <div className="workout-number">{t("set")} {index+1}</div>
                     <div className="workout-content">
                       <div className="workout-repetitions">{repetitions} {training_unit == 0 ? t("rep") : training_unit == 2 ? t("min") : t("sec")}</div>
-                      <div className="workout-weight">{formatNumber(weight)} Kg</div>
+                      <div className="workout-weight">
+                        <div className="weight-in-kg">{formatNumber(weight)} Kg</div>
+                        <div className="one-rep-max">{previousOneRm > 0 ? (Math.round(weight/previousOneRm * 100) + ' %') : ''}</div>
+                      </div>
                     </div>
                   </div>
                   {
@@ -66,6 +84,7 @@ export default ({
 
   settings,
   workouts,
+  oneRMArray,
 
   onCreateProtocoll,
   createProtocollLoading,
@@ -104,6 +123,11 @@ export default ({
     }
   }
 
+console.log("workouts", workouts)
+const workoutsDates = _.map(workouts, (values, date) => date);
+console.log("workoutsDates", workoutsDates)
+var dayIndex = 0;
+
   return workouts && (
     <Tab.Pane className="protocolls-pane">
       <ProtocollConfigurationField
@@ -116,16 +140,21 @@ export default ({
       />
       <div className="workouts">
         {
-          _.size(workouts) > 0 && _.map(workouts, (values, date) => <Workout
-            t={t}
-            key={'workout-' + date }
-            workouts={values}
-            date={date}
-            onDeleteProtocoll={deleteProtocoll}
-            loading={deleteProtocollLoading}
-            selected={selected}
-            setSelected={setSelected}
-          />)
+          _.size(workouts) > 0 && _.map(workouts, (values, date) => {
+            const indexOfDay = workoutsDates.indexOf(date) + 1
+            return (<Workout
+              t={t}
+              key={'workout-' + date }
+              workouts={values}
+              oneRM={oneRMArray[date]}
+              previousOneRm={ indexOfDay >= workoutsDates.length ? 0 : oneRMArray[workoutsDates[indexOfDay]] }
+              date={date}
+              onDeleteProtocoll={deleteProtocoll}
+              loading={deleteProtocollLoading}
+              selected={selected}
+              setSelected={setSelected}
+            />);
+          })
         }
         {
           _.size(workouts) === 0 && <div className="empty-list">{t("no protocolls")}</div>
