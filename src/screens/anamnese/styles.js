@@ -50,7 +50,7 @@ export const StyledTab = styled(Tab)`
     text-align: center!important;
     display: initial!important;
     margin: 0!important;
-    padding-left: 1em!important;
+    padding-left: 0.44em!important;
     min-width: 7.5em;
     line-height: 2em!important;
   }
@@ -194,6 +194,9 @@ export const FindingForm = styled(Dialog)`
   .MuiDialog-paper {
     border-radius: 15px;
     overflow: visible;
+    .time-section  {
+      margin-top: 50px!important;
+    }
     .editing.rating-section {
       box-shadow: 0px 5px 5px -3px rgba(0,0,0,0.2), 0px 8px 10px 1px rgba(0,0,0,0.14), 0px 3px 14px 2px rgba(0,0,0,0.12);
       border: none!important;
@@ -218,7 +221,7 @@ export const FindingForm = styled(Dialog)`
     }
     .finding-form {
       width: 595px;
-      height: 509px;
+      height: 650px;
       padding: 2em;
       display: flex;
       flex-flow: column;
@@ -245,6 +248,16 @@ export const FindingForm = styled(Dialog)`
       .content-section {
         padding-top: 1em;
         flex: 1;
+        .form-row {
+          display: flex;
+          place-content: space-between;
+          .rating-text {
+            margin-right: 0!important;
+          }
+          .rating-text.active {
+            font-weight: 900!important;
+          }
+        }
         .description-section {
           height: 86px;
           padding-bottom: 1em;
@@ -253,6 +266,38 @@ export const FindingForm = styled(Dialog)`
           color: #7d7d7d!important;
           .MuiFormControl-root  {
             width: 100%;
+          }
+        }
+        .rating-section-button {
+          display: flex;
+          justify-content: space-between;
+          border: 1px solid rgba(0, 0, 0, 0.08);
+          border-radius: 40px;
+          margin-top: 1em;
+          align-items: center;
+          font-weight: 100;
+          width: 200px;
+          .button-content {
+            padding: 1em 1.5em;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            align-items: center;
+            .rating-text {
+              margin-right: 2em;
+            }
+            .rating-text, .time-text, .importance-text, .visibility-text{
+              font-weight: 500;
+            }
+          }
+        }
+        .status-switch {
+          width: 250px;
+          .rating-text {
+            text-align: center;
+            font-size: 12px;
+            line-height: 10px;
+            flex: 1;
           }
         }
         .rating-section, .importance-section, .visibility-section, .time-section {
@@ -280,7 +325,7 @@ export const FindingForm = styled(Dialog)`
 
       }
       .notes-list-section {
-        height: 92px;
+        height: 135px;
         overflow: scroll;
       }
       .author-section {
@@ -332,11 +377,17 @@ export const FindingForm = styled(Dialog)`
     display: flex;
     flex-flow: column;
     justify-content: center;
-    background-color: #0000007a;
+    background-color: black;
     color: white;
     border-radius: 30px;
+    overflow: hidden;
+    padding-top: 5px;
+    padding-bottom: 5px;
     .MuiBottomNavigationAction-root {
       min-width: 50px!important;
+    }
+    .MuiBottomNavigationAction-root {
+      color: #717171;
     }
     .MuiBottomNavigationAction-root.Mui-selected {
       color: white;
@@ -560,5 +611,15 @@ export const RatingSlider = styled(Slider)`
   padding-top: 0px!important;
   .MuiSlider-markLabel {
     top: 8px;
+  }
+`;
+
+export const RatingPopover = styled(Popover)`
+  .MuiPaper-root {
+    padding: 40px 30px 30px 25px;
+    border-radius: 15px;
+    height: 350px;
+    width: 120px;
+    overflow: hidden;
   }
 `;

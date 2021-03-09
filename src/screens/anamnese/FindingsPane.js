@@ -37,6 +37,10 @@ export default ({
   deleteAnamneseNoteLoading,
   deleteAnamneseNoteError,
 
+  onToggleAnamneseStatus,
+  toggleAnamneseStatusLoading,
+  toggleAnamneseStatusError,
+
 }) => {
 
   const [openFirst, setOpenFirst] = useState(id);
@@ -139,6 +143,10 @@ export default ({
             onDeleteAnamneseNote={onDeleteAnamneseNote}
             deleteAnamneseNoteLoading={deleteAnamneseNoteLoading}
             deleteAnamneseNoteError={deleteAnamneseNoteError}
+
+            onToggleAnamneseStatus={onToggleAnamneseStatus}
+            toggleAnamneseStatusLoading={toggleAnamneseStatusLoading}
+            toggleAnamneseStatusError={toggleAnamneseStatusError}
           />
         })}
       </div>

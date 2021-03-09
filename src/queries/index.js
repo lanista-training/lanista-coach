@@ -849,6 +849,7 @@ export const MEMBER_ANAMNESE = gql`
             photoUrl
           }
         }
+        status
       }
     }
   }

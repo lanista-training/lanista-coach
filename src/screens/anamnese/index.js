@@ -107,11 +107,15 @@ const Panel = ({
   deleteAnamneseNoteLoading,
   deleteAnamneseNoteError,
 
+  toggleAnamneseStatus,
+  toggleAnamneseStatusLoading,
+  toggleAnamneseStatusError,
+
   goBack,
   goToSetup,
 }) => {
-  const {t} = useTranslate("anamnese");
 
+  const {t} = useTranslate("anamnese");
 
   const handleTabChange = (e, { activeIndex }) => {
     setTabIndex(activeIndex);
@@ -341,10 +345,17 @@ const Panel = ({
   }
 
   const onDeleteAnamneseNote = (noteId) => {
-    console.log("onDeleteAnamneseNote")
     deleteAnamneseNote({
       variables: {
         noteId: noteId,
+      }
+    })
+  }
+
+  const onToggleAnamneseStatus = (anamneseId) => {
+    toggleAnamneseStatus({
+      variables: {
+        anamneseId: anamneseId,
       }
     })
   }
@@ -462,6 +473,10 @@ const Panel = ({
         onDeleteAnamneseNote={onDeleteAnamneseNote}
         deleteAnamneseNoteLoading={deleteAnamneseNoteLoading}
         deleteAnamneseNoteError={deleteAnamneseNoteError}
+
+        onToggleAnamneseStatus={onToggleAnamneseStatus}
+        toggleAnamneseStatusLoading={toggleAnamneseStatusLoading}
+        toggleAnamneseStatusError={toggleAnamneseStatusError}
       />
     </Scene>
   )

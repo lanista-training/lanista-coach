@@ -29,19 +29,10 @@ export function withApollo (PageComponent, { ssr = true } = {}) {
 
       const cache = new InMemoryCache(initData);
 
-      //console.log(env)
-      // Mobile App GrapQL Link
-      //var graphqlServer = 'https://' + mobile.lanista-training.com + '/graphql';
 
-
-
-     //var graphqlServer = 'http://localhost:4000/graphql';
-     //var graphqlServer = env.server + 'graphql';
-     //var graphqlServer = 'https://app.lanista-training.com/graphql';
-     var graphqlServer = document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/graphql';
-
-
-
+     var graphqlServerApp = 'https://app.lanista-training.com/graphql';
+     var graphqlServerPortal = document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/graphql';
+     var graphqlServer = (typeof document !== 'undefined' && window.cordova === undefined) ? graphqlServerPortal : graphqlServerApp;
 
       //
       // LINK: Authorization

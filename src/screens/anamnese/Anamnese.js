@@ -108,6 +108,10 @@ const Screen = ({
   deleteAnamneseNoteLoading,
   deleteAnamneseNoteError,
 
+  onToggleAnamneseStatus,
+  toggleAnamneseStatusLoading,
+  toggleAnamneseStatusError,
+
 }) => {
 
   const {goals, drugs, sport_activities, lifestyles, physios, findings} = customer;
@@ -152,6 +156,10 @@ const Screen = ({
         onDeleteAnamneseNote={onDeleteAnamneseNote}
         deleteAnamneseNoteLoading={deleteAnamneseNoteLoading}
         deleteAnamneseNoteError={deleteAnamneseNoteError}
+
+        onToggleAnamneseStatus={onToggleAnamneseStatus}
+        toggleAnamneseStatusLoading={toggleAnamneseStatusLoading}
+        toggleAnamneseStatusError={toggleAnamneseStatusError}
       />
     },
     { menuItem: (

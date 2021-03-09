@@ -99,7 +99,9 @@
     "NO_VALUE": "Sin valor",
     "NEW_VALUE": "Nuevo valor",
     "from": "desde",
-    "title is mandatory": "Por favor, escriba un nombre"
+    "title is mandatory": "Por favor, escriba un nombre",
+    "STATUS_TRUE": "Activo",
+    "STATUS_FALSE": "Inactivo"
   },
   "common": {
     "title": "Lanista Trainer",

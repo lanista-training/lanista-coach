@@ -318,39 +318,6 @@ export default ({
                 emptyText={t("no_description")}
               />
             </div>
-            <div
-              className={history ? "rating-section inverted" : ratingEditing ? "rating-section editing" : "rating-section"}
-              onClick={(e) => {
-                e.target.nodeName != 'LABEL' && e.target.nodeName != 'INPUT' && setRatingEditing(!ratingEditing)
-              }}
-            >
-              <div className="rating-text">{t("intensity")}</div>
-              { ratingValue === null && !showScale &&
-                <Button onClick={() => setShowScale(true)}>
-                  {t("NEW_VALUE")}
-                </Button>
-              }
-              { (ratingValue !== null || showScale) &&
-                <Slider
-                  defaultValue={0}
-                  getAriaValueText={valuetext}
-                  aria-labelledby="discrete-slider"
-                  valueLabelDisplay="auto"
-                  step={1}
-                  marks={marks}
-                  min={0}
-                  max={10}
-                  value={ratingValue}
-
-                  readOnly={!ratingEditing && !editing}
-                  onChange={(event, newValue) => {
-                    console.log("onChange", newValue);
-                    setRatingValue(newValue);
-                  }}
-                  disabled={loading || !ratingEditing || editing}
-                />
-              }
-            </div>
             { history &&
               <div className="history-section">
                 {renderGraphSection(data.rating, t)}

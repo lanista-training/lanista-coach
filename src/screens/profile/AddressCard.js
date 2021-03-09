@@ -310,7 +310,6 @@ export default ({
               disabled={loading}
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
-              defaultValue={'phone_number'}
             />
             <TextField
               id="street"
@@ -319,7 +318,6 @@ export default ({
               disabled={loading}
               value={street}
               onChange={(e) => setStreet(e.target.value)}
-              defaultValue={'street'}
             />
             <TextField
               id="zipcode"
@@ -328,7 +326,6 @@ export default ({
               disabled={loading}
               value={zipcode}
               onChange={(e) => setZipcode(e.target.value)}
-              defaultValue={'zip_code'}
             />
             <TextField
               id="city"
@@ -337,7 +334,6 @@ export default ({
               disabled={loading}
               value={city}
               onChange={(e) => setCity(e.target.value)}
-              defaultValue={'city'}
             />
             <Autocomplete
               id="country-select-demo"

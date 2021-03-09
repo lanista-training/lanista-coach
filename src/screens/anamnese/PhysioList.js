@@ -6,7 +6,7 @@ import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import moment from "moment";
 
 export default ( {data, onSelection, placeholder, emptytext, intensity, onSave, loading, error} ) => {
-  
+
   const {t} = useTranslate("anamnese");
   const [inputField, setInputField] = React.useState('');
   const [selection, setSelection] = React.useState(null);
@@ -45,7 +45,6 @@ export default ( {data, onSelection, placeholder, emptytext, intensity, onSave, 
           >
             <div className="anamnese-info">
               <div className="anamnese-description">{item.findingName ? '(' + item.findingName + ')' : ''} {item.description}</div>
-              <div className="anamnese-intensity">{intensity}: <span>{(item.rating && item.rating.length > 0) ? (item.rating[0].value !== null ? item.rating[0].value + ' ' + t('from') + ' 10' : t("NO_VALUE")): t("NO_VALUE")}</span></div>
             </div>
             <div className="anamnese-extra-info">
               <div className="anamnese-creation-date">{moment(new Date(item.start_date)).format("DD-MM-YYYY")}</div>

@@ -1029,3 +1029,12 @@ export const DELETEANAMNESENOTE = gql`
     }
   }
 `;
+
+export const TOGGLEANAMNESESTATUS = gql`
+  mutation ToggleAnamneseStatus( $anamneseId: ID! ) {
+    toggleAnamneseStatus( anamneseId: $anamneseId ) {
+      success
+      error
+    }
+  }
+`;

@@ -146,7 +146,7 @@ const Message = styled.div`
       position: relative;
       transform-origin: left bottom;
       animation: 0.3s ease 0s 1 normal forwards running Lmuha;
-      background: rgb(84, 173, 245);
+      background: rgb(193 193 193);
       border-radius: 18px 18px 18px 0px;
       margin: 0px 0px 10px;
       overflow: hidden;

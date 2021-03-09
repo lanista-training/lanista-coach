@@ -1030,7 +1030,7 @@ const Panel = ({
       autoHideDuration={null}
       onClose={toggleSnackbar}
     >
-      <MuiAlert onClose={toggleSnackbar} severity="warning" variant="filled" >
+      <MuiAlert onClose={toggleSnackbar} severity="info" variant="filled" >
         {snackbarData.message}
         {snackbarData.action}
       </MuiAlert>

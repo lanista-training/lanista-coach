@@ -26,6 +26,7 @@ import {
   DELETEPHYSIO,
   SAVEANAMNESENOTE,
   DELETEANAMNESENOTE,
+  TOGGLEANAMNESESTATUS,
 } from "../../mutations";
 
 const TABINDEX = gql`
@@ -354,6 +355,21 @@ const withData = (WrappedComponent, {memberId, tab, id, goBack, goToSetup}) => {
       }
     );
 
+    //
+    // Toggle anamnese status
+    //
+    const [toggleAnamneseStatus, { loading: toggleAnamneseStatusLoading, error: toggleAnamneseStatusError }] = useMutation(
+      TOGGLEANAMNESESTATUS,
+      {
+        update(cache,  { data: { toggleAnamneseStatus } }) {
+          if( toggleAnamneseStatus.success ) {
+            refetch();
+          }
+        }
+      }
+    );
+
+
     return(
       <WrappedComponent
         me={me}
@@ -448,6 +464,10 @@ const withData = (WrappedComponent, {memberId, tab, id, goBack, goToSetup}) => {
         deleteAnamneseNote={deleteAnamneseNote}
         deleteAnamneseNoteLoading={deleteAnamneseNoteLoading}
         deleteAnamneseNoteError={deleteAnamneseNoteError}
+
+        toggleAnamneseStatus={toggleAnamneseStatus}
+        toggleAnamneseStatusLoading={toggleAnamneseStatusLoading}
+        toggleAnamneseStatusError={toggleAnamneseStatusError}
 
         goBack={goBack}
         goToSetup={goToSetup}

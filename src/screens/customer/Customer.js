@@ -136,10 +136,18 @@ const FileDropZone = ({memberId, updateMemberFiles, closeFileUploadPanel, setLoa
   const files = acceptedFiles.map((file, index) => {
     setLoading(true);
     let reader = new FileReader();
-    let uploadBaseUrl = document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/' + 'file/user/';
+
+    var uploadBaseUrlApp = 'https://app.lanista-training.com/file/user/';
+    var uploadBaseUrlPortal = document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/file/user/';
+    var uploadBaseUrl = (typeof document !== 'undefined' && window.cordova === undefined) ? uploadBaseUrlPortal : uploadBaseUrlApp;
+
+    //let uploadBaseUrl = 'https://kj8xejnla9.execute-api.eu-central-1.amazonaws.com/dev/' + 'file/user/';
+    /*
     if( window.cordova ) {
-      uploadBaseUrl = 'https://preview.lanista-training.com/file/user/';
+      uploadBaseUrl = 'https://app.lanista-training.com/file/user/';
     }
+    */
+
     const token = cookie.get('token');
     const fileName = file.name == 'image.jpg' ? ('image-' + moment().format('DD-MM-YYYY-h-mm-ss') + '.jpg') : file.name;
     reader.addEventListener('loadend', function(e) {

@@ -174,23 +174,25 @@ const Login = ({
               >
                 { authenticating ? ("...") : t("login") }
               </LanistaButton>
-              <LanistaButton
-                onClick={
-                  (e) => {
-                    const {x, y, height, width} = e.target.getBoundingClientRect();
-                    goToRegistration({
-                      x,
-                      y,
-                      height,
-                      width
-                    });
-                    //this.setState({show: false});
+              { window.cordova === undefined &&
+                <LanistaButton
+                  onClick={
+                    (e) => {
+                      const {x, y, height, width} = e.target.getBoundingClientRect();
+                      goToRegistration({
+                        x,
+                        y,
+                        height,
+                        width
+                      });
+                      //this.setState({show: false});
+                    }
                   }
-                }
-              disabled={authenticating}
-              >
-                {authenticating ? ("...") : t("register")}
-              </LanistaButton>
+                disabled={authenticating}
+                >
+                  {authenticating ? ("...") : t("register")}
+                </LanistaButton>
+              }
             </div>
           </div>
         )}
