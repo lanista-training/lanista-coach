@@ -71,6 +71,8 @@ const Exercise = ({
   editIndexesMode,
   toggleEditIndexesMode,
 
+  me,
+
 } ) => {
 
   React.useEffect(() => {
@@ -179,6 +181,8 @@ const Exercise = ({
 
                 onDeleteChatMessage={onDeleteChatMessage}
                 deleteChatMessageLoading={deleteChatMessageLoading}
+
+                me={me}
               />
             </div>
           )}

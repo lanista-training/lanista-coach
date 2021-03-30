@@ -172,6 +172,7 @@ query chat($memberId:ID!) {
       exercise_id
       exercise_start_image
       exercise_end_image
+      creator_user_id
     }
   }
 }
@@ -252,6 +253,7 @@ export const EXERCISE = gql`
         exercise_name
         exercise_start_image
         exercise_end_image
+        creator_user_id
       }
       settings {
         id

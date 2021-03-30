@@ -21,7 +21,7 @@ const getMessageContent = (message, hideExercises) => {
       html={
         "<strong>"
         + message.first_name + ' ' + message.last_name + "</strong><br />"
-        + (!hideExercises ? "<br /><div class='exercise-section'><div class='exercise-images'><div class='exercise-start-images' style='background-image: url(" + message.exercise_start_image + ")'></div><div class='exercise-end-images' style='background-image: url(" + message.exercise_end_image + ")'/></div></div><div class='exercise-name'>" + message.exercise_name + "</div></div class='exercise-section'>" : "")
+        + (!hideExercises ? "<br /><div class='exercise-section'><div class='exercise-images'><div class='images-wrapper'><div class='exercise-start-images' style='background-image: url(" + message.exercise_start_image + ")'></div><div class='exercise-end-images' style='background-image: url(" + message.exercise_end_image + ")'/></div></div></div><div class='exercise-name'>" + message.exercise_name + "</div></div class='exercise-section'>" : "")
         + message.text
         + "<br /><div style='text-align: right;font-size: 12px;font-weight: 200;'>" + moment(parseInt(message.creation_date)).format('DD/MM/YYYY h:mm') + "</div>"
       }
@@ -33,6 +33,7 @@ export default ({
   closePanel,
   visible,
   member,
+  me,
   data,
   hideHeader,
   hideExercises,
@@ -51,7 +52,7 @@ export default ({
   loadingMessages,
 
 }) => {
-
+console.log( "me", me )
   const {t} = useTranslate("exercise");
 
   const onSubmit = event => event.preventDefault();
@@ -63,9 +64,13 @@ export default ({
 
   const [selectedMessage, setSelectedMessage] = React.useState(null);
 
-  const handleClick = (event, messageId) => {
-    setSelectedMessage(messageId);
-    setAnchorEl(event.currentTarget);
+  const handleClick = (event, message) => {
+    console.log("handleClick")
+    console.log("message", message)
+    if( message.type === 0 && me.id == message.creator_user_id ) {
+      setSelectedMessage(message.id);
+      setAnchorEl(event.currentTarget);
+    }
   };
 
   const handleClose = () => {
@@ -87,7 +92,7 @@ export default ({
           sender: message.first_name + ' ' + message.last_name,
           message: message.text,
         }}
-        onClick={(event) => onMessageClick ? onMessageClick(message) : handleClick(event, message.id)}
+        onClick={(event) => onMessageClick ? onMessageClick(message) : handleClick(event, message)}
       >
         <Message.Header sentTime={moment(parseInt(message.creation_date)).format('DD/MM/YYYY h:mm')} />
         <Avatar src={message.photoUrl} name={message.first_name + message.last_name} >
@@ -98,7 +103,7 @@ export default ({
       </Message>
     );
   });
-console.log("member", member)
+
   return (
     <StyledChat >
       <ChatContainer>
@@ -124,6 +129,25 @@ console.log("member", member)
           />
         }
       </ChatContainer>
+      <StyledMenu
+        id="message-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        <Fab color="secondary" aria-label="add" onClick={() => onClickDeleteButton(message.id)}>
+          <DeleteIcon />
+        </Fab>
+      </StyledMenu>
     </StyledChat>
   );
 

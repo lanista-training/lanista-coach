@@ -48,6 +48,11 @@ export const StyledChat  = styled(MainContainer)`
   .ps__thumb-y {
     background-color: #c5c5c5!important;
   }
+  .images-wrapper {
+    display: flex;
+    border-radius: 10px;
+    overflow: hidden;
+  }
   .exercise-section {
     margin-bottom: 10px;
     .exercise-images {
@@ -64,11 +69,33 @@ export const StyledChat  = styled(MainContainer)`
       font-style: italic;
     }
   }
+  .cs-message__content-wrapper {
+    cursor: pointer!important;
+  }
+  .cs-message--outgoing {
+    .exercise-images {
+      justify-content: flex-end;
+    }
+    .exercise-name {
+      text-align: right;
+    }
+  }
+  .cs-message--incoming {
+    .exercise-images {
+      justify-content: flex-start;
+    }
+    .exercise-name {
+      text-align: left;
+    }
+  }
 `;
 
 export const StyledMenu = styled(Menu)`
   .MuiPaper-root {
     background: transparent;
     box-shadow: none;
+    padding: 2px 12px;
+    margin-left: 25px;
   }
+
 `;

@@ -189,6 +189,8 @@ const withData = (WrappedComponent, {exerciseId, planexerciseId, memberId, tab, 
         goBack={goBack}
         goToExercise={goToExercise}
         goToSetup={goToSetup}
+
+        me={me}
       />
     )
   }

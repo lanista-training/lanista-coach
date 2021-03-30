@@ -81,7 +81,10 @@ const Panel = ({
   goBack,
   goToExercise,
   goToSetup,
+
+  me,
 }) => {
+  console.log("me", me)
   const {t} = useTranslate("exercise");
   //
   // Chart type switch
@@ -412,6 +415,7 @@ const Panel = ({
         toggleEditIndexesMode={toggleEditIndexesMode}
 
         activeChart={activeChart}
+        me={me}
 
       />
     { exercise && (activeTab == 5 || activeTabName == 'info') &&
