@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-
 import gql from "graphql-tag";
 import fetch from 'isomorphic-unfetch';
 import {TranslatorProvider} from '../hooks/Translation';
@@ -29,10 +28,11 @@ export function withApollo (PageComponent, { ssr = true } = {}) {
 
       const cache = new InMemoryCache(initData);
 
-
-     var graphqlServerApp = 'https://app.lanista-training.com/graphql';
-     var graphqlServerPortal = document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/graphql';
-     var graphqlServer = (typeof document !== 'undefined' && window.cordova === undefined) ? graphqlServerPortal : graphqlServerApp;
+      var graphqlServerApp = 'https://app.lanista-training.com/graphql';
+      var graphqlServerPortal = document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/graphql';
+      var graphqlServer = (typeof document !== 'undefined' && window.cordova === undefined) ? graphqlServerPortal : graphqlServerApp;
+      //var graphqlServer = 'https://kj8xejnla9.execute-api.eu-central-1.amazonaws.com/dev/graphql';
+      console.log("graphqlServer", graphqlServer)
 
       //
       // LINK: Authorization
@@ -97,19 +97,34 @@ export function withApollo (PageComponent, { ssr = true } = {}) {
       //
       // LINK: Subscription, HTTP
       //
-      const httpLink = new HttpLink({
+      const httpLink = errorLink.concat(new HttpLink({
         uri: graphqlServer,
         credentials: 'same-origin',
         fetch: fetch
-      });
+      }));
+
+      var wsProductionUrl = 'wss://jq3eu6hd5h.execute-api.eu-central-1.amazonaws.com/prod';
+      var wsDevelopmentUrl = 'wss://4okkq8fmea.execute-api.eu-central-1.amazonaws.com/dev';
+      var wsServer = wsProductionUrl;
+
       const wsClient = new SubscriptionClient(
-        "ws://localhost:3001",
-        { lazy: true, reconnect: true },
+        wsServer,
+        {
+          connectionParams: () => {
+            const token = cookie.get('token');
+            return {
+              authToken: `Bearer ${token}`,
+              client: 'coach'
+            }
+          },
+          lazy: true,
+          reconnect: true
+        },
         null,
         [],
       );
-      const wsLink = new WebSocketLink(wsClient);
-      const SubscriptionHttpLink = split(
+      const wsLink = errorLink.concat(new WebSocketLink(wsClient));
+      const subscriptionHttpLink = split(
         ({ query }) => {
           const { kind, operation } = getMainDefinition(query);
           return kind === 'OperationDefinition' && operation === 'subscription';
@@ -146,7 +161,7 @@ export function withApollo (PageComponent, { ssr = true } = {}) {
       // Apollo Client
       //
       const client = new ApolloClient({
-        link: errorLink.concat(SubscriptionHttpLink),
+        link: subscriptionHttpLink,
         cache: cache,
       });
 

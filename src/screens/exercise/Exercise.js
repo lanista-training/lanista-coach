@@ -152,34 +152,38 @@ const Exercise = ({
       <Menu.Item key='notes'>
         {t("chats")}<Label>{chats.length}</Label>
       </Menu.Item>
-    ), id: 'chats', render: () =>
-      <Tab.Pane>
-        {exercise.member && (
-          <div className="chat-panel">
-            <Chat
-              t={t}
-              member={exercise.member}
-              closePanel={() => console.log("CLOSE CHAT PANEL")}
-              visible={true}
-              data={exercise && exercise.chats ? exercise.chats : []}
-              loading={loading}
-              error={error}
-              hideHeader={true}
-              hideExercises={true}
-              hideInputField={false}
-              onMessageChange={onMessageChange}
-              message={message}
-              editable={editable}
+    ), id: 'chats', render: () =>{
+      const contentSectionElement = document.getElementsByClassName("content-section");
+      const chatHeight = contentSectionElement.length > 0 ? (contentSectionElement[0].offsetHeight - 49) + 'px' : '500px';
+      return (
+        <Tab.Pane>
+          {exercise.member && (
+            <div className="chat-panel" style={{ position:"relative", height: chatHeight }}>
+              <Chat
+                t={t}
+                member={exercise.member}
+                closePanel={() => console.log("CLOSE CHAT PANEL")}
+                visible={true}
+                data={exercise && exercise.chats ? exercise.chats : []}
+                loading={loading}
+                error={error}
+                hideHeader={true}
+                hideExercises={true}
+                hideInputField={false}
+                onMessageChange={onMessageChange}
+                message={message}
+                editable={editable}
 
-              onCreateChatMessage={onCreateChatMessage}
-              createChatMessageLoading={createChatMessageLoading}
+                onCreateChatMessage={onCreateChatMessage}
+                createChatMessageLoading={createChatMessageLoading}
 
-              onDeleteChatMessage={onDeleteChatMessage}
-              deleteChatMessageLoading={deleteChatMessageLoading}
-            />
-          </div>
-        )}
-      </Tab.Pane>
+                onDeleteChatMessage={onDeleteChatMessage}
+                deleteChatMessageLoading={deleteChatMessageLoading}
+              />
+            </div>
+          )}
+        </Tab.Pane>
+      )}
     })
   }
 

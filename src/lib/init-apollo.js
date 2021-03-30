@@ -36,6 +36,8 @@ function create (initialState) {
   var graphqlServerPortal = document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/graphql';
   var graphqlServer = (typeof document !== 'undefined' && window.cordova === undefined) ? graphqlServerPortal : graphqlServerApp;
 
+  console.log("graphqlServer", graphqlServer)
+
   const httpLink = new HttpLink({
       uri: graphqlServer,
   })

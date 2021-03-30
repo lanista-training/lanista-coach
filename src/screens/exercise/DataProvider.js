@@ -1,10 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { withApollo } from '../../lib/apollo';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery, useSubscription } from '@apollo/react-hooks';
 import moment from "moment";
 
-import { EXERCISE, PLANEXERCISE, ME, PLANEXERCISESETTINGS } from '../../queries';
-import { CREATENOTE, DELETENOTE, CREATECHATMESSAGE, DELETECHATMESSAGE, SAVEEXERCISESETTINGS, CREATEPROTOCOLL, DELETEPROTOCOLL, DELETEEXERCISE } from '../../mutations';
+import {
+  EXERCISE,
+  PLANEXERCISE,
+  ME,
+  PLANEXERCISESETTINGS
+} from '../../queries';
+import {
+  CREATENOTE,
+  DELETENOTE,
+  CREATECHATMESSAGE,
+  DELETECHATMESSAGE,
+  SAVEEXERCISESETTINGS,
+  CREATEPROTOCOLL,
+  DELETEPROTOCOLL,
+  DELETEEXERCISE
+} from '../../mutations';
+import { MESSAGEFEED } from "../../subscriptions";
 
 const withData = (WrappedComponent, {exerciseId, planexerciseId, memberId, tab, editmode, goBack, goToExercise, goToSetup}) => {
 
@@ -74,6 +89,15 @@ const withData = (WrappedComponent, {exerciseId, planexerciseId, memberId, tab, 
         }
       }
     );
+    //
+    // Chat Subscription
+    //
+    const onSubscriptionData = useCallback( (result) => {
+        refetch();
+      },
+      [],
+    );
+    useSubscription(MESSAGEFEED, { onSubscriptionData });
 
     const [saveExerciseSettings, { loading: mutationSettingsLoading, error: mutationSettingsError }] = useMutation(
       SAVEEXERCISESETTINGS,

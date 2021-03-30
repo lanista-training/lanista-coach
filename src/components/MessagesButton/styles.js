@@ -9,7 +9,15 @@ export const StyledMenu = styled(Menu)`
     height: 80vh;
     border-radius: 15px;
   }
+  .MuiList-root {
+    padding-top: 0!important;
+    padding-bottom: 0!important;
+  }
+  .slick-list {
+    height: 80vh!important;
+  }
   .slick-slider {
+    height: 80vh!important;
     position: relative;
     display: block;
     box-sizing: border-box;
@@ -154,6 +162,9 @@ export const Message = styled(ListItem)`
   }
   .time-section {
     color: #a2a2a2;
+  }
+  .MuiAvatar-root {
+    margin-right: 10px;
   }
 `;
 

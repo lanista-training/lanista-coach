@@ -1,4 +1,4 @@
-const ENV = 'prod';
+const ENV = 'dev';
 const version = '0.30';
 export const env = (ENV == 'prod') ? {
   env: ENV,

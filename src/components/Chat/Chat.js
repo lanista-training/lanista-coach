@@ -10,200 +10,26 @@ import Menu from '@material-ui/core/Menu';
 import Fab from '@material-ui/core/Fab';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-const StyledMenu = styled(Menu)`
-  .MuiPaper-root {
-    background: transparent;
-    box-shadow: none;
-  }
-`;
-const Chat = styled.div`
-  height: 100%;
-  display: flex!important;
-  flex-flow: column;
-  .header {
-    .back-button{
-      font-size: 1.5em;
-      padding-top: 0.1em;
-      width: 40px;
-      height: 40px;
-      float: left;
-      ::before {
-        font-family: Lanista;
-        content: '\\e953';
+import { ChatContainer, MessageList, Message, MessageInput, Avatar, ConversationHeader, ArrowButton } from '@chatscope/chat-ui-kit-react';
+import MateriaUiAvatar from '@material-ui/core/Avatar';
+import { StyledChat, StyledMenu } from './styles';
+import { useTranslate } from '../../hooks/Translation';
+
+const getMessageContent = (message, hideExercises) => {
+  return (
+    <Message.HtmlContent
+      html={
+        "<strong>"
+        + message.first_name + ' ' + message.last_name + "</strong><br />"
+        + (!hideExercises ? "<br /><div class='exercise-section'><div class='exercise-images'><div class='exercise-start-images' style='background-image: url(" + message.exercise_start_image + ")'></div><div class='exercise-end-images' style='background-image: url(" + message.exercise_end_image + ")'/></div></div><div class='exercise-name'>" + message.exercise_name + "</div></div class='exercise-section'>" : "")
+        + message.text
+        + "<br /><div style='text-align: right;font-size: 12px;font-weight: 200;'>" + moment(parseInt(message.creation_date)).format('DD/MM/YYYY h:mm') + "</div>"
       }
-    }
-    .title{
-      text-align: center;
-      line-height: 2em;
-      padding-right: 40px;
-    }
-  }
-  .MuiPaper-root {
-    display: flex;
-    padding-left: 1em;
-    .MuiInputBase-root {
-      flex: 1;
-    }
-  }
-  .panel {
-    flex: 1;
-    width: 100%;
-    overflow-y: scroll;
-    margin-top: 2px;
-    padding-top: 6px;
-    padding-bottom: 20px;
-    ::-webkit-scrollbar {
-      display: none!important;
-    }
-  }
-  .footer {
-    display: flex;
-    flex-direction: row;
-    border-top: 1px solid rgb(238,238,238);
-    input {
-      border-style: initial;
-      border-color: initial;
-      box-shadow: none;
-      box-sizing: border-box;
-      font-size: 16px;
-      opacity: 1;
-      width: 100%;
-      outline: none;
-      padding: 16px 52px 16px 10px;
-      -webkit-writing-mode: horizontal-tb !important;
-      text-rendering: auto;
-      color: initial;
-      text-align: start;
-      -webkit-appearance: textfield;
-      background-color: white;
-      -webkit-rtl-ordering: logical;
-      cursor: text;
-      margin: 0em;
-      font: 400 11px system-ui;
-    }
-    button {
-      border-width: 0px;
-      border-style: initial;
-      border-color: initial;
-      border-image: initial;
-      outline: none;
-      padding: 14px 16px 12px;
-    }
-  }
-`;
-const Message = styled.div`
-  .trainer {
-    align-items: flex-end;
-    display: flex;
-    -webkit-box-pack: end;
-    justify-content: flex-end;
-    .message-bubble {
-      box-shadow: rgba(0,0,0,0.15) 0px 1px 2px 0px;
-      color: white;
-      display: inline-block;
-      font-size: 14px;
-      max-width: 50%;
-      position: relative;
-      -webkit-transform-origin: right bottom;
-      -ms-transform-origin: right bottom;
-      transform-origin: right bottom;
-      -webkit-animation: 0.3s ease 0s 1 normal forwards running Lmuha;
-      animation: 0.3s ease 0s 1 normal forwards running Lmuha;
-      background: rgb(255,255,255);
-      border-radius: 18px 18px 0px;
-      margin: 0px 0px 10px;
-      overflow: hidden;
-      padding: 12px;
-      background: rgb(155, 201, 61);
-    }
-    .image-container{
-      display: inline-block;
-      order: 1;
-      padding: 6px;
-      .image{
-        box-shadow: rgba(0,0,0,0.15) 0px 1px 2px 0px;
-        -webkit-transform-origin: left bottom;
-        -ms-transform-origin: left bottom;
-        transform-origin: left bottom;
-        -webkit-animation: 0.3s ease 0s 1 normal forwards running Lmuha;
-        animation: 0.3s ease 0s 1 normal forwards running Lmuha;
-        border-radius: 50% 50% 50% 0px;
-        padding: 3px;
-      }
-    }
-  }
-  .member {
-    align-items: flex-end;
-    display: flex;
-    -webkit-box-pack: start;
-    justify-content: flex-start;
-    .message-bubble {
-      box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 2px 0px;
-      color: rgb(255, 255, 255);
-      display: inline-block;
-      font-size: 14px;
-      max-width: 50%;
-      position: relative;
-      transform-origin: left bottom;
-      animation: 0.3s ease 0s 1 normal forwards running Lmuha;
-      background: rgb(193 193 193);
-      border-radius: 18px 18px 18px 0px;
-      margin: 0px 0px 10px;
-      overflow: hidden;
-      padding: 12px;
-    }
-    .image-container {
-      display: inline-block;
-      order: 0;
-      padding: 6px;
-      .image{
-        box-shadow: rgba(0, 0, 0, 0.15) 0px 1px 2px 0px;
-        height: 40px;
-        min-width: 40px;
-        transform-origin: right bottom;
-        animation: 0.3s ease 0s 1 normal forwards running Lmuha;
-        border-radius: 50% 50% 0px;
-        padding: 3px;
-      }
-    }
-  }
-  .image-container {
-    border-radius: 50%;
-    margin-right: 1em;
-    .image {
-      width: 40px;
-      height: 40px;
-      background-color: #fafafa;
-      border-radius: 50%;
-      box-sizing: border-box;
-      display: block;
-      flex: 0 0 auto;
-      overflow: hidden;
-      position: relative;
-      background-size: contain;
-    }
-  }
-  .exercise-images {
-    display: flex;
-  }
-  .exercise-start-images {
-    height: 60px;
-    width: 60px;
-    background-size: contain;
-  }
-  .exercise-end-images {
-    height: 60px;
-    width: 60px;
-    background-size: contain;
-  }
-  .exercise {
-    font-style: italic;
-  }
-`;
+    />
+  )
+}
 
 export default ({
-  t,
-
   closePanel,
   visible,
   member,
@@ -222,7 +48,11 @@ export default ({
 
   onMessageClick,
 
+  loadingMessages,
+
 }) => {
+
+  const {t} = useTranslate("exercise");
 
   const onSubmit = event => event.preventDefault();
   const el = useRef(null);
@@ -250,34 +80,54 @@ export default ({
 
   const messages = data.map((message) => {
     return (
-      <>
-        <Message key={"message-" + message.id}>
-          <div className={message.type === 0 ? 'trainer' : 'member'}>
-            <div className='image-container'>
-              <div className="image" style={{backgroundImage: 'url("' + message.photoUrl + '")'}}/>
-            </div>
-            <div className='message-bubble' onClick={(event) => onMessageClick ? onMessageClick(message) : handleClick(event, message.id)}>
-              {moment(parseInt(message.creation_date)).format('DD/MM/YYYY h:mm')}
-              {!hideExercises && (
-                <div className='exercise-images'>
-                  <div className='exercise-start-images' style={{backgroundImage: 'url("' + message.exercise_start_image + '")'}}/>
-                  <div className='exercise-end-images' style={{backgroundImage: 'url("' + message.exercise_end_image + '")'}}/>
-                </div>
-              )}
-              {!hideExercises && (
-                <div className='exercise'>"{message.exercise_name}"</div>
-              )}
-              <div className='text'>{message.text}</div>
-            </div>
-          </div>
-        </Message>
-
-      </>
-    )}
+      <Message
+        model={{
+          sentTime: moment(parseInt(message.creation_date)).format('DD/MM/YYYY h:mm'),
+          direction: message.type == 0 ? "outgoing" : "incoming",
+          sender: message.first_name + ' ' + message.last_name,
+          message: message.text,
+        }}
+        onClick={(event) => onMessageClick ? onMessageClick(message) : handleClick(event, message.id)}
+      >
+        <Message.Header sentTime={moment(parseInt(message.creation_date)).format('DD/MM/YYYY h:mm')} />
+        <Avatar src={message.photoUrl} name={message.first_name + message.last_name} >
+          <MateriaUiAvatar src={message.photoUrl}></MateriaUiAvatar>
+        </Avatar>
+        {getMessageContent(message, hideExercises)}
+        <Message.Footer sender={message.first_name + ' ' + message.last_name} sentTime={moment(parseInt(message.creation_date)).format('DD/MM/YYYY h:mm')} />
+      </Message>
+    );
+  });
+console.log("member", member)
+  return (
+    <StyledChat >
+      <ChatContainer>
+        { !hideHeader &&
+          <ConversationHeader>
+            <ConversationHeader.Back onClick={closePanel}/>
+            <Avatar src={member.photoUrl} name={member.first_name + ' ' + member.last_name} >
+              <MateriaUiAvatar src={member.photoUrl}></MateriaUiAvatar>
+            </Avatar>
+            <ConversationHeader.Content userName={member.first_name + ' ' + member.last_name}  />
+          </ConversationHeader>
+        }
+        <MessageList loading={loadingMessages}>
+          {messages}
+        </MessageList>
+        { !hideInputField &&
+          <MessageInput
+            attachButton={false}
+            placeholder={t("create-chat-placeholder")}
+            onChange={(value) => onMessageChange(value)}
+            value={message}
+            onSend={onCreateChatMessage}
+          />
+        }
+      </ChatContainer>
+    </StyledChat>
   );
 
-
-
+  /*
   return (
     <Transition unmountOnHide visible={visible} animation='fly left' >
       <Chat>
@@ -333,4 +183,5 @@ export default ({
       </Chat>
     </Transition>
   )
+  */
 };

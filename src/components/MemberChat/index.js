@@ -4,8 +4,17 @@ import { CHAT } from "../../queries";
 import { withApollo } from '../../lib/apollo'
 import { useQuery } from '@apollo/react-hooks';
 
-export default function({member, closePanel, visible, hideHeader, onMessageClick}) {
-  const { loading, error, data } = useQuery(CHAT, {variables: {memberId: member.id}})
+export default function({member, closePanel, visible, hideHeader, onMessageClick, loadingMessages}) {
+
+  const { loading, error, data } = useQuery(
+    CHAT, {
+      variables: {
+        memberId: member.id
+      },
+      fetchPolicy: 'network-only',
+    }
+  );
+
   return (
     <Chat
       member={member}
@@ -18,6 +27,7 @@ export default function({member, closePanel, visible, hideHeader, onMessageClick
       hideExercises={false}
       hideInputField={true}
       onMessageClick={onMessageClick}
+      loadingMessages={loadingMessages || loading}
     />
   )
 }

@@ -16,6 +16,7 @@ import EmailIcon from '@material-ui/icons/Email';
 import List from '@material-ui/core/List';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
+import Avatar from '@material-ui/core/Avatar';
 
 import Chat from '../MemberChat';
 import InvitationPanel from './InvitationPanel';
@@ -30,6 +31,7 @@ export default ({
   data,
   onUpdateChatMessageStatus,
   refetch,
+  loadingMessages,
 }) => {
 
   const {t} = useTranslate("dashboard");
@@ -52,7 +54,8 @@ export default ({
 
   const onCloseMessage = () => {
     sliderEl.current.slickPrev();
-    setMessage(null);
+    setTimeout(() => {  setMessage(null) }, 500);
+
   }
 
   const onMessageClick = (chat) => {
@@ -126,9 +129,7 @@ export default ({
                     key={index}
                     style={{minWidth: '400px', display: 'flex'}}
                   >
-                    <Photo>
-                      <div className="image" style={{backgroundImage: 'url("' + message.member.photoUrl + '")'}}/>
-                    </Photo>
+                    <Avatar src={message.member.photoUrl} />
                     <ListItemText
                       primary={message.member.first_name + ' ' + message.member.last_name}
                       secondary={message.type == 1 ? message.text : t("invitation-text")}
@@ -147,12 +148,15 @@ export default ({
           <div className="messages-section">
           {
             message !== null && (
-              <Chat
-                visible={message !== null}
-                closePanel={onCloseMessage}
-                member={message ? message.member : {}}
-                onMessageClick={onMessageClick}
-              />
+              <div className="chat-panel" style={{ position:"relative", height: '80vh' }}>
+                <Chat
+                  visible={message !== null}
+                  closePanel={onCloseMessage}
+                  member={message ? message.member : {}}
+                  onMessageClick={onMessageClick}
+                  loadingMessages={false}
+                />
+              </div>
             )
           }
           </div>

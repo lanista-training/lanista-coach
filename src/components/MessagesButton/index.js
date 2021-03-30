@@ -1,15 +1,28 @@
-import * as React from 'react';
+import React, { Component, useState, useCallback } from 'react';
 import MessagesButton from './MessagesButton';
 import { withApollo } from '../../lib/apollo';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation, useSubscription } from '@apollo/react-hooks';
 import { MESSAGES } from "../../queries";
 import { UPDATECHATMESSAGESTATUS } from "../../mutations";
+import { MESSAGEFEED } from "../../subscriptions";
 
 const Panel = ({filter, title}) => {
 
   const {data, loading, error, refetch} = useQuery(MESSAGES, {
     fetchPolicy: 'network-only'
   });
+
+  //
+  // Subscriptions
+  //
+  const onSubscriptionData = useCallback( (result) => {
+      console.log("MESSAGEFEED", result);
+      console.log("REFETCHING...")
+      refetch();
+    },
+    [],
+  );
+  useSubscription(MESSAGEFEED, { onSubscriptionData });
 
   const [updateChatMessageStatus, {
     loading: updateChatMessageStatusLoading,
@@ -31,6 +44,7 @@ const Panel = ({filter, title}) => {
     })
   }
 
+
   return (
     <MessagesButton
       data={data && data.messages && data.messages.data ? data.messages.data : []}
@@ -38,6 +52,7 @@ const Panel = ({filter, title}) => {
       error={error}
       onUpdateChatMessageStatus={onUpdateChatMessageStatus}
       refetch={refetch}
+      loadingMessages={loading}
     />)
 };
 
