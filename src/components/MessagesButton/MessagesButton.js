@@ -9,6 +9,7 @@ import {
   Loader,
 } from 'semantic-ui-react';
 import Router from 'next/router';
+import { useHistory } from "react-router-dom";
 import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import EmailIcon from '@material-ui/icons/Email';
@@ -33,7 +34,7 @@ export default ({
   refetch,
   loadingMessages,
 }) => {
-
+  const history = useHistory();
   const {t} = useTranslate("dashboard");
   const sliderEl = useRef(null);
 
@@ -59,14 +60,19 @@ export default ({
   }
 
   const onMessageClick = (chat) => {
-    Router.push({
-      pathname: '/exercise',
-      query: {
-        exercise: chat.exercise_id,
-        member: message.member.id,
-        tab: 2,
-      }
-    });
+    var isCordovaApp = !!window.cordova;
+    if( isCordovaApp ) {
+      history.push('/exercise/' + chat.exercise_id + '/'+  message.member.id + '/' + 2);
+    } else {
+      Router.push({
+        pathname: '/exercise',
+        query: {
+          exercise: chat.exercise_id,
+          member: message.member.id,
+          tab: 2,
+        }
+      });
+    }
   }
 
   const [invitation, setInvitation] = React.useState(null);

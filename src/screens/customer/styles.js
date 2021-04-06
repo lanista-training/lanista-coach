@@ -658,6 +658,9 @@ export const Header = styled.div`
   .header-button.with-bardget {
 
   }
+  .header-date {
+    cursor: pointer;
+  }
 `;
 export const FilesPanel = styled.div`
   width: 100%;
@@ -821,7 +824,7 @@ export const StyledDrawer = styled(Drawer)`
     background: transparent;
     box-shadow: none;
     .MuiListItemText-primary {
-      color: #34acfb;
+      color: black;
       font-size: 20px;
       font-weight: 300;
     }
@@ -832,7 +835,7 @@ export const StyledDrawer = styled(Drawer)`
       background: white;
       background: white;
       border-left-style: solid;
-      border-left-color: #34acfb;
+      border-left-color: black;
       border-left-width: 0.5em;
     }
   }

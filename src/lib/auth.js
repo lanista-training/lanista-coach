@@ -17,10 +17,14 @@ export const signup = async ({ token }) => {
 }
 
 export const logout = () => {
+  console.log("LOGOUT...")
   cookie.remove('token');
-  window.localStorage.clear();
-  window.localStorage.setItem('logout', Date.now());
-  Router.push('/login');
+  setTimeout(() => {
+    window.localStorage.clear();
+    window.localStorage.setItem('logout', Date.now());
+    Router.push('/login');
+    console.log("LOGOUT DONE !")
+  }, 2000 );
   return true;
 }
 
@@ -102,4 +106,13 @@ export const auth = ctx => {
     }
   }
   return token
+}
+
+export const isLogedIn = () => {
+  const token = cookie.get("token");
+  if (token) {
+    return true
+  } else {
+    return false
+  }
 }

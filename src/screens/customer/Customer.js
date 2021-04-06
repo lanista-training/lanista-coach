@@ -466,14 +466,14 @@ const Customer = ({
                       {
                         <Rating
                           name="customized-icons"
-                          defaultValue={ item.rating[item.rating.length-1].value === null ? null : item.rating[item.rating.length-1].value + 1 }
+                          defaultValue={ item.rating[0].value === null ? null : item.rating[0].value + 1 }
                           icon={<AdjustIcon fontSize="inherit" />}
                           max={11}
                           readOnly
                         />
                       }
                       <div className="rating-lable">
-                        {item.rating[item.rating.length-1].value === null ? t('NO_VALUE') : item.rating[item.rating.length-1].value +  ' ' + t('from') + ' 10'}
+                        {item.rating[0].value === null ? t('NO_VALUE') : item.rating[0].value +  ' ' + t('from') + ' 10'}
                       </div>
                     </div>
                   </div>

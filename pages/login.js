@@ -2,8 +2,13 @@ import { Component } from 'react';
 import LoginScreen from "../src/screens/login";
 import CCLoginScreen from "../src/screens/cclogin";
 import Router from 'next/router';
+import {isLogedIn} from '../src/lib/auth';
 
 function Login({cctoken}) {
+
+  if( isLogedIn() ) {
+    Router.push('/');
+  }
 
   if(typeof window !== 'undefined' && window.document && window.document.createElement) {
     if( cctoken ) {

@@ -84,7 +84,6 @@ const Panel = ({
 
   me,
 }) => {
-  console.log("me", me)
   const {t} = useTranslate("exercise");
   //
   // Chart type switch
@@ -143,7 +142,6 @@ const Panel = ({
     }
   }, [exercise]);
 
-
   React.useEffect(() => {
     if(settings
       && exercise
@@ -160,7 +158,14 @@ const Panel = ({
 
 
   const onSettingsChange = (newSettings) => {
-    setSettings({...newSettings});
+    setSettings({
+      indications: newSettings.indications,
+      sets: newSettings.rounds,
+      weight:newSettings.weight,
+      training: newSettings.training,
+      unit: newSettings.unit,
+      setsConfiguration: newSettings.setsConfiguration ? JSON.parse(JSON.stringify(newSettings.setsConfiguration)) : [],
+    });
   }
 
   const onSendSettings = () => {
@@ -207,10 +212,10 @@ const Panel = ({
   //
   // Chart management
   //
-  const onCreateChatMessage = () => {
+  const onCreateChatMessage = (text) => {
     createChatMessage({
       variables: {
-        text: message,
+        text: text,
         memberId: memberId,
         exerciseId: exerciseId,
       }

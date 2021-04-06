@@ -214,9 +214,10 @@ export default ({
       setOrder == selectedItem && activeField == null  &&(
         <div className="buttons-section">
           <Button className="delete-button" disabled={setOrder !== selectedItem} inverted onClick={() => {
-              onRemoveSet(setOrder)
-              setEditingMode(false)
-              setActiveField(null)
+              onRemoveSet(setOrder);
+              setEditingMode(false);
+              setActiveField(null);
+              setSelectedItem(null);
             }}
           >
             {t("delete set")}

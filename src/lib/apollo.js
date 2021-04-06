@@ -27,12 +27,13 @@ export function withApollo (PageComponent, { ssr = true } = {}) {
       };
 
       const cache = new InMemoryCache(initData);
+      window.cache = cache;
 
       var graphqlServerApp = 'https://app.lanista-training.com/graphql';
       var graphqlServerPortal = document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/graphql';
-      var graphqlServer = (typeof document !== 'undefined' && window.cordova === undefined) ? graphqlServerPortal : graphqlServerApp;
-      //var graphqlServer = 'https://kj8xejnla9.execute-api.eu-central-1.amazonaws.com/dev/graphql';
-      console.log("graphqlServer", graphqlServer)
+      //var graphqlServer = (typeof document !== 'undefined' && window.cordova === undefined) ? graphqlServerPortal : graphqlServerApp;
+      var graphqlServer = 'https://kj8xejnla9.execute-api.eu-central-1.amazonaws.com/dev/graphql';
+      //console.log("graphqlServer", graphqlServer)
 
       //
       // LINK: Authorization
@@ -187,4 +188,13 @@ export function withApollo (PageComponent, { ssr = true } = {}) {
 
   }
   return WithApollo
+}
+
+export const isLogedIn = () => {
+  const token = cookie.get("token");
+  if (token) {
+    return true
+  } else {
+    return false
+  }
 }

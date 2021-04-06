@@ -147,6 +147,7 @@ export const StyledExercise = styled.div`
   -webkit-flex-flow: column;
   -ms-flex-flow: column;
   flex-flow: column;
+  cursor: pointer;
   .exercise-images{
     display: flex;
     .exercise-start-image {
@@ -230,7 +231,7 @@ export const StyledDrawer = styled(Drawer)`
     box-shadow: none;
     max-width: 32em;
     .MuiListItemText-primary {
-      color: #34acfb;
+      color: black;
       font-size: 20px;
       font-weight: 300;
     }
@@ -241,7 +242,7 @@ export const StyledDrawer = styled(Drawer)`
       background: white;
       background: white;
       border-left-style: solid;
-      border-left-color: #34acfb;
+      border-left-color: black;
       border-left-width: 0.5em;
     }
   }

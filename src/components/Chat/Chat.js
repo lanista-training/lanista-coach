@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components';
 import { Transition, Input } from 'semantic-ui-react';
 import moment from 'moment';
@@ -9,6 +9,7 @@ import SendIcon from '@material-ui/icons/Send';
 import Menu from '@material-ui/core/Menu';
 import Fab from '@material-ui/core/Fab';
 import DeleteIcon from '@material-ui/icons/Delete';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { ChatContainer, MessageList, Message, MessageInput, Avatar, ConversationHeader, ArrowButton } from '@chatscope/chat-ui-kit-react';
 import MateriaUiAvatar from '@material-ui/core/Avatar';
@@ -38,8 +39,6 @@ export default ({
   hideHeader,
   hideExercises,
   hideInputField,
-  message,
-  onMessageChange,
 
   onCreateChatMessage,
   createChatMessageLoading,
@@ -52,8 +51,13 @@ export default ({
   loadingMessages,
 
 }) => {
-console.log( "me", me )
+
   const {t} = useTranslate("exercise");
+
+  const [message, setMessage] = useState('');
+  const onMessageChange = (event) => {
+    setMessage(event.target.value);
+  }
 
   const onSubmit = event => event.preventDefault();
   const el = useRef(null);
@@ -65,8 +69,6 @@ console.log( "me", me )
   const [selectedMessage, setSelectedMessage] = React.useState(null);
 
   const handleClick = (event, message) => {
-    console.log("handleClick")
-    console.log("message", message)
     if( message.type === 0 && me.id == message.creator_user_id ) {
       setSelectedMessage(message.id);
       setAnchorEl(event.currentTarget);
@@ -82,6 +84,15 @@ console.log( "me", me )
     onDeleteChatMessage(selectedMessage);
     handleClose();
   }
+
+  const onSumib = event => {
+    event.preventDefault();
+    onCreateChatMessage(message);
+  };
+
+  useEffect(() => {
+    setMessage('');
+  }, [data]);
 
   const messages = data.map((message) => {
     return (
@@ -119,16 +130,32 @@ console.log( "me", me )
         <MessageList loading={loadingMessages}>
           {messages}
         </MessageList>
-        { !hideInputField &&
-          <MessageInput
-            attachButton={false}
-            placeholder={t("create-chat-placeholder")}
-            onChange={(value) => onMessageChange(value)}
-            value={message}
-            onSend={onCreateChatMessage}
-          />
-        }
+        <InputBase
+          placeholder={t("create-chat-placeholder")}
+          onChange={(value) => onMessageChange(value)}
+          value={message}
+        />
       </ChatContainer>
+      { !hideInputField &&
+        <Paper component="form" onSubmit={onSumib} className="message-text">
+          <InputBase
+            placeholder={t("create-note-placeholder")}
+            onChange={onMessageChange}
+            value={message}
+          />
+        { (loadingMessages || createChatMessageLoading ) &&
+            <CircularProgress size={30}/>
+          }
+          { !(loadingMessages || createChatMessageLoading ) &&
+            <IconButton
+              onClick={() => onCreateChatMessage(message)}
+              disabled={message == ''}
+            >
+              <SendIcon />
+            </IconButton>
+          }
+        </Paper>
+      }
       <StyledMenu
         id="message-menu"
         anchorEl={anchorEl}

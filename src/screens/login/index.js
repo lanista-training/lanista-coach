@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useTranslate } from '../../hooks/Translation';
 import Login from './Login';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation, useLazyQuery } from '@apollo/react-hooks';
 import { withApollo } from '../../lib/apollo';
 import { LOGIN } from "../../mutations/authenticate";
 import { GETDOMAININFO } from "../../queries";
@@ -25,7 +25,7 @@ const LoginPanel = ({
   //
   // Domain info
   //
-  const { loading, error, data } = useQuery(GETDOMAININFO, {
+  const [ getDomain, {loading, error, data} ] = useLazyQuery(GETDOMAININFO, {
     fetchPolicy: 'no-cache',
   });
   const domainLogoUrl = data && data.getDomainInfo ?  data.getDomainInfo.logoUrl : '';
@@ -38,6 +38,7 @@ const LoginPanel = ({
       update(cache,  {data}) {
         const { token, user, tbt } = data.login;
         login({ token, tbt });
+        getDomain();
         goToRoot();
       }
     }

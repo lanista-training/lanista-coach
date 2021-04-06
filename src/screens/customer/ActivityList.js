@@ -95,7 +95,7 @@ const WorkoutsList = (
       list.push(
         <DailyList>
           <Header as='h3'>
-            <div onClick={(event) => handleProtocollsOptionsClick(event, titel)}>{formatHeader(titel)}</div>
+            <div className="header-date" onClick={(event) => handleProtocollsOptionsClick(event, titel)}>{formatHeader(titel)}</div>
             <div
               className={dayNotes.length > 0 ? "header-button with-bardget" : "header-button"}
               onClick={(event) => handleNotesClick(event, titel)}

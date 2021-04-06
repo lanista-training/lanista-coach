@@ -9,13 +9,14 @@ export const login = async ({ token }) => {
 }
 
 export const logout = () => {
-  console.log("LOGIN OUT !");
-  cookie.remove('token')
+  console.log("LOGOUT !");
+  cookie.remove('token');
   window.localStorage.clear();
   window.localStorage.setItem('logout', Date.now());
   setTimeout(function () {
-      window.location.reload();
-    }, 1000);
+    window.location.reload();
+  }, 500);
+  return true;
   console.log("READY TO LOGOUT !");
 }
 

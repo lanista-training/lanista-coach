@@ -21,9 +21,11 @@ export const ImageEditor = styled.div`
   align-items: center;
   .image-section {
     background-image: url(${props => props.photoUrl});
+    background-repeat: no-repeat;
+    background-position: center;
     height: ${props => props.containerHeight}px;
     width: ${props => props.containerWidth}px;
-    background-size: cover;
+    background-size: contain;
     -webkit-box-shadow: 0 2px 25px 0 rgba(34,36,38,.05) inset;
     box-shadow: 0 2px 25px 0 rgba(34,36,38,.05) inset;
     border-radius: 15px;

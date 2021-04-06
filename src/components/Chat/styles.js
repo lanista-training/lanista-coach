@@ -6,6 +6,20 @@ export const StyledChat  = styled(MainContainer)`
   overflow: hidden;
   background: transparent;
   border: none;
+  display: flex;
+  flex-flow: column-reverse;
+  .MuiPaper-root {
+    display: flex;
+    place-items: center;
+    .MuiInputBase-root {
+      flex: 1;
+      padding: 0 0 0 15px;
+    }
+    .MuiCircularProgress-root {
+      color: black;
+      margin-right: 15px;
+    }
+  }
   .cs-conversation-header, .cs-conversation-header__user-name, .cs-conversation-header__info {
     background-color: #f3f3f3;
   }
@@ -87,6 +101,12 @@ export const StyledChat  = styled(MainContainer)`
     .exercise-name {
       text-align: left;
     }
+  }
+  form {
+    margin-bottom: 2px;
+    margin-right: 2px;
+    margin-left: 2px;
+    min-height: 45px;
   }
 `;
 

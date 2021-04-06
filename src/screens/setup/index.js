@@ -2,6 +2,7 @@ import React, { Component, useState, useEffect } from 'react';
 import { useTranslate } from '../../hooks/Translation';
 import { withApollo } from '../../lib/apollo';
 import { useMutation, useQuery } from '@apollo/react-hooks';
+import { CachePersistor } from 'apollo-cache-persist';
 
 import Scene from "../../components/Scene";
 import Setup from './Setup';
@@ -29,7 +30,7 @@ const SetupWithData = ({goBack, doLogout}) => {
 
   const {t, locale, changeLanguage} = useTranslate("setup");
 
-  const getCommandsRight = (client) => {
+  const getCommandsRight =  (client) => {
     return [{
         icon: <Logout/>,
         iosname: 'iconfinder_Out_2134656',
@@ -39,9 +40,45 @@ const SetupWithData = ({goBack, doLogout}) => {
         name: 'logout',
         style: {color: "#db2828"},
         className: 'logout-button',
-        onTap: () => {
-          client.resetStore();
-          doLogout();
+        onTap: async () => {
+          const persistor = new CachePersistor({
+            cache: window.cache,
+            storage: window.localStorage,
+          });
+          persistor.pause();
+          await persistor.purge();
+          client.resetStore()
+          .then(() => {
+            client.clearStore()
+            .then(() => {
+              window.localStorage.clear();
+              window.localStorage.setItem('logout', Date.now());
+              persistor.resume();
+              doLogout();
+            })
+            .catch(() => {
+              window.localStorage.clear();
+              window.localStorage.setItem('logout', Date.now());
+              persistor.resume();
+              doLogout()
+            });
+          })
+          .catch(() => {
+            client.clearStore()
+            .then(() => {
+              window.localStorage.clear();
+              window.localStorage.setItem('logout', Date.now());
+              persistor.resume();
+              doLogout();
+            })
+            .catch(() => {
+              window.localStorage.clear();
+              window.localStorage.setItem('logout', Date.now());
+              this.cachePersistor.resume();
+              persistor.resume();
+              doLogout()
+            });
+          });
         }
     }];
   }
