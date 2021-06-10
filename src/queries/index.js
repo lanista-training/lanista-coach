@@ -437,6 +437,7 @@ export const ME = gql`
       accesslevel
       language
       dataPrivacyPolicy
+      bu_type
     }
   }
 `
@@ -810,6 +811,7 @@ export const MEMBER_ANAMNESE = gql`
         id
         title
         description
+        request_feedback
         position {
           x
           y

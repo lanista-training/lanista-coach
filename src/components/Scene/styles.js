@@ -193,7 +193,7 @@ export const StyledDrawer = styled(Drawer)`
     max-width: 32em;
     min-width: 15em;
     .MuiListItemText-primary {
-      color: #34acfb;
+      color: black;
       font-size: 20px;
       font-weight: 300;
     }
@@ -204,7 +204,7 @@ export const StyledDrawer = styled(Drawer)`
       background: white;
       background: white;
       border-right-style: solid;
-      border-right-color: #34acfb;
+      border-right-color: black;
       border-right-width: 0.5em;
     }
   }

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useTranslate } from '../../hooks/Translation';
 import moment from "moment";
 import { Pane, StyledFinding, FindingForm, GraphSection, RatingSlider, RatingPopover } from './styles';
+import CustomTooltip from './CustomTooltip';
 
 import PlaceIcon from '@material-ui/icons/Place';
 import HomeIcon from '@material-ui/icons/Home';
@@ -101,8 +102,8 @@ const AnamneseSwitch = withStyles({
 })(Switch);
 
 
-const CustomizedLabel = ({x, y, stroke, value, t}) => {
-  return <text x={x} y={y-10} dy={-4} fill="black" fontSize={15} textAnchor="middle">{(value)}</text>;
+const CustomizedLabel = ({x, y, stroke, value, t, index, data, memberId, therapies}) => {
+  return <text x={x} y={y-10} dy={-4} fill={memberId == data[index].creator.id ? 'rgb(13,112,211)' : 'black'} fontSize={15} textAnchor="middle">{(value)}</text>;
 }
 
 const renderGraphSection = (
@@ -111,9 +112,9 @@ const renderGraphSection = (
    selectedDate,
    setSelectedDate,
    therapies,
+   memberId,
  ) => {
 
-  const curatedDate = graphData && graphData.map(item => ({...item, label: moment(new Date(parseInt(item.date))).format("DD-MMMM-YYYY") }) );
   const available = graphData && graphData.length > 1;
   const onChartClick = (event) => {
     if( event ) {
@@ -127,9 +128,9 @@ const renderGraphSection = (
   return(
     <GraphSection>
       {available ?
-        <ResponsiveContainer>
+        <ResponsiveContainer width="100%" height="100%">
           <LineChart
-            data={curatedDate.reverse()}
+            data={graphData}
             margin={{
               top: 50, right: 70, left: 70, bottom: 5,
             }}
@@ -141,6 +142,14 @@ const renderGraphSection = (
               type="number"
               hide
             />
+            {graphData.map(item => {
+              if( item.note_date ) {
+                return (<ReferenceLine x={item.label} stroke="black" alwaysShow ifOverflow="extendDomain"/>);
+              } else {
+                return null;
+              }
+            })}
+            <CartesianGrid strokeDasharray="3 3" />
             <Line
               type="monotone"
               dataKey="value"
@@ -148,9 +157,9 @@ const renderGraphSection = (
               strokeWidth={2}
               stroke="black"
               connectNulls
-              label={<CustomizedLabel t={t} />
+              label={<CustomizedLabel t={t} data={graphData} memberId={memberId}/>
             }/>
-            <Tooltip />
+            <Tooltip content={<CustomTooltip t={t}/>} />
           </LineChart>
         </ResponsiveContainer>
         :
@@ -220,7 +229,6 @@ const RatingButton = ({
           max={10}
           value={ratingValue}
           onChange={(event, newValue) => {
-            console.log("onChange", newValue);
             setRatingValue(newValue);
           }}
         />
@@ -257,6 +265,7 @@ const StatusButton = ({
 
 const Finding = ({
   t,
+  customer,
   finding,
   top,
   left,
@@ -285,6 +294,12 @@ const Finding = ({
   onToggleAnamneseStatus,
   toggleAnamneseStatusLoading,
   toggleAnamneseStatusError,
+
+  onTogleFindingFeedbackRequest,
+  toogleFindingFeedbackRequestLoading,
+  toogleFindingFeedbackRequestError,
+
+  isPhysio,
 
 }) => {
 
@@ -320,23 +335,32 @@ const Finding = ({
 
   const [titleValue, setTitleValue] = useState('');
   const [titleEditing, setTitleEditing] = useState(false);
+
   const [descriptionValue, setDescriptionValue] = useState('');
   const [descriptionEditing, setDescriptionEditing] = useState(false);
+
   const [ratingValue, setRatingValue] = useState(0);
   const [ratingEditing, setRatingEditing] = useState(false);
+
   const [warningFlagValue, setWarningFlagValue] = useState(false);
   const [warningFlagEditing, setWarningFlagEditing] = useState(false);
+
   const [visibleValue, setVisibleValue] = useState(false);
   const [visibleEditing, setVisibleEditing] = useState(false);
+
   const [startDateValue, setStartDateValue] = useState(0);
   const [endDateValue, setEndDateValue] = useState(0);
   const [timeEditing, setTimeEditing] = useState(false);
+
   const [statusValue, setStatusValue] = useState(false);
+
+  const [requestFeedbackValue, setRequestFeedbackValue] = useState(false);
+  const [requestFeedbackEditing, setRequestFeedbackEditing] = useState(false);
 
   const [titleErrorMessage, setTitleErrorMessage] = useState(null);
 
   useEffect(() => {
-    const {title, description, rating, warning_flag, visible, start_date, end_date, status} = finding;
+    const {title, description, rating, warning_flag, visible, start_date, end_date, status, request_feedback} = finding;
     setTitleValue(title);
     setDescriptionValue(description);
     setWarningFlagValue(warning_flag);
@@ -345,7 +369,8 @@ const Finding = ({
     setEndDateValue(end_date);
     const lastRating = (rating && rating.length > 0) ? rating[0].value : null;
     setRatingValue(lastRating);
-    setStatusValue(status)
+    setStatusValue(status);
+    setRequestFeedbackValue(request_feedback);
 
     setTitleEditing(false);
     setDescriptionEditing(false);
@@ -353,10 +378,11 @@ const Finding = ({
     setTimeEditing(false);
     setWarningFlagEditing(false);
     setVisibleEditing(false);
+    setRequestFeedbackEditing(false);
     setReadyToSave(false);
 
     if( finding.id > 0 ) {
-      finding.id == undefined && console.log("editing finding")
+      finding.id == undefined && console.log("editing finding");
     } else {
       setAnchorEl(pinEl.current);
       setOpen(true);
@@ -370,6 +396,7 @@ const Finding = ({
       setTimeEditing(false);
       setWarningFlagEditing(false);
       setVisibleEditing(false);
+      setRequestFeedbackEditing(false);
     }
   }, [titleEditing]);
 
@@ -380,6 +407,7 @@ const Finding = ({
       setTimeEditing(false);
       setWarningFlagEditing(false);
       setVisibleEditing(false);
+      setRequestFeedbackEditing(false);
     }
   }, [descriptionEditing]);
 
@@ -390,6 +418,7 @@ const Finding = ({
       setTimeEditing(false);
       setWarningFlagEditing(false);
       setVisibleEditing(false);
+      setRequestFeedbackEditing(false);
     }
   }, [ratingEditing]);
 
@@ -400,6 +429,7 @@ const Finding = ({
       setRatingEditing(false);
       setWarningFlagEditing(false);
       setVisibleEditing(false);
+      setRequestFeedbackEditing(false);
     }
   }, [timeEditing]);
 
@@ -410,6 +440,7 @@ const Finding = ({
       setRatingEditing(false);
       setTimeEditing(false);
       setVisibleEditing(false);
+      setRequestFeedbackEditing(false);
     }
   }, [warningFlagEditing]);
 
@@ -420,11 +451,22 @@ const Finding = ({
       setRatingEditing(false);
       setTimeEditing(false);
       setWarningFlagEditing(false);
+      setRequestFeedbackEditing(false);
     }
   }, [visibleEditing]);
 
   useEffect(() => {
-    console.log("open");
+    if( requestFeedbackEditing ) {
+      setTitleEditing(false);
+      setDescriptionEditing(false);
+      setRatingEditing(false);
+      setTimeEditing(false);
+      setWarningFlagEditing(false);
+      setVisibleEditing(false);
+    }
+  }, [requestFeedbackEditing]);
+
+  useEffect(() => {
     setValue(0);
     setSettings(false);
     setRequestDeletion(false);
@@ -501,6 +543,41 @@ const Finding = ({
   const pinEl = useRef(null);
 
   const [value, setValue] = React.useState(0);
+
+  //
+  // Graphic Data
+  //
+  const {notes, rating} = finding;
+
+  const curatedDate = [];
+  rating && rating.map(item => {
+    const existEntry = curatedDate.find(i => {
+      return moment(parseInt(i.date)).isSame(moment(parseInt(item.date)), 'day');
+    })
+    if( !existEntry ) {
+      curatedDate.push({...item, label: moment(new Date(parseInt(item.date))).format("DD-MMMM-YYYY") });
+    }
+  });
+  notes && notes.map(item => {
+    const existEntry = curatedDate.find(i => {
+      return moment(parseInt(i.date)).isSame(moment(parseInt(item.note_date)), 'day');
+    })
+
+    if( !existEntry ) {
+      curatedDate.push({...item, label: moment(new Date(parseInt(item.note_date))).format("DD-MMMM-YYYY"), value: null, date: item.note_date })
+    } else {
+      existEntry.note_date = item.note_date;
+      existEntry.text = item.text;
+    }
+  });
+
+  var graphData = curatedDate.sort(function(a, b) {
+    return b.date - a.date;
+  }).reverse();
+
+  //
+  //
+  //
 
   return <>
     <StyledFinding
@@ -606,7 +683,15 @@ const Finding = ({
 
                 { !settings && !editing &&
                   <div className="history-section">
-                    {renderGraphSection(finding.rating, t, selectedDate, setSelectedDate, finding ? finding.notes : [])}
+                    {renderGraphSection(
+                      graphData,
+                      t,
+                      selectedDate,
+                      setSelectedDate,
+                      finding ? finding.notes : [],
+                      customer && customer.id,
+                      finding.notes ? finding.notes : [],
+                    )}
                   </div>
                 }
                 { settings &&
@@ -627,6 +712,7 @@ const Finding = ({
                         editable={timeEditing || editing}
                       />
                     </div>
+
                     <div className={ warningFlagEditing ? "editing importance-section" : "importance-section" } onClick={(e) => {
                       !warningFlagEditing && setWarningFlagEditing(true)
                     }}>
@@ -645,6 +731,27 @@ const Finding = ({
                         onChange={(e) => setWarningFlagValue(e.target.checked)}
                       />
                     </div>
+
+                    { isPhysio &&
+                      <div className={ requestFeedbackEditing ? "editing importance-section" : "importance-section" } onClick={(e) => {
+                        !requestFeedbackEditing && setRequestFeedbackEditing(true)
+                      }}>
+                        <div
+                          className="importance-text"
+                          onClick={() => requestFeedbackEditing && setRequestFeedbackEditing(false)}
+                        >
+                          {t("feedback_request")}
+                        </div>
+                        <AnamneseSwitch
+                          checked={requestFeedbackValue}
+                          name="importance-request"
+                          inputProps={{ 'aria-label': 'secondary checkbox' }}
+                          size="small"
+                          disabled={(!editing && !requestFeedbackEditing) || saveFindingLoading || toogleFindingFeedbackRequestLoading}
+                          onChange={(e) => onTogleFindingFeedbackRequest(finding.id)}
+                        />
+                      </div>
+                    }
                   </>
                 }
               </>

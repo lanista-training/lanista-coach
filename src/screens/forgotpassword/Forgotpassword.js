@@ -155,13 +155,13 @@ const Nav = styled.nav`
 `;
 
 const SuccessfullMessage  = styled.div`
-  color: #d20027;
-  width: 100%;
-  font-size: 2em;
+width: 100%;
   font-weight: 700;
   padding: 0 0 2em 0;
   line-height: 1em;
-  text-align: center;
+  text-align: justify;
+  font-size: 23px;
+  font-weight: 100;
 `;
 
 class Forgotpassword extends React.Component {
@@ -242,8 +242,6 @@ class Forgotpassword extends React.Component {
       }} />)
       : <ChildButton/>);
 
-    console.log("errorMessage", errorMessage)
-
     return(
       <Root className={"scene"} style={{height: "100vh", width: "100vw", verticalAlign: "middle"}}>
         <div className="main-section">
@@ -255,29 +253,32 @@ class Forgotpassword extends React.Component {
               </div>
             </LanistaLogo>
 
-            <div className="input-fields-section">
-              <LanistaTextField
-                className="email-field"
-                variant="outlined"
-                placeholder='Email'
-                disabled={loading}
-                type={"email"}
-                error={emailIsValid}
-                value= {email}
-                onChange={handleEmailChange}
-                helperText="Incorrect entry."
-                helperText={errorMessage}
-              />
-            </div>
+            { !passwordresetsuccessfull &&
+              <div className="input-fields-section">
+                <LanistaTextField
+                  className="email-field"
+                  variant="outlined"
+                  placeholder='Email'
+                  disabled={loading}
+                  type={"email"}
+                  error={emailIsValid}
+                  value= {email}
+                  onChange={handleEmailChange}
+                  helperText="Incorrect entry."
+                  helperText={errorMessage}
+                />
+              </div>
+            }
+
 
             <div className="buttons-section">
               {!passwordresetsuccessfull && (
                 <Button
-                  inverted
+                  inverted={email && email.length > 0}
                   style={{marginTop: "2em"}}
                   loading={loading}
                   onClick={ () => { onSendpasswordreset() }}
-                  disabled={loading}
+                  disabled={loading || !(email && email.length > 0)}
                 >
                   { loading ? ("...") : t("reset password") }
                 </Button>
@@ -289,7 +290,7 @@ class Forgotpassword extends React.Component {
                 </SuccessfullMessage>
               )}
 
-              <Button key="button"  onClick={() => {
+              <Button key="button" inverted={passwordresetsuccessfull} onClick={() => {
                 this.setState({
                   show: false
                 });

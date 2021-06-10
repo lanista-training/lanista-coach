@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { withApollo } from '../../lib/apollo';
+
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import gql from "graphql-tag";
 import moment from "moment";
@@ -27,6 +27,7 @@ import {
   SAVEANAMNESENOTE,
   DELETEANAMNESENOTE,
   TOGGLEANAMNESESTATUS,
+  TOOGLEFINDINGREQUESTFEDDBACK,
 } from "../../mutations";
 
 const TABINDEX = gql`
@@ -82,6 +83,20 @@ const withData = (WrappedComponent, {memberId, tab, id, goBack, goToSetup}) => {
       {
         update(cache,  { data: { saveFinding } }) {
           if( saveFinding.success ) {
+            refetch();
+          }
+        }
+      }
+    );
+
+    //
+    // Save fiding feedback request
+    //
+    const [toogleFindingFeedbackRequest, { loading: toogleFindingFeedbackRequestLoading, error: toogleFindingFeedbackRequestError }] = useMutation(
+      TOOGLEFINDINGREQUESTFEDDBACK,
+      {
+        update(cache,  { data: { toggleFindingRequestFeedback } }) {
+          if( toggleFindingRequestFeedback.success ) {
             refetch();
           }
         }
@@ -469,13 +484,17 @@ const withData = (WrappedComponent, {memberId, tab, id, goBack, goToSetup}) => {
         toggleAnamneseStatusLoading={toggleAnamneseStatusLoading}
         toggleAnamneseStatusError={toggleAnamneseStatusError}
 
+        toogleFindingFeedbackRequest={toogleFindingFeedbackRequest}
+        toogleFindingFeedbackRequestLoading={toogleFindingFeedbackRequestLoading}
+        toogleFindingFeedbackRequestError={toogleFindingFeedbackRequestError}
+
         goBack={goBack}
         goToSetup={goToSetup}
       />
     )
   }
 
-  return withApollo(DataProvider);
+  return DataProvider;
 
 }
 

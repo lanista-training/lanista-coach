@@ -112,6 +112,10 @@ const Screen = ({
   toggleAnamneseStatusLoading,
   toggleAnamneseStatusError,
 
+  onTogleFindingFeedbackRequest,
+  toogleFindingFeedbackRequestLoading,
+  toogleFindingFeedbackRequestError,
+
 }) => {
 
   const {goals, drugs, sport_activities, lifestyles, physios, findings} = customer;
@@ -131,6 +135,7 @@ const Screen = ({
     ), render: () =>
       <FindingsPane
         me={me}
+        customer={customer}
 
         id={tab == 0 ? openFirst : undefined}
 
@@ -160,6 +165,10 @@ const Screen = ({
         onToggleAnamneseStatus={onToggleAnamneseStatus}
         toggleAnamneseStatusLoading={toggleAnamneseStatusLoading}
         toggleAnamneseStatusError={toggleAnamneseStatusError}
+
+        onTogleFindingFeedbackRequest={onTogleFindingFeedbackRequest}
+        toogleFindingFeedbackRequestLoading={toogleFindingFeedbackRequestLoading}
+        toogleFindingFeedbackRequestError={toogleFindingFeedbackRequestError}
       />
     },
     { menuItem: (

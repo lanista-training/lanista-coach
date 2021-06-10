@@ -101,7 +101,8 @@
     "from": "desde",
     "title is mandatory": "Por favor, escriba un nombre",
     "STATUS_TRUE": "Activo",
-    "STATUS_FALSE": "Inactivo"
+    "STATUS_FALSE": "Inactivo"",
+    "feedback_request": "Solicitar feedback"
   },
   "common": {
     "title": "Lanista Trainer",
@@ -210,7 +211,8 @@
     "plans": "Planos",
     "from": "de",
     "to": "a",
-    "NO_VALUE": "No hay datos"
+    "NO_VALUE": "No hay datos",
+    "back": "regresar"
   },
   "customers": {
     "customers_found": "Resultado",
@@ -438,7 +440,11 @@
     "created_at": "Creado:",
     "changed_from": "por",
     "changed_at": "Ultimo cambio:",
-    "no instructions": "No se han introducido instrucciones para el cliente."
+    "no instructions": "No se han introducido instrucciones para el cliente.",
+    "zoom": "ZOOM",
+    "rotation": "ROTATION",
+    "PREVIEW": "PREVIEW",
+    "image preview": "IMAGE PREVIEW"
   },
   "exercises": {
     "exercises": "Ejercicios",
@@ -713,7 +719,12 @@
     "DELETE_SUCCESSFULL": "Customer successfully deleted",
     "GO_BACK": "back",
     "CUSTOMER_ID": "Customer-ID",
-    "square image format": "Formato de imagen cuadrado"
+    "square image format": "Formato de imagen cuadrado",
+    "EDIT": "Edit",
+    "zoom": "ZOOM",
+    "rotation": "ROTATION",
+    "PREVIEW": "PREVIEW",
+    "image preview": "IMAGE PREVIEW"
   },
   "setup": {
     "personal_data": "Personal data",
@@ -795,7 +806,12 @@
     "square image format": "square image format",
     "free image format": "free image format",
     "app image format": "860x600 px",
-    "back": "Back"
+    "back": "Back",
+    "EDIT": "Edit",
+    "zoom": "ZOOM",
+    "rotation": "ROTATION",
+    "PREVIEW": "PREVIEW",
+    "image preview": "IMAGE PREVIEW"
   },
   "testsmanager": {
     "test-name": "Test name",
@@ -938,24 +954,26 @@
   },
   "workouts": {
     "split": "Split",
-    "created at": "Created on",
-    "from trainer": "from trainer",
+    "created at": "Creado el",
+    "from trainer": "del entrenador",
     "sets": "Sets",
     "repetitions": "Rep.",
-    "plan duration" : "Durance in weeks",
-    "week": "Week",
-    "weeks": "Weeks",
-    "no description available": "No description entered yet",
-    "new plan": "New plan",
-    "search": "Search",
-    "show results": "Show list",
-    "my": "My",
-    "gym": "Gym",
-    "plans": "plans",
-    "PLAN NAME": "Name für den Plan eingeben",
-    "DURATION": "Duration",
+    "plan duration" : "Duración en semanas",
+    "week": "Semana",
+    "weeks": "Semanas",
+    "WEEKS": "Semanas",
+    "no description available": "No hay descripción disponible",
+    "new plan": "Nuevo plan",
+    "search": "Buscar",
+    "show results": "Mostrar resultados",
+    "my": "Mi",
+    "gym": "Gimnasio",
+    "plans": "planes",
+    "PLAN NAME": "NOMBRE DEL PLAN",
+    "DURATION": "DURACIÓN",
     "ALL": "Todos",
-    "PUBLIC": "Públicos"
+    "PUBLIC": "Públicos",
+    "back": "regresar"
   },
   "shop": {
     "week-licence": "Week-License",

@@ -129,7 +129,8 @@
     "from": "from",
     "title is mandatory": "Please enter a name",
     "STATUS_TRUE": "Active",
-    "STATUS_FALSE": "Inactive"
+    "STATUS_FALSE": "Inactive",
+    "feedback_request": "Request feedback"
   },
   "common": {
     "title": "Lanista Trainer",
@@ -274,7 +275,8 @@
     "plans": "Plans",
 
     "from": "von",
-    "to": "bis"
+    "to": "bis",
+    "back": "back"
   },
   "customers": {
     "customers_found": "Results",
@@ -502,7 +504,11 @@
     "no protocolls": "No loggs entered",
     "apply": "apply",
     "photo_upload_error": "Upload-Error. Please try again.",
-    "square image format": "Square image format"
+    "square image format": "Square image format",
+    "zoom": "ZOOM",
+    "rotation": "ROTATION",
+    "PREVIEW": "PREVIEW",
+    "image preview": "IMAGE PREVIEW"
   },
   "exercises": {
     "exercises": "Exercises",
@@ -783,7 +789,12 @@
     "FIRST_NAME_ERROR": "Please, enter first name",
     "LAST_NAME_ERROR": "Please, enter last name",
     "CUSTOMER_STATUS": "Customer Status",
-    "CUSTOMER_NEED_TO_ACTIVATE_ACCOUNT": ", as soon as he activated his Account."
+    "CUSTOMER_NEED_TO_ACTIVATE_ACCOUNT": ", as soon as he activated his Account.",
+    "EDIT": "Edit",
+    "zoom": "ZOOM",
+    "rotation": "ROTATION",
+    "PREVIEW": "PREVIEW",
+    "image preview": "IMAGE PREVIEW"
   },
   "setup": {
     "personal_data": "Personal data",
@@ -865,7 +876,12 @@
     "square image format": "Square image format",
     "free image format": "Free image format",
     "app image format": "860x600 px",
-    "back": "back"
+    "back": "back",
+    "EDIT": "Edit",
+    "zoom": "ZOOM",
+    "rotation": "ROTATION",
+    "PREVIEW": "PREVIEW",
+    "image preview": "IMAGE PREVIEW"
   },
   "testsmanager": {
     "test-name": "Test name",
@@ -1015,6 +1031,7 @@
     "plan duration" : "Durance in weeks",
     "week": "Week",
     "weeks": "Weeks",
+    "WEEKS": "Weeks",
     "no description available": "No description entered yet",
     "new plan": "New plan",
     "search": "Search",
@@ -1025,7 +1042,8 @@
     "PLAN NAME": "Enter plan name",
     "DURATION": "Plan duration",
     "ALL": "All",
-    "PUBLIC": "Public"
+    "PUBLIC": "Public",
+    "back": "back"
   },
   "shop": {
     "week-licence": "Weekly licence",

@@ -11,6 +11,7 @@ COLORS['DOCTOR'] = '#59d76e';
 
 export default ({
   me,
+  customer,
 
   id,
 
@@ -40,6 +41,10 @@ export default ({
   onToggleAnamneseStatus,
   toggleAnamneseStatusLoading,
   toggleAnamneseStatusError,
+
+  onTogleFindingFeedbackRequest,
+  toogleFindingFeedbackRequestLoading,
+  toogleFindingFeedbackRequestError,
 
 }) => {
 
@@ -119,6 +124,7 @@ export default ({
           const {x, y} = finding.position;
           return <Finding
             t={t}
+            customer={customer}
             finding={finding}
             top={y*imageRadio}
             left={(x*imageRadio) + marginLeft}
@@ -147,6 +153,12 @@ export default ({
             onToggleAnamneseStatus={onToggleAnamneseStatus}
             toggleAnamneseStatusLoading={toggleAnamneseStatusLoading}
             toggleAnamneseStatusError={toggleAnamneseStatusError}
+
+            onTogleFindingFeedbackRequest={onTogleFindingFeedbackRequest}
+            toogleFindingFeedbackRequestLoading={toogleFindingFeedbackRequestLoading}
+            toogleFindingFeedbackRequestError={toogleFindingFeedbackRequestError}
+
+            isPhysio={me && me.bu_type == 2}
           />
         })}
       </div>

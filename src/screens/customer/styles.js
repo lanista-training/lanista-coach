@@ -378,6 +378,15 @@ export const Card = styled.div`
           }
         }
       }
+      .goal-date {
+        position: relative;
+        left: -288px!important;
+        min-width: 100px!important;
+        top: 39px!important;
+        font-weight: 100;
+        font-size: 11px;
+        max-height: 21px;
+      }
     }
   }
   .workout-wrapper {
@@ -866,6 +875,11 @@ export const StyledDialog = styled(Dialog)`
 `;
 
 export const StyledDataPrivacyDialog = styled(Dialog)`
+  #alert-dialog-title {
+    .MuiIconButton-root {
+      color: black!important;
+    }
+  }
   .MuiDialog-paper {
     height: 700px;
   }
@@ -884,7 +898,7 @@ export const StyledDataPrivacyDialog = styled(Dialog)`
       width: 100%;
       border-radius: 15px;
       margin: 1em 0;
-      background: rgb(155,201,61);
+      background: black;
       color: white;
       justify-content: end;
       padding-left: 1.5em;
@@ -903,6 +917,14 @@ export const StyledDataPrivacyDialog = styled(Dialog)`
     border-radius: 20px;
     border-color: #dadada;
     background: #efefef;
+  }
+  .MuiDialogActions-root {
+    button {
+      color: black;
+    }
+  }
+  .MuiStepIcon-root.MuiStepIcon-active {
+    color: black;
   }
 `;
 

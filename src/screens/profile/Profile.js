@@ -286,7 +286,7 @@ const Profile = ({
               containerWidth={500}
               containerHeight={500}
 
-              onUploadMemberImage={onUploadMemberImage}
+              onUploadImage={onUploadMemberImage}
               onCropImage={onCropImage}
               onRotateImage={onRotateImage}
               loading={loadingImage}
@@ -333,28 +333,28 @@ const Profile = ({
     <div className="navigation-section">
       <Scrollspy items={ ['section-personal', 'section-address', 'section-status', 'section-photo'] } className="navigation-panel">
 
-        <ListItem button component="a" onClick={() => window.location.replace("#section-personal")}>
+        <ListItem button component="a" onClick={() => !window.cordova && window.location.replace("#section-personal")}>
           <ListItemIcon>
             <AccountBoxIcon />
           </ListItemIcon>
           <ListItemText primary={t("personal_data")} />
         </ListItem>
 
-        <ListItem button component="a" onClick={() => window.location.replace("#section-photo")}>
+        <ListItem button component="a" onClick={() => !window.cordova && window.location.replace("#section-photo")}>
           <ListItemIcon>
             <PhotoCameraIcon />
           </ListItemIcon>
             <ListItemText primary={t("profile_picture")} />
         </ListItem>
 
-        <ListItem button component="a"  onClick={() => window.location.replace("#section-status")}>
+        <ListItem button component="a"  onClick={() => !window.cordova && window.location.replace("#section-status")}>
           <ListItemIcon>
             <TrafficIcon />
           </ListItemIcon>
           <ListItemText primary={t("CUSTOMER_STATUS")} />
         </ListItem>
 
-        <ListItem button component="a" onClick={() => window.location.replace("#section-address")}>
+        <ListItem button component="a" onClick={() => !window.cordova && window.location.replace("#section-address")}>
           <ListItemIcon>
             <HomeWorkIcon />
           </ListItemIcon>

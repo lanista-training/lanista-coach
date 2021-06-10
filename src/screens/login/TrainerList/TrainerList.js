@@ -86,7 +86,7 @@ export default ({
       <LanistaTextField
         className="password-field"
         variant="outlined"
-        placeholder='Password'
+        placeholder={t("password")}
         disabled={disabled}
         type={"password"}
         error={error}

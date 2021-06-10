@@ -189,8 +189,12 @@ export const SyledTab = styled(Tab)`
   flex-flow: column;
   .menu .active.item{
     border-bottom: none!important;
-    font-size: 1.3em;
-    color: rgb(155,201,61)!important;
+    font-size: 20px;
+    color: black!important;
+    font-weight: 900!important;
+    line-height: 14px;
+    padding: 14px!important;
+    transition: all 0.2s ease!important;
   }
   .menu {
     flex-flow: row-reverse;
@@ -207,6 +211,11 @@ export const SyledTab = styled(Tab)`
       color: #fff!important;
       margin-left: 2px!important;
       padding: 0.3em!important;
+    }
+    .item {
+      font-family: 'Roboto';
+      font-weight: 100;
+      color: #545454;
     }
   }
   .tab {
@@ -346,6 +355,9 @@ export const SyledTab = styled(Tab)`
     ::-webkit-scrollbar {
       display: none!important;
     }
+  }
+  .loading-image {
+    height: 100%;
   }
 `;
 export const NotesPanel = styled.div`

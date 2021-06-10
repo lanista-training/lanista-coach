@@ -318,7 +318,7 @@ const Setup = ({
             >
               <ToolsList>
                 <div className="list-item">
-                  <a href="#section-1" style={{display: 'flex'}}>
+                  <a href={!window.cordova && "#section-1"} style={{display: 'flex'}}>
                     <ContactMailIcon/>
                     <div className="list-item-content">
                       <div className="list-header">{t( "personal_data" )}</div>
@@ -328,7 +328,7 @@ const Setup = ({
                 {bu == 0 &&
                   <>
                     <div className="list-item">
-                      <a href="#section-logo" style={{display: 'flex'}}>
+                      <a href={!window.cordova && "#section-logo"} style={{display: 'flex'}}>
                         <PhotoIcon/>
                         <div className="list-item-content">
                           <div className="list-header">{t( "MY_BUSINESS_LOGO" )}</div>
@@ -336,7 +336,7 @@ const Setup = ({
                       </a>
                     </div>
                     <div className="list-item">
-                      <a href="#section-2" style={{display: 'flex'}}>
+                      <a href={!window.cordova && "#section-2"} style={{display: 'flex'}}>
                         <PhotoIcon/>
                         <div className="list-item-content">
                           <div className="list-header">{t( "profile_picture" )}</div>
@@ -344,7 +344,7 @@ const Setup = ({
                       </a>
                     </div>
                     <div className="list-item">
-                      <a href="#section-3" style={{display: 'flex'}}>
+                      <a href={!window.cordova && "#section-3"} style={{display: 'flex'}}>
                         <PaymentIcon/>
                         <div className="list-item-content">
                           <div className="list-header">{t( "licence_data" )}</div>
@@ -352,7 +352,7 @@ const Setup = ({
                       </a>
                     </div>
                     <div className="list-item">
-                      <a href="#section-4" style={{display: 'flex'}}>
+                      <a href={!window.cordova && "#section-4"} style={{display: 'flex'}}>
                         <BusinessIcon/>
                         <div className="list-item-content">
                           <div className="list-header">{t( "my_address" )}</div>
@@ -360,7 +360,7 @@ const Setup = ({
                       </a>
                     </div>
                     <div className="list-item">
-                      <a href="#section-5" style={{display: 'flex'}}>
+                      <a href={!window.cordova && "#section-5"} style={{display: 'flex'}}>
                         <SecurityIcon/>
                         <div className="list-item-content">
                           <div className="list-header">{t( "data_protection" )}</div>
@@ -368,7 +368,7 @@ const Setup = ({
                       </a>
                     </div>
                     <div className="list-item">
-                      <a href="#section-6" style={{display: 'flex'}}>
+                      <a href={!window.cordova && "#section-6"} style={{display: 'flex'}}>
                         <PhoneIphoneIcon/>
                         <div className="list-item-content">
                           <div className="list-header">{t( "app_banner" )}</div>
@@ -376,7 +376,7 @@ const Setup = ({
                       </a>
                     </div>
                     <div className="list-item">
-                      <a href="#section-7" style={{display: 'flex'}}>
+                      <a href={!window.cordova && "#section-7"} style={{display: 'flex'}}>
                         <YouTubeIcon/>
                         <div className="list-item-content">
                           <div className="list-header">{t( "workout_channel" )}</div>
@@ -386,7 +386,7 @@ const Setup = ({
                   </>
                 }
                 <div className="list-item">
-                  <a href="#section-8" style={{display: 'flex'}}>
+                  <a href={!window.cordova && "#section-8"} style={{display: 'flex'}}>
                     <VpnKeyIcon/>
                     <div className="list-item-content">
                       <div className="list-header">{t( "password_reset" )}</div>

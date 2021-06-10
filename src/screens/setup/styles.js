@@ -29,6 +29,7 @@ export const Stage = styled.div`
   }
   .save-banner-url-button {
     margin: 0 0 2em 0;
+    margin-top: 60px;
   }
   .data-section {
     flex: 2;
@@ -68,7 +69,7 @@ export const Stage = styled.div`
   }
   .empty-image {
     font-size: 1.5em!important;
-    margin-top: 15%;
+    margin-top: 120px;
   }
   .data-protection-section {
     display: flex;
@@ -173,7 +174,17 @@ export const Stage = styled.div`
     }
   }
   .profile-image-section {
-    .section-content {
+    .section-content, .loading-image  {
+      height: 475px;
+      padding: 3em 3em 0 3em;
+    }
+    button {
+      margin-bottom: 3em;
+    }
+  }
+  .logo-image-section {
+    .section-content, .loading-image {
+      height: 390px;
       padding: 3em 3em 0 3em;
     }
     button {
@@ -202,8 +213,9 @@ export const Stage = styled.div`
     }
   }
   .app-configuration {
-    .section-content {
+    .section-content, .loading-image  {
       padding: 3em 3em;
+      height: 377px;
     }
     .MuiFormControl-root {
       margin-top: 2em;
@@ -225,6 +237,9 @@ export const Stage = styled.div`
     }
     .preview-workout-channel-button {
       margin-top: 4em!important;
+    }
+    .image-editor-wrapper, .loading-image {
+      height: 283px;
     }
   }
   .password-section {

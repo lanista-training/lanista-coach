@@ -323,54 +323,35 @@ const Panel = ({
 
     setLoadingImage(true);
     let reader = new FileReader();
-
     let uploadBaseUrl = document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/' + 'file/user/';
+    //let uploadBaseUrl = 'https://app.lanista-training.com/file/user/';
     if( window.cordova ) {
       uploadBaseUrl = 'https://app.lanista-training.com/file/user/';
     }
-    if(file instanceof File) {
-      reader.addEventListener('loadend', function(e){
-        const token = cookie.get('token');
-        fetch(uploadBaseUrl + memberId + '/photo', {
-          method: "POST",
-          body: new Blob([reader.result], {type: file.type}),
-          headers: {
-            authorization: token ? `Bearer ${token}` : ''
-          },
-        })
-        .then((response) => {
-          if (response.ok) {
-            refetch();
-          } else {
-            alert('Error uploading [' + file.name + ']. Max upload size is ~4MB.');
-          }
-          setLoadingImage(false);
-        })
-        .catch((error) => {
-          setLoadingImage(false);
-        });
-      });
-      reader.readAsArrayBuffer(file);
-    } else {
+
+    reader.addEventListener('loadend', function(e){
       const token = cookie.get('token');
-      fetch(uploadBaseUrl + memberId + '/photo' + '/' + file.substring(file.lastIndexOf("/") + 1), {
+      fetch(uploadBaseUrl + memberId + '/photo', {
         method: "POST",
+        body: new Blob([reader.result], {type: file.type}),
         headers: {
           authorization: token ? `Bearer ${token}` : ''
         },
       })
       .then((response) => {
-        setUploadMemberImageLoading(false);
         if (response.ok) {
           refetch();
         } else {
           alert('Error uploading [' + file.name + ']. Max upload size is ~4MB.');
         }
+        setLoadingImage(false);
       })
       .catch((error) => {
-        setUploadMemberImageLoading(false);
+        setLoadingImage(false);
       });
-    }
+    });
+    reader.readAsArrayBuffer(file);
+
   }
 
   const onRequestDataPrivacySignature = () => {

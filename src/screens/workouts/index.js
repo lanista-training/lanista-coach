@@ -4,7 +4,6 @@ import _ from 'lodash';
 import styled from 'styled-components';
 import moment from "moment";
 //import Router from 'next/router';
-import { withApollo } from '../../lib/apollo'
 import { useMutation, useQuery } from '@apollo/react-hooks'
 import Scene from "../../components/Scene";
 import Workouts from './Workouts';
@@ -218,4 +217,4 @@ const WorkoutsPanel = ({memberId, goBack, goToWorkout, goToSetup}) => {
   )
 }
 
-export default withApollo(WorkoutsPanel);
+export default WorkoutsPanel;

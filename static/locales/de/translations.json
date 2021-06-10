@@ -17,7 +17,7 @@
     "goals emtpy list": "Noch keine Einträge vorhanden. Für neue Einträge bitte ins Textfeld oben klicken",
     "physio input placeholder": "z.B. Mobilisierung LWS, Manipulation C3/C4, etc.",
     "physio emtpy list": "Noch keine Einträge vorhanden. Für neue Einträge bitte ins Textfeld oben klicken",
-    "intensity": "Schmerz",
+    "intensity": "Schmerzskala",
     "dosis": "Dosierung",
     "regularity": "Regelmäßigkeit",
     "body data": "Körperdaten",
@@ -94,14 +94,15 @@
     "CANCEL": "Abbrechen",
     "PHYSIO_TREATMENT": "Behandlung dokumentieren",
     "SAVE_PHYSIO_TREATMENT": "Speichern",
-    "score": "Schmerz",
+    "score": "Schmerzskala",
     "TREATMENT_DATE": "Behandlungstag",
     "NO_VALUE": "Kein Eintrag",
     "NEW_VALUE": "Neuer Eintrag",
     "from": "von",
     "title is mandatory": "Bitte einen Titel eingeben",
     "STATUS_TRUE": "Verletzung akut",
-    "STATUS_FALSE": "Verletzung abgeschlossen"
+    "STATUS_FALSE": "Verletzung abgeschlossen",
+    "feedback_request": "Feedback zulassen"
   },
   "common": {
     "title": "Lanista Trainer",
@@ -210,7 +211,8 @@
     "plans": "Pläne",
     "from": "von",
     "to": "bis",
-    "NO_VALUE": "Kein Eintrag"
+    "NO_VALUE": "Kein Eintrag",
+    "back": "zurück"
   },
   "customers": {
     "customers_found": "Trefferliste",
@@ -438,7 +440,11 @@
     "created_at": "am:",
     "changed_from": "von",
     "changed_at": "Zuletzt geändert:",
-    "no instructions": "Keine Anweisungen für den Kunden eingetragen."
+    "no instructions": "Keine Anweisungen für den Kunden eingetragen.",
+    "zoom": "ZOOM",
+    "rotation": "ROTATION",
+    "PREVIEW": "PREVIEW",
+    "image preview": "IMAGE PREVIEW"
   },
   "exercises": {
     "exercises": "Übungen",
@@ -719,7 +725,12 @@
     "FIRST_NAME_ERROR": "Bitte, Vorname eingeben",
     "LAST_NAME_ERROR": "Bitte, Nachname eingeben",
     "CUSTOMER_STATUS": "Kundenstatus",
-    "CUSTOMER_NEED_TO_ACTIVATE_ACCOUNT": ", sobald er seinen Account aktiviert hat"
+    "CUSTOMER_NEED_TO_ACTIVATE_ACCOUNT": ", sobald er seinen Account aktiviert hat",
+    "EDIT": "Foto editieren",
+    "zoom": "ZOOM",
+    "rotation": "ROTATION",
+    "PREVIEW": "PREVIEW",
+    "image preview": "IMAGE PREVIEW"
   },
   "setup": {
     "personal_data": "Persönliche Daten",
@@ -801,7 +812,12 @@
     "square image format": "Quadratisches Bildformat",
     "free image format": "Freies Bildformat",
     "app image format": "860x600 px",
-    "back": "zurück"
+    "back": "zurück",
+    "EDIT": "Foto editieren",
+    "zoom": "ZOOM",
+    "rotation": "ROTATION",
+    "PREVIEW": "PREVIEW",
+    "image preview": "IMAGE PREVIEW"
   },
   "testsmanager": {
     "test-name": "Name des Tests",
@@ -951,6 +967,7 @@
     "plan duration" : "Plandauer in Wochen",
     "week": "Woche",
     "weeks": "Wochen",
+    "WEEKS": "Wochen",
     "no description available": "Keine Beschreibung vorhanden",
     "new plan": "Neuer Plan",
     "search": "Suche",
@@ -961,7 +978,8 @@
     "PLAN NAME": "Name für den Plan eingeben",
     "DURATION": "Plandauer",
     "ALL": "Alle",
-    "PUBLIC": "Öffentlich"
+    "PUBLIC": "Öffentlich",
+    "back": "zurück"
   },
   "shop": {
     "week-licence": "Wochenlizenz",

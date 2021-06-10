@@ -149,13 +149,15 @@ export default ({
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title">
-        <IconButton color="primary" aria-label="close" component="span" onClick={toggleDpDialogOpen}>
-          <CloseIcon />
+        <IconButton color="primary" aria-label="close" component="span" onClick={toggleDpDialogOpen} >
+          <CloseIcon fontSize="large" />
         </IconButton>
         {t("DATA_PRIVACY")}
-        <IconButton color="primary" aria-label="back" component="span" onClick={backwards}>
-          <ArrowBackIosIcon />
-        </IconButton>
+        { step > 0 &&
+          <IconButton color="primary" aria-label="back" component="span" onClick={backwards} >
+            <ArrowBackIosIcon fontSize="large" />
+          </IconButton>
+        }
       </DialogTitle>
 
       {step > 1 &&

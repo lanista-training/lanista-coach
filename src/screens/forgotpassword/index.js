@@ -4,7 +4,6 @@ import _ from 'lodash';
 import moment from "moment";
 import Router from 'next/router';
 import { useMutation } from '@apollo/react-hooks';
-import { withApollo } from '../../lib/apollo';
 import Scene from "../../components/Scene";
 import Forgotpassword from './Forgotpassword';
 import { SENDPASSWORDRESET } from "../../mutations";
@@ -148,4 +147,4 @@ const Panel = ({goBack}) => {
 
 }
 
-export default withApollo(Panel);
+export default Panel;

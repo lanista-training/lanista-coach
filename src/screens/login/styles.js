@@ -77,7 +77,7 @@ export const Root = styled.div`
         flex-flow: column;
       }
       .buttons-section {
-        margin-top: 5em;
+        margin-top: 1em;
         display: flex;
         flex-flow: column;
         align-items: center;
@@ -172,8 +172,6 @@ export const Footer = styled.footer`
  box-shadow: rgba(0, 0, 0, 0.05) 0px -1em 3em;
  min-height: 60px;
  width: 100%;
- position: absolute;
- bottom: 0;
  padding: 1em;
 `;
 
@@ -184,14 +182,11 @@ export const Nav = styled.nav`
    color: black;
   }
   a:hover {
-   /* shows an example of how we can use themes */
    color: #d20027;
   }
   a:after {
-   /* shows an example of how we can use themes */
    content: ">";
    font-size: 1.2em;
-   position: fixed;
    padding-left: 0.1em;
    line-height: 1.1em;
    margin-left: 0.2em;

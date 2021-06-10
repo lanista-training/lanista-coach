@@ -194,6 +194,7 @@ export const FindingForm = styled(Dialog)`
   .MuiDialog-paper {
     border-radius: 15px;
     overflow: visible;
+    max-width: 700px;
     .time-section  {
       margin-top: 50px!important;
     }
@@ -220,7 +221,7 @@ export const FindingForm = styled(Dialog)`
       }
     }
     .finding-form {
-      width: 595px;
+      width: 700px;
       height: 650px;
       padding: 2em;
       display: flex;
@@ -621,5 +622,45 @@ export const RatingPopover = styled(Popover)`
     height: 350px;
     width: 120px;
     overflow: hidden;
+  }
+`;
+
+export const ToolTip = styled.div`
+  background: white;
+  border-radius: 15px;
+  padding: 1em;
+  width: 250px;
+  box-shadow: 0 0 10px 0 #0000006b;
+  .tootip-title {
+    margin-bottom: 15px;
+    display: flex;
+    .record-date {
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .author {
+      display: flex;
+      flex: 1;
+      align-items: center;
+      .author-avatar {
+
+      }
+      .author-name {
+        line-height: 14px;
+        margin-left: 10px;
+      }
+    }
+  }
+  .record {
+    display: flex;
+    font-weight: 100;
+    justify-content: space-between;
+    margin-top: 0.5em;
+    .record-value{
+      font-weight: 900;
+    }
+  }
+  button {
+    margin: 2em auto auto 0;
   }
 `;

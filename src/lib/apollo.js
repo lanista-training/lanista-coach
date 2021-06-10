@@ -1,12 +1,13 @@
 import React, { useMemo } from 'react';
 import gql from "graphql-tag";
 import fetch from 'isomorphic-unfetch';
-import {TranslatorProvider} from '../hooks/Translation';
+
 import { ApolloProvider } from '@apollo/react-hooks';
 import { ApolloClient, InMemoryCache, HttpLink } from 'apollo-boost';
 import { getMainDefinition } from 'apollo-utilities';
 import { ApolloLink, split } from 'apollo-link';
 import { WebSocketLink } from 'apollo-link-ws';
+
 import { SubscriptionClient } from 'subscriptions-transport-ws';
 import { onError } from "apollo-link-error";
 import { createUploadLink } from 'apollo-upload-client';
@@ -31,8 +32,9 @@ export function withApollo (PageComponent, { ssr = true } = {}) {
 
       var graphqlServerApp = 'https://app.lanista-training.com/graphql';
       var graphqlServerPortal = document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/graphql';
-      //var graphqlServer = (typeof document !== 'undefined' && window.cordova === undefined) ? graphqlServerPortal : graphqlServerApp;
-      var graphqlServer = 'https://kj8xejnla9.execute-api.eu-central-1.amazonaws.com/dev/graphql';
+      var graphqlServer = (typeof document !== 'undefined' && window.cordova === undefined) ? graphqlServerPortal : graphqlServerApp;
+      //var graphqlServer = 'https://kj8xejnla9.execute-api.eu-central-1.amazonaws.com/dev/graphql';
+      //var graphqlServer = graphqlServerApp;
       //console.log("graphqlServer", graphqlServer)
 
       //
@@ -52,7 +54,6 @@ export function withApollo (PageComponent, { ssr = true } = {}) {
       // LINK: Error
       //
       const errorLink = authLink.concat(onError(({ graphQLErrors, networkError }) => {
-        console.log("NEW ERROR");
         if (graphQLErrors)
           graphQLErrors.forEach(({ message, locations, path }) => {
             console.log(
@@ -108,18 +109,30 @@ export function withApollo (PageComponent, { ssr = true } = {}) {
       var wsDevelopmentUrl = 'wss://4okkq8fmea.execute-api.eu-central-1.amazonaws.com/dev';
       var wsServer = wsProductionUrl;
 
+      const token = cookie.get('token')
       const wsClient = new SubscriptionClient(
-        wsServer,
+        wsServer + '?authorization=' + token + '0',
         {
           connectionParams: () => {
             const token = cookie.get('token');
             return {
-              authToken: `Bearer ${token}`,
+              authToken: token ? `Bearer ${token}` : '',
               client: 'coach'
             }
           },
           lazy: true,
-          reconnect: true
+          reconnect: true,
+          connectionCallback: (error, tmp) => {
+            //console.log("+++++++++++++++++++++++ connectionCallback +++++++++++++++++++++++", error, tmp);
+            const token = cookie.get('token');
+            //console.log("token", token);
+            if( !token ) {
+              wsClient.unsubscribeAll();
+              //console.log("LOGOUT", client);
+              client.resetStore();
+              setTimeout(() => logout(), 1000);
+            }
+          }
         },
         null,
         [],
@@ -180,9 +193,7 @@ export function withApollo (PageComponent, { ssr = true } = {}) {
     if (client === undefined) return <div>Loading...</div>;
     return (
       <ApolloProvider client={client}>
-        <TranslatorProvider client={client}>
-          <PageComponent {...pageProps} client={client}/>
-        </TranslatorProvider>
+        <PageComponent {...pageProps} client={client}/>
       </ApolloProvider>
     );
 

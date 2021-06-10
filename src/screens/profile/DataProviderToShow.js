@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslate } from '../../hooks/Translation';
-import { withApollo } from '../../lib/apollo';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import moment from "moment";
 
@@ -156,5 +155,5 @@ export const withData = (WrappedComponent, {memberId, goBack, goToSetup}) => {
       />
     )
   }
-  return withApollo(DataProvider);
+  return DataProvider;
 }

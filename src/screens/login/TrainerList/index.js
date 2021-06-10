@@ -1,5 +1,4 @@
 import React from 'react';
-import { withApollo } from '../../../lib/apollo';
 import TrainerList from './TrainerList';
 import { useQuery } from '@apollo/react-hooks';
 import { GETTRAINERSLIST } from "../../../queries";
@@ -68,4 +67,4 @@ const Panel = ({
 
 }
 
-export default withApollo(Panel);
+export default Panel;

@@ -671,6 +671,16 @@ export const SAVEFINDING = gql`
   }
 `;
 
+export const TOOGLEFINDINGREQUESTFEDDBACK = gql`
+  mutation ToggleFindingRequestFeedback ( $findingId: ID! ) {
+    toggleFindingRequestFeedback( findingId: $findingId ) {
+      success
+      error
+      errorMessage
+    }
+  }
+`;
+
 export const CREATEFINDING = gql`
   mutation CreateFinding ( $memberId: ID!, $xPosition: Int!, $yPosition: Int!, $title: String!, $description: String, $warningFlag: Boolean, $visible: Boolean, $rating: Int, $startDate: String, $endDate: String ) {
     createFinding( memberId: $memberId, xPosition: $xPosition, yPosition: $yPosition, title: $title, description: $description, warningFlag: $warningFlag, visible: $visible, rating: $rating, startDate: $startDate, endDate: $endDate ) {
@@ -1033,6 +1043,15 @@ export const DELETEANAMNESENOTE = gql`
 export const TOGGLEANAMNESESTATUS = gql`
   mutation ToggleAnamneseStatus( $anamneseId: ID! ) {
     toggleAnamneseStatus( anamneseId: $anamneseId ) {
+      success
+      error
+    }
+  }
+`;
+
+export const LOGERROR = gql`
+  mutation LogError( $error: String!, $memberId: ID  ) {
+    logError( error: $error, memberId: $memberId ) {
       success
       error
     }

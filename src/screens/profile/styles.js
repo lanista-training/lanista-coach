@@ -13,6 +13,14 @@ export const Stage = styled.div`
   width: 750px;
   overflow: visible;
   display: flex;
+  #section-photo {
+    .content {
+      height: 477px;
+    }
+    .loading-image {
+      height: 477px;
+    }
+  }
   ::-webkit-scrollbar {
     display: none!important;
   }

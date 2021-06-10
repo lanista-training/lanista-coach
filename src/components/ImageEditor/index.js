@@ -1,6 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import {useDropzone} from 'react-dropzone';
-import CropImageContainer from './CropImageContainer';
 import {ImageEditor, StyledDropContainer, StyledCropContainer} from './styles';
 import IconButton from '@material-ui/core/IconButton';
 import CropIcon from '@material-ui/icons/Crop';
@@ -9,11 +8,65 @@ import RotateRightIcon from '@material-ui/icons/RotateRight';
 import RotateLeftIcon from '@material-ui/icons/RotateLeft';
 import { Icon } from 'semantic-ui-react';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Cropper from 'react-easy-crop';
+import Slider from '@material-ui/core/Slider';
+
+import ImgDialog from './ImgDialog'
+import getCroppedImg from './cropImage';
 
 import Button from './Button';
 
+//
+// Decides wich commands should be shown
+//
+const getCommands = ({
+  t,
+  imgChanged,
+  uploadMode,
+  editingMode,
+  startInEditingMode,
+  toggleEditingMode,
+
+  onEnd,
+  toggleUploadMode,
+  showCroppedImage,
+  imageError,
+}) => {
+  const result = [];
+
+  if( uploadMode ) {
+    result.push(
+      <Button name={t('BACK')} onClick={toggleUploadMode}/>
+    );
+  } else {
+    if( !imgChanged ) {
+      result.push(
+        <Button name={t('UPLOAD_PHOTO')} onClick={toggleUploadMode}/>
+      );
+    }
+    if( !editingMode && !imageError) {
+      result.push(
+        <Button name={t('EDIT')} onClick={toggleEditingMode}/>
+      )
+    } else if( !imageError ) {
+      result.push(
+        <Button name={t('BACK')} onClick={editingMode && !startInEditingMode ? toggleEditingMode : onEnd}/>
+      )
+    }
+
+    if( imgChanged && editingMode) {
+      result.push(
+        <Button name={t('PREVIEW')} onClick={showCroppedImage}/>
+      )
+    }
+  }
+
+  return result;
+}
+
 export default ({
   t,
+  aspect,
   pictureMessage,
 
   imageSrc,
@@ -23,135 +76,54 @@ export default ({
   containerHeight,
   containerWidth,
 
-  onUploadMemberImage,
-  onCropImage,
-  onRotateImage,
+  onUploadImage,
 
   onStartEditing,
   onEndEditing,
 
   loading,
   notEditable,
+
+  onEnd,
+  startInEditingMode,
 }) => {
+
   const [imageError, setImageError] = useState(false);
-  const [currentSrc, setCurrentSrc] = useState(null);
-
-  const [naturalHeight, setNaturalHeight] = useState(0);
-  const [naturalWidth, setNaturalWidth] = useState(0);
-
-
-  const [cropContainerHeight, setCropContainerHeight] = React.useState(containerHeight);
-  const [cropContainerWidth, setCropContainerWidth] = React.useState(containerWidth);
-
-
+console.log("containerHeight", containerHeight)
+console.log("containerWidth", containerWidth)
   useEffect(() => {
-    setCurrentSrc(imageSrc);
-    setCropMode(false);
-    setEditingMode(false);
-    setSelectedCrop(null);
-    setAngle(0);
-    /*
+    onClose();
+    setUploadMode(false);
+    setZoom(1);
+    setRotation(0);
+    setCrop({
+      x: 0,
+      y: 0,
+    });
+    setImageChange(false);
     if(imageSrc) {
       const imgTest = document.createElement('img');
-      console.log("imageSrc")
-      console.log(imageSrc)
       imgTest.src = imageSrc;
       imgTest.onload = function() {
-        setNaturalHeight(imgTest.naturalHeight);
-        setNaturalWidth(imgTest.naturalWidth);
-
-        if(imgTest.naturalWidth != imgTest.naturalHeight) {
-          if(imgTest.naturalWidth > imgTest.naturalHeight) {
-            setCropContainerHeight( Math.ceil((cropContainerWidth/imgTest.naturalWidth)*imgTest.naturalHeight) );
-          } else {
-            setCropContainerWidth( Math.ceil((cropContainerHeight/imgTest.naturalHeight)*imgTest.naturalWidth) );
-          }
-        }
-
         setImageError(false);
       };
       imgTest.onerror = function() {
         setImageError(true);
       };
+    } else {
+      setImageError(true);
     }
-    */
   }, [imageSrc]);
 
-  useEffect(() => {
-    if(previewImage) {
-      const imgTest = document.createElement('img');
-      imgTest.src = previewImage;
-      imgTest.onload = function() {
-        setNaturalHeight(imgTest.naturalHeight);
-        setNaturalWidth(imgTest.naturalWidth);
-
-        if(imgTest.naturalWidth != imgTest.naturalHeight) {
-          if(imgTest.naturalWidth > imgTest.naturalHeight) {
-            setCropContainerHeight( Math.ceil((cropContainerWidth/imgTest.naturalWidth)*imgTest.naturalHeight) );
-          } else {
-            setCropContainerWidth( Math.ceil((cropContainerHeight/imgTest.naturalHeight)*imgTest.naturalWidth) );
-          }
-        }
-
-        setImageError(false);
-      };
-      imgTest.onerror = function() {
-        setImageError(true);
-      };
+  //
+  // Fix status bar bug after camera is shown
+  //
+  const fixStatusBar = () => {
+    if( window.cordova ) {
+      window.StatusBar.hide();
+      window.StatusBar.show();
     }
-  }, [previewImage]);
-
-
-  //
-  // Photo editing
-  //
-  const [editingMode, setEditingMode] = React.useState(false);
-  const toggleEditingMode = () => setEditingMode(!editingMode);
-  React.useEffect(() => {
-    if( editingMode ) {
-      onStartEditing && onStartEditing();
-    } else {
-      onEndEditing && onEndEditing();
-    }
-  }, [editingMode])
-
-  //
-  // Photo crop
-  //
-  const [cropMode, setCropMode] = React.useState(false);
-  const toggleCropMode = () => setCropMode(!cropMode);
-  const [selectedCrop, setSelectedCrop] = React.useState(null);
-  const onCropComplete = (crop) => {
-    setSelectedCrop(crop);
-  };
-  React.useEffect(() => {
-    !cropMode && resetPreviewImage();
-    !cropMode && onEndEditing && onEndEditing();
-  }, [cropMode]);
-
-  //
-  // Photo rotate
-  //
-  const [rotateMode, setRotateMode] = React.useState(false);
-  const toggleRotateMode = () => setRotateMode(!rotateMode);
-  const [angle, setAngle] = React.useState(0);
-  const rotateToRight = () => {
-    setAngle(angle - 90);
   }
-  const rotateToLeft = () => {
-    setAngle(angle + 90);
-  }
-  React.useEffect(() => {
-    if(!rotateMode) {
-      resetPreviewImage();
-      onEndEditing && onEndEditing();
-      setAngle(0);
-    }
-  }, [rotateMode])
-  React.useEffect(() => {
-    rotateMode && onRotateImage(angle);
-  }, [angle]);
-
 
   //
   // Photo upload
@@ -159,8 +131,9 @@ export default ({
   const [uploadMode, setUploadMode] = React.useState(false);
   const toggleUploadMode = () => setUploadMode(!uploadMode);
   const onDropPhoto = React.useCallback(acceptedFiles => {
+    fixStatusBar();
     if( acceptedFiles && acceptedFiles.length == 1 ) {
-      return onUploadMemberImage(acceptedFiles[0]);
+      return onUploadImage(acceptedFiles[0]);
     }
   }, []);
   const {
@@ -169,118 +142,69 @@ export default ({
     isDragActive,
     isDragAccept,
     isDragReject
-  } = useDropzone({onDrop: onDropPhoto, accept: 'image/*'});
-  React.useEffect(() => {
-    setUploadMode(false);
-  }, [imageSrc]);
-
+  } = useDropzone({onDrop: onDropPhoto, accept: 'image/*', onFileDialogCancel: fixStatusBar});
 
   //
-  // Decides wich commands should be shown
+  // Photo editing
   //
-  const getCommands = () => {
-    const result = [];
+  const [editingMode, setEditingMode] = React.useState(startInEditingMode ? true : false);
+  const toggleEditingMode = () => setEditingMode(!editingMode);
+  const [imgChanged, setImageChange] = useState(false);
+  const [crop, setCrop] = useState({ x: 0, y: 0 })
+  const [rotation, setRotation] = useState(0)
+  const [zoom, setZoom] = useState(1)
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null)
+  const [croppedImage, setCroppedImage] = useState(null)
 
-    if( uploadMode ) {
-      result.push(
-        <Button name={t('BACK')} onClick={toggleUploadMode}/>
-      );
-    } 
+  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
+    setCroppedAreaPixels(croppedAreaPixels);
+  }, []);
 
-    if( editingMode && !cropMode && !rotateMode) {
-      result.push(
-        <Button name={t('BACK')} onClick={toggleEditingMode}/>
-      );
+  const showCroppedImage = useCallback(async () => {
+    try {
+      const croppedImage = await getCroppedImg(
+        imageSrc,
+        croppedAreaPixels,
+        rotation
+      )
+      setCroppedImage(croppedImage)
+    } catch (e) {
+      console.error(e)
     }
+  }, [croppedAreaPixels, rotation])
 
-    if( editingMode && cropMode ) {
-      const imgChanged = (imageSrc.split('?')[0] !== previewImage.split('?')[0]);
-      result.push(
-        <Button name={t('BACK')} onClick={toggleCropMode}/>
-      );
+  const onClose = useCallback(() => {
+    setCroppedImage(null)
+  }, [])
 
-      if( selectedCrop !== null ) {
-        if( imgChanged ) {
-          result.push(
-            <Button name={t('SAVE')} inverted onClick={() => onUploadMemberImage(previewImage)}/>
-          );
-        } else {
-          result.push(
-            <Button name={t('CROP_IMAGE')} onClick={() => onCropImage(selectedCrop)}/>
-          );
-        }
-      }
-    }
-
-    if( editingMode && rotateMode ) {
-      const imgChanged = (imageSrc.split('?')[0] !== previewImage.split('?')[0]);
-      result.push(
-        <Button name={t('BACK')} onClick={toggleRotateMode}/>
-      );
-      if( imgChanged ) {
-        result.push(
-          <Button name={t('SAVE')} inverted onClick={() => onUploadMemberImage(previewImage)}/>
-        );
-      }
-    }
-
-    if( !editingMode && !uploadMode){
-      result.push(
-        <Button name={t('UPLOAD_PHOTO')} onClick={toggleUploadMode}/>
-      );
-      if( !imageError &&  imageSrc && imageSrc.indexOf('dn2ppfvx6tfpw.cloudfront.net') > 0 ) {
-        if( !notEditable ) {
-          result.push(
-            <Button name={t('EDIT_PHOTO')} onClick={toggleEditingMode}/>
-          );
-        }
-      }
-    }
-    return result;
-  }
-
-  //
-  // Decides wich tools should be shown
-  //
-  const getTools = () => {
-    const result = [];
-    if( rotateMode ) {
-      result.push(
-        <IconButton aria-label="crop">
-          <RotateRightIcon fontSize="large" onClick={rotateToLeft}/>
-        </IconButton>
-      );
-      result.push(
-        <IconButton aria-label="rotate">
-          <RotateLeftIcon fontSize="large" onClick={rotateToRight}/>
-        </IconButton>
-      );
+  useEffect(() => {
+    if( crop.x !== 0 || crop.y !== 0 || zoom !== 1 || rotation !== 0){
+      setImageChange(true);
     } else {
-      /*
-      result.push(
-        <IconButton aria-label="crop">
-          <CropIcon fontSize="large" onClick={toggleCropMode}/>
-        </IconButton>
-      );
-      */
-      result.push(
-        <IconButton aria-label="rotate">
-          <Rotate90DegreesCcwIcon fontSize="large" onClick={toggleRotateMode}/>
-        </IconButton>
-      );
+      setImageChange(false);
     }
+  }, [crop.x, crop.y , zoom, rotation]);
 
-    return result;
+  useEffect(() => {
+    setZoom(1);
+    setRotation(0);
+    setCrop({
+      x: 0,
+      y: 0,
+    })
+    if( crop.x !== 0 || crop.x !== 0 || zoom !== 1 || rotation !== 0){
+      setImageChange(true);
+    } else {
+      setImageChange(false);
+    }
+  }, [editingMode]);
+
+  const onSaveImage = () => {
+    console.log("onSaveImage")
   }
-
-  //console.log("cropContainerHeight")
-  //console.log(cropContainerHeight)
-  //console.log("cropContainerWidth")
-  //console.log(cropContainerWidth)
 
   return (
     <ImageEditor
-      photoUrl={rotateMode ? previewImage : currentSrc}
       containerWidth={containerWidth}
       containerHeight={containerHeight}
     >
@@ -289,31 +213,14 @@ export default ({
           <CircularProgress size={100}/>
         </div>
       }
-      { !uploadMode && !cropMode &&
-        <div className="empty-image">
-          <Icon name='file image outline' />
-          {t( pictureMessage )}
-        </div>
-      }
-      { cropMode &&
-        <StyledCropContainer
-          containerHeight={cropContainerHeight}
-          containerWidth={cropContainerWidth}
-        >
-          <CropImageContainer
-            src={previewImage}
-            onCropComplete={onCropComplete}
-            crossorigin={null}
-
-            containerHeight={cropContainerHeight}
-            containerWidth={cropContainerWidth}
-          />
-        </StyledCropContainer>
-      }
+      <div className="empty-image">
+        <Icon name='file image outline' />
+        {t( pictureMessage )}
+      </div>
       { uploadMode &&
         <StyledDropContainer
           containerWidth={containerWidth}
-          containerHeight={containerHeight}
+          containerHeight={containerHeight-220}
           {...getRootProps({isDragActive, isDragAccept, isDragReject})}
         >
           <input {...getInputProps()} />
@@ -324,15 +231,79 @@ export default ({
           }
         </StyledDropContainer>
       }
-      { !uploadMode && !cropMode &&
-        <div className="image-section">
-          {editingMode &&
-             getTools()
+      { !uploadMode &&
+        <div className="image-section" style={{backgroundImage: 'url(' + imageSrc + ')'}}>
+          { !imageError && editingMode &&
+            <>
+              <div className="crop-container">
+                <Cropper
+                  image={imageSrc}
+                  crop={crop}
+                  rotation={rotation}
+                  zoom={zoom}
+                  aspect={ aspect ? aspect : 1 / 1 }
+                  onCropChange={setCrop}
+                  onRotationChange={setRotation}
+                  onCropComplete={onCropComplete}
+                  onZoomChange={setZoom}
+                />
+              </div>
+              <div className="controls">
+                <div className="image-controlls">
+                  <div className="slider-container">
+                    <div className="slider-title">
+                      {t("zoom")}
+                    </div>
+                    <Slider
+                      value={zoom}
+                      min={1}
+                      max={3}
+                      step={0.1}
+                      aria-labelledby="Zoom"
+                      onChange={(e, zoom) => setZoom(zoom)}
+                      classes={{ root: 'slider' }}
+                    />
+                  </div>
+                  <div className="slider-container">
+                    <div className="slider-title">
+                      {t("rotation")}
+                    </div>
+                    <Slider
+                      value={rotation}
+                      min={0}
+                      max={360}
+                      step={1}
+                      aria-labelledby="Rotation"
+                      onChange={(e, rotation) => setRotation(rotation)}
+                    />
+                  </div>
+                  <ImgDialog
+                    img={croppedImage}
+                    onClose={onClose}
+                    onUploadImage={onUploadImage}
+                    loading={loading}
+                  />
+                </div>
+              </div>
+            </>
           }
         </div>
       }
-      <div className="command-section">
-        {getCommands()}
+      <div className="commands">
+        {getCommands({
+            t,
+            imgChanged,
+            uploadMode,
+            editingMode,
+            startInEditingMode,
+
+            onEnd,
+            toggleUploadMode,
+            showCroppedImage,
+            toggleEditingMode,
+            imageError,
+          }
+        )}
       </div>
     </ImageEditor>
   )

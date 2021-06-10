@@ -1,6 +1,5 @@
 import React, { Component, useState, useEffect } from 'react';
 import { useTranslate } from '../../hooks/Translation';
-import { withApollo } from '../../lib/apollo';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { CachePersistor } from 'apollo-cache-persist';
 
@@ -680,4 +679,4 @@ const SetupWithData = ({goBack, doLogout}) => {
   );
 }
 
-export default withApollo(SetupWithData);
+export default SetupWithData;

@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { withApollo } from '../../lib/apollo';
 import { useMutation, useQuery, useSubscription } from '@apollo/react-hooks';
 import moment from "moment";
 
@@ -195,7 +194,7 @@ const withData = (WrappedComponent, {exerciseId, planexerciseId, memberId, tab, 
     )
   }
 
-  return withApollo(DataProvider);
+  return DataProvider;
 
 }
 

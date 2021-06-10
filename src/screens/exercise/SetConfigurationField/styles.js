@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 export const StyledField = styled(motion.div)`
   font-weight: 700;
   margin-top: 4px;;
-  background: white;
+  background: black;
   padding: 1em;
   padding-top: 0.8em;
   box-shadow: 0 0 27px 0 #0000001f;
@@ -24,6 +24,7 @@ export const StyledField = styled(motion.div)`
   .label {
     float: left;
     font-size: 1.2em;
+    color: white;
   }
   .entry-value {
     display: flex;
@@ -95,11 +96,13 @@ export const StyledField = styled(motion.div)`
       padding: 0px 10px 0px 0px;
       height: 1em;
       font-size: 20px;
+      color: white;
       input {
         text-align: right;
         padding: 0;
         font-weight: 900;
         font-size: 20px;
+        color: white;
       }
       fieldset {
         border: 0;
@@ -130,6 +133,11 @@ export const StyledField = styled(motion.div)`
   .delete-button {
     position: relative;
     margin-top: -8px;
+    background: white!important;
+    border: none;
+    .MuiButton-label {
+      color: black;
+    }
   }
   .progress.positive {
     float: right;

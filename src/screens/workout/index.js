@@ -5,7 +5,6 @@ import moment from "moment";
 import arrayMove from 'array-move';
 import QRCode from 'qrcode.react';
 
-import { withApollo } from '../../lib/apollo';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import gql from "graphql-tag";
 
@@ -97,6 +96,7 @@ const Panel = ({
 }) => {
 
   const {t} = useTranslate("workout");
+  const [splitChanging, setSplitChanging] = React.useState(false);
 
   //
   // Snackbar
@@ -229,27 +229,9 @@ const Panel = ({
     SHIFTPLITRIGHT,
     {
       update(cache,  { data: { shiftSplitRight } }) {
-        let {workout} = cache.readQuery({
-          query: WORKOUT,
-          variables: {
-            workoutId: workoutId,
-          },
-        });
-        const {splits} = workout;
-        const newSplits = arrayMove(splits, shiftSplitRight.split-1, shiftSplitRight.split)
-        newSplits.map((split, index) => {
-          split.id = index + 1;
-          split.name = (index + 1) + '';
-        })
-        workout.splits = newSplits;
-        cache.writeQuery({
-          query: WORKOUT,
-          variables: {
-            workoutId: workoutId,
-          },
-          data: { workout: workout },
-        });
         setActiveSplitIndex(shiftSplitRight.split);
+        refetch();
+        setSplitChanging(false);
       }
     }
   );
@@ -258,27 +240,9 @@ const Panel = ({
     SHIFTPLITLEFT,
     {
       update(cache,  { data: { shiftSplitLeft } }) {
-        let {workout} = cache.readQuery({
-          query: WORKOUT,
-          variables: {
-            workoutId: workoutId,
-          },
-        });
-        const {splits} = workout;
-        const newSplits = arrayMove(splits, shiftSplitLeft.split-1, shiftSplitLeft.split - 2);
-        newSplits.map((split, index) => {
-          split.id = index + 1;
-          split.name = (index + 1) + '';
-        })
-        workout.splits = newSplits;
-        cache.writeQuery({
-          query: WORKOUT,
-          variables: {
-            workoutId: workoutId,
-          },
-          data: { workout: workout },
-        });
         setActiveSplitIndex(shiftSplitLeft.split-2);
+        refetch();
+        setSplitChanging(false);
       }
     }
   );
@@ -287,8 +251,9 @@ const Panel = ({
     DUPLICATESPLIT,
     {
       update(cache,  { data: { duplicateSplit } }) {
+        setActiveSplitIndex(duplicateSplit.split - 1);
         refetch();
-        setTimeout(() => setActiveSplitIndex(duplicateSplit.split - 1), 300);
+        setSplitChanging(false);
       }
     }
   );
@@ -681,6 +646,7 @@ const Panel = ({
   }
 
   const onCopySplit = () => {
+    setSplitChanging(true);
     duplicateSplit({
       variables: {
         planId: workoutId,
@@ -690,6 +656,7 @@ const Panel = ({
   }
 
   const onShiftSplitRight = () => {
+    setSplitChanging(true);
     shiftSplitRight({
       variables: {
         planId: workoutId,
@@ -699,6 +666,7 @@ const Panel = ({
   }
 
   const onShiftSplitLeft = () => {
+    setSplitChanging(true);
     shiftSplitLeft({
       variables: {
         planId: workoutId,
@@ -753,7 +721,7 @@ const Panel = ({
     >
       <Workout
         workout={workout}
-        loading={loading}
+        loading={loading || mutationLoading || shiftSplitLeftLoading || deleteSplitLoading || duplicateSplitLoading || splitChanging}
         error={error}
         t={t}
         onShowExercise={showExercise}
@@ -1041,4 +1009,4 @@ const Panel = ({
   )
 }
 
-export default withApollo(Panel);
+export default Panel;

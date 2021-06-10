@@ -94,12 +94,17 @@ const Panel = ({
   //
   // Tabs management
   //
-  const [activeTab, setActiveTab] = useState(tab ? tab : 0);
+  const [activeTab, setActiveTab] = useState(tab ? tab : planexerciseId > 0 ? 4 : 0);
   const [activeTabName, setActiveTabName] = useState((exercise && exercise.member) ? '' : 'info');
   const onTabChange = (e, {activeIndex, panes}) => {
     setActiveTab(activeIndex);
     setActiveTabName(panes[activeIndex].id);
   }
+  useEffect(() => {
+    if( planexerciseId && planexerciseId > 0 ) {
+      setActiveTab(4);
+    }
+  }, [planexerciseId])
 
   //
   // Video player

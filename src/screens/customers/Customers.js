@@ -57,7 +57,7 @@ const Customers = ({
       <ListItem key={i} onClick={folderMode > 0 ? null : () => showCustomer(customer.id)}>
         <div style={{
           width: '14em',
-          height: '14em',
+          height: '13em',
           backgroundColor: '#fafafa',
           webkitBoxSizing: 'border-box',
           boxSizing: 'border-box',

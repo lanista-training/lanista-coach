@@ -111,6 +111,10 @@ const Panel = ({
   toggleAnamneseStatusLoading,
   toggleAnamneseStatusError,
 
+  toogleFindingFeedbackRequest,
+  toogleFindingFeedbackRequestLoading,
+  toogleFindingFeedbackRequestError,
+
   goBack,
   goToSetup,
 }) => {
@@ -360,6 +364,14 @@ const Panel = ({
     })
   }
 
+  const onToogleFindingFeedbackRequest = (findingId) => {
+    toogleFindingFeedbackRequest({
+      variables: {
+        findingId: findingId,
+      }
+    })
+  }
+
   return (
     <Scene
       commandsLeft={getCommandsLeft()}
@@ -477,6 +489,10 @@ const Panel = ({
         onToggleAnamneseStatus={onToggleAnamneseStatus}
         toggleAnamneseStatusLoading={toggleAnamneseStatusLoading}
         toggleAnamneseStatusError={toggleAnamneseStatusError}
+
+        onTogleFindingFeedbackRequest={onToogleFindingFeedbackRequest}
+        toogleFindingFeedbackRequestLoading={toogleFindingFeedbackRequestLoading}
+        toogleFindingFeedbackRequestError={toogleFindingFeedbackRequestError}
       />
     </Scene>
   )

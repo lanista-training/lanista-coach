@@ -43,50 +43,6 @@ export default ({
     setPreviewImage(photoUrlFullSize)
   }
 
-  //
-  // Crop image
-  const onCropImage = (crop) => {
-    if(crop) {
-      setLoadingImage(true);
-      const cropRequest = {
-        bucket: 'lanista-data',
-        key: id + '/photo.jpg',
-        edits: {
-          extract: {
-            height: Math.ceil(crop.height),
-            width:Math.ceil(crop.width),
-            top: Math.ceil(crop.y),
-            left: Math.ceil(crop.x),
-          }
-        }
-      }
-      const strRequest = JSON.stringify(cropRequest);
-      const encRequest = btoa(strRequest);
-      setPreviewImage("https://dn2ppfvx6tfpw.cloudfront.net/" + encRequest + '?DC=!' + (new Date()).getTime() );
-    }
-  };
-
-  //
-  // Rotate image
-  //
-  const onRotateImage = (angle) => {
-    setLoadingImage(true);
-    const rotateRequest = {
-      bucket: 'lanista-data',
-      key: id + '/photo.jpg',
-      edits: {
-        rotate: angle,
-      }
-    }
-    const strRequest = JSON.stringify(rotateRequest);
-    const encRequest = btoa(strRequest);
-    setPreviewImage("https://dn2ppfvx6tfpw.cloudfront.net/" + encRequest + '?DC=!' + (new Date()).getTime() );
-  }
-
-  React.useEffect(() => {
-    setLoadingImage(false);
-  }, [previewImage])
-
 
   //
   // image upload
@@ -97,57 +53,33 @@ export default ({
     setLoadingImage(true);
     let reader = new FileReader();
     let uploadBaseUrl = document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/' + 'file/user/';
+    //let uploadBaseUrl = 'https://preview.lanista-training.com/file/user/';
     if( window.cordova ) {
       uploadBaseUrl = 'https://preview.lanista-training.com/file/user/';
     }
-    if(file instanceof File) {
-      reader.addEventListener('loadend', function(e){
-        const token = cookie.get('token');
-        fetch(uploadBaseUrl + id + '/photo', {
-          method: "POST",
-          body: new Blob([reader.result], {type: file.type}),
-          headers: {
-            authorization: token ? `Bearer ${token}` : ''
-          },
-        })
-        .then((response) => {
-          if (response.ok) {
-            refetch();
-          } else {
-            alert('Error uploading [' + file.name + '].');
-          }
-          setLoadingImage(false);
-        })
-        .catch((error) => {
-          setLoadingImage(false);
-        });
-      });
-      reader.readAsArrayBuffer(file);
-    } else {
+    reader.addEventListener('loadend', function(e){
       const token = cookie.get('token');
-      fetch(uploadBaseUrl + id + '/photo' + '/' + file.substring(file.lastIndexOf("/") + 1), {
+      fetch(uploadBaseUrl + id + '/photo', {
         method: "POST",
+        body: new Blob([reader.result], {type: file.type}),
         headers: {
           authorization: token ? `Bearer ${token}` : ''
         },
       })
       .then((response) => {
-        setUploadMemberImageLoading(false);
         if (response.ok) {
           refetch();
         } else {
-          alert('Error uploading [' + file.name + ']. Max upload size is ~4MB.');
+          alert('Error uploading [' + file.name + '].');
         }
+        setLoadingImage(false);
       })
       .catch((error) => {
-        setUploadMemberImageLoading(false);
+        setLoadingImage(false);
       });
-    }
+    });
+    reader.readAsArrayBuffer(file);
   }
-
-  console.log("ImageCard")
-  console.log(photoUrl)
-  console.log(photoUrlFullSize)
 
   return (
     <div className="section profile-image-section" id="section-2">
@@ -163,9 +95,7 @@ export default ({
             containerWidth={350}
             containerHeight={350}
 
-            onUploadMemberImage={onUploadMemberImage}
-            onCropImage={onCropImage}
-            onRotateImage={onRotateImage}
+            onUploadImage={onUploadMemberImage}
             loading={loadingImage}
 
             onStartEditing={onStartEditing}

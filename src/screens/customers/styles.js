@@ -64,7 +64,7 @@ export const ListItem = styled(List.Item)`
   height: 100%;
   background-color: white;
   overflow: hidden;
-  margin: 2em;
+  margin: 1em;
   border: 1px solid rgba(0,0,0,.0975);
   border-radius: 14px;
   box-shadow: 0 0 27px 0 #0000001f;
@@ -75,7 +75,7 @@ export const ListItem = styled(List.Item)`
   .email {
     text-align: center;
     text-overflow: ellipsis;
-    padding-top: 1em;
+    padding-top: 0.5em;
     width: 150px;
     overflow: hidden;
   }
@@ -118,13 +118,13 @@ export const Action  = styled.div`
 `;
 export const ListSection = styled.div`
   overflow: auto;
-  padding-top: 1.5em;
+  padding-top: 0.5em;
   width: 100%;
   padding-bottom: 4em;
   .infinity-list {
     display: flex;
     flex-flow: wrap;
-    justify-content: center;
+    justify-content: space-around;
   }
 `;
 export const StyledHeaderSwitch = styled.div`

@@ -238,55 +238,8 @@ const EditImageSection = ({t, exercise, refetch, editImageMode, toggleEditImageM
   }, [exercise]);
 
   //
-  // Crop image
-  const onCropImage = (crop) => {
-    if(crop) {
-      setLoadingImage(true);
-      const cropRequest = {
-        bucket: 'lanista-exercises',
-        key: exerciseId + imageSrc,
-        edits: {
-          extract: {
-            height: Math.ceil(crop.height),
-            width:Math.ceil(crop.width),
-            top: Math.ceil(crop.y),
-            left: Math.ceil(crop.x),
-          }
-        }
-      }
-      const strRequest = JSON.stringify(cropRequest);
-      const encRequest = btoa(strRequest);
-      setPreviewImage("https://dn2ppfvx6tfpw.cloudfront.net/" + encRequest + '?DC=!' + (new Date()).getTime() );
-    }
-  };
-
-  //
-  // Rotate image
-  //
-  const onRotateImage = (angle) => {
-    setLoadingImage(true);
-    const rotateRequest = {
-      bucket: 'lanista-exercises',
-      key: exerciseId+ imageSrc,
-      edits: {
-        rotate: angle,
-      }
-    }
-    const strRequest = JSON.stringify(rotateRequest);
-    const encRequest = btoa(strRequest);
-    setPreviewImage("https://dn2ppfvx6tfpw.cloudfront.net/" + encRequest + '?DC=!' + (new Date()).getTime() );
-  }
-
-  React.useEffect(() => {
-    setLoadingImage(false);
-  }, [previewImage])
-
-
-  //
   // image upload
   //
-  const [uploadExerciseImageLoading, setUploadExerciseImageLoading] = React.useState(false);
-  const [uploadExerciseImageError, setUploadExerciseImageError] = React.useState(null);
   const onUploadExerciseImage = (file) => {
     setLoadingImage(true);
     const exercisePosition = editImageMode == 1 ? 'start' : 'end';
@@ -295,51 +248,28 @@ const EditImageSection = ({t, exercise, refetch, editImageMode, toggleEditImageM
     if( window.cordova ) {
       uploadBaseUrl = 'https://preview.lanista-training.com/file/exercise/';
     }
-    if(file instanceof File) {
-      reader.addEventListener('loadend', function(e){
-        const token = cookie.get('token');
-        fetch(uploadBaseUrl + exerciseId + '/' + exercisePosition, {
-          method: "POST",
-          body: new Blob([reader.result], {type: file.type}),
-          headers: {
-            authorization: token ? `Bearer ${token}` : ''
-          },
-        })
-        .then((response) => {
-          if (response.ok) {
-            refetch();
-          } else {
-            alert(t("photo_upload_error"));
-          }
-          setLoadingImage(false);
-        })
-        .catch((error) => {
-          console.log("UPLOAD ERROR")
-          console.log(error)
-          setLoadingImage(false);
-        });
-      });
-      reader.readAsArrayBuffer(file);
-    } else {
+    reader.addEventListener('loadend', function(e){
       const token = cookie.get('token');
-      fetch(uploadBaseUrl + exerciseId + '/' + exercisePosition + '/' + file.substring(file.lastIndexOf("/") + 1), {
+      fetch(uploadBaseUrl + exerciseId + '/' + exercisePosition, {
         method: "POST",
+        body: new Blob([reader.result], {type: file.type}),
         headers: {
-          authorization: token ? `Bearer ${token}` : ''
+          authorization: token ? `Bearer ${token}` : '',
         },
       })
       .then((response) => {
-        setUploadExerciseImageLoading(false);
         if (response.ok) {
           refetch();
         } else {
           alert(t("photo_upload_error"));
         }
+        setLoadingImage(false);
       })
       .catch((error) => {
-        setUploadExerciseImageLoading(false);
+        setLoadingImage(false);
       });
-    }
+    });
+    reader.readAsArrayBuffer(file);
   }
 
   const [paneWidth, setPaneWidth] = React.useState(0);
@@ -355,6 +285,7 @@ const EditImageSection = ({t, exercise, refetch, editImageMode, toggleEditImageM
       {paneWidth > 0 &&
         <ImageEditor
           t={t}
+          startInEditingMode={true}
           imageSrc={editImageMode == 1 ? start_image_full_size : end_image_full_size}
           previewImage={previewImage}
           resetPreviewImage={resetPreviewImage}
@@ -362,11 +293,11 @@ const EditImageSection = ({t, exercise, refetch, editImageMode, toggleEditImageM
           containerWidth={paneWidth}
           containerHeight={paneWidth}
 
-          onUploadMemberImage={onUploadExerciseImage}
-          onCropImage={onCropImage}
-          onRotateImage={onRotateImage}
+          onUploadImage={onUploadExerciseImage}
           loading={loadingImage}
           pictureMessage={'square image format'}
+
+          onEnd={toggleEditImageMode}
         />
       }
     </Tab.Pane>

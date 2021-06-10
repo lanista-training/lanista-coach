@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useTranslate } from '../../hooks/Translation';
 import Dashboard from './Dashboard';
-import { withApollo } from '../../lib/apollo';
+
 import { useQuery, useLazyQuery } from '@apollo/react-hooks';
 
 import _ from 'lodash';
@@ -211,4 +211,4 @@ const Panel = ({
   )
 }
 
-export default withApollo(Panel);
+export default Panel;

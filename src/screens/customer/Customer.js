@@ -475,6 +475,7 @@ const Customer = ({
                       <div className="rating-lable">
                         {item.rating[0].value === null ? t('NO_VALUE') : item.rating[0].value +  ' ' + t('from') + ' 10'}
                       </div>
+                      <div className="goal-date">{ moment(new Date(parseInt(item.creation_date))).format('DD MMMM YYYY') }</div>
                     </div>
                   </div>
                 </Card>
@@ -515,7 +516,7 @@ const Customer = ({
               <Card key={file.flinename}>
                 <div className="workout-wrapper member-file" >
                   <div className="workoutname">{decodeURI(file.filename)}</div>
-                  <div className="file-date">{ moment(new Date(parseInt(file.last_change))).format('DD MMMM YYYY')}</div>
+                  <div className="file-date">{ moment(new Date(parseInt(file.last_change))).format('DD MMMM YYYY') }</div>
                   <div className="member-file-icons">
                     <div className="member-file-icon trash">
                       <Icon name='trash alternate outline' onClick={() => handleOpen(file)}/>

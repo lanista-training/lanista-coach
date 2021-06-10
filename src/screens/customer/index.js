@@ -3,7 +3,6 @@ import { useTranslate } from '../../hooks/Translation';
 import cookie from 'js-cookie';
 import _ from 'lodash';
 import moment from "moment";
-import { withApollo } from '../../lib/apollo'
 import { useMutation, useQuery } from '@apollo/react-hooks'
 import Scene from "../../components/Scene";
 import Customer from './Customer';
@@ -22,6 +21,7 @@ import {
   UPDATENOTE,
   DELETENOTE,
   CREATEPLANFROMWORKOUT,
+  LOGERROR,
 } from "../../mutations";
 import { Modal} from 'semantic-ui-react';
 
@@ -115,6 +115,7 @@ const CustomerPane = ({
       if(error.message.indexOf('MEMBERNOTFOUND') > -1 ) {
         goBack();
       } else {
+        onLogError(error.stack);
         setErrorMessage(t("GENERAL_ERROR"));
       }
     } else {
@@ -372,6 +373,8 @@ const CustomerPane = ({
     }
   );
 
+  const [logError] = useMutation(LOGERROR);
+
   const onCreateNote = (text, date) => {
     createNote({
       variables: {
@@ -397,6 +400,15 @@ const CustomerPane = ({
         noteId: noteId,
       }
     });
+  }
+
+  const onLogError = (exception) => {
+    logError({
+      variables: {
+        error: exception,
+        memberId: memberId,
+      }
+    })
   }
 
   // Files
@@ -501,30 +513,10 @@ const CustomerPane = ({
       default:
     }
     goToAnamnese(tab, warning.object_id);
-    /*
-    Router.push({
-      pathname: '/anamnese',
-      query: {
-        customer: memberId,
-        tab: tab,
-        id: warning.object_id,
-      }
-    });
-    */
   }
 
   const onProtocollClick = (exerciseId, tab = 0) => {
     goToExercise(exerciseId, tab);
-    /*
-    Router.push({
-      pathname: '/exercise',
-      query: {
-        exercise: exerciseId,
-        member: memberId,
-        tab: tab
-      }
-    });
-    */
   }
 
   const getCommandsRight = () => {
@@ -562,14 +554,6 @@ const CustomerPane = ({
       name: 'folder',
       onTap: () => {
         goToExercises();
-        /*
-        Router.push({
-          pathname: '/exercises',
-          query: {
-            member: memberId,
-          }
-        });
-        */
       }
     });
     commands.push({
@@ -580,12 +564,6 @@ const CustomerPane = ({
       name: 'last',
       onTap: () => {
         goToMeasures();
-        /*
-        Router.push({
-          pathname: '/measures',
-          query: { customer: memberId }
-        });
-        */
       }
     });
     commands.push({
@@ -661,18 +639,10 @@ const CustomerPane = ({
 
   const openWorkout = (workoutId) => {
     goToWorkout(workoutId);
-    /*
-    Router.push({
-      pathname: '/workout',
-      query: { workout: workoutId }
-    });
-    */
   }
 
   const createWorkout = () => {
     toggleDrawer();
-    //setSnackbarMessage("Funktionalität steht bald zu verfügung")
-    //setOpenSnackbar(true)
   }
 
   const showGoal = (goal) => {
@@ -680,30 +650,12 @@ const CustomerPane = ({
       warning_type: 'GOA',
       object_id: goal.id,
     })
-    /*
-    setSelectedGoal(goal)
-    handleOpen()
-    */
   }
 
   const onCreateGoal = () => {
     onWarningClick({
       warning_type: 'GOA',
     })
-    /*
-    setSelectedGoal({
-      description: '',
-      rating: 0,
-      warning_flag: false,
-      creation_date: (new Date()).getTime(),
-      creator: {
-        first_name: me.first_name,
-        last_name: me.last_name,
-        photoUrl: me.photoUrl,
-      }
-    })
-    handleOpen();
-    */
   }
 
   const onDeleteGoal = () => {
@@ -756,22 +708,10 @@ const CustomerPane = ({
   const onCreatePlanFromTemplate = () => {
     window.localStorage.setItem('assignToUser', memberId);
     goToWorkouts();
-    /*
-    Router.push({
-      pathname: '/workouts',
-      query: { customer: memberId }
-    });
-    */
   }
 
   const openMemberProfile = () => {
     goToProfile();
-    /*
-    Router.push({
-      pathname: '/profile',
-      query: { member: memberId }
-    });
-    */
   }
 
   const onCreatePlanFromWorkout = (workoutDay) => {
@@ -1010,4 +950,4 @@ const CustomerPane = ({
   )
 }
 
-export default withApollo(CustomerPane);
+export default CustomerPane;

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { withApollo } from '../../lib/apollo';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import gql from "graphql-tag";
 import moment from "moment";
@@ -268,7 +267,7 @@ const WithData = (WrappedComponent, {workoutId, goBack, goToCustomer, goToSetup}
     )
   }
 
-  return withApollo(DataProvider);
+  return DataProvider;
 
 }
 

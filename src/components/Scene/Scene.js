@@ -233,12 +233,12 @@ export default ({
           <DrawerList>
             <div className="list-item-wrapper">
               <ListItem button key="new-plan-from-templates" onClick={toggleGallery}>
-                <ListItemText primary={t("anatomy")} />
+                <ListItemText primary={t("anatomy").toUpperCase()} />
               </ListItem>
             </div>
             <div className="list-item-wrapper">
               <ListItem button key="new-plan" onClick={toggleChronometer}>
-                <ListItemText primary={t("stopwatch")} />
+                <ListItemText primary={t("stopwatch").toUpperCase()} />
               </ListItem>
             </div>
           </DrawerList>

@@ -80,7 +80,7 @@ export default ({t, handleCloseDialogCreatePlan, creatingPlan, createPlan, membe
       {!creatingPlan &&
         <>
           <Button onClick={handleCloseDialogCreatePlan} color="primary">
-            Zürück
+            {t("back")}
           </Button>
           <Button inverted onClick={() => {
               createPlan({

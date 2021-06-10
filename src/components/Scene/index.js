@@ -14,10 +14,7 @@ const SceneWithData = (props) => {
   const { data, refetch, error } = useQuery(ME, { ssr: false, fetchPolicy: 'cache-first' });
   const me = data ? data : {};
 
-  console.log("ERROR", error)
-
   useEffect(() => {
-    console.log("ERROR", error);
     if( error ) {
       window.localStorage.clear();
     }

@@ -2,7 +2,6 @@ import * as React from "react";
 import Login from './Login';
 import Router from 'next/router';
 import { useMutation } from '@apollo/react-hooks'
-import { withApollo } from '../../lib/apollo'
 import { CCAUTHENTICATE, CCLOGIN } from "../../mutations";
 import { ME_QUERY } from "../../mutations/authenticate";
 import { login } from '../../lib/auth';
@@ -86,4 +85,4 @@ const LoginPanel = ({doLogin}) => {
   )
 }
 
-export default withApollo(LoginPanel);
+export default LoginPanel;

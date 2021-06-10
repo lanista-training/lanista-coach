@@ -3,7 +3,6 @@ import { useTranslate } from '../../hooks/Translation';
 import Registration from './Registration';
 import Router from 'next/router';
 import { useMutation, useQuery } from '@apollo/react-hooks';
-import { withApollo } from '../../lib/apollo';
 import { REGISTER } from "../../mutations";
 import { GETDOMAININFO } from "../../queries";
 
@@ -172,4 +171,4 @@ const Panel = ({goBack}) => {
   />);
 }
 
-export default withApollo(Panel);
+export default Panel;

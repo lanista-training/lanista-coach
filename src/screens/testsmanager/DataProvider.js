@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { withApollo } from '../../lib/apollo';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 import { OWNTESTS, TESTS } from "../../queries";
 import { DEFINETEST, REMOVETEST } from "../../mutations";
@@ -79,7 +78,7 @@ console.log("goToExercises", goToExercises)
     )
   }
 
-  return withApollo(DataProvider);
+  return DataProvider;
 
 }
 

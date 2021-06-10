@@ -27,26 +27,24 @@ const MyFooter = ({t, currentLanguage, languageItems}) => {
   //const [visible, toggle] = useState(true)
   const props = useSpring({opacity: 1, from:{opacity: 0}})
   return (
-    <animated.div style={props}>
-      <Footer>
-        <Nav style={{color: 'black'}}>
-          © Lanista Trainingssoftware 2012
-          <a href="https://studio.lanista-training.com/impressum/" target="_blank">
-            {t("imprint")}
-          </a>
-          <a href="https://studio.lanista-training.com/datenschutz/" target="_blank">
-            {t("privacy")}
-          </a>
-          <a href="https://desk.zoho.eu/portal/lanista/de/home" target="_blank">
-            {t("support")}
-          </a>
-        </Nav>
-        <Menu effect={effect} method={method} position={pos}>
-          <MainButton className={currentLanguage + "-flag"} iconResting="ion-plus-round" iconActive="ion-close-round" />
-          {languageItems}
-        </Menu>
-      </Footer>
-    </animated.div>
+    <Footer>
+      <Nav style={{color: 'black'}}>
+        © Lanista Trainingssoftware 2012
+        <a href="https://studio.lanista-training.com/impressum/" target="_blank">
+          {t("imprint")}
+        </a>
+        <a href="https://studio.lanista-training.com/datenschutz/" target="_blank">
+          {t("privacy")}
+        </a>
+        <a href="https://desk.zoho.eu/portal/lanista/de/home" target="_blank">
+          {t("support")}
+        </a>
+      </Nav>
+      <Menu effect={effect} method={method} position={pos}>
+        <MainButton className={currentLanguage + "-flag"} iconResting="ion-plus-round" iconActive="ion-close-round" />
+        {languageItems}
+      </Menu>
+    </Footer>
   )
 }
 

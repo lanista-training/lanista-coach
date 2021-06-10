@@ -258,6 +258,25 @@ const Workouts = () => {
 }
 
 function App() {
+
+  function onDeviceReady() {
+      if( window.device.version && window.device.version.startsWith('12') ) {
+        console.log("EVENT LISTNER focusout ADDED");
+        window.addEventListener('focusout', () => {
+          window.scrollTo(0,0);
+        	document.body.scrollTop = 0;
+        });
+      }
+  }
+
+  if(typeof(cordova) == "object"){
+    console.log("You're on a mobile device");
+    console.log("DEVICE VERSION:");
+    document.addEventListener("deviceready", onDeviceReady, false);
+  }
+
+
+
   return (
     <Router>
       <Switch>
@@ -369,7 +388,5 @@ function PrivateRoute({ children, ...rest }) {
     />
   );
 }
-
-
 
 export default App;

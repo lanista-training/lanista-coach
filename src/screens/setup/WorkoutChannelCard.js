@@ -41,68 +41,6 @@ export default ({
   //
   const [previewImage, setPreviewImage] = React.useState(null);
   const [loadingImage, setLoadingImage] = React.useState(false);
-  const resetPreviewImage = () => {
-    if( id > 0 ) {
-      const cropRequest = {
-        bucket: 'lanista-data',
-        key: id + '/workout/background.jpg',
-      }
-      const strRequest = JSON.stringify(cropRequest);
-      const encRequest = btoa(strRequest);
-      setPreviewImage("https://dn2ppfvx6tfpw.cloudfront.net/" + encRequest + '?DC=!' + (new Date()).getTime() );
-    }
-  };
-  const onStartEditing = () => {
-    setPreviewImage(workoutImageUrl)
-  }
-  const onEndEditing = () => {
-    setPreviewImage(workoutImageUrl)
-  }
-
-  //
-  // Crop image
-  const onCropImage = (crop) => {
-    if(crop) {
-      setLoadingImage(true);
-      const cropRequest = {
-        bucket: 'lanista-data',
-        key: id + '/workout/background.jpg',
-        edits: {
-          extract: {
-            height: Math.ceil(crop.height),
-            width:Math.ceil(crop.width),
-            top: Math.ceil(crop.y),
-            left: Math.ceil(crop.x),
-          }
-        }
-      }
-      const strRequest = JSON.stringify(cropRequest);
-      const encRequest = btoa(strRequest);
-      setPreviewImage("https://dn2ppfvx6tfpw.cloudfront.net/" + encRequest + '?DC=!' + (new Date()).getTime() );
-    }
-  };
-
-  //
-  // Rotate image
-  //
-  const onRotateImage = (angle) => {
-    setLoadingImage(true);
-    const rotateRequest = {
-      bucket: 'lanista-data',
-      key: id + '/workout/background.jpg',
-      edits: {
-        rotate: angle,
-      }
-    }
-    const strRequest = JSON.stringify(rotateRequest);
-    const encRequest = btoa(strRequest);
-    setPreviewImage("https://dn2ppfvx6tfpw.cloudfront.net/" + encRequest + '?DC=!' + (new Date()).getTime() );
-  }
-
-  React.useEffect(() => {
-    setLoadingImage(false);
-  }, [previewImage])
-
 
   //
   // image upload
@@ -113,53 +51,34 @@ export default ({
     setLoadingImage(true);
     let reader = new FileReader();
     let uploadBaseUrl = document.location.protocol + '//' + document.location.host.replace('3000', '4000') + '/file/user/';
+    //let uploadBaseUrl = 'https://preview.lanista-training.com/file/user/';
     if( window.cordova ) {
-      uploadBaseUrl = 'https://preview.lanista-training.com/file/exercise/';
+      uploadBaseUrl = 'https://preview.lanista-training.com/file/user/';
     }
-    if(file instanceof File) {
-      reader.addEventListener('loadend', function(e){
-        const token = cookie.get('token');
-        fetch(uploadBaseUrl + id + '/workout', {
-          method: "POST",
-          body: new Blob([reader.result], {type: file.type}),
-          headers: {
-            authorization: token ? `Bearer ${token}` : ''
-          },
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.message == 'OK') {
-            refetch();
-          } else {
-            alert('Error uploading [' + file.name + '].');
-          }
-          setLoadingImage(false);
-        })
-        .catch((error) => {
-          setLoadingImage(false);
-        });
-      });
-      reader.readAsArrayBuffer(file);
-    } else {
+
+    reader.addEventListener('loadend', function(e){
       const token = cookie.get('token');
-      fetch(uploadBaseUrl + id + '/workout/' + file.substring(file.lastIndexOf("/") + 1), {
+      fetch(uploadBaseUrl + id + '/workout', {
         method: "POST",
+        body: new Blob([reader.result], {type: file.type}),
         headers: {
           authorization: token ? `Bearer ${token}` : ''
         },
       })
-      .then((response) => {
-        setUploadMemberImageLoading(false);
-        if (response.ok) {
+      .then(response => response.json())
+      .then(data => {
+        if (data.message == 'OK') {
           refetch();
         } else {
-          alert('Error uploading [' + file.name + ']. Max upload size is ~4MB.');
+          alert('Error uploading [' + file.name + '].');
         }
+        setLoadingImage(false);
       })
       .catch((error) => {
-        setUploadMemberImageLoading(false);
+        setLoadingImage(false);
       });
-    }
+    });
+    reader.readAsArrayBuffer(file);
   }
 
   return (
@@ -228,26 +147,22 @@ export default ({
           >
             {t( "save" )}
           </LanistaButton>
-          <ImageEditor
-            t={t}
-            imageSrc={workoutImageUrl}
-            previewImage={previewImage}
-            resetPreviewImage={resetPreviewImage}
+          <div className="image-editor-wrapper">
+            <ImageEditor
+              t={t}
+              aspect={860 / 600}
+              imageSrc={workoutImageUrl}
 
-            containerWidth={350}
-            containerHeight={350}
+              containerWidth={350}
+              containerHeight={350}
 
-            onUploadMemberImage={onUploadMemberImage}
-            onCropImage={onCropImage}
-            onRotateImage={onRotateImage}
-            loading={loadingImage}
+              onUploadImage={onUploadMemberImage}
+              loading={loadingImage}
 
-            onStartEditing={onStartEditing}
-            onEndEditing={onEndEditing}
-
-            pictureMessage={'free image format'}
-            notEditable={true}
-          />
+              pictureMessage={'free image format'}
+              notEditable={true}
+            />
+          </div>
         </div>
         <LanistaButton
           className="preview-workout-channel-button"
