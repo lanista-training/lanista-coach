@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslate } from '../../hooks/Translation';
 import Registration from './Registration';
 import Router from 'next/router';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/client';
 import { REGISTER } from "../../mutations";
 import { GETDOMAININFO } from "../../queries";
 

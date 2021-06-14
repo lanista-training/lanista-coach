@@ -1,7 +1,7 @@
 import React from 'react';
 import Calender from './Calender';
 import { withApollo } from '../../lib/apollo';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { CALENDARENTRIES } from "../../queries";
 
 const Panel = ({t, selectedDay, setSelectedDay}) => {

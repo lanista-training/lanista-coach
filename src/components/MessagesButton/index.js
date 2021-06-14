@@ -1,7 +1,7 @@
 import React, { Component, useState, useCallback } from 'react';
 import MessagesButton from './MessagesButton';
 import { withApollo } from '../../lib/apollo';
-import { useQuery, useMutation, useSubscription } from '@apollo/react-hooks';
+import { useQuery, useMutation, useSubscription } from '@apollo/client';
 import { MESSAGES } from "../../queries";
 import { UPDATECHATMESSAGESTATUS } from "../../mutations";
 import { MESSAGEFEED } from "../../subscriptions";

@@ -9,7 +9,7 @@ export default class MyDocument extends Document {
     if (req) { // if you are on the server and you get a 'req' property from your context
       userAgent = req.headers['user-agent'] // get the user-agent from the headers
     } else {
-      userAgent = navigator.userAgent // if you are on the client you can access the navigator from the window object
+      userAgent = window.navigator.userAgent // if you are on the client you can access the navigator from the window object
     }
     const deviceDetector = new DeviceDetector();
     const device = deviceDetector.parse(userAgent);

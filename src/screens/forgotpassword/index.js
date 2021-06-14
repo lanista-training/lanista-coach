@@ -3,7 +3,7 @@ import { useTranslate } from '../../hooks/Translation';
 import _ from 'lodash';
 import moment from "moment";
 import Router from 'next/router';
-import { useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/client';
 import Scene from "../../components/Scene";
 import Forgotpassword from './Forgotpassword';
 import { SENDPASSWORDRESET } from "../../mutations";

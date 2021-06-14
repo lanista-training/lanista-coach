@@ -2,7 +2,7 @@ import React, { Component, useState, useCallback, useEffect } from 'react';
 import Scene from './Scene';
 import Router from 'next/router';
 
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 import { withApollo } from '../../lib/apollo'
 
 import { ME } from "../../queries";

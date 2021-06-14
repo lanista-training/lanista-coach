@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import _ from 'lodash';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/client';
 import gql from "graphql-tag";
 import moment from "moment";
 import { ADDEXERCISESTOPLAN, ADDEXERCISESTOTEST, ADDEXERCISETOFOLDER, DELETEEXERCISEFROMFOLDER, CREATEFOLDER, DELETEFOLDER, CREATEEXERCISE, CHANGEFOLDERNAME} from "../../mutations";
@@ -86,7 +86,11 @@ const withData = (WrappedComponent, {editmode, workout: workoutId, testId, split
     const {filter} = (filterData && filterData.filter && filterData.filter.body) ? filterData : {filter: filterInitialValues};
     const setFilter = (newFilter) => {
       newFilter.__typename = 'filter';
-      client.writeData({ data: { filter: newFilter } });
+      client.writeQuery(
+        {
+          query: GET_FILTER,
+          data: { filter: newFilter }
+      });
     };
     const [hasMore, setHasMore] = useState(false);
     const [pageSize, setPageSize] = useState(40);

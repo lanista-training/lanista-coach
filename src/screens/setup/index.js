@@ -1,6 +1,6 @@
 import React, { Component, useState, useEffect } from 'react';
 import { useTranslate } from '../../hooks/Translation';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/client';
 import { CachePersistor } from 'apollo-cache-persist';
 
 import Scene from "../../components/Scene";

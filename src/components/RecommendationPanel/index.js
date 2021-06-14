@@ -3,7 +3,7 @@ import RecommendationPanel from './RecommendationPanel';
 import { Query } from "react-apollo"
 import { RECOMMENDATION } from "../../queries";
 import { withApollo } from '../../lib/apollo'
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client'
 
 const Panel = function({exerciseId, closePanel, visible, style, goToExercise}) {
 

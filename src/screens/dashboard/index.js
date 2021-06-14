@@ -2,7 +2,7 @@ import * as React from "react";
 import { useTranslate } from '../../hooks/Translation';
 import Dashboard from './Dashboard';
 
-import { useQuery, useLazyQuery } from '@apollo/react-hooks';
+import { useQuery, useLazyQuery } from '@apollo/client';
 
 import _ from 'lodash';
 import moment from 'moment';

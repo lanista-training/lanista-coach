@@ -2,17 +2,21 @@ import React, { useMemo } from 'react';
 import gql from "graphql-tag";
 import fetch from 'isomorphic-unfetch';
 
-import { ApolloProvider } from '@apollo/react-hooks';
-import { ApolloClient, InMemoryCache, HttpLink } from 'apollo-boost';
-import { getMainDefinition } from 'apollo-utilities';
-import { ApolloLink, split } from 'apollo-link';
-import { WebSocketLink } from 'apollo-link-ws';
+import {
+  ApolloProvider,
+  ApolloClient,
+  InMemoryCache,
+  HttpLink,
+  ApolloLink,
+  split,
+} from '@apollo/client';
+import { WebSocketLink } from '@apollo/client/link/ws';
+import { onError } from "@apollo/client/link/error";
+import { setContext } from '@apollo/client/link/context';
 
+import { getMainDefinition } from 'apollo-utilities';
 import { SubscriptionClient } from 'subscriptions-transport-ws';
-import { onError } from "apollo-link-error";
-import { createUploadLink } from 'apollo-upload-client';
 import { persistCache } from 'apollo-cache-persist';
-import { setContext } from 'apollo-link-context';
 import cookie from 'js-cookie';
 import {logout} from './auth';
 

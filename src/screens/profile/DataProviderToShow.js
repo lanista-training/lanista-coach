@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslate } from '../../hooks/Translation';
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/client';
 import moment from "moment";
 
 import { MEMBER, ME } from '../../queries';

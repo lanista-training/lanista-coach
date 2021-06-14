@@ -5,7 +5,7 @@ import moment from "moment";
 import arrayMove from 'array-move';
 import QRCode from 'qrcode.react';
 
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/client';
 import gql from "graphql-tag";
 
 import Scene from "../../components/Scene";
@@ -180,12 +180,16 @@ const Panel = ({
   const { data: defaultSettingsData, client } = useQuery(GET_DEFAULTSETTINGS);
   const defaultSettings = defaultSettingsData && defaultSettingsData.defaultSettings ? defaultSettingsData.defaultSettings : initialValues;
   if( !(defaultSettingsData && defaultSettingsData.defaultSettings) ) {
-    client.writeData({
-      data: { defaultSettings: {__typename: 'defaultSettings', ...initialValues} }
+    client.writeQuery(
+      {
+        query: GET_DEFAULTSETTINGS,
+        data: { defaultSettings: {__typename: 'defaultSettings', ...initialValues} }
     });
   }
-  const setDefaultSettings = (settings) => client.writeData({
-    data: { defaultSettings: {__typename: 'defaultSettings', ...settings} }
+  const setDefaultSettings = (settings) => client.writeQuery(
+    {
+      query: GET_DEFAULTSETTINGS,
+      data: { defaultSettings: {__typename: 'defaultSettings', ...settings} }
   });
 
   //
@@ -532,8 +536,21 @@ const Panel = ({
 
   const onChangeExerciseOrder = (splitIndex, oldIndex, newIndex) => {
     if( oldIndex !== newIndex ) {
-      workout.splits[splitIndex-1].exercises = arrayMove(workout.splits[splitIndex-1].exercises, oldIndex, newIndex)
-      setWorkout({...workout});
+      console.log("workout", workout)
+      console.log("splitIndex", splitIndex-1)
+      console.log("splitIndex-1", splitIndex-1)
+      console.log("workout.splits[splitIndex-1]", workout.splits[splitIndex-1])
+      //workout.splits[splitIndex-1].exercises = arrayMove(workout.splits[splitIndex-1].exercises, oldIndex, newIndex);
+      const splits = [];
+      for(var i = 0; i < workout.splits.length; i++){
+        if( i == splitIndex -1 ) {
+          splits.push({...workout.splits[i], exercises: arrayMove(workout.splits[splitIndex-1].exercises, oldIndex, newIndex)});
+        } else {
+          splits.push(workout.splits[i]);
+        }
+      }
+      const newWorkout = {...workout, splits: splits};
+      setWorkout(newWorkout);
       saveSplit(splitIndex);
     }
   }

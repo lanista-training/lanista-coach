@@ -1,7 +1,7 @@
 import React from 'react';
 import WidgetStatistic from './WidgetStatistic';
 import { withApollo } from '../../lib/apollo';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 
 import { Query } from "react-apollo"
 

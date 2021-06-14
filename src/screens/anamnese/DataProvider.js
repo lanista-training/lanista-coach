@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { useMutation, useQuery } from '@apollo/react-hooks';
+import { useMutation, useQuery } from '@apollo/client';
 import gql from "graphql-tag";
 import moment from "moment";
 import Router from 'next/router';

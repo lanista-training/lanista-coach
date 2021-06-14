@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useTranslate } from '../../hooks/Translation';
 import Login from './Login';
-import { useQuery, useMutation, useLazyQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation, useLazyQuery } from '@apollo/client';
 import { LOGIN } from "../../mutations/authenticate";
 import { GETDOMAININFO } from "../../queries";
 import { login } from '../../lib/auth';

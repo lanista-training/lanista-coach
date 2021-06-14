@@ -1,7 +1,7 @@
 import React from 'react';
 import WidgetAverage from './WidgetAverage';
 import { withApollo } from '../../lib/apollo';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery } from '@apollo/client';
 
 const Widget = ({query, title, onClick}) => {
 

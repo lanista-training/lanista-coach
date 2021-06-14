@@ -3,7 +3,7 @@ import { useTranslate } from '../../hooks/Translation';
 import cookie from 'js-cookie';
 import _ from 'lodash';
 import moment from "moment";
-import { useMutation, useQuery } from '@apollo/react-hooks'
+import { useMutation, useQuery } from '@apollo/client'
 import Scene from "../../components/Scene";
 import Customer from './Customer';
 import CustomerHeader from "../../components/CustomerHeader";

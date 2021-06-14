@@ -4,7 +4,7 @@ import _ from 'lodash';
 import styled from 'styled-components';
 import moment from "moment";
 //import Router from 'next/router';
-import { useMutation, useQuery } from '@apollo/react-hooks'
+import { useMutation, useQuery } from '@apollo/client'
 import Scene from "../../components/Scene";
 import Workouts from './Workouts';
 import WorkoutsHeader from "./WorkoutsHeader";

@@ -1,7 +1,7 @@
 import React, { createContext, useMemo, useContext, useState } from "react";
 import createTranslator from "./createTranslator";
 import { ME } from "../../queries";
-import { useQuery } from '@apollo/react-hooks'
+import { useQuery } from '@apollo/client';
 
 function translator(namespace) {
   return key => namespace + "." + key;

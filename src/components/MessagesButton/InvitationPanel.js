@@ -1,7 +1,7 @@
 import * as React from "react";
 import {StyledDialog} from "./styles";
 import { withApollo } from '../../lib/apollo';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/client';
 
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
